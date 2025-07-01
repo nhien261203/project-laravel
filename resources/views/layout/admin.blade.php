@@ -16,6 +16,9 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Custom JS -->
     <script src="{{ asset('js/admin.js') }}" defer></script>
 </head>
@@ -43,7 +46,7 @@
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
                 <i class="fas fa-tags"></i> <span class="sidebar-text">Categories</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="{{ route('admin.brands.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
                 <i class="fas fa-industry"></i> <span class="sidebar-text">Brands</span>
             </a>
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
@@ -89,4 +92,58 @@
     <!-- Overlay for mobile -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
 </body>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+
+{{-- trang thai alert --}}
+<script>
+    @if (session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: '{{ session('success') }}',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    @endif
+
+    @if (session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: '{{ session('error') }}',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    @endif
+</script>
+{{-- confirm delete --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: 'Xác nhận xoá',
+                    text: "Bạn có chắc muốn xoá mục này?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: ' Xoá',
+                    cancelButtonText: 'Huỷ'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
 </html>
