@@ -8,6 +8,8 @@ use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\ProductVariant\ProductVariantRepository;
+use App\Repositories\ProductVariant\ProductVariantRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
 
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
+
+        $this->app->bind(ProductVariantRepositoryInterface::class, ProductVariantRepository::class);
     }
 
     /**

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductVariantController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,4 +36,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('products', ProductController::class);
+});
+
+Route::prefix('admin/products/{product}/variants')->name('admin.products.variants.')->group(function () {
+    Route::get('/', [ProductVariantController::class, 'index'])->name('index'); // danh sach 
+    Route::post('/', [ProductVariantController::class, 'store'])->name('store');// luu moi
+    
+    Route::get('create', [ProductVariantController::class, 'create'])->name('create'); // ➕ Form tạo
+    Route::get('{variant}/edit', [ProductVariantController::class, 'edit'])->name('edit');
+    Route::put('{variant}', [ProductVariantController::class, 'update'])->name('update');
+    Route::delete('{variant}', [ProductVariantController::class, 'destroy'])->name('destroy');
+
+    Route::delete('images/{image}', [ProductVariantController::class, 'deleteImage'])->name('images.delete');
 });
