@@ -23,7 +23,7 @@ class BrandRepository implements BrandRepositoryInterface
             $query->where('status', $request->status);
         }
 
-        return $query->orderByDesc('id')->paginate(10)->withQueryString();
+        return $query->orderByDesc('id')->paginate(6)->withQueryString();
     }
 
     public function find($id)

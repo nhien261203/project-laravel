@@ -87,6 +87,7 @@
 
 <!-- Pagination -->
 <div class="mt-4">
-    {{ $brands->links() }}
+    {{-- {{ $brands->links() }} --}}
+    {{ $brands->links('pagination.custom-tailwind') }}
 </div>
 @endsection

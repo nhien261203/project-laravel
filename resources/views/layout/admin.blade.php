@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
+    <title>Nexus Admin - All In One</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     @vite(['resources/css/app.css'])
@@ -43,7 +43,7 @@
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
                 <i class="fas fa-box"></i> <span class="sidebar-text">Products</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
                 <i class="fas fa-tags"></i> <span class="sidebar-text">Categories</span>
             </a>
             <a href="{{ route('admin.brands.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
@@ -85,7 +85,7 @@
 
         <!-- Footer -->
         <footer class="bg-white text-center text-sm text-gray-500 p-4 flex-shrink-0 shadow-inner">
-            &copy; {{ date('Y') }} Your Company. All rights reserved.
+            &copy; {{ date('Y') }} Nexus Admin . Tool Admin All In One.
         </footer>
     </div>
 
