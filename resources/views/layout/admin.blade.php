@@ -21,8 +21,18 @@
 
     <!-- Custom JS -->
     <script src="{{ asset('js/admin.js') }}" defer></script>
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+       
+        #sidebarWrapper {
+            min-height: 100vh;
+        }
+    </style>
 </head>
-<body class="h-screen overflow-hidden flex bg-gray-100 text-gray-800">
+<body class="h-screen overflow-y-auto flex bg-gray-100 text-gray-800">
 
     <!-- Sidebar -->
     <div id="sidebarWrapper" class="fixed md:static z-40 w-64 bg-white shadow-lg h-full transform -translate-x-full md:translate-x-0 transition-all duration-500 flex flex-col" data-collapsed="false">
@@ -79,7 +89,7 @@
         </header>
 
         <!-- Page content -->
-        <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <main class="flex-1  overflow-y-auto p-6 bg-gray-50">
             @yield('content')
         </main>
 
@@ -138,7 +148,7 @@
                     cancelButtonText: 'Huỷ'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        form.requestSubmit();
                     }
                 });
             });
