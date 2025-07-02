@@ -61,9 +61,18 @@
             </div>
         </div>
 
-        <!-- Ảnh mới -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Thêm ảnh mới (nhiều ảnh)</label>
+        <!-- Checkbox thay thế -->
+        <div class="mt-2">
+            <label class="inline-flex items-center">
+                <input type="checkbox" name="replace_images" class="form-checkbox text-red-600">
+                <span class="ml-2 text-sm text-gray-700">Thay thế toàn bộ ảnh cũ</span>
+            </label>
+            <p class="text-xs text-gray-500 ml-6">Nếu chọn, ảnh cũ sẽ bị xóa và thay bằng ảnh mới</p>
+        </div>
+
+        <!-- Upload ảnh mới -->
+        <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700">Thêm ảnh mới</label>
             <input type="file" name="images[]" id="images-input" multiple accept="image/*" class="form-input w-full">
             @error('images.*')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
@@ -84,15 +93,15 @@
 <script>
     document.getElementById('images-input').addEventListener('change', function (event) {
         const gallery = document.getElementById('image-gallery');
+        const files = event.target.files;
 
-        // Không xóa ảnh cũ — chỉ thêm preview ảnh mới lên đầu
-        Array.from(event.target.files).forEach(file => {
+        Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = e => {
                 const imgBox = document.createElement('div');
                 imgBox.className = 'relative w-24 h-24';
                 imgBox.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain border rounded">`;
-                gallery.appendChild(imgBox); // 🟢 Thêm vào đầu
+                gallery.appendChild(imgBox);
             };
             reader.readAsDataURL(file);
         });

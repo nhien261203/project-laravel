@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 // Trang chủ – cho tất cả (user cũng vào được)
 Route::get('/', function () {
     return view('layout.user');
-})->middleware('role:user|staff|admin');
+});
 
 // 🟩 Admin - toàn quyền (chỉ admin)
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

@@ -21,11 +21,13 @@ class ProductVariantRepository implements ProductVariantRepositoryInterface
     public function create($productId, array $data)
     {
         $data['product_id'] = $productId;
+        $images = $data['images'] ?? [];
+        unset($data['images']);
+
         $variant = ProductVariant::create($data);
 
-        // Upload ảnh nếu có
-        if (!empty($data['images'])) {
-            $this->uploadImages($variant, $data['images']);
+        if (!empty($images)) {
+            $this->uploadImages($variant, $images);
         }
 
         return $variant;
@@ -34,11 +36,22 @@ class ProductVariantRepository implements ProductVariantRepositoryInterface
     public function update($id, array $data)
     {
         $variant = $this->find($id);
+
+        // Xử lý ảnh nếu có yêu cầu thay thế
+        if (!empty($data['replace_images'])) {
+            foreach ($variant->images as $image) {
+                Storage::disk('public')->delete($image->image_path);
+            }
+            $variant->images()->delete();
+        }
+
+        $images = $data['images'] ?? [];
+        unset($data['images'], $data['replace_images']);
+
         $variant->update($data);
 
-        // Upload ảnh mới nếu có
-        if (!empty($data['images'])) {
-            $this->uploadImages($variant, $data['images']);
+        if (!empty($images)) {
+            $this->uploadImages($variant, $images);
         }
 
         return $variant;
@@ -48,7 +61,6 @@ class ProductVariantRepository implements ProductVariantRepositoryInterface
     {
         $variant = $this->find($id);
 
-        // Xoá ảnh vật lý và DB
         foreach ($variant->images as $image) {
             Storage::disk('public')->delete($image->image_path);
         }
@@ -64,14 +76,10 @@ class ProductVariantRepository implements ProductVariantRepositoryInterface
         return $image->delete();
     }
 
-    /**
-     * Upload danh sách ảnh (không gán ảnh chính)
-     */
     protected function uploadImages(ProductVariant $variant, array $images)
     {
         foreach ($images as $file) {
             $path = $file->store('variant_images', 'public');
-
             $variant->images()->create([
                 'image_path' => $path,
             ]);

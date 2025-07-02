@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Repositories\ProductVariant\ProductVariantRepositoryInterface;
+use Illuminate\Support\Facades\Storage;
 
 class ProductVariantController extends Controller
 {
@@ -70,18 +71,16 @@ class ProductVariantController extends Controller
             'images.*' => 'image|max:2048',
         ]);
 
-        $data = $request->except(['_token', '_method']);
-        $data['images'] = $request->file('images');
-
-        if (empty($data['sku'])) {
-            $data['sku'] = 'SKU-P' . $productId . '-' . strtoupper(uniqid());
-        }
+        $data = $request->all();
+        $data['images'] = $request->file('images') ?? [];
 
         $this->variantRepo->update($variantId, $data);
 
         return redirect()->route('admin.products.variants.index', $productId)
             ->with('success', 'Cập nhật biến thể thành công');
     }
+
+
 
     public function destroy($productId, $variantId)
     {
