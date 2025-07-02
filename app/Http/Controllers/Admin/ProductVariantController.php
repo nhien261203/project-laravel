@@ -42,8 +42,9 @@ class ProductVariantController extends Controller
 
         $data = $request->except('_token');
         $data['images'] = $request->file('images');
+        $data['primary_image_id'] = $request->input('primary_image_id'); // 💡 Thêm dòng này để lấy ảnh chính
 
-        //Tự sinh SKU nếu không có
+        // Tự sinh SKU nếu không có
         if (empty($data['sku'])) {
             $data['sku'] = 'SKU-P' . $productId . '-' . strtoupper(uniqid());
         }

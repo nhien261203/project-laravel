@@ -23,8 +23,15 @@ class ProductVariantRepository implements ProductVariantRepositoryInterface
         $data['product_id'] = $productId;
         $variant = ProductVariant::create($data);
 
+        // Xác định ảnh chính nếu được chọn
+        $newPrimaryImageIndex = null;
+        if (!empty($data['primary_image_id']) && str_starts_with($data['primary_image_id'], 'new_')) {
+            $newPrimaryImageIndex = (int) str_replace('new_', '', $data['primary_image_id']);
+        }
+
+        // Upload ảnh
         if (!empty($data['images'])) {
-            $this->uploadImages($variant, $data['images']);
+            $this->uploadImages($variant, $data['images'], $newPrimaryImageIndex);
         }
 
         return $variant;
@@ -35,16 +42,27 @@ class ProductVariantRepository implements ProductVariantRepositoryInterface
         $variant = $this->find($id);
         $variant->update($data);
 
-        // Cập nhật ảnh chính
-        if (!empty($data['primary_image_id'])) {
+        // Reset ảnh cũ về không phải ảnh chính
+        foreach ($variant->images as $image) {
+            $image->update(['is_primary' => 0]);
+        }
+
+        // Gắn cờ nếu ảnh chính là ảnh mới
+        $newPrimaryImageIndex = null;
+        if (!empty($data['primary_image_id']) && str_starts_with($data['primary_image_id'], 'new_')) {
+            $newPrimaryImageIndex = (int) str_replace('new_', '', $data['primary_image_id']);
+        }
+
+        // Upload ảnh mới
+        if (!empty($data['images'])) {
+            $this->uploadImages($variant, $data['images'], $newPrimaryImageIndex);
+        }
+
+        // Nếu ảnh chính là ảnh cũ
+        if (!empty($data['primary_image_id']) && !str_starts_with($data['primary_image_id'], 'new_')) {
             foreach ($variant->images as $image) {
                 $image->update(['is_primary' => $image->id == $data['primary_image_id'] ? 1 : 0]);
             }
-        }
-
-        // Thêm ảnh mới
-        if (!empty($data['images'])) {
-            $this->uploadImages($variant, $data['images']);
         }
 
         return $variant;
@@ -54,12 +72,10 @@ class ProductVariantRepository implements ProductVariantRepositoryInterface
     {
         $variant = $this->find($id);
 
-        // Xoá ảnh khỏi storage
         foreach ($variant->images as $image) {
             Storage::disk('public')->delete($image->image_path);
         }
 
-        // Xoá bản ghi
         $variant->images()->delete();
         return $variant->delete();
     }
@@ -71,17 +87,19 @@ class ProductVariantRepository implements ProductVariantRepositoryInterface
         return $image->delete();
     }
 
-    protected function uploadImages(ProductVariant $variant, array $images)
+    /**
+     * Upload danh sách ảnh và đánh dấu ảnh chính nếu có
+     */
+    protected function uploadImages(ProductVariant $variant, array $images, $primaryIndex = null)
     {
         foreach ($images as $index => $file) {
             $path = $file->store('variant_images', 'public');
+            $isPrimary = $index === $primaryIndex ? 1 : 0;
 
             $variant->images()->create([
                 'image_path' => $path,
-                'is_primary' => 0 // Đặt mặc định không là ảnh chính
+                'is_primary' => $isPrimary
             ]);
         }
     }
-
-    
 }

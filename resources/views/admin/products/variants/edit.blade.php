@@ -77,8 +77,8 @@
         </div>
 
         <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-700">Ảnh hiện tại:</label>
-            <div class="flex flex-wrap gap-4 mt-2">
+            <label class="block text-sm font-medium text-gray-700">Ảnh hiện tại và mới:</label>
+            <div id="image-gallery" class="flex flex-wrap gap-4 mt-2">
                 @foreach($variant->images as $image)
                     <div class="relative w-24 h-24">
                         <img src="{{ asset('storage/' . $image->image_path) }}" class="w-full h-full object-contain border rounded">
@@ -89,15 +89,12 @@
                 @endforeach
             </div>
         </div>
-        
 
         <div>
             <label class="block text-sm font-medium text-gray-700">Thêm ảnh mới (nhiều ảnh)</label>
             <input type="file" name="images[]" id="images-input" multiple accept="image/*" class="form-input w-full">
             @error('images.*')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
-
-        <div id="preview-images" class="flex flex-wrap gap-4 mt-4"></div>
 
         <div class="pt-4 flex justify-between items-center">
             <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded">
@@ -114,19 +111,21 @@
 @push('scripts')
 <script>
     document.getElementById('images-input').addEventListener('change', function (event) {
-        const preview = document.getElementById('preview-images');
-        preview.innerHTML = '';
+        const gallery = document.getElementById('image-gallery');
         const files = event.target.files;
 
-        Array.from(files).forEach(file => {
+        Array.from(files).forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = e => {
                 const imgBox = document.createElement('div');
                 imgBox.classList.add('relative', 'w-24', 'h-24');
                 imgBox.innerHTML = `
                     <img src="${e.target.result}" class="w-full h-full object-contain border rounded">
+                    <div class="absolute top-0 right-0">
+                        <input type="radio" name="primary_image_id" value="new_${index}">
+                    </div>
                 `;
-                preview.appendChild(imgBox);
+                gallery.appendChild(imgBox);
             }
             reader.readAsDataURL(file);
         });
