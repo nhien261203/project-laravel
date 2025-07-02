@@ -2,7 +2,14 @@
 
 @section('content')
 <div class="max-w-3xl mx-auto bg-white shadow p-6 rounded-lg">
-    <h2 class="text-xl font-bold text-gray-800 mb-6">📄 Chi tiết sản phẩm</h2>
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800 mb-6">📄 Chi tiết sản phẩm</h2>
+        <a href="{{ route('admin.products.variants.index', $product->id) }}"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow">
+                        📦 Xem biến thể
+        </a>
+    </div>
+    
 
     <div class="space-y-5">
         <div>
@@ -57,10 +64,7 @@
                     ✏️ Chỉnh sửa
                 </a>
 
-                <a href="{{ route('admin.products.variants.index', $product->id) }}"
-                   class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow">
-                    📦 Xem biến thể
-                </a>
+                
             </div>
 
             <a href="{{ route('admin.products.index') }}"

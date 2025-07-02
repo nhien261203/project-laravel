@@ -77,16 +77,41 @@
     <div class="flex flex-col flex-1 h-full overflow-hidden">
 
         <!-- Header -->
-        <header class="bg-white shadow p-4 flex items-center justify-between flex-shrink-0">
+       <header class="bg-white shadow p-6 flex items-center justify-between flex-shrink-0">
             <button id="toggleSidebar" class="text-2xl text-gray-500 md:hidden">
                 <i class="fas fa-bars"></i>
             </button>
             <div class="text-lg font-bold text-center w-full">Admin Dashboard</div>
             <div class="flex items-center gap-4">
                 <i class="fas fa-bell text-gray-500"></i>
-                <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+
+                <div class="relative" id="avatarDropdownWrapper">
+                    <!-- Avatar -->
+                    <div id="avatarToggle" class="w-8 h-8 rounded-full bg-gray-300 cursor-pointer"></div>
+
+                    <!-- Dropdown -->
+                    <div
+                        id="avatarDropdown"
+                        class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50 hidden"
+                    >
+                        <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                            Xin chào, {{ Auth::user()->name }}
+                        </div>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button
+                                type="submit"
+                                class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-red-600"
+                            >
+                                <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </header>
+
 
         <!-- Page content -->
         <main class="flex-1  overflow-y-auto p-6 bg-gray-50">
@@ -157,5 +182,22 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function () {
+        // Toggle dropdown khi click avatar
+        $('#avatarToggle').on('click', function (e) {
+            e.stopPropagation(); // không lan ra document
+            $('#avatarDropdown').toggle();
+        });
+
+        // Click ngoài dropdown thì ẩn
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('#avatarDropdownWrapper').length) {
+                $('#avatarDropdown').hide();
+            }
+        });
+    });
+</script>
+
 
 </html>

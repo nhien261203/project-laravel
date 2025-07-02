@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone', 
         'password',
     ];
 
@@ -43,3 +44,4 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 }
+// nhien1@gmail.com 1234567
