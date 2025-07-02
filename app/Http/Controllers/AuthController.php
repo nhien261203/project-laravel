@@ -56,14 +56,16 @@ class AuthController extends Controller
             'password' => 'required|confirmed|min:6',
         ]);
 
-        User::create([
+        $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'phone'    => $request->phone,
             'password' => Hash::make($request->password),
         ]);
 
-        // Không login sau khi đăng ký
+        // Gán quyền "user" mặc định
+        $user->assignRole('user');
+
         return redirect()->route('login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
     }
 
