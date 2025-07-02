@@ -10,4 +10,6 @@ interface ProductVariantRepositoryInterface
     public function update($id, array $data);
     public function delete($id);
     public function deleteImage($imageId);
+    
+
 }

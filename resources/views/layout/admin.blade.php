@@ -50,7 +50,7 @@
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
                 <i class="fas fa-chart-bar"></i> <span class="sidebar-text">Reports</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
                 <i class="fas fa-box"></i> <span class="sidebar-text">Products</span>
             </a>
             <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
@@ -101,8 +101,10 @@
 
     <!-- Overlay for mobile -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden md:hidden"></div>
+    @stack('scripts')
 </body>
 {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+
 
 {{-- trang thai alert --}}
 <script>

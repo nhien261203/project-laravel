@@ -50,7 +50,8 @@ class ProductVariantController extends Controller
 
         $this->variantRepo->create($productId, $data);
 
-        return back()->with('success', 'Tạo biến thể thành công');
+        return redirect()->route('admin.products.variants.index', $productId)
+            ->with('success', 'Tạo biến thể thành công');
     }
 
 
@@ -72,7 +73,6 @@ class ProductVariantController extends Controller
         ]);
 
         $data = $request->except(['_token', '_method']);
-
         $data['images'] = $request->file('images');
         $data['primary_image_id'] = $request->input('primary_image_id');
 
@@ -82,19 +82,27 @@ class ProductVariantController extends Controller
 
         $this->variantRepo->update($variantId, $data);
 
-        return back()->with('success', 'Cập nhật biến thể thành công');
+        return redirect()->route('admin.products.variants.index', $productId)
+            ->with('success', 'Cập nhật biến thể thành công');
     }
 
     public function destroy($productId, $variantId)
     {
         $this->variantRepo->delete($variantId);
-        return back()->with('success', 'Xoá biến thể thành công');
+
+        return redirect()->route('admin.products.variants.index', $productId)
+            ->with('success', 'Xoá biến thể thành công');
     }
 
-    public function deleteImage($imageId)
+
+    public function deleteImage($productId, $imageId)
     {
         $this->variantRepo->deleteImage($imageId);
-        return response()->json(['message' => 'Xoá ảnh thành công']);
+
+        return response()->json([
+            'message' => 'Xoá ảnh thành công',
+            'redirect' => url()->previous(), // Gửi lại URL để redirect về đúng trang edit
+        ]);
     }
 
     public function show($productId, $variantId)

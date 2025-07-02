@@ -50,11 +50,18 @@
             <p class="text-gray-700">{{ $product->updated_at->format('d/m/Y H:i') }}</p>
         </div>
 
-        <div class="pt-6 flex justify-between">
-            <a href="{{ route('admin.products.edit', $product->id) }}"
-               class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow">
-                ✏️ Chỉnh sửa
-            </a>
+        <div class="pt-6 flex flex-col md:flex-row md:justify-between gap-3">
+            <div class="flex gap-2">
+                <a href="{{ route('admin.products.edit', $product->id) }}"
+                   class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow">
+                    ✏️ Chỉnh sửa
+                </a>
+
+                <a href="{{ route('admin.products.variants.index', $product->id) }}"
+                   class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow">
+                    📦 Xem biến thể
+                </a>
+            </div>
 
             <a href="{{ route('admin.products.index') }}"
                class="text-sm text-gray-600 hover:underline">
