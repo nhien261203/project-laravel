@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('layout.admin');
+    return view('layout.user');
 });
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
@@ -50,3 +52,19 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
+
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+
+Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+
+
+//test gui mail
+Route::get('/test-mail', function () {
+    Mail::raw('Test email from Laravel', function ($msg) {
+        $msg->to('youremail@gmail.com')->subject('Test Mail');
+    });
+
+    return 'Gửi mail xong!';
+});
