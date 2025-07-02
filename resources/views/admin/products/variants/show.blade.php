@@ -25,9 +25,6 @@
             @foreach($variant->images as $image)
                 <div class="relative w-24 h-24">
                     <img src="{{ asset('storage/' . $image->image_path) }}" class="w-full h-full object-contain border rounded">
-                    @if($image->is_primary)
-                        <span class="absolute bottom-0 left-0 text-xs bg-green-500 text-white px-1 rounded-tr">Chính</span>
-                    @endif
                 </div>
             @endforeach
         </div>

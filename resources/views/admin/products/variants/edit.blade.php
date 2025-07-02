@@ -32,40 +32,13 @@
                 @error('quantity')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700">RAM</label>
-                <input type="text" name="ram" value="{{ old('ram', $variant->ram) }}" class="form-input w-full">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Bộ nhớ</label>
-                <input type="text" name="storage" value="{{ old('storage', $variant->storage) }}" class="form-input w-full">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Màu sắc</label>
-                <input type="text" name="color" value="{{ old('color', $variant->color) }}" class="form-input w-full">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Màn hình</label>
-                <input type="text" name="screen_size" value="{{ old('screen_size', $variant->screen_size) }}" class="form-input w-full">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Pin</label>
-                <input type="text" name="battery" value="{{ old('battery', $variant->battery) }}" class="form-input w-full">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Chip</label>
-                <input type="text" name="chip" value="{{ old('chip', $variant->chip) }}" class="form-input w-full">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Trọng lượng</label>
-                <input type="text" name="weight" value="{{ old('weight', $variant->weight) }}" class="form-input w-full">
-            </div>
+            <div><label class="block text-sm font-medium text-gray-700">RAM</label><input type="text" name="ram" value="{{ old('ram', $variant->ram) }}" class="form-input w-full"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Bộ nhớ</label><input type="text" name="storage" value="{{ old('storage', $variant->storage) }}" class="form-input w-full"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Màu sắc</label><input type="text" name="color" value="{{ old('color', $variant->color) }}" class="form-input w-full"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Màn hình</label><input type="text" name="screen_size" value="{{ old('screen_size', $variant->screen_size) }}" class="form-input w-full"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Pin</label><input type="text" name="battery" value="{{ old('battery', $variant->battery) }}" class="form-input w-full"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Chip</label><input type="text" name="chip" value="{{ old('chip', $variant->chip) }}" class="form-input w-full"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Trọng lượng</label><input type="text" name="weight" value="{{ old('weight', $variant->weight) }}" class="form-input w-full"></div>
         </div>
 
         <div>
@@ -76,20 +49,19 @@
             </select>
         </div>
 
+        <!-- Ảnh hiện tại -->
         <div class="mt-4">
-            <label class="block text-sm font-medium text-gray-700">Ảnh hiện tại và mới:</label>
+            <label class="block text-sm font-medium text-gray-700">Ảnh hiện tại:</label>
             <div id="image-gallery" class="flex flex-wrap gap-4 mt-2">
                 @foreach($variant->images as $image)
                     <div class="relative w-24 h-24">
                         <img src="{{ asset('storage/' . $image->image_path) }}" class="w-full h-full object-contain border rounded">
-                        <div class="absolute top-0 right-0">
-                            <input type="radio" name="primary_image_id" value="{{ $image->id }}" {{ $image->is_primary ? 'checked' : '' }}>
-                        </div>
                     </div>
                 @endforeach
             </div>
         </div>
 
+        <!-- Ảnh mới -->
         <div>
             <label class="block text-sm font-medium text-gray-700">Thêm ảnh mới (nhiều ảnh)</label>
             <input type="file" name="images[]" id="images-input" multiple accept="image/*" class="form-input w-full">
@@ -112,21 +84,16 @@
 <script>
     document.getElementById('images-input').addEventListener('change', function (event) {
         const gallery = document.getElementById('image-gallery');
-        const files = event.target.files;
 
-        Array.from(files).forEach((file, index) => {
+        // Không xóa ảnh cũ — chỉ thêm preview ảnh mới lên đầu
+        Array.from(event.target.files).forEach(file => {
             const reader = new FileReader();
             reader.onload = e => {
                 const imgBox = document.createElement('div');
-                imgBox.classList.add('relative', 'w-24', 'h-24');
-                imgBox.innerHTML = `
-                    <img src="${e.target.result}" class="w-full h-full object-contain border rounded">
-                    <div class="absolute top-0 right-0">
-                        <input type="radio" name="primary_image_id" value="new_${index}">
-                    </div>
-                `;
-                gallery.appendChild(imgBox);
-            }
+                imgBox.className = 'relative w-24 h-24';
+                imgBox.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain border rounded">`;
+                gallery.appendChild(imgBox); // 🟢 Thêm vào đầu
+            };
             reader.readAsDataURL(file);
         });
     });

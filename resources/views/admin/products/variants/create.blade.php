@@ -52,9 +52,8 @@
             @error('images.*')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
 
-        <div id="preview-images" class="flex flex-wrap gap-4 mt-4">
-            <!-- Ảnh xem trước sẽ hiển thị ở đây -->
-        </div>
+        <!-- Preview ảnh -->
+        <div id="preview-images" class="flex flex-wrap gap-4 mt-4"></div>
 
         <!-- Nút submit -->
         <div class="pt-4 flex justify-between items-center">
@@ -76,21 +75,16 @@
         preview.innerHTML = '';
         const files = event.target.files;
 
-        Array.from(files).forEach((file, index) => {
+        Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = e => {
                 const imgBox = document.createElement('div');
                 imgBox.classList.add('relative', 'w-24', 'h-24');
-
                 imgBox.innerHTML = `
                     <img src="${e.target.result}" class="w-full h-full object-contain border rounded">
-                    <div class="absolute top-0 right-0 bg-white rounded-bl px-1">
-                        <input type="radio" name="primary_image_id" value="new_${index}" title="Chọn làm ảnh chính">
-                    </div>
                 `;
-
                 preview.appendChild(imgBox);
-            }
+            };
             reader.readAsDataURL(file);
         });
     });

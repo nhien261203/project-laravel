@@ -30,7 +30,6 @@ class ProductVariantController extends Controller
         return view('admin.products.variants.create', compact('product'));
     }
 
-
     public function store(Request $request, $productId)
     {
         $request->validate([
@@ -42,7 +41,6 @@ class ProductVariantController extends Controller
 
         $data = $request->except('_token');
         $data['images'] = $request->file('images');
-        $data['primary_image_id'] = $request->input('primary_image_id'); // 💡 Thêm dòng này để lấy ảnh chính
 
         // Tự sinh SKU nếu không có
         if (empty($data['sku'])) {
@@ -54,7 +52,6 @@ class ProductVariantController extends Controller
         return redirect()->route('admin.products.variants.index', $productId)
             ->with('success', 'Tạo biến thể thành công');
     }
-
 
     public function edit($productId, $variantId)
     {
@@ -75,7 +72,6 @@ class ProductVariantController extends Controller
 
         $data = $request->except(['_token', '_method']);
         $data['images'] = $request->file('images');
-        $data['primary_image_id'] = $request->input('primary_image_id');
 
         if (empty($data['sku'])) {
             $data['sku'] = 'SKU-P' . $productId . '-' . strtoupper(uniqid());
@@ -95,14 +91,13 @@ class ProductVariantController extends Controller
             ->with('success', 'Xoá biến thể thành công');
     }
 
-
     public function deleteImage($productId, $imageId)
     {
         $this->variantRepo->deleteImage($imageId);
 
         return response()->json([
             'message' => 'Xoá ảnh thành công',
-            'redirect' => url()->previous(), // Gửi lại URL để redirect về đúng trang edit
+            'redirect' => url()->previous(),
         ]);
     }
 
