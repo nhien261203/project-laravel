@@ -8,6 +8,7 @@
         @csrf
         @method('PUT')
 
+        {{-- Tên --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Tên thương hiệu *</label>
             <input
@@ -22,6 +23,7 @@
             @enderror
         </div>
 
+        {{-- Slug --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Slug (tuỳ chọn)</label>
             <input
@@ -35,17 +37,21 @@
             @enderror
         </div>
 
+        {{-- Logo --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Logo hiện tại</label>
-            @if($brand->logo)
-                <div class="mb-2">
-                    <img src="{{ asset('storage/' . $brand->logo) }}" alt="Logo" class="w-24 h-24 object-contain border rounded">
-                </div>
-            @endif
+            <div class="mb-2">
+                @if($brand->logo)
+                    <img id="current_logo" src="{{ asset('storage/' . $brand->logo) }}" alt="Logo hiện tại" class="w-24 h-24 object-contain border rounded">
+                @endif
+                <img id="preview_logo" class="w-24 h-24 object-contain border rounded mt-2 hidden">
+            </div>
+
             <input
                 type="file"
                 name="logo"
                 accept="image/*"
+                onchange="previewImage(this)"
                 class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100"
             >
             @error('logo')
@@ -53,6 +59,7 @@
             @enderror
         </div>
 
+        {{-- Quốc gia --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Quốc gia *</label>
             <input
@@ -67,6 +74,7 @@
             @enderror
         </div>
 
+        {{-- Trạng thái --}}
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái *</label>
             <select
@@ -82,20 +90,35 @@
             @enderror
         </div>
 
+        {{-- Nút --}}
         <div class="flex items-center justify-between mt-6">
-            <button
-                type="submit"
-                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded"
-            >
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded">
                 💾 Cập nhật
             </button>
-            <a
-                href="{{ route('admin.brands.index') }}"
-                class="text-gray-600 hover:underline text-sm"
-            >
+            <a href="{{ route('admin.brands.index') }}" class="text-gray-600 hover:underline text-sm">
                 ← Quay lại danh sách
             </a>
         </div>
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function previewImage(input) {
+        const file = input.files[0];
+        const preview = document.getElementById('preview_logo');
+        const current = document.getElementById('current_logo');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                if (current) current.classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+@endpush

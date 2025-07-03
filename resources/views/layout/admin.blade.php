@@ -59,9 +59,18 @@
             <a href="{{ route('admin.brands.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
                 <i class="fas fa-industry"></i> <span class="sidebar-text">Brands</span>
             </a>
+            <a href="{{ route('admin.banners.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+                <i class="fa-solid fa-images"></i> <span class="sidebar-text">Banners</span>
+            </a>
+
+            <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+                <i class="fa-solid fa-newspaper"></i> <span class="sidebar-text">Blogs</span>
+            </a>
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
                 <i class="fas fa-receipt"></i> <span class="sidebar-text">Orders</span>
             </a>
+
+
         </nav>
 
         <!-- Button thu gọn -->

@@ -1,0 +1,667 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.2
+-- https://www.phpmyadmin.net/
+--
+-- Máy chủ: localhost:3306
+-- Thời gian đã tạo: Th7 03, 2025 lúc 02:27 AM
+-- Phiên bản máy phục vụ: 8.0.30
+-- Phiên bản PHP: 8.2.28
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Cơ sở dữ liệu: `nexus-be`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `banners`
+--
+
+CREATE TABLE `banners` (
+  `id` bigint UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image_desk` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image_mobile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `position` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `banners`
+--
+
+INSERT INTO `banners` (`id`, `title`, `image_desk`, `image_mobile`, `position`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Slider cho trang home', 'banners/PdOhCsDwsjS7YpyxYdSHS5r76K6gTQty6oMCr7HQ.jpg', 'banners/XRHHqMCbpNAyI3RLbIt3kbQNjPUsVhX4mSTKtWxo.png', 'trang home', 1, '2025-07-03 01:25:42', '2025-07-03 01:49:53'),
+(4, 't', 'banners/GxaJopiFCIh6tV4u03nTl8oZUzaWP003mEr1c8xM.png', NULL, 't', 1, '2025-07-03 02:02:55', '2025-07-03 02:02:55'),
+(5, 'test', 'banners/2Ral8ATqD9zbxHTQHnpyKmH8u1Rpz0BiECWY8dVx.png', NULL, 'trang home', 1, '2025-07-03 02:04:57', '2025-07-03 02:04:57');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `brands`
+--
+
+CREATE TABLE `brands` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `brands`
+--
+
+INSERT INTO `brands` (`id`, `name`, `slug`, `logo`, `country`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Sam sung', 'sam-sung', 'brand/VID0ijSQrSO4rLIhTI9pbIr10SPnOt4SLMyVbRNF.png', 'Hàn quốc', 1, '2025-06-30 20:18:50', '2025-06-30 20:18:50'),
+(3, 'Apple-iphone', 'apple-iphone', 'brand/HXM85edW9KDp9yqsK9kPifxRzm8XVxWl9yBjJNmD.png', 'Mỹ', 0, '2025-06-30 20:44:58', '2025-06-30 20:54:51'),
+(6, 'Lenovo', 'lenovo', 'brand/8bT6KkFofYheVnvlTUJssQTOTBUa8JqYAOr3OGh5.png', 'Mỹ', 1, '2025-06-30 21:12:37', '2025-06-30 21:12:37'),
+(7, 'MSI', 'msi', 'brand/IWzJQ0sbYdTAS75yJpF6JMAgObgtvD4bG1KdBtv5.png', 'Mỹ', 1, '2025-06-30 21:13:04', '2025-06-30 21:13:04'),
+(8, 'Apple-macbook', 'apple-macbook', 'brand/Ee2eQd1It7gIdoz5wDjzehfzrFV1YfKZScmuKF1j.png', 'Mỹ', 1, '2025-06-30 21:13:50', '2025-06-30 21:13:50'),
+(9, 'Oppo', 'oppo', 'brand/Mqg2WqhgSOIuwWAIRTRMpf8M3anr9SBgdDiduil9.png', 'Hàn Quốc', 1, '2025-06-30 21:15:40', '2025-06-30 21:15:40'),
+(10, 'Realme', 'realme', 'brand/vg84j8GLH1IT573GqV8ChI7IYF1SG7i0gynGZ78V.png', 'Trung Quốc', 1, '2025-06-30 21:16:03', '2025-06-30 21:16:03'),
+(11, 'test', 'test', 'brand/lPT0eQS5Cm8KCZMihg9DGbFkcjrFbd6z7f2bhBop.png', 'Đài Loan', 1, '2025-07-03 02:05:53', '2025-07-03 02:06:05'),
+(12, 'test-5', 'test-5', 'brand/VMTd7DISPQtCmqzMdNpt65Kzv3JAaWjstY3sT7gN.jpg', 'Hàn Quốc', 1, '2025-07-03 02:10:25', '2025-07-03 02:15:18');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `categories`
+--
+
+CREATE TABLE `categories` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `parent_id` bigint UNSIGNED DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `slug`, `parent_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Điện Thoại', 'dien-thoai', NULL, 1, '2025-06-30 23:37:18', '2025-06-30 23:37:18'),
+(3, 'Phụ kiên', 'phu-kien', NULL, 1, '2025-06-30 23:41:56', '2025-06-30 23:41:56'),
+(4, 'Phụ kiện máy tính', 'phu-kien-may-tinh', 3, 0, '2025-06-30 23:42:13', '2025-07-01 06:58:46'),
+(10, 'Laptop', 'laptop', NULL, 1, '2025-07-01 07:15:38', '2025-07-01 07:15:38'),
+(13, 'Phụ kiện điện thoại', 'phu-kien-dien-thoai', 3, 1, '2025-07-01 07:16:01', '2025-07-01 07:16:34'),
+(14, 'Đồng hồ', 'dong-ho', NULL, 1, '2025-07-01 07:16:16', '2025-07-01 07:16:16');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `failed_jobs`
+--
+
+CREATE TABLE `failed_jobs` (
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` int UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2014_10_12_000000_create_users_table', 1),
+(2, '2014_10_12_100000_create_password_reset_tokens_table', 1),
+(3, '2019_08_19_000000_create_failed_jobs_table', 1),
+(4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+(5, '2025_07_01_030249_create_brands_table', 1),
+(6, '2025_07_01_040326_create_categories_table', 2),
+(7, '2025_07_01_143050_create_products_table', 3),
+(8, '2025_07_01_143113_create_product_variants_table', 3),
+(9, '2025_07_01_143147_create_product_variant_images_table', 3),
+(10, '2025_07_02_104704_add_phone_to_users_table', 4),
+(11, '2025_07_02_160916_create_permission_tables', 5),
+(12, '2025_07_02_204241_add_extra_fields_to_users_table', 6),
+(13, '2025_07_03_081513_create_banners_table', 7);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `model_has_permissions`
+--
+
+CREATE TABLE `model_has_permissions` (
+  `permission_id` bigint UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `model_has_roles`
+--
+
+CREATE TABLE `model_has_roles` (
+  `role_id` bigint UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `model_has_roles`
+--
+
+INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
+(1, 'App\\Models\\User', 1),
+(3, 'App\\Models\\User', 7),
+(2, 'App\\Models\\User', 8),
+(1, 'App\\Models\\User', 9);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `password_reset_tokens`
+--
+
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(1, 'view products', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
+(2, 'manage products', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
+(3, 'view users', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
+(4, 'manage users', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
+(5, 'manage orders', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
+(6, 'edit role', 'web', '2025-07-03 00:59:18', '2025-07-03 00:59:18');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `personal_access_tokens`
+--
+
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `products`
+--
+
+CREATE TABLE `products` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_id` bigint UNSIGNED NOT NULL,
+  `brand_id` bigint UNSIGNED DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `slug`, `category_id`, `brand_id`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Iphone 15', 'iphone-15', 1, 3, 'Dòng sản phẩm ra mắt tháng 6 năm 2024 của Apple', 1, '2025-07-01 08:00:25', '2025-07-01 08:19:49'),
+(2, 'Sam Sung Galaxy24', 'sam-sung-galaxy24', 1, 1, 'Dòng sản phẩm Sam Sung', 1, '2025-07-01 08:21:07', '2025-07-01 08:21:07');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `product_variants`
+--
+
+CREATE TABLE `product_variants` (
+  `id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `sku` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ram` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `storage` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `color` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `screen_size` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `weight` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `battery` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `chip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `original_price` decimal(10,2) DEFAULT NULL,
+  `quantity` int NOT NULL DEFAULT '0',
+  `sold` int NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `product_variants`
+--
+
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `ram`, `storage`, `color`, `screen_size`, `weight`, `battery`, `chip`, `price`, `original_price`, `quantity`, `sold`, `status`, `created_at`, `updated_at`) VALUES
+(7, 1, 'SKU-P1-6864930280CB6', '84GB', '128', 'Đen', '128 inch', '0.8kg', '100%', 'ios', 35000000.00, 30000000.00, 12, 0, 0, '2025-07-02 02:01:38', '2025-07-02 09:04:36'),
+(8, 1, 'SKU-P1-68649591AB0C4', '84GB', NULL, 'Titan', NULL, '500 g', '100%', NULL, 40000000.00, 30000000.00, 10, 0, 1, '2025-07-02 02:12:33', '2025-07-02 02:12:33'),
+(9, 1, 'SKU-P1-686498A806B0E', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3333.00, 333.00, 12, 0, 1, '2025-07-02 02:25:44', '2025-07-02 02:25:44'),
+(10, 2, 'SKU-P2-6865E722D2EB5', '8gb', '128', 'đen', '128 inch', '2.3', '100%', 'androi', 30000000.00, 50000000.00, 23, 0, 1, '2025-07-03 02:12:50', '2025-07-03 02:13:26'),
+(11, 2, 'SKU-P2-6865E78DD9B20', '84GB', '128', 'Bạc', '128 inch', '500 g', '100%', 'androi', 56.00, 45000000.00, 1, 0, 1, '2025-07-03 02:14:37', '2025-07-03 02:14:37');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `product_variant_images`
+--
+
+CREATE TABLE `product_variant_images` (
+  `id` bigint UNSIGNED NOT NULL,
+  `product_variant_id` bigint UNSIGNED NOT NULL,
+  `image_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_primary` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `product_variant_images`
+--
+
+INSERT INTO `product_variant_images` (`id`, `product_variant_id`, `image_path`, `is_primary`, `created_at`, `updated_at`) VALUES
+(34, 9, 'variant_images/xKrA1LePuYh1EN7xXOma6OQkLS8Ac0KlYeIPRe6H.png', 0, '2025-07-02 11:39:23', '2025-07-02 11:39:23'),
+(35, 9, 'variant_images/pLhGT3At3K34oP9HgXmjRROf7FQnLk6yeOR5WVse.jpg', 0, '2025-07-02 11:39:37', '2025-07-02 11:39:37'),
+(36, 9, 'variant_images/v9GGo3MKLCDXxm8mJ8Acl0qIUS6CLEcG75538Sfb.jpg', 0, '2025-07-02 11:44:53', '2025-07-02 11:44:53'),
+(37, 9, 'variant_images/jKsjmiY42HNwUTDB8bJ6DFlZZ31C5EscBw5YNG2S.jpg', 0, '2025-07-02 11:47:09', '2025-07-02 11:47:09'),
+(38, 9, 'variant_images/WL7oKx8nG6nSMkm5T6kJBSkzCjlFasjIXs4DFOrv.png', 0, '2025-07-02 11:47:20', '2025-07-02 11:47:20'),
+(41, 8, 'variant_images/ylKPXMObRz91HAvcwH4SvxhmbiDewnWdPa88LYA3.png', 0, '2025-07-02 11:56:18', '2025-07-02 11:56:18'),
+(42, 8, 'variant_images/p2v3uv4ixvDdCC7oTFQ9ZK1cLL5aYBIqFslTx6lv.png', 0, '2025-07-02 11:56:33', '2025-07-02 11:56:33'),
+(43, 8, 'variant_images/TJg3hcwhOyU3nYUS23xuwRT7Nar2eNHfmyq3Dc4j.png', 0, '2025-07-02 11:56:33', '2025-07-02 11:56:33'),
+(44, 8, 'variant_images/a2wTzmvRoSD95PYeKFRoTG6r5PpFEHG6hoAKe5EJ.png', 0, '2025-07-02 11:56:33', '2025-07-02 11:56:33'),
+(45, 7, 'variant_images/SiN9zaIC1szkid709JEzj7N8fADexPfUengr2ImG.png', 0, '2025-07-02 12:00:11', '2025-07-02 12:00:11'),
+(46, 10, 'variant_images/fqmFwYF0xhPirxzlaVmXJmjgubKUtbPPF9gZEFMZ.jpg', 0, '2025-07-03 02:12:50', '2025-07-03 02:12:50');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
+(2, 'staff', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
+(3, 'user', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `role_has_permissions`
+--
+
+CREATE TABLE `role_has_permissions` (
+  `permission_id` bigint UNSIGNED NOT NULL,
+  `role_id` bigint UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `role_has_permissions`
+--
+
+INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 1),
+(5, 1),
+(6, 1),
+(1, 2),
+(2, 2),
+(5, 2),
+(1, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `users`
+--
+
+CREATE TABLE `users` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` enum('male','female','other') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `phone`, `address`, `gender`, `avatar`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Đỗ Văn Nhiên', 'nhien12345@gmail.com', '0968239407', 'Phu Kim Thạch thất hà nội', 'other', 'avatars/QSFuimo0bRpZYM4M2TDRDdlwPRv2OOwgPaibL6KT.jpg', NULL, '$2y$12$7NtKpKXTOGSvzOSIlV5y0.pet.ojja9BuVl9trpuX0hWgozxV.L96', NULL, '2025-07-02 03:49:09', '2025-07-03 00:48:46'),
+(2, 'Đỗ Nhiên', 'nhien@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$e5AYxQHtonVEWaacypMxo.aoh3TpBzVhXpX.yeHLElIhJXoI3AT7K', NULL, '2025-07-02 03:50:20', '2025-07-02 03:50:20'),
+(3, 'Đỗ Nhiên', 'nhien1234@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$SC1qklp0LGYZhFZVSurAP.6qgGup2zJwdBgj1NUpSnON86.ZQIwPO', NULL, '2025-07-02 03:52:16', '2025-07-02 03:52:16'),
+(4, 'Đỗ Nhiên', 'nhien1@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$o84sndoejDpNyegC/bzUIeek07/F6IKlR4ZqiXLvp7tQeqZnB9ily', NULL, '2025-07-02 03:56:54', '2025-07-02 03:56:54'),
+(6, 'Đỗ Nhiên', 'dovannhien12345@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$I.SyaLS3mQO5jJGhOS/PMuKNpA35xQJY/8WUO9vcCAIubU6miSTJS', NULL, '2025-07-02 08:04:49', '2025-07-02 08:07:19'),
+(7, 'Đỗ Nhiên', 'user1@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$t6OkMQHhXkFAT9usyjWEpueiLdK9gGdGmD3D/UvjQvvn63GF30lGe', NULL, '2025-07-02 09:24:01', '2025-07-02 09:24:01'),
+(8, 'Nhân viên - Nam', 'staff1@gmail.com', '0966636363', 'Ha noi', 'male', 'avatars/ZX2Cdb5r7vj4xVh6Oh1u7Fp9UAET9VV1cW6qSHpQ.jpg', NULL, '$2y$12$J.E2DcC4ftaA3CoetBwXqO5jhKUZq2VbwNrrKfExwsloZ7TGYfWUa', NULL, '2025-07-02 09:30:46', '2025-07-03 01:06:32'),
+(9, 'Đỗ Nhiên', 'nhien123@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$nNPu96eBE57lG39SSnxjau2V5RRIjLva2ZFbXX22yV04zMQ80IbtK', NULL, '2025-07-02 09:53:46', '2025-07-02 09:53:46');
+
+--
+-- Chỉ mục cho các bảng đã đổ
+--
+
+--
+-- Chỉ mục cho bảng `banners`
+--
+ALTER TABLE `banners`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `brands`
+--
+ALTER TABLE `brands`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `brands_slug_unique` (`slug`);
+
+--
+-- Chỉ mục cho bảng `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `categories_slug_unique` (`slug`);
+
+--
+-- Chỉ mục cho bảng `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Chỉ mục cho bảng `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
+-- Chỉ mục cho bảng `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD PRIMARY KEY (`role_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
+-- Chỉ mục cho bảng `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`email`);
+
+--
+-- Chỉ mục cho bảng `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`);
+
+--
+-- Chỉ mục cho bảng `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
+
+--
+-- Chỉ mục cho bảng `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `products_slug_unique` (`slug`),
+  ADD KEY `products_category_id_foreign` (`category_id`),
+  ADD KEY `products_brand_id_foreign` (`brand_id`);
+
+--
+-- Chỉ mục cho bảng `product_variants`
+--
+ALTER TABLE `product_variants`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `product_variants_sku_unique` (`sku`),
+  ADD KEY `product_variants_product_id_foreign` (`product_id`);
+
+--
+-- Chỉ mục cho bảng `product_variant_images`
+--
+ALTER TABLE `product_variant_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_variant_images_product_variant_id_foreign` (`product_variant_id`);
+
+--
+-- Chỉ mục cho bảng `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`);
+
+--
+-- Chỉ mục cho bảng `role_has_permissions`
+--
+ALTER TABLE `role_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`role_id`),
+  ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
+
+--
+-- Chỉ mục cho bảng `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `users_phone_unique` (`phone`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
+
+--
+-- AUTO_INCREMENT cho bảng `banners`
+--
+ALTER TABLE `banners`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT cho bảng `brands`
+--
+ALTER TABLE `brands`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT cho bảng `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT cho bảng `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT cho bảng `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT cho bảng `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT cho bảng `product_variants`
+--
+ALTER TABLE `product_variants`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT cho bảng `product_variant_images`
+--
+ALTER TABLE `product_variant_images`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+
+--
+-- AUTO_INCREMENT cho bảng `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT cho bảng `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- Ràng buộc đối với các bảng kết xuất
+--
+
+--
+-- Ràng buộc cho bảng `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD CONSTRAINT `model_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
+
+--
+-- Ràng buộc cho bảng `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+--
+-- Ràng buộc cho bảng `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `products_brand_id_foreign` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
+
+--
+-- Ràng buộc cho bảng `product_variants`
+--
+ALTER TABLE `product_variants`
+  ADD CONSTRAINT `product_variants_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Ràng buộc cho bảng `product_variant_images`
+--
+ALTER TABLE `product_variant_images`
+  ADD CONSTRAINT `product_variant_images_product_variant_id_foreign` FOREIGN KEY (`product_variant_id`) REFERENCES `product_variants` (`id`) ON DELETE CASCADE;
+
+--
+-- Ràng buộc cho bảng `role_has_permissions`
+--
+ALTER TABLE `role_has_permissions`
+  ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

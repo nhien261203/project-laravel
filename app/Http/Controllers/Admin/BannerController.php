@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -8,11 +9,23 @@ use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $banners = Banner::latest()->paginate(10);
+        $query = Banner::query();
+
+        if ($request->filled('keyword')) {
+            $query->where('title', 'like', '%' . $request->keyword . '%');
+        }
+
+        if ($request->filled('status') && in_array($request->status, ['0', '1'])) {
+            $query->where('status', $request->status);
+        }
+
+        $banners = $query->latest()->paginate(8)->withQueryString();
+
         return view('admin.banners.index', compact('banners'));
     }
+
 
     public function create()
     {
@@ -49,20 +62,26 @@ class BannerController extends Controller
     public function update(Request $request, Banner $banner)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'image_desk' => 'nullable|image',
-            'image_mobile' => 'nullable|image',
-            'position' => 'required|string|max:255',
-            'status' => 'required|boolean',
+            'title'         => 'required|string|max:255',
+            'position'      => 'required|string|max:100',
+            'status'        => 'required|boolean',
+            'image_desk'    => 'nullable|image|max:2048',
+            'image_mobile'  => 'nullable|image|max:2048',
         ]);
 
+        // Xử lý ảnh desktop nếu có upload mới
         if ($request->hasFile('image_desk')) {
-            Storage::disk('public')->delete($banner->image_desk);
+            if ($banner->image_desk) {
+                Storage::disk('public')->delete($banner->image_desk);
+            }
             $data['image_desk'] = $request->file('image_desk')->store('banners', 'public');
         }
 
+        // Xử lý ảnh mobile nếu có upload mới
         if ($request->hasFile('image_mobile')) {
-            Storage::disk('public')->delete($banner->image_mobile);
+            if ($banner->image_mobile) {
+                Storage::disk('public')->delete($banner->image_mobile);
+            }
             $data['image_mobile'] = $request->file('image_mobile')->store('banners', 'public');
         }
 
@@ -71,11 +90,26 @@ class BannerController extends Controller
         return redirect()->route('admin.banners.index')->with('success', 'Đã cập nhật banner.');
     }
 
+
     public function destroy(Banner $banner)
     {
-        Storage::disk('public')->delete([$banner->image_desk, $banner->image_mobile]);
+        // Xoá ảnh nếu có
+        if ($banner->image_desk) {
+            Storage::disk('public')->delete($banner->image_desk);
+        }
+
+        if ($banner->image_mobile) {
+            Storage::disk('public')->delete($banner->image_mobile);
+        }
+
+        // Xoá record
         $banner->delete();
 
         return redirect()->route('admin.banners.index')->with('success', 'Đã xoá banner.');
+    }
+
+    public function show(Banner $banner)
+    {
+        return view('admin.banners.show', compact('banner'));
     }
 }
