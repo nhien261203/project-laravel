@@ -33,6 +33,11 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
 
     Route::post('blogs/upload', [BlogController::class, 'upload'])->name('blogs.upload');
 
+    Route::get('/logs', [\App\Http\Controllers\Admin\AdminLogController::class, 'index'])
+        ->middleware('can:view log')
+        ->name('logs.index');
+
+
 
     Route::prefix('products/{product}/variants')->name('products.variants.')->group(function () {
         Route::get('/', [ProductVariantController::class, 'index'])->name('index');
@@ -50,10 +55,10 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
 
-    
-        // Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
-        // Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.change');
-    
+
+    // Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
+    // Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.change');
+
 });
 
 // Staff – chỉ vào sản phẩm

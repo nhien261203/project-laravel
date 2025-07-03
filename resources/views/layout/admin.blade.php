@@ -70,6 +70,12 @@
                 <i class="fas fa-receipt"></i> <span class="sidebar-text">Orders</span>
             </a>
 
+            @can('view log')
+                <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> <span class="sidebar-text">Log Actions</span>
+                </a>
+            @endcan
+
 
         </nav>
 

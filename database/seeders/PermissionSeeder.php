@@ -15,10 +15,12 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         // Tạo permission nếu chưa có
-        $permission = Permission::firstOrCreate(['name' => 'edit role']);
+        $editRolePermission = Permission::firstOrCreate(['name' => 'edit role']);
+        $viewLogPermission  = Permission::firstOrCreate(['name' => 'view log']);
 
-        // Gán permission này cho vai trò admin
+        // Gán cho vai trò admin
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $adminRole->givePermissionTo($permission);
+        $adminRole->givePermissionTo($editRolePermission);
+        $adminRole->givePermissionTo($viewLogPermission);
     }
 }

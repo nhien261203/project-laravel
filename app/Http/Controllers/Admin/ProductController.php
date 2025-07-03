@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\AdminLogHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Models\Category;
@@ -48,7 +49,10 @@ class ProductController extends Controller
 
         $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
 
-        $this->productRepo->create($data);
+        $product = $this->productRepo->create($data);
+
+        //Ghi log thêm
+        AdminLogHelper::log('create_product', "Thêm sản phẩm: {$product->name}");
 
         return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công!');
     }
@@ -79,12 +83,19 @@ class ProductController extends Controller
 
         $this->productRepo->update($id, $data);
 
+        //ghi log
+        AdminLogHelper::log('update_product', "Cập nhật sản phẩm: {$product->name}");
+
         return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công!');
     }
 
     public function destroy($id)
     {
+        $product = $this->productRepo->find($id);
         $this->productRepo->delete($id);
+
+        // 📝 Ghi log xoá
+        AdminLogHelper::log('delete_product', "Xóa sản phẩm: {$product->name}");
         return redirect()->back()->with('success', 'Xóa sản phẩm thành công!');
     }
 
