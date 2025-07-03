@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Support\Facades\Mail;
@@ -16,13 +18,15 @@ Route::get('/', function () {
     return view('layout.user');
 });
 
-// 🟩 Admin - toàn quyền (chỉ admin)
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+//  Admin - toàn quyền (chỉ admin, staff dung permission chặn 1 số quyền ở controller va view)
+Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
 
     Route::resource('brands', BrandController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
+
+    Route::resource('banners', BannerController::class);
 
     Route::prefix('products/{product}/variants')->name('products.variants.')->group(function () {
         Route::get('/', [ProductVariantController::class, 'index'])->name('index');
@@ -33,13 +37,19 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::delete('{variant}', [ProductVariantController::class, 'destroy'])->name('destroy');
         Route::get('{variant}', [ProductVariantController::class, 'show'])->name('show');
         Route::delete('images/{image}', [ProductVariantController::class, 'deleteImage'])->name('images.delete');
+
+
     });
+
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
-// 🟩 Staff – chỉ vào sản phẩm
-Route::middleware(['auth', 'role:staff|admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('products', ProductController::class)->only(['index', 'create', 'store', 'edit', 'update']);
-});
+// Staff – chỉ vào sản phẩm
+// Route::middleware(['auth', 'role:staff|admin'])->prefix('admin')->name('admin.')->group(function () {
+//     Route::resource('products', ProductController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+// });
 
 // 🟩 Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

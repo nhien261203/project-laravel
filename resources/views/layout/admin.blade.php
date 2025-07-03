@@ -95,7 +95,7 @@
                         class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50 hidden"
                     >
                         <div class="px-4 py-2 text-sm text-gray-700 border-b">
-                            Xin chào, {{ Auth::user()->name }}
+                            <a href="{{ route('admin.profile.show') }}"> Xin chào, {{ Auth::user()->name }}</a>
                         </div>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
