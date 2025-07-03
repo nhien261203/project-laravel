@@ -8,20 +8,27 @@ use Illuminate\Database\Eloquent\Model;
 class Blog extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'title', 'slug', 'excerpt', 'content', 'blog_category_id', 'status'
+        'title',
+        'slug',
+        'excerpt',
+        'content',
+        'status',
+        'thumbnail'
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(BlogCategory::class, 'blog_category_id');
-    }
-
+    /**
+     * Tags liên kết nhiều nhiều
+     */
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'blog_tag');
     }
 
+    /**
+     * Các comment liên kết 1-nhiều
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);

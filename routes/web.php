@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
@@ -27,6 +28,11 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::resource('products', ProductController::class);
 
     Route::resource('banners', BannerController::class);
+
+    Route::resource('blogs', BlogController::class);
+
+    Route::post('blogs/upload', [BlogController::class, 'upload'])->name('blogs.upload');
+
 
     Route::prefix('products/{product}/variants')->name('products.variants.')->group(function () {
         Route::get('/', [ProductVariantController::class, 'index'])->name('index');

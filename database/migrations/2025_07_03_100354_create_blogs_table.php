@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('excerpt')->nullable();
             $table->longText('content');
-            $table->foreignId('blog_category_id')->nullable()->constrained('blog_categories')->onDelete('set null');
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
