@@ -35,7 +35,8 @@
 <body class="h-screen overflow-y-auto flex bg-gray-100 text-gray-800">
 
     <!-- Sidebar -->
-    <div id="sidebarWrapper" class="fixed md:static z-40 w-64 bg-[#242a33] shadow-lg h-full transform -translate-x-full md:translate-x-0 transition-all duration-500 flex flex-col" data-collapsed="false">
+    <div id="sidebarWrapper" class="fixed md:static z-40 w-64 bg-[#242a33] shadow-lg h-full overflow-y-auto transform -translate-x-full md:translate-x-0 transition-all duration-500 flex flex-col" data-collapsed="false">
+
         <div class="p-6 text-xl font-bold border-b">
             <span class="sidebar-text text-white">🌟 Nexus Admin</span>
         </div>
@@ -70,6 +71,7 @@
                 <i class="fas fa-receipt"></i> <span class="sidebar-text">Orders</span>
             </a>
 
+            
             @can('view log')
                 <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                     <i class="fa-solid fa-screwdriver-wrench"></i> <span class="sidebar-text">Log Actions</span>
@@ -102,30 +104,41 @@
 
                 <div class="relative" id="avatarDropdownWrapper">
                     <!-- Avatar -->
-                    <div id="avatarToggle" class="w-8 h-8 rounded-full bg-gray-300 cursor-pointer"></div>
+                    <img id="avatarToggle"
+                        src="{{ asset('storage/' . (Auth::user()->avatar ?? 'avatars/default.jpg')) }}"
+                        alt="Avatar"
+                        class="w-9 h-9 rounded-full object-cover cursor-pointer border-1 border-white shadow" />
+
 
                     <!-- Dropdown -->
                     <div
                         id="avatarDropdown"
-                        class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50 hidden"
+                        class="absolute right-0 mt-2 w-60 bg-white border rounded-lg shadow-lg z-50 hidden"
                     >
-                        <div class="px-4 py-2 text-sm text-gray-700 border-b">
-                            <a href="{{ route('admin.profile.show') }}"> Xin chào, {{ Auth::user()->name }}</a>
-                        </div>
-                        <div class="px-4 py-2 text-sm text-gray-700 border-b">
-                            <a href="{{ route('password.change') }}">Thay đổi mật khẩu</a>
+                        <div class="flex items-center gap-3 px-4 py-4 bg-blue-500 rounded-t-lg text-white">
+                            <img src="{{ asset('storage/' . (Auth::user()->avatar ?? 'avatars/default.jpg')) }}"
+                                class="w-12 h-12 rounded-full object-cover border-2 border-white shadow" alt="Avatar">
+                            <div>
+                                <div class="font-semibold text-base">{{ Auth::user()->name }}</div>
+                                <div class="text-sm opacity-80">{{ Auth::user()->email }}</div>
+                            </div>
                         </div>
 
-                        <form action="{{ route('logout') }}" method="POST">
+                        <a href="{{ route('admin.profile.show') }}" class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100 text-sm">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a href="{{ route('password.change') }}" class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100 text-sm">
+                            <i class="fas fa-key"></i> Thay đổi mật khẩu
+                        </a>
+                        <form action="{{ route('logout') }}" method="POST" class="border-t">
                             @csrf
-                            <button
-                                type="submit"
-                                class="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-red-600"
-                            >
-                                <i class="fas fa-sign-out-alt mr-2"></i> Đăng xuất
+                            <button type="submit"
+                                    class="flex items-center gap-3 px-4 py-3 w-full text-left text-red-600 hover:bg-gray-100 text-sm">
+                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
                             </button>
                         </form>
                     </div>
+
                 </div>
 
             </div>
