@@ -35,38 +35,38 @@
 <body class="h-screen overflow-y-auto flex bg-gray-100 text-gray-800">
 
     <!-- Sidebar -->
-    <div id="sidebarWrapper" class="fixed md:static z-40 w-64 bg-white shadow-lg h-full transform -translate-x-full md:translate-x-0 transition-all duration-500 flex flex-col" data-collapsed="false">
+    <div id="sidebarWrapper" class="fixed md:static z-40 w-64 bg-[#242a33] shadow-lg h-full transform -translate-x-full md:translate-x-0 transition-all duration-500 flex flex-col" data-collapsed="false">
         <div class="p-6 text-xl font-bold border-b">
-            <span class="sidebar-text">🌟 Nexus Admin</span>
+            <span class="sidebar-text text-white">🌟 Nexus Admin</span>
         </div>
 
-        <nav class="flex-1 p-4 space-y-2 text-gray-700">
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+        <nav class="flex-1 p-4 space-y-2 text-white">
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-tachometer-alt"></i> <span class="sidebar-text">Dashboard</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-user"></i> <span class="sidebar-text">Users</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-chart-bar"></i> <span class="sidebar-text">Reports</span>
             </a>
-            <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-box"></i> <span class="sidebar-text">Products</span>
             </a>
-            <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-tags"></i> <span class="sidebar-text">Categories</span>
             </a>
-            <a href="{{ route('admin.brands.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="{{ route('admin.brands.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-industry"></i> <span class="sidebar-text">Brands</span>
             </a>
-            <a href="{{ route('admin.banners.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="{{ route('admin.banners.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fa-solid fa-images"></i> <span class="sidebar-text">Banners</span>
             </a>
 
-            <a class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="{{ route('admin.blogs.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fa-solid fa-newspaper"></i> <span class="sidebar-text">Blogs</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100">
+            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-receipt"></i> <span class="sidebar-text">Orders</span>
             </a>
 
@@ -75,7 +75,7 @@
 
         <!-- Button thu gọn -->
         <div class="p-4 border-t hidden md:block">
-            <button id="collapseSidebarBtn" class="w-full flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-indigo-600 transition duration-200 group">
+            <button id="collapseSidebarBtn" class="w-full flex items-center justify-center gap-2 text-sm text-white hover:text-indigo-600 transition duration-200 group">
                 <i id="collapseIcon" class="fas fa-angle-double-left transition-transform duration-300 group-hover:rotate-180"></i>
                 <span class="sidebar-text">Thu gọn</span>
             </button>
@@ -86,7 +86,7 @@
     <div class="flex flex-col flex-1 h-full overflow-hidden">
 
         <!-- Header -->
-       <header class="bg-white shadow p-6 flex items-center justify-between flex-shrink-0">
+        <header class="bg-white shadow p-6 flex items-center justify-between flex-shrink-0">
             <button id="toggleSidebar" class="text-2xl text-gray-500 md:hidden">
                 <i class="fas fa-bars"></i>
             </button>
@@ -106,6 +106,10 @@
                         <div class="px-4 py-2 text-sm text-gray-700 border-b">
                             <a href="{{ route('admin.profile.show') }}"> Xin chào, {{ Auth::user()->name }}</a>
                         </div>
+                        <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                            <a href="{{ route('password.change') }}">Thay đổi mật khẩu</a>
+                        </div>
+
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button

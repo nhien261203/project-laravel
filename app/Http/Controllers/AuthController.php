@@ -23,7 +23,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // Xác định loại login: email hay số điện thoại
+        // Xác định loại login: email hoặc phone
         $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
         $credentials = [
@@ -33,12 +33,20 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect()->intended('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
+
+            $user = Auth::user();
+
+            // Kiểm tra role bằng Spatie
+            if ($user->hasRole(['admin', 'staff'])) {
+                return redirect()->intended('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
+            }
+
+            // Nếu không phải admin/staff → về trang chủ
+            return redirect('/')->with('success', 'Đăng nhập thành công!');
         }
 
         return back()->with('error', 'Thông tin đăng nhập không chính xác.')->withInput();
     }
-
 
     // Hiển thị form đăng ký
     public function showRegister()
@@ -76,5 +84,30 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('login');
+    }
+
+    public function showChangePassword()
+    {
+        return view('auth.change-password');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return back()->with('success', 'Mật khẩu đã được thay đổi thành công!');
     }
 }

@@ -43,13 +43,17 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
         Route::delete('{variant}', [ProductVariantController::class, 'destroy'])->name('destroy');
         Route::get('{variant}', [ProductVariantController::class, 'show'])->name('show');
         Route::delete('images/{image}', [ProductVariantController::class, 'deleteImage'])->name('images.delete');
-
-
     });
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+
+    
+        // Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
+        // Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.change');
+    
 });
 
 // Staff – chỉ vào sản phẩm
@@ -71,6 +75,10 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
+    Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.change');
+});
 // 🟩 Test gửi mail
 Route::get('/test-mail', function () {
     Mail::raw('Test email from Laravel', function ($msg) {
