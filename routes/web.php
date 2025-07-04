@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ForgotPasswordController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ForgotPasswordController;
+
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -66,7 +68,7 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
 //     Route::resource('products', ProductController::class)->only(['index', 'create', 'store', 'edit', 'update']);
 // });
 
-// 🟩 Auth
+// Auth cho user 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -75,15 +77,38 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 
 // 🟩 Quên mật khẩu
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
-Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
-    Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.change');
+
+
+
+
+//auth cho admin 
+
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login']);
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+    Route::get('/register', [AdminAuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AdminAuthController::class, 'register']);
+
+    // Đổi mật khẩu
+   
+
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+    
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/change-password', [AdminAuthController::class, 'showChangePassword'])->name('password.form');
+        Route::post('/change-password', [AdminAuthController::class, 'changePassword'])->name('password.change');
+    });
 });
+
+
 // 🟩 Test gửi mail
 Route::get('/test-mail', function () {
     Mail::raw('Test email from Laravel', function ($msg) {

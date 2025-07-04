@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
+
+class AdminAuthController extends Controller
 {
-    // Hiển thị form đăng nhập
     public function showLogin()
     {
-        return view('auth.login');
+        return view('admin.auth.login');
     }
 
     // Xử lý đăng nhập
@@ -42,7 +43,7 @@ class AuthController extends Controller
             // }
 
             // Nếu không phải admin/staff → về trang chủ
-            return redirect('/')->with('success', 'Đăng nhập thành công!');
+            return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
         }
 
         return back()->with('error', 'Thông tin đăng nhập không chính xác.')->withInput();
@@ -51,7 +52,7 @@ class AuthController extends Controller
     // Hiển thị form đăng ký
     public function showRegister()
     {
-        return view('auth.register');
+        return view('admin.auth.register');
     }
 
     // Xử lý đăng ký
@@ -71,10 +72,10 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Gán quyền "user" mặc định
-        $user->assignRole('user');
+        // Gán quyền "staff" mặc định
+        $user->assignRole('staff');
 
-        return redirect()->route('login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
+        return redirect()->route('admin.login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
     }
 
     // Xử lý đăng xuất
@@ -83,31 +84,34 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login');
+        return redirect()->route('admin.login');
     }
 
-    // public function showChangePassword()
-    // {
-    //     return view('auth.change-password');
-    // }
+    public function showChangePassword()
+    {
+        return view('admin.auth.change-password');
+    }
 
-    // public function changePassword(Request $request)
-    // {
-    //     $request->validate([
-    //         'current_password' => 'required',
-    //         'new_password' => 'required|min:6|confirmed',
-    //     ]);
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
 
-    //     $user = Auth::user();
+        $user = Auth::user();
 
-    //     if (!Hash::check($request->current_password, $user->password)) {
-    //         return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng.']);
-    //     }
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng.']);
+        }
 
-    //     $user->update([
-    //         'password' => Hash::make($request->new_password),
-    //     ]);
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
 
-    //     return back()->with('success', 'Mật khẩu đã được thay đổi thành công!');
-    // }
+        return back()->with('success', 'Mật khẩu đã được thay đổi thành công!');
+    }
 }
+// dovan.....com Nhien12345@ admin
+// 2101......com Nhien123456@ staff
+// user ........ Nhien12345@  user

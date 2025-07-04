@@ -8,7 +8,7 @@
         <div class="text-green-600 mb-4">{{ session('success') }}</div>
     @endif --}}
 
-    <form method="POST" action="{{ route('password.change') }}">
+    <form method="POST" action="{{ route('admin.password.change') }}">
         @csrf
 
         <div class="mb-4">

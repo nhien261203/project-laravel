@@ -7,6 +7,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
+
 
 class ResetPasswordMail extends Mailable
 {
@@ -42,9 +44,13 @@ class ResetPasswordMail extends Mailable
         return new Content(
             view: 'emails.reset-password',
             with: [
-                'token' => $this->token,
                 'email' => $this->email,
+                'resetUrl' => URL::route('admin.password.reset', [
+                    'token' => $this->token,
+                    'email' => $this->email,
+                ], true),
             ],
+
         );
     }
 

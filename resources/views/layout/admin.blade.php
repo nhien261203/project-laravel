@@ -94,7 +94,7 @@
     <div class="flex flex-col flex-1 h-full overflow-hidden">
 
         <!-- Header -->
-        <header class="bg-white shadow p-6 flex items-center justify-between flex-shrink-0">
+        <header class="bg-gray-200 shadow p-6 flex items-center justify-between flex-shrink-0">
             <button id="toggleSidebar" class="text-2xl text-gray-500 md:hidden">
                 <i class="fas fa-bars"></i>
             </button>
@@ -113,28 +113,38 @@
                     <!-- Dropdown -->
                     <div
                         id="avatarDropdown"
-                        class="absolute right-0 mt-2 w-60 bg-white border rounded-lg shadow-lg z-50 hidden"
+                        class="absolute right-0 mt-2 w-72 bg-white border rounded-lg shadow-lg z-50 hidden"
                     >
-                        <div class="flex items-center gap-3 px-4 py-4 bg-blue-500 rounded-t-lg text-white">
+                        {{-- Header Avatar --}}
+                        <div class="flex items-center gap-3 px-4 py-4 bg-blue-600 rounded-t-lg text-white">
                             <img src="{{ asset('storage/' . (Auth::user()->avatar ?? 'avatars/default.jpg')) }}"
                                 class="w-12 h-12 rounded-full object-cover border-2 border-white shadow" alt="Avatar">
-                            <div>
-                                <div class="font-semibold text-base">{{ Auth::user()->name }}</div>
-                                <div class="text-sm opacity-80">{{ Auth::user()->email }}</div>
+                            <div class="overflow-hidden">
+                                <div class="font-semibold text-base truncate max-w-[180px]">
+                                    {{ Auth::user()->name }}
+                                </div>
+                                <div class="text-sm opacity-80 truncate max-w-[180px] whitespace-nowrap overflow-hidden">
+                                    {{ Auth::user()->email }}
+                                </div>
                             </div>
                         </div>
 
-                        <a href="{{ route('admin.profile.show') }}" class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100 text-sm">
-                            <i class="fas fa-user"></i> My Profile
+                        {{-- Menu Items --}}
+                        <a href="{{ route('admin.profile.show') }}"
+                        class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100 text-sm">
+                            <i class="fas fa-user text-blue-600 w-5"></i> <span>Thông tin cá nhân</span>
                         </a>
-                        <a href="{{ route('password.change') }}" class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100 text-sm">
-                            <i class="fas fa-key"></i> Thay đổi mật khẩu
+
+                        <a href="{{ route('admin.password.form') }}"
+                        class="flex items-center gap-3 px-4 py-3 text-gray-800 hover:bg-gray-100 text-sm">
+                            <i class="fas fa-key text-yellow-500 w-5"></i> <span>Thay đổi mật khẩu</span>
                         </a>
-                        <form action="{{ route('logout') }}" method="POST" class="border-t">
+
+                        <form action="{{ route('admin.logout') }}" method="POST" class="border-t">
                             @csrf
                             <button type="submit"
                                     class="flex items-center gap-3 px-4 py-3 w-full text-left text-red-600 hover:bg-gray-100 text-sm">
-                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                <i class="fas fa-sign-out-alt w-5"></i> <span>Đăng xuất</span>
                             </button>
                         </form>
                     </div>
@@ -151,7 +161,7 @@
         </main>
 
         <!-- Footer -->
-        <footer class="bg-white text-center text-sm text-gray-500 p-4 flex-shrink-0 shadow-inner">
+        <footer class="bg-gray-200 text-center text-sm text-gray-500 p-4 flex-shrink-0 shadow-inner">
             &copy; {{ date('Y') }} Nexus Admin . Tool Admin All In One.
         </footer>
     </div>

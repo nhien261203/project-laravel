@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordMail;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -12,10 +13,9 @@ use Illuminate\Http\Request;
 
 class ForgotPasswordController extends Controller
 {
-    // Hiển thị form nhập email
     public function showForm()
     {
-        return view('auth.forgot-password');
+        return view('admin.auth.forgot-password');
     }
 
     // Gửi mail reset mật khẩu
@@ -38,7 +38,7 @@ class ForgotPasswordController extends Controller
     // Hiển thị form đặt lại mật khẩu
     public function showResetForm(Request $request)
     {
-        return view('auth.reset-password', [
+        return view('admin.auth.reset-password', [
             'token' => $request->token,
             'email' => $request->email,
         ]);
@@ -75,6 +75,6 @@ class ForgotPasswordController extends Controller
         // Xoá token sau khi dùng
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
-        return redirect()->route('login')->with('success', 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập.');
+        return redirect()->route('admin.login')->with('success', 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập.');
     }
 }

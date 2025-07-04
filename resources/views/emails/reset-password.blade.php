@@ -12,7 +12,7 @@
     <p>Vui lòng nhấn vào nút bên dưới để tiến hành đặt lại mật khẩu:</p>
 
     <p>
-        <a href="{{ url('/reset-password?token=' . $token . '&email=' . urlencode($email)) }}"
+        <a href="{{ $resetUrl }}"
            style="display: inline-block; padding: 10px 20px; background-color: #3490dc; color: #fff; text-decoration: none; border-radius: 5px;">
             Đặt lại mật khẩu
         </a>
