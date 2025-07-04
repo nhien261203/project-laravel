@@ -26,7 +26,7 @@
                 <tr>
                     <th class="p-3">#</th>
                     <th class="p-3">Tiêu đề</th>
-                    <th class="p-3">Ảnh</th>
+                    {{-- <th class="p-3">Ảnh</th> --}}
                     <th class="p-3">Trạng thái</th>
                     <th class="p-3">Ngày tạo</th>
                     <th class="p-3 text-right">Hành động</th>
@@ -37,14 +37,14 @@
                     <tr class="border-t">
                         <td class="p-3">{{ $loop->iteration + ($blogs->currentPage() - 1) * $blogs->perPage() }}</td>
                         <td class="p-3 font-semibold">{{ $blog->title }}</td>
-                        <td class="p-3">
+                        {{-- <td class="p-3">
                             @if($blog->thumbnail)
                                 <img src="{{ asset('storage/' . $blog->thumbnail) }}" class="w-16 h-16 object-cover rounded shadow">
 
                             @else
                                 <span class="text-gray-400 italic">Không có</span>
                             @endif
-                        </td>
+                        </td> --}}
 
                         <td class="p-3">
                             <span class="px-2 py-1 rounded text-white text-sm
@@ -54,13 +54,13 @@
                         </td>
                         <td class="p-3 text-gray-500 text-sm">{{ $blog->created_at->format('d/m/Y') }}</td>
                         <td class="p-3 text-right space-x-2">
-                            <a href="{{ route('admin.blogs.show', $blog->id) }}" class="text-blue-600 hover:underline">👁️ Xem</a>
-                            <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="text-blue-600 hover:underline">✏️ Sửa</a>
+                            <a href="{{ route('admin.blogs.show', $blog->id) }}" class="text-blue-600 hover:underline">👁️ </a>
+                            <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="text-blue-600 hover:underline">✏️</a>
                             <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST"
                                   onsubmit="return confirm('Xác nhận xóa?')" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline">🗑️ Xoá</button>
+                                <button type="submit" class="text-red-600 hover:underline">🗑️</button>
                             </form>
                         </td>
                     </tr>

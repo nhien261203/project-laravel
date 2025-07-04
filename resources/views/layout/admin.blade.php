@@ -22,6 +22,11 @@
     <!-- Custom JS -->
     <script src="{{ asset('js/admin.js') }}" defer></script>
 
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+
     <style>
         html, body {
             height: 100%;

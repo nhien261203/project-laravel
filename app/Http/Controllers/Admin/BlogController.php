@@ -23,7 +23,7 @@ class BlogController extends Controller
             $query->where('status', $status);
         }
 
-        $blogs = $query->latest()->paginate(8)->withQueryString();
+        $blogs = $query->latest()->paginate(6)->withQueryString();
 
         return view('admin.blogs.index', compact('blogs'));
     }
@@ -125,8 +125,8 @@ class BlogController extends Controller
 
     public function upload(Request $request)
     {
-        if ($request->hasFile('upload')) {
-            $file = $request->file('upload');
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
             $filename = time() . '_' . $file->getClientOriginalName();
             $path = $file->storeAs('uploads/blog', $filename, 'public');
 
