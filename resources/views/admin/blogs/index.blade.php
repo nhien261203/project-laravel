@@ -2,78 +2,85 @@
 
 @section('content')
 <div class="bg-white p-6 rounded shadow max-w-7xl mx-auto">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">📚 Danh sách bài viết</h2>
+    <div class="flex justify-between items-center mb-6 flex-wrap gap-2">
+        <h2 class="text-2xl font-bold text-gray-800">📚 Danh sách bài viết</h2>
+        <a href="{{ route('admin.blogs.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
+            ➕ Viết bài mới
+        </a>
+    </div>
 
-    <form method="GET" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <!-- Bộ lọc -->
+    <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <input type="text" name="search" value="{{ request('search') }}"
-               class="border-gray-300 rounded px-3 py-2" placeholder="Tìm theo tiêu đề...">
+               class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-100"
+               placeholder="🔍 Tìm theo tiêu đề...">
 
-        <select name="status" class="border-gray-300 rounded px-3 py-2">
+        <select name="status"
+                class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-100">
             <option value="">-- Tất cả trạng thái --</option>
             <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Công khai</option>
             <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Nháp</option>
         </select>
 
         <div class="flex gap-2">
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">🔍 Tìm</button>
-            <a href="{{ route('admin.blogs.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">♻️ Reset</a>
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow">
+                🔍 Tìm
+            </button>
+            <a href="{{ route('admin.blogs.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded shadow">
+                ♻️ Reset
+            </a>
         </div>
     </form>
 
+    <!-- Bảng danh sách -->
     <div class="overflow-x-auto">
-        <table class="w-full border border-gray-200">
-            <thead class="bg-gray-100 text-left">
+        <table class="w-full min-w-[640px] table-auto border border-gray-200 rounded-lg overflow-hidden">
+            <thead class="bg-gray-100 text-sm text-gray-700">
                 <tr>
-                    <th class="p-3">#</th>
-                    <th class="p-3">Tiêu đề</th>
-                    {{-- <th class="p-3">Ảnh</th> --}}
-                    <th class="p-3">Trạng thái</th>
-                    <th class="p-3">Ngày tạo</th>
+                    <th class="p-3 text-left">#</th>
+                    <th class="p-3 text-left">Tiêu đề</th>
+                    <th class="p-3 text-center">Trạng thái</th>
+                    <th class="p-3 text-center">Ngày tạo</th>
                     <th class="p-3 text-right">Hành động</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-sm">
                 @forelse($blogs as $blog)
-                    <tr class="border-t">
+                    <tr class="border-t hover:bg-gray-50 transition-all">
                         <td class="p-3">{{ $loop->iteration + ($blogs->currentPage() - 1) * $blogs->perPage() }}</td>
-                        <td class="p-3 font-semibold">{{ $blog->title }}</td>
-                        {{-- <td class="p-3">
-                            @if($blog->thumbnail)
-                                <img src="{{ asset('storage/' . $blog->thumbnail) }}" class="w-16 h-16 object-cover rounded shadow">
-
-                            @else
-                                <span class="text-gray-400 italic">Không có</span>
-                            @endif
-                        </td> --}}
-
-                        <td class="p-3">
-                            <span class="px-2 py-1 rounded text-white text-sm
-                                {{ $blog->status ? 'bg-green-500' : 'bg-yellow-500' }}">
+                        <td class="p-3 font-medium text-gray-900">{{ $blog->title }}</td>
+                        <td class="p-3 text-center">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold
+                                {{ $blog->status ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
                                 {{ $blog->status ? 'Công khai' : 'Nháp' }}
                             </span>
                         </td>
-                        <td class="p-3 text-gray-500 text-sm">{{ $blog->created_at->format('d/m/Y') }}</td>
-                        <td class="p-3 text-right space-x-2">
-                            <a href="{{ route('admin.blogs.show', $blog->id) }}" class="text-blue-600 hover:underline">👁️ </a>
-                            <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="text-blue-600 hover:underline">✏️</a>
+                        <td class="p-3 text-center text-gray-600">{{ $blog->created_at->format('d/m/Y') }}</td>
+                        <td class="p-3 text-right space-x-2 whitespace-nowrap">
+                            <a href="{{ route('admin.blogs.show', $blog->id) }}"
+                               class="inline-block text-blue-600 hover:underline text-sm">👁️</a>
+                            <a href="{{ route('admin.blogs.edit', $blog->id) }}"
+                               class="inline-block text-yellow-600 hover:underline text-sm">✏️</a>
                             <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST"
-                                  onsubmit="return confirm('Xác nhận xóa?')" class="inline">
+                                  onsubmit="return confirm('Bạn có chắc muốn xoá bài viết này?')"
+                                  class="inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline">🗑️</button>
+                                <button type="submit" class="text-red-600 hover:underline text-sm">🗑️</button>
                             </form>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="p-4 text-center text-gray-500">Không có bài viết nào.</td>
+                        <td colspan="5" class="p-4 text-center text-gray-500 italic">Không có bài viết nào.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 
-    <div class="mt-4">
+    <!-- Pagination -->
+    <div class="mt-6">
         {{ $blogs->links('pagination.custom-tailwind') }}
     </div>
 </div>

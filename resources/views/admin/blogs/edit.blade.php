@@ -10,32 +10,49 @@
 
         <div class="mb-4">
             <label class="font-semibold">Tiêu đề</label>
-            <input type="text" name="title" value="{{ old('title', $blog->title) }}" class="w-full mt-1 border-gray-300 rounded">
+            <input type="text" name="title" value="{{ old('title', $blog->title) }}" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
         </div>
 
         <div class="mb-4">
             <label class="font-semibold">Slug</label>
-            <input type="text" name="slug" value="{{ old('slug', $blog->slug) }}" class="w-full mt-1 border-gray-300 rounded">
+            <input type="text" name="slug" value="{{ old('slug', $blog->slug) }}" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
         </div>
 
-        <div class="mb-4">
-            <label class="font-semibold">Tags</label>
-            <select name="tags[]" multiple class="w-full mt-1 border-gray-300 rounded">
-                @foreach($tags as $tag)
-                    <option value="{{ $tag->id }}" {{ $blog->tags->contains($tag->id) ? 'selected' : '' }}>
-                        {{ $tag->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Tags -->
+            <div>
+                <label for="tags" class="block text-sm font-semibold text-gray-700 mb-1">🏷️ Tags</label>
+                <select name="tags[]" id="tags" multiple
+                    class="w-full h-48 px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring focus:ring-blue-100 text-sm overflow-y-auto">
+                    @foreach($tags as $tag)
+                        <option value="{{ $tag->id }}" {{ $blog->tags->contains($tag->id) ? 'selected' : '' }}>
+                            {{ $tag->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <p class="text-xs text-gray-500 mt-1">
+                    Giữ <kbd class="px-1 py-0.5 bg-gray-100 border rounded text-gray-700">Ctrl</kbd> (hoặc <kbd>Cmd</kbd> trên Mac) để chọn nhiều thẻ.
+                </p>
+            </div>
 
-        <div class="mb-4">
-            <label class="font-semibold">Trạng thái</label>
-            <div class="flex gap-4 mt-2">
-                <label><input type="radio" name="status" value="0" {{ $blog->status == 0 ? 'checked' : '' }}> Nháp</label>
-                <label><input type="radio" name="status" value="1" {{ $blog->status == 1 ? 'checked' : '' }}> Công khai</label>
+            <!-- Trạng thái -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">📢 Trạng thái</label>
+                <div class="flex items-center gap-6 mt-2">
+                    <label class="inline-flex items-center text-sm text-gray-700">
+                        <input type="radio" name="status" value="0" {{ $blog->status == 0 ? 'checked' : '' }}
+                            class="text-blue-600 focus:ring focus:ring-blue-200 mr-2">
+                        Nháp
+                    </label>
+                    <label class="inline-flex items-center text-sm text-gray-700">
+                        <input type="radio" name="status" value="1" {{ $blog->status == 1 ? 'checked' : '' }}
+                            class="text-blue-600 focus:ring focus:ring-blue-200 mr-2">
+                        Công khai
+                    </label>
+                </div>
             </div>
         </div>
+
 
         <div class="mb-4">
             <label class="font-semibold">Nội dung</label>

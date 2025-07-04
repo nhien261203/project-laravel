@@ -11,34 +11,46 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700">SKU *</label>
-                <input type="text" name="sku" value="{{ old('sku', $variant->sku) }}" class="form-input w-full" required>
+                <input type="text" name="sku" value="{{ old('sku', $variant->sku) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
                 @error('sku')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700">Giá bán *</label>
-                <input type="number" name="price" step="0.01" value="{{ old('price', $variant->price) }}" class="form-input w-full" required>
+                <input type="number" name="price" step="0.01" value="{{ old('price', $variant->price) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
                 @error('price')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700">Giá gốc</label>
-                <input type="number" name="original_price" step="0.01" value="{{ old('original_price', $variant->original_price) }}" class="form-input w-full">
+                <input type="number" name="original_price" step="0.01" value="{{ old('original_price', $variant->original_price) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-gray-700">Số lượng *</label>
-                <input type="number" name="quantity" value="{{ old('quantity', $variant->quantity) }}" class="form-input w-full" required>
+                <input type="number" name="quantity" value="{{ old('quantity', $variant->quantity) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
                 @error('quantity')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
-            <div><label class="block text-sm font-medium text-gray-700">RAM</label><input type="text" name="ram" value="{{ old('ram', $variant->ram) }}" class="form-input w-full"></div>
-            <div><label class="block text-sm font-medium text-gray-700">Bộ nhớ</label><input type="text" name="storage" value="{{ old('storage', $variant->storage) }}" class="form-input w-full"></div>
-            <div><label class="block text-sm font-medium text-gray-700">Màu sắc</label><input type="text" name="color" value="{{ old('color', $variant->color) }}" class="form-input w-full"></div>
-            <div><label class="block text-sm font-medium text-gray-700">Màn hình</label><input type="text" name="screen_size" value="{{ old('screen_size', $variant->screen_size) }}" class="form-input w-full"></div>
-            <div><label class="block text-sm font-medium text-gray-700">Pin</label><input type="text" name="battery" value="{{ old('battery', $variant->battery) }}" class="form-input w-full"></div>
-            <div><label class="block text-sm font-medium text-gray-700">Chip</label><input type="text" name="chip" value="{{ old('chip', $variant->chip) }}" class="form-input w-full"></div>
-            <div><label class="block text-sm font-medium text-gray-700">Trọng lượng</label><input type="text" name="weight" value="{{ old('weight', $variant->weight) }}" class="form-input w-full"></div>
+            <div><label class="block text-sm font-medium text-gray-700">RAM</label><input type="text" name="ram" value="{{ old('ram', $variant->ram) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Bộ nhớ</label>
+                <input type="text" name="storage" value="{{ old('storage', $variant->storage) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Màu sắc</label><input type="text" name="color" value="{{ old('color', $variant->color) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Màn hình</label><input type="text" name="screen_size" value="{{ old('screen_size', $variant->screen_size) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Pin</label><input type="text" name="battery" value="{{ old('battery', $variant->battery) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Chip</label><input type="text" name="chip" value="{{ old('chip', $variant->chip) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100"></div>
+            <div><label class="block text-sm font-medium text-gray-700">Trọng lượng</label><input type="text" name="weight" value="{{ old('weight', $variant->weight) }}" 
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100"></div>
         </div>
 
         <div>
@@ -73,7 +85,7 @@
         <!-- Upload ảnh mới -->
         <div class="mt-4">
             <label class="block text-sm font-medium text-gray-700">Thêm ảnh mới</label>
-            <input type="file" name="images[]" id="images-input" multiple accept="image/*" class="form-input w-full">
+            <input type="file" name="images[]" id="images-input" multiple accept="image/*" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
             @error('images.*')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
         </div>
 
