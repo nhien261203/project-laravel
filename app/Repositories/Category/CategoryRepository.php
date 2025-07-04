@@ -11,16 +11,17 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         $query = Category::query();
 
-        if ($request->filled('name')) {
+        if (isset($request->name)) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
 
-        if ($request->filled('status')) {
+        if (isset($request->status) && in_array($request->status, ['0', '1'], true)) {
             $query->where('status', $request->status);
         }
 
         return $query->orderByDesc('id')->paginate(10)->withQueryString();
     }
+
 
     public function find($id)
     {

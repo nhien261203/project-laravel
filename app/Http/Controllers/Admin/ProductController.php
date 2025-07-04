@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $filters = $request->only(['keyword', 'category_id', 'brand_id']);
+        $filters = $request->only(['keyword', 'category_id', 'brand_id','status']);
         $products = $this->productRepo->getAll($filters, 10);
         $categories = Category::all();
         $brands = Brand::all();

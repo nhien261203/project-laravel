@@ -13,11 +13,11 @@ class BannerController extends Controller
     {
         $query = Banner::query();
 
-        if ($request->filled('keyword')) {
+        if (isset($request->keyword)) {
             $query->where('title', 'like', '%' . $request->keyword . '%');
         }
 
-        if ($request->filled('status') && in_array($request->status, ['0', '1'])) {
+        if (isset($request->status) && in_array($request->status, ['0', '1'])) {
             $query->where('status', $request->status);
         }
 
@@ -25,6 +25,7 @@ class BannerController extends Controller
 
         return view('admin.banners.index', compact('banners'));
     }
+
 
 
     public function create()

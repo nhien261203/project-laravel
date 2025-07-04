@@ -111,7 +111,7 @@
             const reader = new FileReader();
             reader.onload = e => {
                 const imgBox = document.createElement('div');
-                imgBox.className = 'relative w-24 h-24';
+                imgBox.className = 'relative w-24 h-24 new-preview ring-2 ring-blue-500 shadow-lg rounded overflow-hidden';
                 imgBox.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-contain border rounded">`;
                 gallery.appendChild(imgBox);
             };

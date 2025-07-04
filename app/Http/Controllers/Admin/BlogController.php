@@ -15,13 +15,14 @@ class BlogController extends Controller
     {
         $query = Blog::with('tags');
 
-        if ($search = $request->input('search')) {
-            $query->where('title', 'like', '%' . $search . '%');
+        if (isset($request->search)) {
+            $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        if ($status = $request->input('status')) {
-            $query->where('status', $status);
+        if (isset($request->status)) {
+            $query->where('status', $request->status);
         }
+
 
         $blogs = $query->latest()->paginate(6)->withQueryString();
 

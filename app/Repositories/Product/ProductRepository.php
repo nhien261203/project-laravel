@@ -6,24 +6,29 @@ use App\Models\Product;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function getAll(array $filters = [], int $perPage = 10)
+    public function getAll(array $filters = [], int $perPage = 8)
     {
         $query = Product::with(['category', 'brand']);
 
-        if (!empty($filters['keyword'])) {
+        if (isset($filters['keyword']) && $filters['keyword'] !== '') {
             $query->where('name', 'like', '%' . $filters['keyword'] . '%');
         }
 
-        if (!empty($filters['category_id'])) {
+        if (isset($filters['category_id']) && $filters['category_id'] !== '') {
             $query->where('category_id', $filters['category_id']);
         }
 
-        if (!empty($filters['brand_id'])) {
+        if (isset($filters['brand_id']) && $filters['brand_id'] !== '') {
             $query->where('brand_id', $filters['brand_id']);
         }
 
-        return $query->latest()->paginate($perPage);
+        if (isset($filters['status']) && $filters['status'] !== '') {
+            $query->where('status', (int) $filters['status']); // ép kiểu để an toàn
+        }
+
+        return $query->latest()->paginate($perPage)->withQueryString();
     }
+
 
     public function find($id)
     {

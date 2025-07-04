@@ -11,20 +11,21 @@ class BrandRepository implements BrandRepositoryInterface
     {
         $query = Brand::query();
 
-        if ($request->filled('name')) {
+        if (isset($request->name)) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
 
-        if ($request->filled('country')) {
+        if (isset($request->country)) {
             $query->where('country', 'like', '%' . $request->country . '%');
         }
 
-        if ($request->filled('status')) {
+        if (isset($request->status) && in_array($request->status, ['0', '1'])) {
             $query->where('status', $request->status);
         }
 
         return $query->orderByDesc('id')->paginate(6)->withQueryString();
     }
+
 
     public function find($id)
     {

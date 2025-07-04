@@ -47,7 +47,10 @@
         </div>
 
         <nav class="flex-1 p-4 space-y-2 text-white">
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.dashboard') }}" 
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
+            data-route="{{ route('admin.dashboard') }}"
+            >
                 <i class="fas fa-tachometer-alt"></i> <span class="sidebar-text">Dashboard</span>
             </a>
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
@@ -56,20 +59,30 @@
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-chart-bar"></i> <span class="sidebar-text">Reports</span>
             </a>
-            <a href="{{ route('admin.products.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.products.index') }}" 
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
+            data-route="{{ route('admin.products.index') }}">
                 <i class="fas fa-box"></i> <span class="sidebar-text">Products</span>
             </a>
-            <a href="{{ route('admin.categories.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.categories.index') }}" 
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
+            data-route="{{ route('admin.categories.index') }}"
+            >
                 <i class="fas fa-tags"></i> <span class="sidebar-text">Categories</span>
             </a>
-            <a href="{{ route('admin.brands.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.brands.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
+            data-route="{{ route('admin.brands.index') }}">
                 <i class="fas fa-industry"></i> <span class="sidebar-text">Brands</span>
             </a>
-            <a href="{{ route('admin.banners.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.banners.index') }}" 
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
+            data-route="{{ route('admin.banners.index') }}">
                 <i class="fa-solid fa-images"></i> <span class="sidebar-text">Banners</span>
             </a>
 
-            <a href="{{ route('admin.blogs.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.blogs.index') }}" 
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
+            data-route="{{ route('admin.blogs.index') }}">
                 <i class="fa-solid fa-newspaper"></i> <span class="sidebar-text">Blogs</span>
             </a>
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
@@ -78,7 +91,9 @@
 
             
             @can('view log')
-                <a href="{{ route('admin.logs.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+                <a href="{{ route('admin.logs.index') }}" 
+                class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
+                data-route="{{ route('admin.logs.index') }}">
                     <i class="fa-solid fa-screwdriver-wrench"></i> <span class="sidebar-text">Log Actions</span>
                 </a>
             @endcan
@@ -245,6 +260,20 @@
         });
     });
 </script>
+
+
+{{-- lay mau cho section hien tai --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentUrl = window.location.href.split('?')[0]; // loại bỏ query string nếu có
+        document.querySelectorAll('nav a[data-route]').forEach(link => {
+            if (currentUrl === link.href || currentUrl.startsWith(link.href)) {
+                link.classList.add('bg-gray-500', 'text-white');
+            }
+        });
+    });
+</script>
+
 
 
 </html>
