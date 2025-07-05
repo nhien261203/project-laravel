@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: localhost:3306
--- Thời gian đã tạo: Th7 03, 2025 lúc 02:27 AM
+-- Thời gian đã tạo: Th7 05, 2025 lúc 02:11 AM
 -- Phiên bản máy phục vụ: 8.0.30
 -- Phiên bản PHP: 8.2.28
 
@@ -20,6 +20,38 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `nexus-be`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `admin_logs`
+--
+
+CREATE TABLE `admin_logs` (
+  `id` bigint UNSIGNED NOT NULL,
+  `admin_id` bigint UNSIGNED NOT NULL,
+  `action` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `admin_logs`
+--
+
+INSERT INTO `admin_logs` (`id`, `admin_id`, `action`, `description`, `ip_address`, `user_agent`, `created_at`, `updated_at`) VALUES
+(1, 1, 'create_product', 'Thêm sản phẩm: test', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-03 09:02:36', '2025-07-03 09:02:36'),
+(2, 1, 'update_product', 'Cập nhật sản phẩm: test', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-03 09:28:26', '2025-07-03 09:28:26'),
+(3, 8, 'update_product', 'Cập nhật sản phẩm: test', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-03 13:43:19', '2025-07-03 13:43:19'),
+(4, 10, 'update_product', 'Cập nhật sản phẩm: test', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-04 03:18:59', '2025-07-04 03:18:59'),
+(5, 10, 'delete_product', 'Xóa sản phẩm: test', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-04 07:29:40', '2025-07-04 07:29:40'),
+(6, 10, 'update_product', 'Cập nhật sản phẩm: Sam Sung Galaxy24', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-04 08:58:45', '2025-07-04 08:58:45'),
+(7, 10, 'update_product', 'Cập nhật sản phẩm: Sam Sung Galaxy24', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-04 09:54:30', '2025-07-04 09:54:30'),
+(8, 10, 'update_product', 'Cập nhật sản phẩm: Sam Sung Galaxy 24', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-04 09:55:34', '2025-07-04 09:55:34'),
+(9, 10, 'create_product', 'Thêm sản phẩm: iPhone 16 Pro Max', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '2025-07-04 14:37:24', '2025-07-04 14:37:24');
 
 -- --------------------------------------------------------
 
@@ -43,9 +75,61 @@ CREATE TABLE `banners` (
 --
 
 INSERT INTO `banners` (`id`, `title`, `image_desk`, `image_mobile`, `position`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Slider cho trang home', 'banners/PdOhCsDwsjS7YpyxYdSHS5r76K6gTQty6oMCr7HQ.jpg', 'banners/XRHHqMCbpNAyI3RLbIt3kbQNjPUsVhX4mSTKtWxo.png', 'trang home', 1, '2025-07-03 01:25:42', '2025-07-03 01:49:53'),
+(1, 'Slider cho trang home', 'banners/PdOhCsDwsjS7YpyxYdSHS5r76K6gTQty6oMCr7HQ.jpg', 'banners/XRHHqMCbpNAyI3RLbIt3kbQNjPUsVhX4mSTKtWxo.png', 'trang home', 0, '2025-07-03 01:25:42', '2025-07-04 09:12:27'),
 (4, 't', 'banners/GxaJopiFCIh6tV4u03nTl8oZUzaWP003mEr1c8xM.png', NULL, 't', 1, '2025-07-03 02:02:55', '2025-07-03 02:02:55'),
 (5, 'test', 'banners/2Ral8ATqD9zbxHTQHnpyKmH8u1Rpz0BiECWY8dVx.png', NULL, 'trang home', 1, '2025-07-03 02:04:57', '2025-07-03 02:04:57');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `blogs`
+--
+
+CREATE TABLE `blogs` (
+  `id` bigint UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `excerpt` text COLLATE utf8mb4_unicode_ci,
+  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `blogs`
+--
+
+INSERT INTO `blogs` (`id`, `title`, `slug`, `excerpt`, `content`, `thumbnail`, `status`, `created_at`, `updated_at`) VALUES
+(2, 'aaa', 'aaa', NULL, '<p>aaa</p>', 'uploads/blog/xpzlzcdJMUO6yEjmZtTNy0gZ9mntRunzc79P3v51.jpg', 0, '2025-07-03 04:03:59', '2025-07-04 02:37:03'),
+(3, 'iPhone 16 Pro - Tinh hoa công nghệ Apple trên một thiết bị nhỏ gọn', 'iphone-16-pro-tinh-hoa-cong-nghe-apple-tren-mot-thiet-bi-nho-gon', NULL, '<p>Apple đã chính thức công bố về<strong>&nbsp;iPhone 16 series</strong>&nbsp;vào đúng 0h00 ngày 10/09 theo giờ Việt Nam (10h00 - 9/9 theo giờ Mỹ). Trong video ra mắt chính thức, Apple giới thiệu chi tiết về<strong> iPhone 16 Pro với nhiều cải tiến và thay đổi đáng kể.&nbsp;</strong></p><p>Trong đó, nổi bất nhất trong phiên bản nâng cấp năm nay chính là Apple Intelligence - công nghệ trí tuệ nhân tạo độc quyền của Apple trên iPhone và thiết kế cụm camera dọc mới lạ. Sự thay đổi thiết kế cụm camera trên iPhone được xem là điểm đột phá trên iPhone trước những thiết kế tương đồng của các phiên bản iPhone trước đó.&nbsp;</p><p>Phiên bản iPhone 16 Pro được xem như phiên bản tập nhiều những tinh hoa mới nhất của Apple năm 2024 trong một chiếc di động nhỏ gọn. Vậy, bản Pro năm nay có những thay đổi đáng kể nào mà dự kiến sẽ khiến iFans \"nhấp nhổm\" chờ ngày về tay?</p><p>&nbsp;</p><figure class=\"table\"><table><tbody><tr><td>&nbsp;</td></tr><tr><td><p><strong>Tổng hợp những điểm mới nổi bật trên iPhone 16 Pro</strong></p><ul><li>Nút camera cảm ứng điều khiển chạm mới&nbsp;</li><li>Camera quay 4K Dolby Vision tốc độ 120 fps&nbsp;</li><li>Viên mỏng hơn, màn hình lớn hơn, rực rỡ hơn</li><li>Chip A18 Pro hoàn toàn mới tăng cường hiệu suất&nbsp;</li><li>Viên pin lớn hơn, kéo dài trải nghiệm thỏa mãn&nbsp;</li><li>iPhone đầu tiên được thiết kế cho Apple Intelligence tăng cường sự riêng tư, mức độ bảo mật mạnh mẽ</li></ul></td></tr></tbody></table></figure><h3><i><strong>Cải tiến camera zoom quang 5x, quay video 4K và nút mới độc lạ&nbsp;</strong></i></h3><p><i><strong>iPhone 16 Pro 128GB </strong>vẫn giữ thiết kế cụm camera sau 03 mắt tương tự trên iPhone 15 Pro. Tuy nhiên, chất lượng máy ảnh được Apple cải thiện chỉn chu, \"nghệ thuật\" và điện ảnh hơn với Camera fusion 48MP: 24 mm, khẩu độ ƒ/1.78. Kết hợp với Telephoto 2x 12MP: 52 mm, một camera Ultra Wide 48MP: 13 mm và một camera Telephoto 5x 12MP.&nbsp;</i></p><p><i><strong>Camera của iPhone 16 Pro có độ thu phóng quang học 5x, và thu phóng kỹ thuật số lên tới 25x </strong>thỏa mãn mọi nhu cầu quay chụp từ người nghiệp dư - bán chuyên đến chuyên nghiệp.&nbsp;</i></p><p><i>Đặc biệt, <strong>iPhone 16 Pro có khả năng Quay video 4K Dolby Vision </strong>cho ra những thước phim quay chậm mượt mà đầy tính điện ảnh, thuận lợi cho công đoạn hậu kỳ. Khả năng quay chụp trên iPhone 16 Pro thực sự đáng nể khi có thể so sánh với những công cụ chụp ảnh và quay video chuyên nghiệp hiện nay.&nbsp;</i></p><p><i><strong>Camera trước 12MP với công nghệ Deep Fusion và TrueDepth</strong> hỗ trợ nhận diện khuôn mặt chi tiết tăng cường bảo mật và tạo ra các hình ảnh Memoji gần gũi, chính xác.&nbsp;</i></p>', NULL, 1, '2025-07-04 02:26:15', '2025-07-04 03:29:03'),
+(10, 'thủ thuật', 'thu-thuat', NULL, '<p><img src=\"https://shopdunk.com/images/thumbs/0038399_chuan-bi-vali-o-du-lich-cung-shopdunk_1600.png\" style=\"width: 826.4px;\"></p><div itemscope=\"\" itemtype=\"https://schema.org/NewsArticle\" style=\"margin: 0px; padding: 0px; color: rgb(119, 119, 119); font-family: Arial; font-size: 14px;\"><div class=\"page-title\" style=\"margin: 0px; padding: 16px 0px 6px; min-height: 50px; border-bottom-style: initial; border-bottom-color: initial;\"><h1 itemprop=\"headline\" id=\"toc-title\" style=\"padding: 0px; font-weight: 700; line-height: 33px; font-size: 24px; color: rgb(57, 57, 57);\">Chuẩn bị “vali số”: Những ứng dụng cực hữu ích trên iPhone để tận hưởng chuyến đi trọn vẹn</h1></div><div class=\"news-date\" style=\"margin: 0px 0px 15px; padding: 0px; background: unset; color: rgb(134, 134, 139); font-size: 13px; line-height: 20px;\"><span itemprop=\"datePublished\" content=\"02/07/2025\" style=\"margin: 0px; padding: 0px;\">02/07/2025</span></div></div><div class=\"page-body\" style=\"margin: 0px; padding: 0px; color: rgb(119, 119, 119); font-family: Arial; font-size: 14px;\"><div class=\"news-body\" style=\"margin: 0px 0px 20px; padding: 0px; line-height: 22px;\"><p style=\"margin-top: 10px; margin-bottom: 10px; padding: 0px; text-align: justify;\"><span style=\"margin: 0px; padding: 0px;\">Một chuyến đi trở nên trọn vẹn khi mà bạn có kế hoạch sẵn cụ thể và bạn có thể tận hưởng chuyến đi mà không phải suy nghĩ thêm sẽ đi đâu, ăn gì,.... Vậy những ứng dụng quản lý chuyến đi là chiếc vali số mà bạn cần chuẩn bị trước mỗi chuyến đi của mình.</span></p><h2 style=\"margin-bottom: 0.5rem; padding: 0px; font-weight: 500; line-height: 1.2; font-size: 2rem; color: rgb(29, 29, 31);\"><span style=\"margin: 0px; padding: 0px; font-size: 12pt;\"><span style=\"margin: 0px; padding: 0px; font-weight: bolder;\">Ứng dụng quản lý chuyến đi như thế nào được đánh giá là hiệu quả?</span></span></h2><p style=\"margin-top: 10px; margin-bottom: 10px; padding: 0px; text-align: justify;\"><span style=\"margin: 0px; padding: 0px;\">Bạn sẽ sử dụng iPhone của mình để sắp xếp lịch trình, tìm kiếm thông tin, đặt chỗ cho toàn bộ chuyến đi một cách hiệu quả khi ứng dụng đó đáp ứng những điều kiện sau:&nbsp;</span></p><ul style=\"margin-bottom: 1rem; padding-left: 40px;\"><li style=\"margin: 0px; padding: 0px; list-style: disc;\"><span style=\"margin: 0px; padding: 0px;\">Thứ nhất, ứng dụng được đánh giá hiệu quả phải lưu trữ tất cả thông tin liên quan đến chuyến đi bao gồm vé phương tiện di chuyển, xác nhận đặt phòng, mã code, thông tin liên hệ,...</span></li><li style=\"margin: 0px; padding: 0px; list-style: disc;\">Thứ hai, ứng dụng tạo lịch trình hàng ngày, sắp xếp giờ giấc tham quan, ăn uống, di chuyển, bao gồm gợi ý địa điểm đầy đủ thông tin về giá vé.</li><li style=\"margin: 0px; padding: 0px; list-style: disc;\">Thứ ba, thông tin cá nhân của bạn cần được bảo mật hoàn toàn. Khi bạn mua vé máy bay, đặt phòng cần thanh toán hoặc cung cấp thông tin cá nhân thì ứng dụng đó phải đảm bảo không làm lộ các thông tin cá nhân của bạn như số tài khoản ngân hàng, CCCD,...</li></ul><h2 style=\"margin-bottom: 0.5rem; padding: 0px; font-weight: 500; line-height: 1.2; font-size: 2rem; color: rgb(29, 29, 31);\"><span style=\"margin: 0px; padding: 0px; font-size: 12pt;\"><span style=\"margin: 0px; padding: 0px; font-weight: bolder;\">Chuẩn bị vali số: Những ứng dụng quản lý chuyến đi hiệu quả</span></span></h2><p style=\"margin-top: 10px; margin-bottom: 10px; padding: 0px; text-align: justify;\"><span style=\"margin: 0px; padding: 0px;\">Dưới đây là những ứng dụng giúp chuyến đi của bạn trở nên dễ dàng và hiệu quả hơn:</span></p><p style=\"margin-top: 10px; margin-bottom: 10px; padding: 0px; text-align: justify;\"><em style=\"margin: 0px; padding: 0px;\"><span style=\"margin: 0px; padding: 0px; font-weight: bolder;\">Airbnb - Đặt phòng nhanh chóng, giá cả phải chăng</span></em></p><p style=\"margin-top: 10px; margin-bottom: 10px; padding: 0px; text-align: justify;\"><span style=\"margin: 0px; padding: 0px;\">Từ ứng dụng này, bạn có thể tìm kiếm chỗ ở từ phòng riêng, căn hộ xinh xắn, biệt thự sang trọng. Airbnb giúp bạn dễ dàng so sánh giá, xem ảnh thực tế và đọc đánh giá từ những người đã từng ở, giúp bạn yên tâm hơn trước khi đặt.&nbsp;</span><img src=\"https://shopdunk.com/images/uploaded/Chu%E1%BA%A9n%20b%E1%BB%8B%20vali%20s%E1%BB%91%20(blog)/chuan-bi-va-li-so-cung-shopdunk-air-bnb.jpg\" style=\"width: 800px;\"></p></div></div>', NULL, 1, '2025-07-04 03:43:52', '2025-07-04 08:03:11');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `blog_tag`
+--
+
+CREATE TABLE `blog_tag` (
+  `id` bigint UNSIGNED NOT NULL,
+  `blog_id` bigint UNSIGNED NOT NULL,
+  `tag_id` bigint UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `blog_tag`
+--
+
+INSERT INTO `blog_tag` (`id`, `blog_id`, `tag_id`, `created_at`, `updated_at`) VALUES
+(2, 3, 1, NULL, NULL),
+(3, 3, 12, NULL, NULL),
+(4, 3, 13, NULL, NULL),
+(10, 10, 1, NULL, NULL),
+(12, 10, 13, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -77,7 +161,7 @@ INSERT INTO `brands` (`id`, `name`, `slug`, `logo`, `country`, `status`, `create
 (9, 'Oppo', 'oppo', 'brand/Mqg2WqhgSOIuwWAIRTRMpf8M3anr9SBgdDiduil9.png', 'Hàn Quốc', 1, '2025-06-30 21:15:40', '2025-06-30 21:15:40'),
 (10, 'Realme', 'realme', 'brand/vg84j8GLH1IT573GqV8ChI7IYF1SG7i0gynGZ78V.png', 'Trung Quốc', 1, '2025-06-30 21:16:03', '2025-06-30 21:16:03'),
 (11, 'test', 'test', 'brand/lPT0eQS5Cm8KCZMihg9DGbFkcjrFbd6z7f2bhBop.png', 'Đài Loan', 1, '2025-07-03 02:05:53', '2025-07-03 02:06:05'),
-(12, 'test-5', 'test-5', 'brand/VMTd7DISPQtCmqzMdNpt65Kzv3JAaWjstY3sT7gN.jpg', 'Hàn Quốc', 1, '2025-07-03 02:10:25', '2025-07-03 02:15:18');
+(12, 'test-5', 'test-5', 'brand/soqHRFayhjt6JMAkJnsuxXefSlKrEY9WXWR7zDSf.png', 'Hàn Quốc', 1, '2025-07-03 02:10:25', '2025-07-04 07:35:44');
 
 -- --------------------------------------------------------
 
@@ -106,6 +190,22 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `parent_id`, `status`, `created_
 (10, 'Laptop', 'laptop', NULL, 1, '2025-07-01 07:15:38', '2025-07-01 07:15:38'),
 (13, 'Phụ kiện điện thoại', 'phu-kien-dien-thoai', 3, 1, '2025-07-01 07:16:01', '2025-07-01 07:16:34'),
 (14, 'Đồng hồ', 'dong-ho', NULL, 1, '2025-07-01 07:16:16', '2025-07-01 07:16:16');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` bigint UNSIGNED NOT NULL,
+  `blog_id` bigint UNSIGNED NOT NULL,
+  `author_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `approved` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -152,7 +252,20 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (10, '2025_07_02_104704_add_phone_to_users_table', 4),
 (11, '2025_07_02_160916_create_permission_tables', 5),
 (12, '2025_07_02_204241_add_extra_fields_to_users_table', 6),
-(13, '2025_07_03_081513_create_banners_table', 7);
+(13, '2025_07_03_081513_create_banners_table', 7),
+(14, '2025_07_03_094254_create_blogs_table', 8),
+(15, '2025_07_03_094752_create_blog_categories_table', 9),
+(16, '2025_07_03_094800_create_tags_table', 9),
+(17, '2025_07_03_094813_create_blog_tag_table', 9),
+(18, '2025_07_03_095949_create_blog_categories_table', 10),
+(19, '2025_07_03_100331_create_tags_table', 10),
+(20, '2025_07_03_100354_create_blogs_table', 10),
+(21, '2025_07_03_100414_create_comments_table', 10),
+(22, '2025_07_03_100433_create_blog_tag_table', 10),
+(23, '2025_07_03_104207_remove_blog_category_id_from_blogs_table', 11),
+(24, '2025_07_03_110033_add_thumbnail_to_blogs_table', 12),
+(25, '2025_07_03_153415_create_admin_logs_table', 13),
+(26, '2025_07_04_170904_add_operating_system_to_product_variants_table', 14);
 
 -- --------------------------------------------------------
 
@@ -186,7 +299,9 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 1),
 (3, 'App\\Models\\User', 7),
 (2, 'App\\Models\\User', 8),
-(1, 'App\\Models\\User', 9);
+(1, 'App\\Models\\User', 9),
+(1, 'App\\Models\\User', 10),
+(2, 'App\\Models\\User', 11);
 
 -- --------------------------------------------------------
 
@@ -224,7 +339,8 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 (3, 'view users', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
 (4, 'manage users', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
 (5, 'manage orders', 'web', '2025-07-02 09:21:57', '2025-07-02 09:21:57'),
-(6, 'edit role', 'web', '2025-07-03 00:59:18', '2025-07-03 00:59:18');
+(6, 'edit role', 'web', '2025-07-03 00:59:18', '2025-07-03 00:59:18'),
+(7, 'view log', 'web', '2025-07-03 08:52:41', '2025-07-03 08:52:41');
 
 -- --------------------------------------------------------
 
@@ -269,7 +385,8 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `name`, `slug`, `category_id`, `brand_id`, `description`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Iphone 15', 'iphone-15', 1, 3, 'Dòng sản phẩm ra mắt tháng 6 năm 2024 của Apple', 1, '2025-07-01 08:00:25', '2025-07-01 08:19:49'),
-(2, 'Sam Sung Galaxy24', 'sam-sung-galaxy24', 1, 1, 'Dòng sản phẩm Sam Sung', 1, '2025-07-01 08:21:07', '2025-07-01 08:21:07');
+(2, 'Sam Sung Galaxy S25', 'sam-sung-galaxy-s25', 1, 1, 'Dòng sản phẩm Sam Sung', 0, '2025-07-01 08:21:07', '2025-07-04 09:55:34'),
+(4, 'iPhone 16 Pro Max', 'iphone-16-pro-max', 1, 3, 'Dòng sản phẩm Iphone 16 ra mắt 2025', 1, '2025-07-04 14:37:24', '2025-07-04 14:37:24');
 
 -- --------------------------------------------------------
 
@@ -288,6 +405,7 @@ CREATE TABLE `product_variants` (
   `weight` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `battery` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `chip` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `operating_system` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `original_price` decimal(10,2) DEFAULT NULL,
   `quantity` int NOT NULL DEFAULT '0',
@@ -301,12 +419,17 @@ CREATE TABLE `product_variants` (
 -- Đang đổ dữ liệu cho bảng `product_variants`
 --
 
-INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `ram`, `storage`, `color`, `screen_size`, `weight`, `battery`, `chip`, `price`, `original_price`, `quantity`, `sold`, `status`, `created_at`, `updated_at`) VALUES
-(7, 1, 'SKU-P1-6864930280CB6', '84GB', '128', 'Đen', '128 inch', '0.8kg', '100%', 'ios', 35000000.00, 30000000.00, 12, 0, 0, '2025-07-02 02:01:38', '2025-07-02 09:04:36'),
-(8, 1, 'SKU-P1-68649591AB0C4', '84GB', NULL, 'Titan', NULL, '500 g', '100%', NULL, 40000000.00, 30000000.00, 10, 0, 1, '2025-07-02 02:12:33', '2025-07-02 02:12:33'),
-(9, 1, 'SKU-P1-686498A806B0E', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3333.00, 333.00, 12, 0, 1, '2025-07-02 02:25:44', '2025-07-02 02:25:44'),
-(10, 2, 'SKU-P2-6865E722D2EB5', '8gb', '128', 'đen', '128 inch', '2.3', '100%', 'androi', 30000000.00, 50000000.00, 23, 0, 1, '2025-07-03 02:12:50', '2025-07-03 02:13:26'),
-(11, 2, 'SKU-P2-6865E78DD9B20', '84GB', '128', 'Bạc', '128 inch', '500 g', '100%', 'androi', 56.00, 45000000.00, 1, 0, 1, '2025-07-03 02:14:37', '2025-07-03 02:14:37');
+INSERT INTO `product_variants` (`id`, `product_id`, `sku`, `ram`, `storage`, `color`, `screen_size`, `weight`, `battery`, `chip`, `operating_system`, `price`, `original_price`, `quantity`, `sold`, `status`, `created_at`, `updated_at`) VALUES
+(14, 1, 'SKU-P1-6867A485423B6', '6GB', '128GB', 'Đen', 'OLED', '171 g', '3349 mAh', 'Apple A16 Bionic', 'IOS', 13950000.00, 19590000.00, 10, 0, 1, '2025-07-04 09:53:09', '2025-07-04 14:27:01'),
+(15, 2, 'SKU-P2-6867A5ED0C525', '12GB', '512GB', 'Xanh Navy', 'Dynamic AMOLED 2X', '200g', '4900 mAh', 'Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân', 'Androi 17', 23990000.00, 29900000.00, 5, 0, 1, '2025-07-04 09:59:09', '2025-07-04 13:53:51'),
+(16, 2, 'SKU-P2-6867DD8EB8CD0', '12GB', '512GB', 'Xám', 'Dynamic AMOLED 2X', '200 g', '4900 mAh', 'Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân', 'Androi 17', 23990000.00, 29900000.00, 6, 0, 1, '2025-07-04 13:56:30', '2025-07-04 13:56:30'),
+(17, 2, 'SKU-P2-6867E4A546979', '12GB', '256GB', 'Xanh Navy', 'Dynamic AMOLED 2X', '200g', '4900 mAh', 'Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân', 'Androi 17', 22900000.00, 26000000.00, 6, 0, 1, '2025-07-04 14:26:45', '2025-07-04 14:26:45'),
+(18, 1, 'SKU-P1-6867E5C483C9A', '6GB', '128GB', 'Hồng', 'OLED', '171g', '3349 mAh', 'Apple A16 Bionic', 'IOS', 13950000.00, 19590000.00, 5, 0, 1, '2025-07-04 14:31:32', '2025-07-04 14:31:32'),
+(19, 1, 'SKU-P1-6867E66948704', '6GB', '512GB', 'Đen', 'OLED', '171g', '3349 mAh', 'Apple A16 Bionic', 'IOS', 24500000.00, 28300000.00, 5, 0, 1, '2025-07-04 14:34:17', '2025-07-04 14:34:17'),
+(20, 4, 'SKU-P4-6867E7DA2F223', '8GB', '256GB', 'Titan Tự Nhiên', 'OLED', '227 g', '4900 mAh', 'Apple A18 Pro 6 nhân', 'IOS', 30900000.00, 34500000.00, 6, 0, 1, '2025-07-04 14:40:26', '2025-07-04 14:40:26'),
+(21, 4, 'SKU-P4-6867E86C044DF', '8GB', '256GB', 'Titan Sa Mạc', 'OLED', '227 g', '4900 mAh', 'Apple A18 Pro 6 nhân', 'IOS', 30900000.00, 34500000.00, 5, 0, 1, '2025-07-04 14:42:52', '2025-07-04 14:42:52'),
+(22, 4, 'SKU-P4-6867EBCC2D336', '8GB', '1TB', 'Titan Sa Mạc', 'OLED', '227g', '4900 mAh', 'Apple A18 Pro 6 nhân', 'IOS', 45000000.00, 46200000.00, 6, 0, 1, '2025-07-04 14:57:16', '2025-07-04 14:57:16'),
+(23, 4, 'SKU-P4-6867EBCCBDA89', '8GB', '1TB', 'Titan Sa Mạc', 'OLED', '227g', '4900 mAh', 'Apple A18 Pro 6 nhân', 'IOS', 45000000.00, 46200000.00, 6, 0, 1, '2025-07-04 14:57:16', '2025-07-04 14:57:16');
 
 -- --------------------------------------------------------
 
@@ -328,17 +451,25 @@ CREATE TABLE `product_variant_images` (
 --
 
 INSERT INTO `product_variant_images` (`id`, `product_variant_id`, `image_path`, `is_primary`, `created_at`, `updated_at`) VALUES
-(34, 9, 'variant_images/xKrA1LePuYh1EN7xXOma6OQkLS8Ac0KlYeIPRe6H.png', 0, '2025-07-02 11:39:23', '2025-07-02 11:39:23'),
-(35, 9, 'variant_images/pLhGT3At3K34oP9HgXmjRROf7FQnLk6yeOR5WVse.jpg', 0, '2025-07-02 11:39:37', '2025-07-02 11:39:37'),
-(36, 9, 'variant_images/v9GGo3MKLCDXxm8mJ8Acl0qIUS6CLEcG75538Sfb.jpg', 0, '2025-07-02 11:44:53', '2025-07-02 11:44:53'),
-(37, 9, 'variant_images/jKsjmiY42HNwUTDB8bJ6DFlZZ31C5EscBw5YNG2S.jpg', 0, '2025-07-02 11:47:09', '2025-07-02 11:47:09'),
-(38, 9, 'variant_images/WL7oKx8nG6nSMkm5T6kJBSkzCjlFasjIXs4DFOrv.png', 0, '2025-07-02 11:47:20', '2025-07-02 11:47:20'),
-(41, 8, 'variant_images/ylKPXMObRz91HAvcwH4SvxhmbiDewnWdPa88LYA3.png', 0, '2025-07-02 11:56:18', '2025-07-02 11:56:18'),
-(42, 8, 'variant_images/p2v3uv4ixvDdCC7oTFQ9ZK1cLL5aYBIqFslTx6lv.png', 0, '2025-07-02 11:56:33', '2025-07-02 11:56:33'),
-(43, 8, 'variant_images/TJg3hcwhOyU3nYUS23xuwRT7Nar2eNHfmyq3Dc4j.png', 0, '2025-07-02 11:56:33', '2025-07-02 11:56:33'),
-(44, 8, 'variant_images/a2wTzmvRoSD95PYeKFRoTG6r5PpFEHG6hoAKe5EJ.png', 0, '2025-07-02 11:56:33', '2025-07-02 11:56:33'),
-(45, 7, 'variant_images/SiN9zaIC1szkid709JEzj7N8fADexPfUengr2ImG.png', 0, '2025-07-02 12:00:11', '2025-07-02 12:00:11'),
-(46, 10, 'variant_images/fqmFwYF0xhPirxzlaVmXJmjgubKUtbPPF9gZEFMZ.jpg', 0, '2025-07-03 02:12:50', '2025-07-03 02:12:50');
+(51, 14, 'variant_images/iOntEHuxR1z5aHbWOO5RnTY1zoZwN3esoImSUuOY.jpg', 0, '2025-07-04 09:53:09', '2025-07-04 09:53:09'),
+(52, 14, 'variant_images/ldY2z4IXEkbo0JjCU8UN3nncQPCatmlOkuUWO9DJ.jpg', 0, '2025-07-04 09:53:09', '2025-07-04 09:53:09'),
+(53, 15, 'variant_images/AXIHThUWlkbDuJsyuReT37frgh50ZbB1tdwK7Qrt.jpg', 0, '2025-07-04 09:59:09', '2025-07-04 09:59:09'),
+(54, 15, 'variant_images/M8qMjmlCprfuVit2D5xDCuNTUW09hnt4b0fp7uN4.jpg', 0, '2025-07-04 09:59:09', '2025-07-04 09:59:09'),
+(55, 16, 'variant_images/gFLEDpPSrShQYuHGUV28IcEkLu16coDx5D2j79Mg.jpg', 0, '2025-07-04 13:56:30', '2025-07-04 13:56:30'),
+(56, 16, 'variant_images/4Mn9nS5ADsd4gz2PGAFlK7sVI1tPtHWeNcdVOWjb.jpg', 0, '2025-07-04 13:56:30', '2025-07-04 13:56:30'),
+(57, 17, 'variant_images/5E0HtSycyZRfNxVqQtiCTZRenY8ZLjYIeIQdfoWs.jpg', 0, '2025-07-04 14:26:45', '2025-07-04 14:26:45'),
+(58, 17, 'variant_images/IUxqDeKxg4lAL2aZeuWawFidabklaRGNldpucxAY.jpg', 0, '2025-07-04 14:26:45', '2025-07-04 14:26:45'),
+(59, 18, 'variant_images/A0mCQNj6wI2gy0v4d9lSCOIdGH3tlXEz6dL6dBYU.jpg', 0, '2025-07-04 14:31:32', '2025-07-04 14:31:32'),
+(60, 19, 'variant_images/gXeYfGqIYhoj23FRkBz3CIdcEzfLAkBJD0TZd62l.jpg', 0, '2025-07-04 14:34:17', '2025-07-04 14:34:17'),
+(61, 19, 'variant_images/dXoU6Ve1CnMpptZ4HcM939Vq53216djicDu8cGjb.jpg', 0, '2025-07-04 14:34:17', '2025-07-04 14:34:17'),
+(62, 20, 'variant_images/yWxLrZSoaPZjsdWJwjQOQH4dlubyKkshCwoinKRR.jpg', 0, '2025-07-04 14:40:26', '2025-07-04 14:40:26'),
+(63, 20, 'variant_images/dcYVWKmEiLl9Plp3KENOHphgdjEgJ71ZG3dIMDwa.jpg', 0, '2025-07-04 14:40:26', '2025-07-04 14:40:26'),
+(64, 21, 'variant_images/w7ZgAj6kcgW5b1SgXcSU2DT6Cs0Y2GoOWOE9VETv.jpg', 0, '2025-07-04 14:42:52', '2025-07-04 14:42:52'),
+(65, 21, 'variant_images/jthybYP7VbemJjlUZhgFsNwVR2Iq0neSEWp9kfLA.jpg', 0, '2025-07-04 14:42:52', '2025-07-04 14:42:52'),
+(66, 22, 'variant_images/lpWt3GFoqDkYZFxYj3PM5fIx8Fq6vfwgMX3GFRLo.jpg', 0, '2025-07-04 14:57:16', '2025-07-04 14:57:16'),
+(67, 22, 'variant_images/vGaP7ChGKAp63TocYVqhOCoUr6mOTGxvC9LYpxjd.jpg', 0, '2025-07-04 14:57:16', '2025-07-04 14:57:16'),
+(68, 23, 'variant_images/qRiIgsmd7WhoiTuTv5qdZxmKBA2JJP8kp8qKMagM.jpg', 0, '2025-07-04 14:57:16', '2025-07-04 14:57:16'),
+(69, 23, 'variant_images/dwxVbY56pWXOaj4Y1VBHYHBBsBPjdppVhQf1i2tK.jpg', 0, '2025-07-04 14:57:16', '2025-07-04 14:57:16');
 
 -- --------------------------------------------------------
 
@@ -385,10 +516,50 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (4, 1),
 (5, 1),
 (6, 1),
+(7, 1),
 (1, 2),
 (2, 2),
 (5, 2),
 (1, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `tags`
+--
+
+CREATE TABLE `tags` (
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `tags`
+--
+
+INSERT INTO `tags` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'iPhone', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(2, 'Samsung', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(3, 'Android', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(4, 'iOS', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(5, 'MacBook', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(6, 'Laptop Gaming', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(7, 'Đồng hồ thông minh', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(8, 'Tai nghe', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(9, 'Sạc dự phòng', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(10, 'Ốp lưng điện thoại', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(11, 'Cáp sạc', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(12, 'Phụ kiện công nghệ', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(13, 'Điện thoại giá rẻ', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(14, 'Laptop văn phòng', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(15, 'Apple Watch', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(16, 'Tablet', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(17, 'Máy tính bảng', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(18, 'Chuột không dây', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(19, 'Bàn phím cơ', '2025-07-03 03:45:40', '2025-07-03 03:45:40'),
+(20, 'Thiết bị đeo tay', '2025-07-03 03:45:40', '2025-07-03 03:45:40');
 
 -- --------------------------------------------------------
 
@@ -416,24 +587,47 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `phone`, `address`, `gender`, `avatar`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Đỗ Văn Nhiên', 'nhien12345@gmail.com', '0968239407', 'Phu Kim Thạch thất hà nội', 'other', 'avatars/QSFuimo0bRpZYM4M2TDRDdlwPRv2OOwgPaibL6KT.jpg', NULL, '$2y$12$7NtKpKXTOGSvzOSIlV5y0.pet.ojja9BuVl9trpuX0hWgozxV.L96', NULL, '2025-07-02 03:49:09', '2025-07-03 00:48:46'),
+(1, 'Đỗ Văn Nhiên', 'nhien12345@gmail.com', '0968239407', 'Phu Kim Thạch thất hà nội', 'other', 'avatars/QSFuimo0bRpZYM4M2TDRDdlwPRv2OOwgPaibL6KT.jpg', NULL, '$2y$12$mye9SWKpRUgo1H3ExHrDE.zEQp9AjfzzN8gfmEs28jwf5RPFsHfsO', NULL, '2025-07-02 03:49:09', '2025-07-03 07:56:41'),
 (2, 'Đỗ Nhiên', 'nhien@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$e5AYxQHtonVEWaacypMxo.aoh3TpBzVhXpX.yeHLElIhJXoI3AT7K', NULL, '2025-07-02 03:50:20', '2025-07-02 03:50:20'),
 (3, 'Đỗ Nhiên', 'nhien1234@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$SC1qklp0LGYZhFZVSurAP.6qgGup2zJwdBgj1NUpSnON86.ZQIwPO', NULL, '2025-07-02 03:52:16', '2025-07-02 03:52:16'),
 (4, 'Đỗ Nhiên', 'nhien1@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$o84sndoejDpNyegC/bzUIeek07/F6IKlR4ZqiXLvp7tQeqZnB9ily', NULL, '2025-07-02 03:56:54', '2025-07-02 03:56:54'),
-(6, 'Đỗ Nhiên', 'dovannhien12345@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$I.SyaLS3mQO5jJGhOS/PMuKNpA35xQJY/8WUO9vcCAIubU6miSTJS', NULL, '2025-07-02 08:04:49', '2025-07-02 08:07:19'),
 (7, 'Đỗ Nhiên', 'user1@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$t6OkMQHhXkFAT9usyjWEpueiLdK9gGdGmD3D/UvjQvvn63GF30lGe', NULL, '2025-07-02 09:24:01', '2025-07-02 09:24:01'),
 (8, 'Nhân viên - Nam', 'staff1@gmail.com', '0966636363', 'Ha noi', 'male', 'avatars/ZX2Cdb5r7vj4xVh6Oh1u7Fp9UAET9VV1cW6qSHpQ.jpg', NULL, '$2y$12$J.E2DcC4ftaA3CoetBwXqO5jhKUZq2VbwNrrKfExwsloZ7TGYfWUa', NULL, '2025-07-02 09:30:46', '2025-07-03 01:06:32'),
-(9, 'Đỗ Nhiên', 'nhien123@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$nNPu96eBE57lG39SSnxjau2V5RRIjLva2ZFbXX22yV04zMQ80IbtK', NULL, '2025-07-02 09:53:46', '2025-07-02 09:53:46');
+(9, 'Đỗ Nhiên', 'nhien123@gmail.com', NULL, NULL, NULL, NULL, NULL, '$2y$12$nNPu96eBE57lG39SSnxjau2V5RRIjLva2ZFbXX22yV04zMQ80IbtK', NULL, '2025-07-02 09:53:46', '2025-07-02 09:53:46'),
+(10, 'nhien12', 'dovannhien12345@gmail.com', '0917557569', 'Thạch thất hà nội', 'other', 'avatars/BEa37351xn6Uf7MlwYT0wmRR73i1vxXBQcw2e4Xg.jpg', NULL, '$2y$12$RJuE1zk2T3LUH9Tm.NUtV.QnpgKE9J1XfFahC0n2FenDjIdIoIGvG', NULL, '2025-07-04 01:39:56', '2025-07-04 08:16:13'),
+(11, 'Nhiendeptry12', '21012082@st.phenikaa-uni.edu.vn', NULL, NULL, NULL, NULL, NULL, '$2y$12$9B4QF6GxKVNutuVXOkIVIOH6gE38Pb2WcaQWar4CuuWk3EyY3unOG', NULL, '2025-07-04 02:05:19', '2025-07-04 02:09:19');
 
 --
 -- Chỉ mục cho các bảng đã đổ
 --
 
 --
+-- Chỉ mục cho bảng `admin_logs`
+--
+ALTER TABLE `admin_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `admin_logs_admin_id_foreign` (`admin_id`);
+
+--
 -- Chỉ mục cho bảng `banners`
 --
 ALTER TABLE `banners`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `blogs`
+--
+ALTER TABLE `blogs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `blogs_slug_unique` (`slug`);
+
+--
+-- Chỉ mục cho bảng `blog_tag`
+--
+ALTER TABLE `blog_tag`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `blog_tag_blog_id_foreign` (`blog_id`),
+  ADD KEY `blog_tag_tag_id_foreign` (`tag_id`);
 
 --
 -- Chỉ mục cho bảng `brands`
@@ -448,6 +642,13 @@ ALTER TABLE `brands`
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `categories_slug_unique` (`slug`);
+
+--
+-- Chỉ mục cho bảng `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `comments_blog_id_foreign` (`blog_id`);
 
 --
 -- Chỉ mục cho bảng `failed_jobs`
@@ -536,6 +737,13 @@ ALTER TABLE `role_has_permissions`
   ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
 
 --
+-- Chỉ mục cho bảng `tags`
+--
+ALTER TABLE `tags`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `tags_name_unique` (`name`);
+
+--
 -- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
@@ -548,10 +756,28 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT cho bảng `admin_logs`
+--
+ALTER TABLE `admin_logs`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT cho bảng `banners`
 --
 ALTER TABLE `banners`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT cho bảng `blogs`
+--
+ALTER TABLE `blogs`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT cho bảng `blog_tag`
+--
+ALTER TABLE `blog_tag`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT cho bảng `brands`
@@ -566,6 +792,12 @@ ALTER TABLE `categories`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT cho bảng `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT cho bảng `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -575,13 +807,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT cho bảng `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT cho bảng `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `personal_access_tokens`
@@ -593,19 +825,19 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `product_variants`
 --
 ALTER TABLE `product_variants`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT cho bảng `product_variant_images`
 --
 ALTER TABLE `product_variant_images`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT cho bảng `roles`
@@ -614,14 +846,39 @@ ALTER TABLE `roles`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT cho bảng `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Ràng buộc đối với các bảng kết xuất
 --
+
+--
+-- Ràng buộc cho bảng `admin_logs`
+--
+ALTER TABLE `admin_logs`
+  ADD CONSTRAINT `admin_logs_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Ràng buộc cho bảng `blog_tag`
+--
+ALTER TABLE `blog_tag`
+  ADD CONSTRAINT `blog_tag_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `blog_tag_tag_id_foreign` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE;
+
+--
+-- Ràng buộc cho bảng `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `comments_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`id`) ON DELETE CASCADE;
 
 --
 -- Ràng buộc cho bảng `model_has_permissions`

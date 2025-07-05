@@ -16,6 +16,7 @@
         <div><strong>Pin:</strong> {{ $variant->battery }}</div>
         <div><strong>Chip:</strong> {{ $variant->chip }}</div>
         <div><strong>Trọng lượng:</strong> {{ $variant->weight }}</div>
+        <div><strong>Hệ điều hành:</strong> {{ $variant->operating_system }}</div>
         <div><strong>Trạng thái:</strong> {{ $variant->status ? 'Hiển thị' : 'Ẩn' }}</div>
     </div>
 

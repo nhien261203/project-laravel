@@ -74,6 +74,13 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Hệ điều hành</label>
+                <input type="text" name="operating_system" value="{{ old('operating_system') }}"
+                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100" />
+            </div>
+
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Trọng lượng</label>
                 <input type="text" name="weight" value="{{ old('weight') }}"
                     class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100" />
