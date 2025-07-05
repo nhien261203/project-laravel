@@ -9,4 +9,7 @@ interface CategoryRepositoryInterface
     public function update($id, array $data);
     public function delete($id);
     public function getParentOptions($excludeId = null);
+
+    // lay cate ra ben header User/HomeController 
+    public function getWithChildren();
 }

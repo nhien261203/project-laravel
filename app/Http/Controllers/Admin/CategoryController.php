@@ -112,4 +112,7 @@ class CategoryController extends Controller
         $category = $this->repo->find($id);
         return view('admin.categories.show', compact('category'));
     }
+
+
+    
 }

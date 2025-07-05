@@ -10,16 +10,14 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\User\HomeController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Auth;
 
 // Trang chủ – cho tất cả (user cũng vào được)
-Route::get('/', function () {
-    return view('layout.user');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //  Admin - toàn quyền (chỉ admin, staff dung permission chặn 1 số quyền ở controller va view)
 Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')->group(function () {
@@ -77,9 +75,6 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 
 // 🟩 Quên mật khẩu
-
-
-
 
 
 //auth cho admin 
