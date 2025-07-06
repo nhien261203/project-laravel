@@ -34,28 +34,36 @@
 
                 {{-- Menu desktop --}}
                 <ul class="hidden lg:flex items-center gap-4">
-                    @foreach($categoriesWithChildren as $parent)
-                        @if($parent->children->count())
-                            <li class="relative group cursor-pointer">
-                                <a href="#" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400">
-                                    {{ $parent->name }}
-                                    <i class="fas fa-caret-down group-hover:rotate-180 transition-transform"></i>
-                                </a>
-                                <div class="absolute hidden group-hover:block w-[200px] bg-white rounded-md shadow-md z-50">
-                                    <ul class="px-2 py-2 space-y-2">
-                                        @foreach($parent->children as $child)
-                                            <li><a href="#" class="block p-2 text-gray-600 hover:bg-gray-100">{{ $child->name }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </li>
-                        @else
-                            <li>
-                                <a href="#" class="inline-block py-4 px-4 text-white hover:bg-gray-400">{{ $parent->name }}</a>
-                            </li>
-                        @endif
-                    @endforeach
+                    {{-- Điện thoại --}}
+                    <li>
+                        <a href="#" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Điện thoại</a>
+                    </li>
+
+                    {{-- Laptop --}}
+                    <li>
+                        <a href="#" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Laptop</a>
+                    </li>
+
+                    {{-- Đồng hồ --}}
+                    <li>
+                        <a href="#" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Đồng hồ</a>
+                    </li>
+
+                    {{-- Phụ kiện có dropdown --}}
+                    <li class="relative group cursor-pointer">
+                        <a href="#" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400">
+                            Phụ kiện
+                            <i class="fas fa-caret-down group-hover:rotate-180 transition-transform"></i>
+                        </a>
+                        <div class="absolute hidden group-hover:block w-[200px] bg-white rounded-md shadow-md z-50">
+                            <ul class="px-2 py-2 space-y-2">
+                                <li><a href="#" class="block p-2 text-gray-600 hover:bg-gray-100">Phụ kiện di động</a></li>
+                                <li><a href="#" class="block p-2 text-gray-600 hover:bg-gray-100">Thiết bị âm thanh</a></li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
+
             </div>
 
             {{-- Search + Cart + User --}}
@@ -112,24 +120,28 @@
             </div>
 
             <ul class="flex flex-col gap-2 p-4">
-                @foreach($categoriesWithChildren as $parent)
-                    <li>
-                        @if($parent->children->count())
-                            <button class="w-full flex items-center justify-between text-white py-2 border-b border-white/10 toggle-submenu">
-                                <span>{{ $parent->name }}</span>
-                                <i class="fas fa-caret-down caret-icon"></i>
-                            </button>
-                            <ul class="pl-4 mt-2 hidden submenu">
-                                @foreach($parent->children as $child)
-                                    <li><a href="#" class="block text-white/80 py-1 text-sm">{{ $child->name }}</a></li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <a href="#" class="block text-white py-2 border-b border-white/10">{{ $parent->name }}</a>
-                        @endif
-                    </li>
-                @endforeach
+                {{-- Điện thoại --}}
+                <li><a href="#" class="block text-white py-2 border-b border-white/10">Điện thoại</a></li>
+
+                {{-- Laptop --}}
+                <li><a href="#" class="block text-white py-2 border-b border-white/10">Laptop</a></li>
+
+                {{-- Đồng hồ --}}
+                <li><a href="#" class="block text-white py-2 border-b border-white/10">Đồng hồ</a></li>
+
+                {{-- Phụ kiện có submenu --}}
+                <li>
+                    <button class="w-full flex items-center justify-between text-white py-2 border-b border-white/10 toggle-submenu">
+                        <span>Phụ kiện</span>
+                        <i class="fas fa-caret-down caret-icon"></i>
+                    </button>
+                    <ul class="pl-4 mt-2 hidden submenu">
+                        <li><a href="#" class="block text-white/80 py-1 text-sm">Phụ kiện di động</a></li>
+                        <li><a href="#" class="block text-white/80 py-1 text-sm">Thiết bị âm thanh</a></li>
+                    </ul>
+                </li>
             </ul>
+
         </div>
     </div>
 
@@ -137,6 +149,34 @@
     <main>
         {{-- Hiển thị Banner --}}
         @include('components.banner', ['banners' => $banners])
+        
+        {{-- Danh mục nổi bật --}}
+        <div class="container">
+
+            <div class="my-10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    @include('components.category-card', [
+                        'title' => 'Điện thoại',
+                        'image' => 'https://cdn.mobilecity.vn/mobilecity-vn/images/2024/12/dien-thoai-chup-anh-dep-nhat-2025-2.jpg.webp',
+                    ])
+
+                    @include('components.category-card', [
+                        'title' => 'Laptop',
+                        'image' => 'https://images.pexels.com/photos/3975680/pexels-photo-3975680.jpeg',
+                    ])
+
+                    @include('components.category-card', [
+                        'title' => 'Đồng hồ',
+                        'image' => 'https://images.pexels.com/photos/32864808/pexels-photo-32864808.jpeg',
+                    ])
+
+                    @include('components.category-card', [
+                        'title' => 'Phụ kiện',
+                        'image' => 'https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg',
+                    ])
+                </div>
+            </div>
+        </div>
         
 
 
@@ -146,6 +186,8 @@
             <p class="text-gray-700">Đây là trang chủ. Bạn có thể xem sản phẩm mới nhất, danh mục nổi bật, và nhiều hơn.</p>
         </div>
     </main>
+
+    @include('components.footer')
 
     {{-- JS --}}
  

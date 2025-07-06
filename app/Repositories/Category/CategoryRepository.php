@@ -71,13 +71,13 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     // lấy category ra cho headers bên User/ HomeController
-    public function getWithChildren()
-    {
-        return Category::with(['children' => function ($q) {
-            $q->where('status', 1);
-        }])
-            ->whereNull('parent_id')
-            ->where('status', 1)
-            ->get();
-    }
+    // public function getWithChildren()
+    // {
+    //     return Category::with(['children' => function ($q) {
+    //         $q->where('status', 1);
+    //     }])
+    //         ->whereNull('parent_id')
+    //         ->where('status', 1)
+    //         ->get();
+    // }
 }
