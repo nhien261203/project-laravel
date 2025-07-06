@@ -55,7 +55,7 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
-        return view('layout.user', compact(
+        return view('user.home', compact(
             //'categoriesWithChildren',
             'banners',
             'iphoneProducts'
@@ -104,23 +104,21 @@ class HomeController extends Controller
     // }
 
 
+
+    // chi tiet sp trang home
     public function show($slug)
     {
-        $product = Product::with(['variants.images'])
-            ->where('slug', $slug)
-            ->firstOrFail();
+        $product = Product::with(['variants.images'])->where('slug', $slug)->firstOrFail();
 
-        // Nhóm các thuộc tính (màu, bộ nhớ)
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
 
-        // Lấy ảnh đầu tiên nếu variant không có ảnh
+        // Tìm biến thể đầu tiên có ảnh thật
+        $fallbackVariantWithImage = $product->variants->firstWhere(fn($v) => $v->images->isNotEmpty());
+
         foreach ($product->variants as $variant) {
-            if ($variant->images->isEmpty()) {
-                $fallback = $product->variants->firstWhere(fn($v) => !$v->images->isEmpty());
-                if ($fallback) {
-                    $variant->fallback_image = $fallback->images->first()->image_path;
-                }
+            if ($variant->images->isEmpty() && $fallbackVariantWithImage) {
+                $variant->fallback_image = $fallbackVariantWithImage->images->first()->image_path;
             }
         }
 

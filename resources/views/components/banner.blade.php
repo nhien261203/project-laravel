@@ -7,7 +7,7 @@
                         <source media="(min-width: 768px)" srcset="{{ asset('storage/' . $banner->image_desk) }}">
                         <img src="{{ asset('storage/' . $banner->image_mobile) }}"
                              alt="{{ $banner->title }}"
-                             loading="lazy"
+                             
                              class="w-full h-full object-cover block rounded-xl" />
                     </picture>
                 </div>

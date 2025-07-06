@@ -1,131 +1,192 @@
 @extends('layout.user')
 
 @section('content')
-<div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="grid md:grid-cols-2 gap-6">
-        {{-- Hình ảnh sản phẩm --}}
+<div class="container py-6 bg-white rounded shadow">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {{-- Hình ảnh --}}
         <div>
             @php
-                $firstVariant = $product->variants->first();
-                $mainImage = $firstVariant->images->first()->image_path ?? $firstVariant->fallback_image ?? null;
+                $defaultVariant = $product->variants->first();
+                $defaultImages = $defaultVariant->images;
+                $fallbackImages = $product->variants->firstWhere(fn($v) => !$v->images->isEmpty())?->images;
             @endphp
-            @if ($mainImage)
-                <img id="mainImage" src="{{ asset('storage/' . $mainImage) }}" alt="{{ $product->name }}" class="rounded-xl w-full">
-            @endif
+
+            {{-- Ảnh chính --}}
+            <div id="mainImage" class="border rounded-lg overflow-hidden shadow-md">
+                @if($defaultImages->count())
+                    <img src="{{ asset('storage/' . $defaultImages->first()->image_path) }}"
+                         class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
+                @elseif($fallbackImages && $fallbackImages->count())
+                    <img src="{{ asset('storage/' . $fallbackImages->first()->image_path) }}"
+                         class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
+                @else
+                    <div class="w-full h-80 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+                        Không có ảnh
+                    </div>
+                @endif
+            </div>
+
+            {{-- Ảnh nhỏ --}}
+            <div class="flex mt-4 gap-3 overflow-x-auto pb-2" id="thumbnailWrapper">
+                @foreach(($defaultImages->count() ? $defaultImages : $fallbackImages ?? []) as $img)
+                    <img src="{{ asset('storage/' . $img->image_path) }}"
+                         class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition"
+                         onclick="changeMainImage('{{ asset('storage/' . $img->image_path) }}')">
+                @endforeach
+            </div>
         </div>
 
-        {{-- Thông tin sản phẩm --}}
-        <div>
-            <h1 class="text-2xl font-bold mb-4">{{ $product->name }}</h1>
+        {{-- Thông tin --}}
+        <div class="px-2">
+            <h1 class="text-xl md:text-2xl font-bold mb-3">{{ $product->name }}</h1>
 
-            {{-- Giá và khuyến mãi --}}
-            <div class="mb-4">
-                <p class="text-gray-700 text-lg">Giá:
-                    <span id="priceDisplay" class="text-red-500 font-bold">{{ number_format($firstVariant->price) }} đ</span>
-                </p>
-                <p id="originalPriceDisplay" class="line-through text-sm text-gray-400">
-                    @if ($firstVariant->original_price && $firstVariant->original_price > $firstVariant->price)
-                        {{ number_format($firstVariant->original_price) }} đ
-                    @endif
-                </p>
+            {{-- Giá --}}
+            <div class="text-red-600 text-xl md:text-2xl font-semibold mb-2" id="variantPrice">
+                {{ number_format($defaultVariant->price, 0, ',', '.') }}₫
             </div>
+            @if($defaultVariant->original_price && $defaultVariant->original_price > $defaultVariant->price)
+                <div class="text-gray-400 line-through mb-4 text-sm">
+                    {{ number_format($defaultVariant->original_price, 0, ',', '.') }}₫
+                </div>
+            @endif
 
             {{-- Màu sắc --}}
             <div class="mb-4">
-                <p class="font-semibold mb-2">Màu sắc:</p>
-                <div class="flex gap-2">
-                    @foreach ($colors as $color)
-                        <button class="color-btn border px-3 py-1 rounded hover:bg-gray-100" data-color="{{ $color }}">{{ $color }}</button>
+                <label class="block text-sm font-semibold mb-1">Màu sắc:</label>
+                <div class="flex flex-wrap gap-2" id="colorOptions">
+                    @foreach($colors as $color)
+                        <button class="color-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100"
+                                data-color="{{ $color }}"
+                                onclick="selectColor(this, '{{ $color }}')">
+                            {{ $color }}
+                        </button>
                     @endforeach
                 </div>
             </div>
 
             {{-- Bộ nhớ --}}
             <div class="mb-4">
-                <p class="font-semibold mb-2">Bộ nhớ:</p>
-                <div class="flex gap-2">
-                    @foreach ($storages as $storage)
-                        <button class="storage-btn border px-3 py-1 rounded hover:bg-gray-100" data-storage="{{ $storage }}">{{ $storage }}</button>
+                <label class="block text-sm font-semibold mb-1">Bộ nhớ:</label>
+                <div class="flex flex-wrap gap-2" id="storageOptions">
+                    @foreach($storages as $storage)
+                        <button class="storage-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100"
+                                data-storage="{{ $storage }}"
+                                onclick="selectStorage(this, '{{ $storage }}')">
+                            {{ $storage }}
+                        </button>
                     @endforeach
                 </div>
             </div>
 
-            {{-- Nút hành động --}}
-            <div class="mt-6 flex gap-4">
-                <button class="bg-blue-600 text-white px-6 py-2 rounded-lg">🛒 Thêm vào giỏ</button>
-                <button class="bg-green-600 text-white px-6 py-2 rounded-lg">⚡ Mua ngay</button>
+            {{-- Thông tin kỹ thuật --}}
+            <div class="mt-5 bg-gray-100 p-4 rounded-lg space-y-1 text-sm md:text-base" id="variantDetails">
+                <p><strong>Màu:</strong> <span id="detailColor">{{ $defaultVariant->color }}</span></p>
+                <p><strong>Bộ nhớ:</strong> <span id="detailStorage">{{ $defaultVariant->storage }}</span></p>
+                <p><strong>Màn hình:</strong> <span id="detailScreen">{{ $defaultVariant->screen }}</span></p>
+                <p><strong>Chip:</strong> <span id="detailChip">{{ $defaultVariant->chip }}</span></p>
+                <p><strong>Pin:</strong> <span id="detailBattery">{{ $defaultVariant->battery }}</span></p>
+                <p><strong>Hệ điều hành:</strong> <span id="detailOS">{{ $defaultVariant->os }}</span></p>
+                <p><strong>Khối lượng:</strong> <span id="detailWeight">{{ $defaultVariant->weight }}</span></p>
             </div>
-        </div>
-    </div>
-
-    {{-- Danh sách biến thể --}}
-    <div class="mt-10">
-        <h2 class="text-xl font-bold mb-4">Các phiên bản:</h2>
-        <div class="grid md:grid-cols-3 gap-4">
-            @foreach ($product->variants as $variant)
-                <div class="border p-4 rounded-lg shadow">
-                    @php
-                        $image = $variant->images->first()->image_path ?? $variant->fallback_image ?? null;
-                    @endphp
-                    @if ($image)
-                        <img src="{{ asset('storage/' . $image) }}" alt="" class="rounded mb-2 w-full">
-                    @endif
-                    <p class="font-semibold">{{ $variant->color }} / {{ $variant->storage }}</p>
-                    <p class="text-red-500 font-bold">{{ number_format($variant->price) }} đ</p>
-                </div>
-            @endforeach
         </div>
     </div>
 </div>
 
-{{-- Script biến thể & xử lý JS --}}
+{{-- Script --}}
 <script>
     const variants = @json($product->variants);
-    let selectedColor = null;
-    let selectedStorage = null;
+    let selectedColor = '{{ $defaultVariant->color }}';
+    let selectedStorage = '{{ $defaultVariant->storage }}';
 
-    document.querySelectorAll('.color-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            selectedColor = btn.dataset.color;
-            highlightSelected('.color-btn', btn);
-            updateVariantDisplay();
+    window.onload = () => {
+        updateOptions();
+        updateVariantDisplay();
+    };
+
+    function changeMainImage(src) {
+        document.getElementById('previewImage').src = src;
+    }
+
+    function selectColor(btn, color) {
+        selectedColor = color;
+        setActiveButton('#colorOptions', color);
+        updateOptions();
+        updateVariantDisplay();
+    }
+
+    function selectStorage(btn, storage) {
+        selectedStorage = storage;
+        setActiveButton('#storageOptions', storage);
+        updateOptions();
+        updateVariantDisplay();
+    }
+
+    function setActiveButton(containerSelector, value) {
+        const buttons = document.querySelectorAll(containerSelector + ' button');
+        buttons.forEach(btn => {
+            btn.classList.remove('bg-gray-800', 'text-white', 'ring', 'ring-gray-400');
         });
-    });
+        const activeBtn = [...buttons].find(b => b.dataset.color === value || b.dataset.storage === value);
+        if (activeBtn) {
+            activeBtn.classList.add('bg-gray-800', 'text-white', 'ring', 'ring-gray-400');
+        }
+    }
 
-    document.querySelectorAll('.storage-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            selectedStorage = btn.dataset.storage;
-            highlightSelected('.storage-btn', btn);
-            updateVariantDisplay();
+    function updateOptions() {
+        const availableStorages = variants.filter(v => v.color === selectedColor).map(v => v.storage);
+        const storageButtons = document.querySelectorAll('#storageOptions button');
+        storageButtons.forEach(btn => {
+            btn.classList.toggle('hidden', !availableStorages.includes(btn.dataset.storage));
         });
-    });
+        if (!availableStorages.includes(selectedStorage)) {
+            selectedStorage = availableStorages[0];
+        }
 
-    function highlightSelected(selector, selectedBtn) {
-        document.querySelectorAll(selector).forEach(btn => btn.classList.remove('bg-gray-200'));
-        selectedBtn.classList.add('bg-gray-200');
+        const availableColors = variants.filter(v => v.storage === selectedStorage).map(v => v.color);
+        const colorButtons = document.querySelectorAll('#colorOptions button');
+        colorButtons.forEach(btn => {
+            btn.classList.toggle('hidden', !availableColors.includes(btn.dataset.color));
+        });
+        if (!availableColors.includes(selectedColor)) {
+            selectedColor = availableColors[0];
+        }
+
+        setActiveButton('#colorOptions', selectedColor);
+        setActiveButton('#storageOptions', selectedStorage);
     }
 
     function updateVariantDisplay() {
-        if (!selectedColor || !selectedStorage) return;
+        const variant = variants.find(v => v.color === selectedColor && v.storage === selectedStorage);
+        if (!variant) return;
 
-        const match = variants.find(v =>
-            v.color === selectedColor && v.storage === selectedStorage
-        );
+        document.getElementById('variantPrice').innerText = new Intl.NumberFormat().format(variant.price) + '₫';
 
-        if (match) {
-            const price = new Intl.NumberFormat().format(match.price) + ' đ';
-            document.getElementById('priceDisplay').textContent = price;
+        document.getElementById('detailColor').innerText = variant.color ?? '';
+        document.getElementById('detailStorage').innerText = variant.storage ?? '';
+        document.getElementById('detailScreen').innerText = variant.screen ?? '';
+        document.getElementById('detailChip').innerText = variant.chip ?? '';
+        document.getElementById('detailBattery').innerText = variant.battery ?? '';
+        document.getElementById('detailOS').innerText = variant.os ?? '';
+        document.getElementById('detailWeight').innerText = variant.weight ?? '';
 
-            if (match.original_price && match.original_price > match.price) {
-                document.getElementById('originalPriceDisplay').textContent =
-                    new Intl.NumberFormat().format(match.original_price) + ' đ';
-            } else {
-                document.getElementById('originalPriceDisplay').textContent = '';
-            }
+        const previewImage = document.getElementById('previewImage');
+        const thumbnailWrapper = document.getElementById('thumbnailWrapper');
 
-            const image = match.images?.[0]?.image_path ?? match.fallback_image;
-            if (image) {
-                document.getElementById('mainImage').src = `/storage/${image}`;
+        if (variant.images.length > 0) {
+            previewImage.src = '/storage/' + variant.images[0].image_path;
+            const thumbs = variant.images.map(img => {
+                return `<img src="/storage/${img.image_path}" class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition" onclick="changeMainImage('/storage/${img.image_path}')">`;
+            });
+            thumbnailWrapper.innerHTML = thumbs.join('');
+        } else if (variant.fallback_image) {
+            previewImage.src = '/storage/' + variant.fallback_image;
+
+            const fallback = variants.find(v => v.images.length > 0);
+            if (fallback) {
+                const thumbs = fallback.images.map(img => {
+                    return `<img src="/storage/${img.image_path}" class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition" onclick="changeMainImage('/storage/${img.image_path}')">`;
+                });
+                thumbnailWrapper.innerHTML = thumbs.join('');
             }
         }
     }
