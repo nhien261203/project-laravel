@@ -51,4 +51,21 @@ class ProductRepository implements ProductRepositoryInterface
         $product = $this->find($id);
         return $product->delete();
     }
+
+
+    // lay ra san pham iphone cho section ben home
+    public function getIphoneProducts(int $limit = 5)
+    {
+        return Product::with(['variants.images'])
+            ->whereHas('category', function ($q) {
+                $q->where('name', 'like', '%Điện thoại%');
+            })
+            ->whereHas('brand', function ($q) {
+                $q->where('name', 'like', '%Apple%')
+                    ->orWhere('name', 'like', '%iPhone%');
+            })
+            ->latest('id')
+            ->limit($limit)
+            ->get();
+    }
 }

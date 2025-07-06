@@ -145,14 +145,17 @@
         </div>
     </div>
 
+    
+
     {{-- Main content --}}
     <main>
         {{-- Hiển thị Banner --}}
-        @include('components.banner', ['banners' => $banners])
         
+        @include('components.banner', ['banners' => $banners])
         {{-- Danh mục nổi bật --}}
         <div class="container">
 
+            {{-- section category card --}}
             <div class="my-10">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                     @include('components.category-card', [
@@ -176,6 +179,14 @@
                     ])
                 </div>
             </div>
+            {{-- end-section cate card --}}
+
+            {{-- section iphone card --}}
+
+            
+            @include('components.iphone-section', ['iphoneProducts' => $iphoneProducts])
+            
+
         </div>
         
 

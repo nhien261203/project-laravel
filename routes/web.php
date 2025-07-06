@@ -19,6 +19,11 @@ use Illuminate\Support\Facades\Auth;
 // Trang chủ – cho tất cả (user cũng vào được)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+
+//chi tiet san pham khi nguoi dung an 
+Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.detail');
+
+
 //  Admin - toàn quyền (chỉ admin, staff dung permission chặn 1 số quyền ở controller va view)
 Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');

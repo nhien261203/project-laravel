@@ -1,19 +1,26 @@
 <?php
+
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\ProductVariantImage;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
 
 class HomeController extends Controller
 {
     protected $categoryRepo;
+    protected $productRepo;
 
-    public function __construct(CategoryRepositoryInterface $categoryRepo)
-    {
+    public function __construct(
+        CategoryRepositoryInterface $categoryRepo,
+        ProductRepositoryInterface $productRepo
+    ) {
         $this->categoryRepo = $categoryRepo;
+        $this->productRepo = $productRepo;
     }
 
     public function index()
@@ -29,6 +36,19 @@ class HomeController extends Controller
         //     $category->display_image = $this->getCategoryThumbnail($category);
         // }
 
+        $iphoneProducts = $this->productRepo->getIphoneProducts(5);
+
+        foreach ($iphoneProducts as $product) {
+            $storages = $product->variants
+                ->pluck('storage')
+                ->unique()
+                ->filter()
+                ->values()
+                ->map(fn($s) => strtoupper($s))
+                ->implode(' / ');
+
+            $product->all_storages = $storages;
+        }
         // Lấy banner cho trang chủ
         $banners = Banner::where('status', 1)
             ->latest('id')
@@ -38,6 +58,7 @@ class HomeController extends Controller
         return view('layout.user', compact(
             //'categoriesWithChildren',
             'banners',
+            'iphoneProducts'
             // 'parentCategories'
         ));
     }
@@ -81,4 +102,28 @@ class HomeController extends Controller
     //     $image = $variant->images->first();
     //     return $image?->image_path;
     // }
+
+
+    public function show($slug)
+    {
+        $product = Product::with(['variants.images'])
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        // Nhóm các thuộc tính (màu, bộ nhớ)
+        $colors = $product->variants->pluck('color')->unique()->filter();
+        $storages = $product->variants->pluck('storage')->unique()->filter();
+
+        // Lấy ảnh đầu tiên nếu variant không có ảnh
+        foreach ($product->variants as $variant) {
+            if ($variant->images->isEmpty()) {
+                $fallback = $product->variants->firstWhere(fn($v) => !$v->images->isEmpty());
+                if ($fallback) {
+                    $variant->fallback_image = $fallback->images->first()->image_path;
+                }
+            }
+        }
+
+        return view('user.product.detail', compact('product', 'colors', 'storages'));
+    }
 }
