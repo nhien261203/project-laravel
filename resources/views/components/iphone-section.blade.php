@@ -34,20 +34,32 @@
                         <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $storages ?: 'N/A' }}</p>
 
                         {{-- Giá --}}
+                        {{-- Giá --}}
                         @if($price)
                             <div class="mt-2">
                                 <span class="text-red-500 font-bold">
                                     {{ number_format($price, 0, ',', '.') }}₫
                                 </span>
+
+                                {{-- Giá gốc (gạch) --}}
                                 @if($originalPrice && $originalPrice > $price)
                                     <span class="text-sm text-gray-400 line-through ml-2">
                                         {{ number_format($originalPrice, 0, ',', '.') }}₫
                                     </span>
                                 @endif
+
+                                {{-- Phần trăm giảm giá --}}
+                                @if($product->sale_percent)
+                                    <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded">
+                                        -{{ $product->sale_percent }}%
+                                    </span>
+                                @endif
+
                             </div>
                         @else
                             <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
                         @endif
+
                     </div>
                 </a>
             </div>

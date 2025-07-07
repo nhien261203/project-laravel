@@ -34,17 +34,18 @@ class ProductVariantController extends Controller
     public function store(Request $request, $productId)
     {
         $request->validate([
-            'sku' => 'nullable|string|max:255|unique:product_variants,sku',
-            'price' => 'required|numeric|min:0',
-            'import_price' => 'required|numeric|min:0',
+            'original_price' => 'required|numeric|min:0',
+            'sale_percent' => 'required|numeric|min:0|max:100',
             'quantity' => 'required|integer|min:0',
             'images.*' => 'image|max:2048',
         ]);
 
         $data = $request->except('_token');
-        $data['images'] = $request->file('images');
 
-        // Tự sinh SKU nếu không có
+        // Tính giá bán
+        $data['price'] = round($data['original_price'] * (1 - ($data['sale_percent'] / 100)), 2);
+
+        // Nếu không nhập SKU, tự sinh
         if (empty($data['sku'])) {
             $data['sku'] = 'SKU-P' . $productId . '-' . strtoupper(uniqid());
         }
@@ -66,23 +67,22 @@ class ProductVariantController extends Controller
     public function update(Request $request, $productId, $variantId)
     {
         $request->validate([
-            'sku' => 'nullable|string|max:255|unique:product_variants,sku,' . $variantId,
-            'price' => 'required|numeric|min:0',
-            'import_price' => 'required|numeric|min:0',
+            'original_price' => 'required|numeric|min:0',
+            'sale_percent' => 'required|numeric|min:0|max:100',
             'quantity' => 'required|integer|min:0',
             'images.*' => 'image|max:2048',
         ]);
 
         $data = $request->all();
-        $data['images'] = $request->file('images') ?? [];
+
+        // Tính giá bán lại nếu có thay đổi
+        $data['price'] = round($data['original_price'] * (1 - ($data['sale_percent'] / 100)), 2);
 
         $this->variantRepo->update($variantId, $data);
 
         return redirect()->route('admin.products.variants.index', $productId)
             ->with('success', 'Cập nhật biến thể thành công');
     }
-
-
 
     public function destroy($productId, $variantId)
     {

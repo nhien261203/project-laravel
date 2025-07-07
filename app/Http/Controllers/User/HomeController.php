@@ -37,8 +37,12 @@ class HomeController extends Controller
         // }
 
         $iphoneProducts = $this->productRepo->getIphoneProducts(5);
+        
 
         foreach ($iphoneProducts as $product) {
+
+            $firstVariant = $product->variants->first();
+            
             $storages = $product->variants
                 ->pluck('storage')
                 ->unique()
@@ -47,7 +51,10 @@ class HomeController extends Controller
                 ->map(fn($s) => strtoupper($s))
                 ->implode(' / ');
 
+            
             $product->all_storages = $storages;
+
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
         }
         // Lấy banner cho trang chủ
         $banners = Banner::where('status', 1)

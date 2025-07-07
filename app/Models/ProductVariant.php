@@ -20,6 +20,7 @@ class ProductVariant extends Model
         'chip',
         'price',
         'original_price',
+        'sale_percent',
         'quantity',
         'sold',
         'status',

@@ -6,8 +6,10 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
         <div><strong>SKU:</strong> {{ $variant->sku }}</div>
+        <div><strong>Giá niêm yết:</strong> {{ number_format($variant->original_price) }} đ</div>
+        <div><strong>Giảm giá:</strong> {{ $variant->sale_percent }}%</div>
         <div><strong>Giá bán:</strong> {{ number_format($variant->price) }} đ</div>
-        <div><strong>Giá gốc:</strong> {{ number_format($variant->original_price) }} đ</div>
+
         <div><strong>Giá nhập:</strong> {{ number_format($variant->import_price) }} đ</div>
         <div><strong>Số lượng:</strong> {{ $variant->quantity }}</div>
         <div><strong>RAM:</strong> {{ $variant->ram }}</div>

@@ -14,11 +14,9 @@
             {{-- Ảnh chính --}}
             <div id="mainImage" class="border rounded-lg overflow-hidden shadow-md">
                 @if($defaultImages->count())
-                    <img src="{{ asset('storage/' . $defaultImages->first()->image_path) }}"
-                         class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
+                    <img src="{{ asset('storage/' . $defaultImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
                 @elseif($fallbackImages && $fallbackImages->count())
-                    <img src="{{ asset('storage/' . $fallbackImages->first()->image_path) }}"
-                         class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
+                    <img src="{{ asset('storage/' . $fallbackImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
                 @else
                     <div class="w-full h-80 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
                         Không có ảnh
@@ -29,9 +27,7 @@
             {{-- Ảnh nhỏ --}}
             <div class="flex mt-4 gap-3 overflow-x-auto pb-2" id="thumbnailWrapper">
                 @foreach(($defaultImages->count() ? $defaultImages : $fallbackImages ?? []) as $img)
-                    <img src="{{ asset('storage/' . $img->image_path) }}"
-                         class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition"
-                         onclick="changeMainImage('{{ asset('storage/' . $img->image_path) }}')">
+                    <img src="{{ asset('storage/' . $img->image_path) }}" class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition" onclick="changeMainImage('{{ asset('storage/' . $img->image_path) }}')">
                 @endforeach
             </div>
         </div>
@@ -41,23 +37,30 @@
             <h1 class="text-xl md:text-2xl font-bold mb-3">{{ $product->name }}</h1>
 
             {{-- Giá --}}
-            <div class="text-red-600 text-xl md:text-2xl font-semibold mb-2" id="variantPrice">
-                {{ number_format($defaultVariant->price, 0, ',', '.') }}₫
+            <div class="mb-2">
+                <span id="variantPrice" class="text-red-600 text-xl md:text-2xl font-semibold">
+                    {{ number_format($defaultVariant->price, 0, ',', '.') }}₫
+                </span>
+
+                @if($defaultVariant->original_price && $defaultVariant->original_price > $defaultVariant->price)
+                    <span id="variantOriginalPrice" class="text-gray-400 line-through text-sm ml-2">
+                        {{ number_format($defaultVariant->original_price, 0, ',', '.') }}₫
+                    </span>
+                @endif
+
+                @if($defaultVariant->sale_percent)
+                    <span id="variantSalePercent" class="text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded ml-2">
+                        -{{ $defaultVariant->sale_percent }}%
+                    </span>
+                @endif
             </div>
-            @if($defaultVariant->original_price && $defaultVariant->original_price > $defaultVariant->price)
-                <div class="text-gray-400 line-through mb-4 text-sm">
-                    {{ number_format($defaultVariant->original_price, 0, ',', '.') }}₫
-                </div>
-            @endif
 
             {{-- Màu sắc --}}
             <div class="mb-4">
                 <label class="block text-sm font-semibold mb-1">Màu sắc:</label>
                 <div class="flex flex-wrap gap-2" id="colorOptions">
                     @foreach($colors as $color)
-                        <button class="color-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100"
-                                data-color="{{ $color }}"
-                                onclick="selectColor(this, '{{ $color }}')">
+                        <button class="color-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100" data-color="{{ $color }}" onclick="selectColor(this, '{{ $color }}')">
                             {{ $color }}
                         </button>
                     @endforeach
@@ -69,9 +72,7 @@
                 <label class="block text-sm font-semibold mb-1">Bộ nhớ:</label>
                 <div class="flex flex-wrap gap-2" id="storageOptions">
                     @foreach($storages as $storage)
-                        <button class="storage-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100"
-                                data-storage="{{ $storage }}"
-                                onclick="selectStorage(this, '{{ $storage }}')">
+                        <button class="storage-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100" data-storage="{{ $storage }}" onclick="selectStorage(this, '{{ $storage }}')">
                             {{ $storage }}
                         </button>
                     @endforeach
@@ -159,8 +160,44 @@
         const variant = variants.find(v => v.color === selectedColor && v.storage === selectedStorage);
         if (!variant) return;
 
+        // Giá bán
         document.getElementById('variantPrice').innerText = new Intl.NumberFormat().format(variant.price) + '₫';
 
+        // Giá gốc
+        const originalPriceEl = document.getElementById('variantOriginalPrice');
+        if (variant.original_price && variant.original_price > variant.price) {
+            if (originalPriceEl) {
+                originalPriceEl.innerText = new Intl.NumberFormat().format(variant.original_price) + '₫';
+                originalPriceEl.classList.remove('hidden');
+            } else {
+                const el = document.createElement('span');
+                el.id = 'variantOriginalPrice';
+                el.className = 'text-gray-400 line-through text-sm ml-2';
+                el.innerText = new Intl.NumberFormat().format(variant.original_price) + '₫';
+                document.getElementById('variantPrice').after(el);
+            }
+        } else if (originalPriceEl) {
+            originalPriceEl.classList.add('hidden');
+        }
+
+        // % Sale
+        const salePercentEl = document.getElementById('variantSalePercent');
+        if (variant.sale_percent && variant.sale_percent > 0) {
+            if (salePercentEl) {
+                salePercentEl.innerText = '-' + variant.sale_percent + '%';
+                salePercentEl.classList.remove('hidden');
+            } else {
+                const el = document.createElement('span');
+                el.id = 'variantSalePercent';
+                el.className = 'text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded ml-2';
+                el.innerText = '-' + variant.sale_percent + '%';
+                document.getElementById('variantPrice').after(el);
+            }
+        } else if (salePercentEl) {
+            salePercentEl.classList.add('hidden');
+        }
+
+        // Chi tiết kỹ thuật
         document.getElementById('detailColor').innerText = variant.color ?? '';
         document.getElementById('detailStorage').innerText = variant.storage ?? '';
         document.getElementById('detailScreen').innerText = variant.screen ?? '';
@@ -169,6 +206,7 @@
         document.getElementById('detailOS').innerText = variant.os ?? '';
         document.getElementById('detailWeight').innerText = variant.weight ?? '';
 
+        // Ảnh
         const previewImage = document.getElementById('previewImage');
         const thumbnailWrapper = document.getElementById('thumbnailWrapper');
 

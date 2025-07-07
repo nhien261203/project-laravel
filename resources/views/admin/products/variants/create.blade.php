@@ -18,16 +18,18 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Giá bán *</label>
-                <input type="number" name="price" step="0.01" value="{{ old('price') }}"
+                <label class="block text-sm font-medium text-gray-700 mb-1">Giá gốc *</label>
+                <input type="number" name="original_price" step="0.01" value="{{ old('original_price') }}"
                     class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100" />
-                @error('price')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
+                @error('original_price')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Giá gốc</label>
-                <input type="number" name="original_price" step="0.01" value="{{ old('original_price') }}"
+                <label class="block text-sm font-medium text-gray-700 mb-1">Giảm giá (%)</label>
+                <input type="number" name="sale_percent" step="0.01" value="{{ old('sale_percent', 0) }}"
                     class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100" />
+                <p class="text-xs text-gray-500 mt-1">Hệ thống sẽ tự tính giá bán sau khi giảm.</p>
+                @error('sale_percent')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
             <div>

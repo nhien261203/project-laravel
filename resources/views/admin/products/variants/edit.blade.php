@@ -16,17 +16,20 @@
                 @error('sku')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
+            <!-- Bỏ "Giá bán" và thay bằng: -->
             <div>
-                <label class="block text-sm font-medium text-gray-700">Giá bán *</label>
-                <input type="number" name="price" step="0.01" value="{{ old('price', $variant->price) }}" 
-                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
-                @error('price')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
+                <label class="block text-sm font-medium text-gray-700">Giá gốc *</label>
+                <input type="number" name="original_price" step="0.01" value="{{ old('original_price', $variant->original_price) }}" 
+                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
+                @error('original_price')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">Giá gốc</label>
-                <input type="number" name="original_price" step="0.01" value="{{ old('original_price', $variant->original_price) }}" 
-                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
+                <label class="block text-sm font-medium text-gray-700">Giảm giá (%)</label>
+                <input type="number" name="sale_percent" step="0.01" value="{{ old('sale_percent', $variant->sale_percent) }}"
+                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
+                <p class="text-xs text-gray-500 mt-1">Hệ thống sẽ tự tính giá bán dựa trên giảm giá.</p>
+                @error('sale_percent')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
             </div>
 
             <div>
