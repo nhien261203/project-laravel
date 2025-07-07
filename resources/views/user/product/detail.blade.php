@@ -30,6 +30,8 @@
                     <img src="{{ asset('storage/' . $img->image_path) }}" class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition" onclick="changeMainImage('{{ asset('storage/' . $img->image_path) }}')">
                 @endforeach
             </div>
+
+            
         </div>
 
         {{-- Thông tin --}}
@@ -91,6 +93,23 @@
             </div>
         </div>
     </div>
+
+    {{-- Mô tả sản phẩm --}}
+    <div class="mt-6 md:w-1/2 w-full">
+        <h3 class="text-base font-semibold text-gray-700 mb-2">📘 Mô tả sản phẩm</h3>
+        
+        <div id="productDescription"
+            class="prose max-w-none text-sm text-gray-800 overflow-hidden transition-all duration-300 line-clamp-3">
+            {!! $product->description !!}
+        </div>
+
+        {{-- Nút Đọc thêm --}}
+        <button id="toggleDescriptionBtn"
+            class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-200 text-sm font-medium focus:outline-none">
+            Đọc thêm 
+        </button>
+    </div>
+
 </div>
 
 {{-- Script --}}
@@ -229,4 +248,21 @@
         }
     }
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const desc = document.getElementById('productDescription');
+        const toggleBtn = document.getElementById('toggleDescriptionBtn');
+
+        toggleBtn.addEventListener('click', function () {
+            if (desc.classList.contains('line-clamp-3')) {
+                desc.classList.remove('line-clamp-3');
+                toggleBtn.innerText = 'Thu gọn ';
+            } else {
+                desc.classList.add('line-clamp-3');
+                toggleBtn.innerText = 'Đọc thêm ';
+            }
+        });
+    });
+</script>
+
 @endsection

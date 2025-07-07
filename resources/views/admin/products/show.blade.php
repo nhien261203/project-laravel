@@ -10,7 +10,7 @@
         </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 gap-6">
         <!-- Cột trái -->
         <div class="space-y-4">
             <div>
@@ -39,8 +39,9 @@
             <div>
                 <h4 class="text-sm font-semibold text-gray-600">Mô tả</h4>
                 <div class="prose max-w-none text-gray-800">
-                    {!! nl2br(e($product->description)) !!}
+                    {!! $product->description !!}
                 </div>
+
             </div>
 
             <div>

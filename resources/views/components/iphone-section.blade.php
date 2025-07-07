@@ -19,7 +19,7 @@
 
                     {{-- Ảnh --}}
                     @if($firstImage)
-                        <img src="{{ asset('storage/' . $firstImage) }}" alt="{{ $product->name }}" class="w-full h-48 object-cover" loading="lazy">
+                        <img src="{{ asset('storage/' . $firstImage) }}" alt="{{ $product->name }}" class="w-full h-40 md:h-48 object-contain" loading="lazy">
                     @else
                         <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">
                             Không có ảnh

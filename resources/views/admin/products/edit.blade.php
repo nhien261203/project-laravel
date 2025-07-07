@@ -62,7 +62,7 @@
 
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Mô tả</label>
-            <textarea name="description" rows="4"
+            <textarea name="description" rows="4" id="summernote"
                 class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">{{ old('description', $product->description) }}</textarea>
             @error('description')
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
@@ -93,3 +93,24 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<!-- Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            height: 250,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline']],
+                ['font', ['fontsize', 'color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link']],
+                ['view', ['codeview']]
+            ]
+        });
+    });
+</script>
+@endpush
