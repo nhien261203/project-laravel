@@ -23,7 +23,8 @@ class ProductVariant extends Model
         'quantity',
         'sold',
         'status',
-        'operating_system'
+        'operating_system',
+        'import_price',
     ];
 
     // Sản phẩm cha

@@ -36,6 +36,7 @@ class ProductVariantController extends Controller
         $request->validate([
             'sku' => 'nullable|string|max:255|unique:product_variants,sku',
             'price' => 'required|numeric|min:0',
+            'import_price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'images.*' => 'image|max:2048',
         ]);
@@ -67,6 +68,7 @@ class ProductVariantController extends Controller
         $request->validate([
             'sku' => 'nullable|string|max:255|unique:product_variants,sku,' . $variantId,
             'price' => 'required|numeric|min:0',
+            'import_price' => 'required|numeric|min:0',
             'quantity' => 'required|integer|min:0',
             'images.*' => 'image|max:2048',
         ]);

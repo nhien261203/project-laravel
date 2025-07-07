@@ -30,6 +30,13 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700">Giá nhập *</label>
+                <input type="number" name="import_price" step="0.01" value="{{ old('import_price', $variant->import_price) }}"
+                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
+                @error('import_price')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700">Số lượng *</label>
                 <input type="number" name="quantity" value="{{ old('quantity', $variant->quantity) }}" 
                 class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">

@@ -8,6 +8,7 @@
         <div><strong>SKU:</strong> {{ $variant->sku }}</div>
         <div><strong>Giá bán:</strong> {{ number_format($variant->price) }} đ</div>
         <div><strong>Giá gốc:</strong> {{ number_format($variant->original_price) }} đ</div>
+        <div><strong>Giá nhập:</strong> {{ number_format($variant->import_price) }} đ</div>
         <div><strong>Số lượng:</strong> {{ $variant->quantity }}</div>
         <div><strong>RAM:</strong> {{ $variant->ram }}</div>
         <div><strong>Bộ nhớ:</strong> {{ $variant->storage }}</div>
