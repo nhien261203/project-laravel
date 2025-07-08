@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Middleware\AutoMergeCartMiddleware;
 
 class AuthController extends Controller
 {
@@ -16,6 +17,8 @@ class AuthController extends Controller
     }
 
     // Xử lý đăng nhập
+
+
     public function login(Request $request)
     {
         $request->validate([
@@ -23,7 +26,6 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // Xác định loại login: email hoặc phone
         $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
         $credentials = [
@@ -31,22 +33,25 @@ class AuthController extends Controller
             'password' => $request->password,
         ];
 
+        // Lưu session_id cũ trước khi đăng nhập
+        $oldSessionId = $request->session()->getId();
+
         if (Auth::attempt($credentials, $request->remember)) {
-            $request->session()->regenerate();
+            $request->session()->regenerate(); // Tạo session mới
 
-            $user = Auth::user();
+            // Gọi mergeCart thủ công với session ID cũ
+            app(\App\Repositories\Cart\CartRepositoryInterface::class)
+                ->mergeCart(Auth::id(), $oldSessionId);
 
-            // Kiểm tra role bằng Spatie
-            // if ($user->hasRole(['admin', 'staff'])) {
-            //     return redirect()->intended('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
-            // }
+            // Đánh dấu đã merge nếu cần
+            session(['cart_merged' => true]);
 
-            // Nếu không phải admin/staff → về trang chủ
             return redirect('/')->with('success', 'Đăng nhập thành công!');
         }
 
         return back()->with('error', 'Thông tin đăng nhập không chính xác.')->withInput();
     }
+
 
     // Hiển thị form đăng ký
     public function showRegister()
@@ -83,8 +88,13 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        // Xoá cờ cart_merged
+        session()->forget('cart_merged');
+
         return redirect()->route('login');
     }
+
 
     // public function showChangePassword()
     // {

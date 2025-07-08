@@ -24,7 +24,6 @@ class AdminAuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        // Xác định loại login: email hoặc phone
         $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
         $credentials = [
@@ -32,17 +31,19 @@ class AdminAuthController extends Controller
             'password' => $request->password,
         ];
 
+        // Lưu session_id cũ trước khi đăng nhập
+        $oldSessionId = $request->session()->getId();
+
         if (Auth::attempt($credentials, $request->remember)) {
-            $request->session()->regenerate();
+            $request->session()->regenerate(); // Tạo session mới
 
-            $user = Auth::user();
+            // Gọi mergeCart thủ công với session ID cũ
+            app(\App\Repositories\Cart\CartRepositoryInterface::class)
+                ->mergeCart(Auth::id(), $oldSessionId);
 
-            // Kiểm tra role bằng Spatie
-            // if ($user->hasRole(['admin', 'staff'])) {
-            //     return redirect()->intended('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
-            // }
+            // Đánh dấu đã merge nếu cần
+            session(['cart_merged' => true]);
 
-            // Nếu không phải admin/staff → về trang chủ
             return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
         }
 

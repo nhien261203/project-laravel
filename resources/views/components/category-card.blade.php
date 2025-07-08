@@ -27,15 +27,17 @@
         </div>
     </div>
 </a> --}}
-<a class="block group transition-all duration-300">
+<a  href="{{ $link ?? '#' }}" class="block group transition-all duration-300">
     <div class="rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
         <div class="relative aspect-[4/3]">
-            <img
-                src="{{ $image }}"
-                alt="{{ $title }}"
-                
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            >
+           
+                <img
+                    src="{{ $image }}"
+                    alt="{{ $title }}"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                >
+            
+            
 
             <div class="absolute bottom-4 right-4">
                 <div class="bg-white rounded-full p-2 shadow-md transition-all duration-300 group-hover:scale-110">

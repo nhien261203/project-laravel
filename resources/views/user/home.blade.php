@@ -13,23 +13,28 @@
         <div class="my-10">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 @include('components.category-card', [
+                    
                     'title' => 'Điện thoại',
                     'image' => 'https://cdn.mobilecity.vn/mobilecity-vn/images/2024/12/dien-thoai-chup-anh-dep-nhat-2025-2.jpg.webp',
+                    'link' => route('product.phone') 
                 ])
 
                 @include('components.category-card', [
                     'title' => 'Laptop',
                     'image' => 'https://images.pexels.com/photos/3975680/pexels-photo-3975680.jpeg',
+                    'link' => '#'
                 ])
 
                 @include('components.category-card', [
                     'title' => 'Đồng hồ',
                     'image' => 'https://images.pexels.com/photos/32864808/pexels-photo-32864808.jpeg',
+                    'link' => '#'
                 ])
 
                 @include('components.category-card', [
                     'title' => 'Phụ kiện',
                     'image' => 'https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg',
+                    'link' => '#'
                 ])
             </div>
         </div>

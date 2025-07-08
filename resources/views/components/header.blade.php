@@ -71,7 +71,7 @@
                                 <li><a  class="block px-4 py-2 hover:bg-gray-100">Thông tin</a></li>
                                 <li><a  class="block px-4 py-2 hover:bg-gray-100">Đơn hàng</a></li>
                                 <li>
-                                    <form method="POST" action="">
+                                    <form method="POST" action="{{ route('logout') }}">
                                         @csrf
                                         <button type="submit" class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500">Đăng xuất</button>
                                     </form>

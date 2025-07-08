@@ -19,24 +19,23 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 // Trang chủ – cho tất cả (user cũng vào được)
+// Route::middleware('auto.merge.cart')->group(function () {
+   
+// });
+
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
 Route::get('/dien-thoai', [UserProductController::class, 'phoneCategory'])->name('product.phone');
-
-
-//chi tiet san pham khi nguoi dung an 
 Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.detail');
 
-//them vao gio hang
+
+
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/add', [CartController::class, 'add'])->name('add');
     Route::put('/update/{variantId}', [CartController::class, 'update'])->name('update');
     Route::delete('/remove/{variantId}', [CartController::class, 'remove'])->name('remove');
 });
-
-
-
 
 //  Admin - toàn quyền (chỉ admin, staff dung permission chặn 1 số quyền ở controller va view)
 Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')->group(function () {

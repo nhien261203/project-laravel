@@ -74,6 +74,7 @@ class CartRepository implements CartRepositoryInterface
     }
 
     // ham nay gop cart tu chua login thanh login
+    // merge trong authcontroller
     public function mergeCart($userId, $sessionId)
     {
         $guestCart = $this->getUserCart(null, $sessionId);
@@ -98,5 +99,8 @@ class CartRepository implements CartRepositoryInterface
         }
 
         $guestCart->items()->delete(); // Xóa giỏ hàng session sau khi merge xong
+
+        // xoa trong DB sau khi merge
+        $guestCart->delete();
     }
 }
