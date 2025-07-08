@@ -49,12 +49,15 @@
             <div class="flex items-center gap-4">
                 <i id="btnOpenSearch" class="fas fa-search text-xl text-white cursor-pointer hover:text-slate-300"></i>
 
-                <button class="relative py-3">
+                <a href="{{ route('cart.index') }}" class="relative py-3">
                     <i class="fas fa-shopping-cart text-white text-xl hover:text-slate-300"></i>
-                    <div class="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 left-[9px] flex items-center justify-center text-xs">
-                        4
-                    </div>
-                </button>
+                    @if($cartQty > 0)
+                        <div class="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 left-[9px] flex items-center justify-center text-xs">
+                            {{ $cartQty }}
+                        </div>
+                    @endif
+                </a>
+
 
                 {{-- User Dropdown --}}
                 <div class="relative group py-5 cursor-pointer">

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandRepositoryInterface;
+use App\Repositories\Cart\CartRepository;
+use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
@@ -11,6 +13,8 @@ use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\ProductVariant\ProductVariantRepository;
 use App\Repositories\ProductVariant\ProductVariantRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,13 +30,29 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
 
         $this->app->bind(ProductVariantRepositoryInterface::class, ProductVariantRepository::class);
+
+        $this->app->bind(
+            CartRepositoryInterface::class,
+            CartRepository::class
+        );
     }
 
     /**
      * Bootstrap any application services.
      */
+    
+
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            $cartRepo = app(CartRepositoryInterface::class);
+            $userId = Auth::id();
+            $sessionId = session()->getId();
+
+            $cart = $cartRepo->getUserCart($userId, $sessionId);
+            $totalQty = $cart ? $cart->items->sum('quantity') : 0;
+
+            $view->with('cartQty', $totalQty);
+        });
     }
 }

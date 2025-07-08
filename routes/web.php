@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\HomeController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,16 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //chi tiet san pham khi nguoi dung an 
 Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.detail');
+
+//them vao gio hang
+Route::prefix('cart')->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/add', [CartController::class, 'add'])->name('add');
+    Route::put('/update/{variantId}', [CartController::class, 'update'])->name('update');
+    Route::delete('/remove/{variantId}', [CartController::class, 'remove'])->name('remove');
+});
+
+
 
 
 //  Admin - toàn quyền (chỉ admin, staff dung permission chặn 1 số quyền ở controller va view)
