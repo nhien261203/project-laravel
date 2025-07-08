@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\UserProductController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 
 // Trang chủ – cho tất cả (user cũng vào được)
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/dien-thoai', [UserProductController::class, 'phoneCategory'])->name('product.phone');
 
 
 //chi tiet san pham khi nguoi dung an 

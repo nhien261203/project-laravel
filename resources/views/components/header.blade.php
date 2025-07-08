@@ -15,7 +15,7 @@
                 <ul class="hidden lg:flex items-center gap-4">
                     {{-- Điện thoại --}}
                     <li>
-                        <a href="#" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Điện thoại</a>
+                        <a href="{{ route('product.phone') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Điện thoại</a>
                     </li>
 
                     {{-- Laptop --}}

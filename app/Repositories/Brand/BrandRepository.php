@@ -65,4 +65,14 @@ class BrandRepository implements BrandRepositoryInterface
         }
         return $brand->delete();
     }
+
+
+    // LAY BRAND LOC O TRANG PRODUCT USER
+    public function getBrandsByCategorySlug(string $slug)
+    {
+        return Brand::whereHas('products.category', function ($q) use ($slug) {
+            $q->where('slug', $slug)->where('status', 1);
+        })->withCount('products')->distinct()->get();
+    }
+
 }

@@ -57,6 +57,7 @@ class ProductRepository implements ProductRepositoryInterface
     public function getIphoneProducts(int $limit = 5)
     {
         return Product::with(['variants.images'])
+            ->where('status', 1) // lấy sản phẩm đang hiển thị
             ->whereHas('category', function ($q) {
                 $q->where('name', 'like', '%Điện thoại%');
             })
@@ -68,4 +69,20 @@ class ProductRepository implements ProductRepositoryInterface
             ->limit($limit)
             ->get();
     }
+
+    // lay all sp dien-thoai cho user
+    public function getPaginatedProductsByCategorySlug(string $slug, int $perPage = 12)
+    {
+        $query = Product::with(['variants.images', 'category'])
+            ->whereHas('category', fn($q) => $q->where('slug', $slug)->where('status', 1))
+            ->where('status', 1);
+
+        if (request('brand_id')) {
+            $query->where('brand_id', request('brand_id'));
+        }
+
+        return $query->latest('id')->paginate($perPage)->withQueryString();
+    }
+
+    
 }
