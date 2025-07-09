@@ -39,7 +39,7 @@
 
                 @include('components.category-card', [
                     'title' => 'Về chúng tôi',
-                    'image' => 'https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg',
+                    'image' => 'https://images.pexels.com/photos/4158/apple-iphone-smartphone-desk.jpg',
                     'link' => '#'
                 ])
 
