@@ -55,5 +55,23 @@ class UserProductController extends Controller
         return view('user.product.laptop', compact('products', 'brands'));
     }
 
+    public function accessoryCategory()
+    {
+        // Lấy sản phẩm trong danh mục "phu-kien" và các danh mục con
+        $products = $this->productRepo->getProductsByCategorySlug('phu-kien');
+
+        foreach ($products as $product) {
+            $firstVariant = $product->variants->first();
+            $storages = $product->variants->pluck('storage')->filter()->unique()->implode(' / ');
+            $product->all_storages = $storages;
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
+        }
+
+        $brands = $this->brandRepo->getBrandsByCategorySlug('phu-kien');
+
+        return view('user.product.accessory', compact('products', 'brands'));
+    }
+
+
 
 }

@@ -34,7 +34,7 @@
                 @include('components.category-card', [
                     'title' => 'Phụ kiện',
                     'image' => 'https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg',
-                    'link' => '#'
+                    'link' => route('product.accessory')
                 ])
 
                 @include('components.category-card', [

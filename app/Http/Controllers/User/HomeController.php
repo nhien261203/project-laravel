@@ -131,4 +131,24 @@ class HomeController extends Controller
 
         return view('user.product.detail', compact('product', 'colors', 'storages'));
     }
+
+
+    public function showAccessory($slug)
+    {
+        $product = Product::with(['variants.images'])->where('slug', $slug)->firstOrFail();
+
+        $colors = $product->variants->pluck('color')->unique()->filter();
+        $storages = $product->variants->pluck('storage')->unique()->filter();
+
+        // Tìm biến thể đầu tiên có ảnh thật
+        $fallbackVariantWithImage = $product->variants->firstWhere(fn($v) => $v->images->isNotEmpty());
+
+        foreach ($product->variants as $variant) {
+            if ($variant->images->isEmpty() && $fallbackVariantWithImage) {
+                $variant->fallback_image = $fallbackVariantWithImage->images->first()->image_path;
+            }
+        }
+
+        return view('user.product.detail-accessory', compact('product', 'colors', 'storages'));
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Product;
 
+use App\Models\Category;
 use App\Models\Product;
 
 class ProductRepository implements ProductRepositoryInterface
@@ -73,13 +74,20 @@ class ProductRepository implements ProductRepositoryInterface
     // lay all sp dien-thoai cho user
     public function getProductsByCategorySlug(string $slug)
     {
+        $category = Category::where('slug', $slug)->where('status', 1)->firstOrFail();
+
+        // Lấy ID của danh mục hiện tại và tất cả danh mục con
+        $categoryIds = Category::where('id', $category->id)
+            ->orWhere('parent_id', $category->id)
+            ->pluck('id');
+
         return Product::with(['variants.images', 'category'])
-            ->whereHas('category', fn($q) => $q->where('slug', $slug)->where('status', 1))
+            ->whereIn('category_id', $categoryIds)
             ->where('status', 1)
             ->when(request('brand_id'), fn($q) => $q->where('brand_id', request('brand_id')))
             ->latest('id')
             ->get();
-    }
+        }
 
 
     

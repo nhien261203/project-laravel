@@ -30,7 +30,7 @@
 
                     {{-- Phụ kiện có dropdown --}}
                     <li class="relative group cursor-pointer">
-                        <a href="#" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400">
+                        <a href="{{ route('product.accessory') }}" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400">
                             Phụ kiện
                             <i class="fas fa-caret-down group-hover:rotate-180 transition-transform"></i>
                         </a>
@@ -40,6 +40,14 @@
                                 <li><a href="#" class="block p-2 text-gray-600 hover:bg-gray-100">Thiết bị âm thanh</a></li>
                             </ul>
                         </div>
+                    </li>
+
+                    <li>
+                        <a href="" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Chuyện công nghệ</a>
+                    </li>
+
+                    <li>
+                        <a href="" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Về chúng tôi</a>
                     </li>
                 </ul>
 
@@ -122,6 +130,9 @@
                         <li><a href="#" class="block text-white/80 py-1 text-sm">Thiết bị âm thanh</a></li>
                     </ul>
                 </li>
+
+                <li><a href="" class="block text-white py-2 border-b border-white/10">Chuyện công nghệ</a></li>
+                <li><a href="" class="block text-white py-2 border-b border-white/10">Về chúng tôi</a></li>
             </ul>
 
         </div>

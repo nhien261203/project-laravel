@@ -28,7 +28,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/dien-thoai', [UserProductController::class, 'phoneCategory'])->name('product.phone');
 Route::get('/laptop', [UserProductController::class, 'laptopCategory'])->name('product.laptop');
 
+Route::get('/phu-kien', [UserProductController::class, 'accessoryCategory'])->name('product.accessory');
+
 Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.detail');
+
+Route::get('/phu-kien/{slug}', [HomeController::class, 'showAccessory'])->name('product.detailAccessory');
 
 
 

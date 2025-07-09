@@ -70,9 +70,23 @@ class BrandRepository implements BrandRepositoryInterface
     // LAY BRAND LOC O TRANG PRODUCT USER
     public function getBrandsByCategorySlug(string $slug)
     {
-        return Brand::whereHas('products.category', function ($q) use ($slug) {
-            $q->where('slug', $slug)->where('status', 1);
-        })->withCount('products')->distinct()->get();
+        $category = \App\Models\Category::where('slug', $slug)->where('status', 1)->firstOrFail();
+
+        // Lấy tất cả ID của danh mục hiện tại và danh mục con
+        $categoryIds = \App\Models\Category::where('id', $category->id)
+            ->orWhere('parent_id', $category->id)
+            ->pluck('id');
+
+        // Lọc các brand có sản phẩm thuộc các danh mục này
+        return Brand::whereHas('products', function ($q) use ($categoryIds) {
+                $q->whereIn('category_id', $categoryIds)->where('status', 1);
+            })
+            ->withCount(['products' => function ($q) use ($categoryIds) {
+                $q->whereIn('category_id', $categoryIds)->where('status', 1);
+            }])
+            ->distinct()
+            ->get();
     }
+
 
 }
