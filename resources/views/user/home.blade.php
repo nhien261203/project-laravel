@@ -22,20 +22,28 @@
                 @include('components.category-card', [
                     'title' => 'Laptop',
                     'image' => 'https://images.pexels.com/photos/3975680/pexels-photo-3975680.jpeg',
-                    'link' => '#'
+                    'link' => route('product.laptop')
                 ])
 
-                @include('components.category-card', [
+                {{-- @include('components.category-card', [
                     'title' => 'Đồng hồ',
                     'image' => 'https://images.pexels.com/photos/32864808/pexels-photo-32864808.jpeg',
                     'link' => '#'
-                ])
+                ]) --}}
 
                 @include('components.category-card', [
                     'title' => 'Phụ kiện',
                     'image' => 'https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg',
                     'link' => '#'
                 ])
+
+                @include('components.category-card', [
+                    'title' => 'Về chúng tôi',
+                    'image' => 'https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg',
+                    'link' => '#'
+                ])
+
+
             </div>
         </div>
 

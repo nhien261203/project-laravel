@@ -71,18 +71,16 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     // lay all sp dien-thoai cho user
-    public function getPaginatedProductsByCategorySlug(string $slug, int $perPage = 12)
+    public function getProductsByCategorySlug(string $slug)
     {
-        $query = Product::with(['variants.images', 'category'])
+        return Product::with(['variants.images', 'category'])
             ->whereHas('category', fn($q) => $q->where('slug', $slug)->where('status', 1))
-            ->where('status', 1);
-
-        if (request('brand_id')) {
-            $query->where('brand_id', request('brand_id'));
-        }
-
-        return $query->latest('id')->paginate($perPage)->withQueryString();
+            ->where('status', 1)
+            ->when(request('brand_id'), fn($q) => $q->where('brand_id', request('brand_id')))
+            ->latest('id')
+            ->get();
     }
+
 
     
 }

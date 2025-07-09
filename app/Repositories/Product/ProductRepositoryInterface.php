@@ -13,12 +13,9 @@ interface ProductRepositoryInterface
     public function getIphoneProducts(int $limit = 5);
 
     // lay san pham dien-thoai cho trang dien thoai (user )
-    public function getPaginatedProductsByCategorySlug(string $slug, int $perPage = 12);
+    public function getProductsByCategorySlug(string $slug);
 
     // public function queryProductsByCategorySlug(string $slug);
     // public function getOperatingSystems();
-
-
-
 
 }

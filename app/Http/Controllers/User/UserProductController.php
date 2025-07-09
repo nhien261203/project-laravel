@@ -22,7 +22,7 @@ class UserProductController extends Controller
     public function phoneCategory()
     {
         // Danh sách sản phẩm trong danh mục "điện thoại", có thể lọc theo brand
-        $products = $this->productRepo->getPaginatedProductsByCategorySlug('dien-thoai', 12);
+        $products = $this->productRepo->getProductsByCategorySlug('dien-thoai');
 
         foreach ($products as $product) {
             $firstVariant = $product->variants->first();
@@ -36,4 +36,24 @@ class UserProductController extends Controller
 
         return view('user.product.phone', compact('products', 'brands'));
     }
+
+    public function laptopCategory()
+    {
+        // Danh sách sản phẩm trong danh mục "laptop", có thể lọc theo brand
+        $products = $this->productRepo->getProductsByCategorySlug('laptop');
+
+        foreach ($products as $product) {
+            $firstVariant = $product->variants->first();
+            $storages = $product->variants->pluck('storage')->unique()->filter()->implode(' / ');
+            $product->all_storages = $storages;
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
+        }
+
+        // Danh sách các brand có sản phẩm thuộc danh mục "laptop"
+        $brands = $this->brandRepo->getBrandsByCategorySlug('laptop');
+
+        return view('user.product.laptop', compact('products', 'brands'));
+    }
+
+
 }

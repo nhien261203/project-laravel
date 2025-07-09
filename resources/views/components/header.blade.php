@@ -20,13 +20,13 @@
 
                     {{-- Laptop --}}
                     <li>
-                        <a href="#" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Laptop</a>
+                        <a href="{{ route('product.phone') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Laptop</a>
                     </li>
 
                     {{-- Đồng hồ --}}
-                    <li>
+                    {{-- <li>
                         <a href="#" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Đồng hồ</a>
-                    </li>
+                    </li> --}}
 
                     {{-- Phụ kiện có dropdown --}}
                     <li class="relative group cursor-pointer">
@@ -106,10 +106,10 @@
                 <li><a href="#" class="block text-white py-2 border-b border-white/10">Điện thoại</a></li>
 
                 {{-- Laptop --}}
-                <li><a href="#" class="block text-white py-2 border-b border-white/10">Laptop</a></li>
+                <li><a href="{{ route('product.laptop') }}" class="block text-white py-2 border-b border-white/10">Laptop</a></li>
 
                 {{-- Đồng hồ --}}
-                <li><a href="#" class="block text-white py-2 border-b border-white/10">Đồng hồ</a></li>
+                {{-- <li><a href="#" class="block text-white py-2 border-b border-white/10">Đồng hồ</a></li> --}}
 
                 {{-- Phụ kiện có submenu --}}
                 <li>

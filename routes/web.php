@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/dien-thoai', [UserProductController::class, 'phoneCategory'])->name('product.phone');
+Route::get('/laptop', [UserProductController::class, 'laptopCategory'])->name('product.laptop');
+
 Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.detail');
 
 

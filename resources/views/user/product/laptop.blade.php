@@ -4,7 +4,7 @@
 <div class="container mx-auto my-10">
     <div class="bg-white p-6 rounded-xl shadow">
         {{-- Tiêu đề --}}
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">📱 Danh sách điện thoại</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">📱 Danh sách laptop</h2>
 
         {{-- Bộ lọc theo brand --}}
         @if ($brands->count())
