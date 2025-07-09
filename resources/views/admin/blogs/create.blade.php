@@ -74,6 +74,19 @@
             <textarea name="content" id="summernote">{{ old('content') }}</textarea>
         </div>
 
+        <div class="mb-4">
+            <label class="font-semibold block mb-1">Ảnh đại diện (thumbnail)</label>
+            <input type="file" name="thumbnail" accept="image/*"
+                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
+                    file:rounded file:border-0 file:text-sm file:font-semibold
+                    file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+
+            @error('thumbnail')
+                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 shadow">
             Đăng bài
         </button>

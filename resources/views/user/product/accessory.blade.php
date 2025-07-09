@@ -2,9 +2,16 @@
 
 @section('content')
 <div class="container mx-auto my-10">
+    <div class="flex items-center text-sm text-gray-600 space-x-2 p-1">
+        <a href="{{ route('home') }}" class="flex items-center hover:text-blue-600">
+            Trang chủ
+        </a>
+        <span class="text-gray-400">›</span>
+        <span class="text-gray-800 font-medium">Phụ kiện</span>
+    </div>
     <div class="bg-white p-6 rounded-xl shadow">
         {{-- Tiêu đề --}}
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">📱 Danh sách phụ kiện</h2>
+        {{-- <h2 class="text-2xl font-bold text-gray-800 mb-6">📱 Danh sách phụ kiện</h2> --}}
 
         {{-- Bộ lọc theo brand --}}
         @if ($brands->count())

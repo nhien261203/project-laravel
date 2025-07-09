@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserProductController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -38,9 +39,9 @@ Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.d
 
 Route::get('/phu-kien/{slug}', [HomeController::class, 'showAccessory'])->name('product.detailAccessory');
 
-
-
-
+// blog cho user
+Route::get('/blogs', [UserBlogController::class, 'index'])->name('blogs.index');
+Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.show');
 
 
 Route::prefix('cart')->name('cart.')->group(function () {
@@ -67,7 +68,6 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::get('/logs', [\App\Http\Controllers\Admin\AdminLogController::class, 'index'])
         ->middleware('can:view log')
         ->name('logs.index');
-
 
 
     Route::prefix('products/{product}/variants')->name('products.variants.')->group(function () {

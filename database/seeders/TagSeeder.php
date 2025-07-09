@@ -11,26 +11,10 @@ class TagSeeder extends Seeder
     public function run(): void
     {
         $tags = [
-            'iPhone',
-            'Samsung',
-            'Android',
-            'iOS',
-            'MacBook',
-            'Laptop Gaming',
-            'Đồng hồ thông minh',
-            'Tai nghe',
-            'Sạc dự phòng',
-            'Ốp lưng điện thoại',
-            'Cáp sạc',
-            'Phụ kiện công nghệ',
-            'Điện thoại giá rẻ',
-            'Laptop văn phòng',
-            'Apple Watch',
-            'Tablet',
-            'Máy tính bảng',
-            'Chuột không dây',
-            'Bàn phím cơ',
-            'Thiết bị đeo tay',
+            'Thủ thuật & AI',
+            'Tin Apple',
+            'Review',
+            'Khám phá',
         ];
 
         foreach ($tags as $tag) {

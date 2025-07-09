@@ -15,12 +15,12 @@
                 <ul class="hidden lg:flex items-center gap-4">
                     {{-- Điện thoại --}}
                     <li>
-                        <a href="{{ route('product.phone') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Điện thoại</a>
+                        <a href="{{ route('product.phone') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400" data-route>Điện thoại</a>
                     </li>
 
                     {{-- Laptop --}}
                     <li>
-                        <a href="{{ route('product.laptop') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Laptop</a>
+                        <a href="{{ route('product.laptop') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400" data-route>Laptop</a>
                     </li>
 
                     {{-- Đồng hồ --}}
@@ -30,24 +30,24 @@
 
                     {{-- Phụ kiện có dropdown --}}
                     <li class="relative group cursor-pointer">
-                        <a href="{{ route('product.accessory') }}" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400">
+                        <a href="{{ route('product.accessory') }}" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400" data-route>
                             Phụ kiện
                             <i class="fas fa-caret-down group-hover:rotate-180 transition-transform"></i>
                         </a>
                         <div class="absolute hidden group-hover:block w-[200px] bg-white rounded-md shadow-md z-50">
                             <ul class="px-2 py-2 space-y-2">
-                                <li><a href="{{ route('product.accessory.mobile') }}" class="block p-2 text-gray-600 hover:bg-gray-100">Phụ kiện di động</a></li>
-                                <li><a href="{{ route('product.accessory.audio') }}" class="block p-2 text-gray-600 hover:bg-gray-100">Thiết bị âm thanh</a></li>
+                                <li><a href="{{ route('product.accessory.mobile') }}" class="block p-2 text-gray-600 hover:bg-gray-100" data-route>Phụ kiện di động</a></li>
+                                <li><a href="{{ route('product.accessory.audio') }}" class="block p-2 text-gray-600 hover:bg-gray-100" data-route>Thiết bị âm thanh</a></li>
                             </ul>
                         </div>
                     </li>
 
                     <li>
-                        <a href="" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Chuyện công nghệ</a>
+                        <a href="{{ route('blogs.index') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400" >Chuyện công nghệ</a>
                     </li>
 
                     <li>
-                        <a href="" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Về chúng tôi</a>
+                        <a href="" class="inline-block py-4 px-4 text-white hover:bg-gray-400" >Về chúng tôi</a>
                     </li>
                 </ul>
 
@@ -111,10 +111,10 @@
 
             <ul class="flex flex-col gap-2 p-4">
                 {{-- Điện thoại --}}
-                <li><a href="#" class="block text-white py-2 border-b border-white/10">Điện thoại</a></li>
+                <li><a href="{{ route('product.phone') }}" class="block text-white py-2 border-b border-white/10" >Điện thoại</a></li>
 
                 {{-- Laptop --}}
-                <li><a href="{{ route('product.laptop') }}" class="block text-white py-2 border-b border-white/10">Laptop</a></li>
+                <li><a href="{{ route('product.laptop') }}" class="block text-white py-2 border-b border-white/10" >Laptop</a></li>
 
                 {{-- Đồng hồ --}}
                 {{-- <li><a href="#" class="block text-white py-2 border-b border-white/10">Đồng hồ</a></li> --}}
@@ -137,3 +137,18 @@
 
         </div>
     </div>
+
+    {{-- jQuery --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const currentUrl = window.location.href.split('?')[0];
+            document.querySelectorAll('a[data-route]').forEach(link => {
+                const href = link.href;
+                if (currentUrl === href || currentUrl.startsWith(href)) {
+                    link.classList.add('bg-gray-400', 'text-white');
+                }
+            });
+        });
+    </script>
+
