@@ -73,5 +73,34 @@ class UserProductController extends Controller
     }
 
 
+    public function mobileAccessory()
+    {
+        $products = $this->productRepo->getProductsByCategorySlug('phu-kien-di-dong');
+
+        foreach ($products as $product) {
+            $firstVariant = $product->variants->first();
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
+        }
+
+        $brands = $this->brandRepo->getBrandsByCategorySlug('phu-kien-di-dong');
+
+        return view('user.product.accessory_mobile', compact('products', 'brands'));
+    }
+
+    public function audioAccessory()
+    {
+        $products = $this->productRepo->getProductsByCategorySlug('thiet-bi-am-thanh');
+
+        foreach ($products as $product) {
+            $firstVariant = $product->variants->first();
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
+        }
+
+        $brands = $this->brandRepo->getBrandsByCategorySlug('thiet-bi-am-thanh');
+
+        return view('user.product.accessory_audio', compact('products', 'brands'));
+    }
+
+
 
 }

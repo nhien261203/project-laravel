@@ -30,9 +30,16 @@ Route::get('/laptop', [UserProductController::class, 'laptopCategory'])->name('p
 
 Route::get('/phu-kien', [UserProductController::class, 'accessoryCategory'])->name('product.accessory');
 
+Route::get('/phu-kien/phu-kien-dong', [UserProductController::class, 'mobileAccessory'])->name('product.accessory.mobile');
+Route::get('/phu-kien/phu-kien-am-thanh', [UserProductController::class, 'audioAccessory'])->name('product.accessory.audio');
+
+
 Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.detail');
 
 Route::get('/phu-kien/{slug}', [HomeController::class, 'showAccessory'])->name('product.detailAccessory');
+
+
+
 
 
 

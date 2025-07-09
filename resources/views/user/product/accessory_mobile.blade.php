@@ -4,7 +4,7 @@
 <div class="container mx-auto my-10">
     <div class="bg-white p-6 rounded-xl shadow">
         {{-- Tiêu đề --}}
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">📱 Danh sách laptop</h2>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">📱 Danh sách phụ kiện di động</h2>
 
         {{-- Bộ lọc theo brand --}}
         @if ($brands->count())
@@ -20,7 +20,7 @@
                     </a>
                 @endforeach
                 @if(request()->has('brand_id'))
-                    <a href="{{ route('product.laptop') }}"
+                    <a href="{{ route('product.accessory.moblie') }}"
                        class="text-sm text-blue-600 underline self-center ml-2">🔄 Reset lọc</a>
                 @endif
             </div>
@@ -37,7 +37,7 @@
                         $originalPrice = $firstVariant?->original_price;
                     @endphp
 
-                    <a href="{{ route('product.detail', $product->slug) }}"
+                    <a href="{{ route('product.detailAccessory', $product->slug) }}"
                        class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:border-blue-400">
                         {{-- Ảnh --}}
                         @if($image)
@@ -54,7 +54,7 @@
                             <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
                                 {{ $product->name }}
                             </h3>
-                            <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $product->all_storages ?? 'N/A' }}</p>
+                            {{-- <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $product->all_storages ?? 'N/A' }}</p> --}}
 
                             {{-- Giá --}}
                             @if($price)

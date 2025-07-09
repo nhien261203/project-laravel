@@ -20,7 +20,7 @@
 
                     {{-- Laptop --}}
                     <li>
-                        <a href="{{ route('product.phone') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Laptop</a>
+                        <a href="{{ route('product.laptop') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Laptop</a>
                     </li>
 
                     {{-- Đồng hồ --}}
@@ -36,8 +36,8 @@
                         </a>
                         <div class="absolute hidden group-hover:block w-[200px] bg-white rounded-md shadow-md z-50">
                             <ul class="px-2 py-2 space-y-2">
-                                <li><a href="#" class="block p-2 text-gray-600 hover:bg-gray-100">Phụ kiện di động</a></li>
-                                <li><a href="#" class="block p-2 text-gray-600 hover:bg-gray-100">Thiết bị âm thanh</a></li>
+                                <li><a href="{{ route('product.accessory.mobile') }}" class="block p-2 text-gray-600 hover:bg-gray-100">Phụ kiện di động</a></li>
+                                <li><a href="{{ route('product.accessory.audio') }}" class="block p-2 text-gray-600 hover:bg-gray-100">Thiết bị âm thanh</a></li>
                             </ul>
                         </div>
                     </li>

@@ -20,7 +20,7 @@
                     </a>
                 @endforeach
                 @if(request()->has('brand_id'))
-                    <a href="{{ route('product.phone') }}"
+                    <a href="{{ route('product.accessory') }}"
                        class="text-sm text-blue-600 underline self-center ml-2">🔄 Reset lọc</a>
                 @endif
             </div>
