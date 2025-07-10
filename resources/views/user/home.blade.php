@@ -32,15 +32,15 @@
                 ]) --}}
 
                 @include('components.category-card', [
-                    'title' => 'Phụ kiện',
+                    'title' => 'Phụ kiện di động',
                     'image' => 'https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg',
-                    'link' => route('product.accessory')
+                    'link' => route('product.accessory.mobile')
                 ])
 
                 @include('components.category-card', [
-                    'title' => 'Về chúng tôi',
-                    'image' => 'https://images.pexels.com/photos/4158/apple-iphone-smartphone-desk.jpg',
-                    'link' => '#'
+                    'title' => 'Phụ kiện âm thanh',
+                    'image' => 'https://images.pexels.com/photos/32880383/pexels-photo-32880383.jpeg',
+                    'link' => route('product.accessory.audio')
                 ])
 
 

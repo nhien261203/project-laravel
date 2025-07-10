@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('blog_id')->constrained('blogs')->onDelete('cascade');
-            $table->string('author_name');
             $table->text('content');
-            $table->boolean('approved')->default(true);
+            $table->boolean('approved')->default(false); // Chờ admin duyệt
             $table->timestamps();
         });
     }

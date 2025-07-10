@@ -54,7 +54,7 @@
         </div>
 
         <div class="text-center mt-3 text-lg font-semibold text-gray-900 group-hover:text-black transition">
-            {{ strtoupper($title) }}
+            {{ $title }}
         </div>
     </div>
 </a>

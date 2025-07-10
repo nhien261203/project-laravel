@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ForgotPasswordController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\UserBlogController;
+use App\Http\Controllers\User\UserCommentController;
 use App\Http\Controllers\User\UserProductController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +45,8 @@ Route::get('/phu-kien/{slug}', [HomeController::class, 'showAccessory'])->name('
 Route::get('/blogs', [UserBlogController::class, 'index'])->name('blogs.index');
 Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.show');
 
+Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
+
 
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
@@ -69,6 +73,10 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
         ->middleware('can:view log')
         ->name('logs.index');
 
+
+    Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
+    Route::post('/comments/{id}/approve', [CommentController::class, 'approve'])->name('comments.approve');
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::prefix('products/{product}/variants')->name('products.variants.')->group(function () {
         Route::get('/', [ProductVariantController::class, 'index'])->name('index');
