@@ -45,7 +45,7 @@ class CartRepository implements CartRepositoryInterface
             'snapshot_storage' => $variant->storage,
             'snapshot_ram' => $variant->ram,
             'snapshot_chip' => $variant->chip,
-            'snapshot_screen' => $variant->screen,
+            'snapshot_screen' => $variant->screen_size,
             'snapshot_battery' => $variant->battery,
             'snapshot_os' => $variant->operating_system,
             'snapshot_weight' => $variant->weight,
@@ -103,4 +103,7 @@ class CartRepository implements CartRepositoryInterface
         // xoa trong DB sau khi merge
         $guestCart->delete();
     }
+
+
+    // tối ưu dọc cart của guest user ( session ID cua khách, clean up sau 3 ngày: chưa làm)
 }

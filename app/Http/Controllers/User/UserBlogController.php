@@ -21,7 +21,7 @@ class UserBlogController extends Controller
                 });
             })
             ->latest()
-            ->paginate(9)
+            ->paginate(6)
             ->appends(['tags' => $tagIds]); // giữ lại query string khi phân trang
 
         return view('user.blogs.index', compact('blogs', 'tags', 'tagIds'));

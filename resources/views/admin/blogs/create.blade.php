@@ -61,13 +61,13 @@
 
 
 
-        <div class="mb-4">
+        {{-- <div class="mb-4">
             <label class="font-semibold">Trạng thái</label>
             <div class="flex gap-4 mt-2">
                 <label><input type="radio" name="status" value="0" {{ old('status', 0) == 0 ? 'checked' : '' }}> Nháp</label>
                 <label><input type="radio" name="status" value="1" {{ old('status') == 1 ? 'checked' : '' }}> Công khai</label>
             </div>
-        </div>
+        </div> --}}
 
         <div class="mb-4">
             <label class="font-semibold">Nội dung</label>

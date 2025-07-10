@@ -93,7 +93,7 @@
 
         {{-- Phân trang --}}
         <div class="mt-10">
-            {{ $blogs->links() }}
+            {{ $blogs->links('pagination.custom-tailwind') }}
         </div>
     @else
         <p class="text-gray-500 text-center mt-10">Không tìm thấy bài viết nào.</p>
