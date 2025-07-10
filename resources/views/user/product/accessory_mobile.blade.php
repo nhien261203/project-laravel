@@ -1,7 +1,7 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container mx-auto my-10">
+<div class="container mx-auto pt-20 pb-10">
     <div class="flex items-center text-sm text-gray-600 space-x-2 p-1">
         <a href="{{ route('home') }}" class="flex items-center hover:text-blue-600">
             Trang chủ
@@ -29,7 +29,7 @@
                     </a>
                 @endforeach
                 @if(request()->has('brand_id'))
-                    <a href="{{ route('product.accessory.moblie') }}"
+                    <a href="{{ route('product.accessory.mobile') }}"
                        class="text-sm text-blue-600 underline self-center ml-2">🔄 Reset lọc</a>
                 @endif
             </div>

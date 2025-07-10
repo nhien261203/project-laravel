@@ -1,7 +1,7 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container mx-auto px-4 py-8 max-w-3xl">
+<div class="container mx-auto px-4 pt-20 pb-10 max-w-3xl">
     <article class="bg-white p-6 rounded shadow">
         <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ $blog->title }}</h1>
 

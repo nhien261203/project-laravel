@@ -1,4 +1,4 @@
-<div class="relative w-full overflow-hidden rounded-xl shadow-lg">
+<div class="relative w-full overflow-hidden rounded-xl shadow-lg mt-[66px]">
     <div class="swiper myBannerSwiper md:aspect-[16/5] relative">
         <div class="swiper-wrapper">
             @foreach ($banners as $banner)

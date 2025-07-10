@@ -1,7 +1,7 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container py-6 bg-white rounded shadow">
+<div class="container pt-24 pb-10 bg-white rounded shadow">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {{-- Hình ảnh --}}
         <div>

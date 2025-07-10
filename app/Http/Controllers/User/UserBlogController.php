@@ -4,19 +4,29 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class UserBlogController extends Controller
 {
     public function index(Request $request)
     {
-        $blogs = Blog::where('status', 1)
-            ->latest()
-            ->with('tags')
-            ->paginate(6);
+        $tags = Tag::all();
+        $tagIds = $request->input('tags', []);
 
-        return view('user.blogs.index', compact('blogs'));
+        $blogs = Blog::with('tags')
+            ->when($tagIds, function ($query) use ($tagIds) {
+                $query->whereHas('tags', function ($q) use ($tagIds) {
+                    $q->whereIn('tags.id', $tagIds);
+                });
+            })
+            ->latest()
+            ->paginate(9)
+            ->appends(['tags' => $tagIds]); // giữ lại query string khi phân trang
+
+        return view('user.blogs.index', compact('blogs', 'tags', 'tagIds'));
     }
+
 
     // Chi tiết blog
     public function show($slug)
