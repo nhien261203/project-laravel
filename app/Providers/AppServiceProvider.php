@@ -8,6 +8,8 @@ use App\Repositories\Cart\CartRepository;
 use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Order\OrderRepository;
+use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\ProductVariant\ProductVariantRepository;
@@ -35,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
             CartRepositoryInterface::class,
             CartRepository::class
         );
+
+        $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
     }
 
     /**

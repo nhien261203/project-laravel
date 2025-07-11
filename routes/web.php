@@ -15,6 +15,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserCommentController;
+use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserProductController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -52,12 +53,20 @@ Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.sho
 Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
 
 
+
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/add', [CartController::class, 'add'])->name('add');
     Route::put('/update/{variantId}', [CartController::class, 'update'])->name('update');
     Route::delete('/remove/{variantId}', [CartController::class, 'remove'])->name('remove');
 });
+
+Route::middleware(['auth'])->prefix('orders')->name('user.orders.')->group(function () {
+    Route::get('/', [UserOrderController::class, 'index'])->name('index');
+    Route::get('/{id}', [UserOrderController::class, 'show'])->name('show');
+    Route::post('/place', [UserOrderController::class, 'store'])->name('store'); // Đặt hàng từ giỏ hàng
+});
+
 
 //  Admin - toàn quyền (chỉ admin, staff dung permission chặn 1 số quyền ở controller va view)
 Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')->group(function () {

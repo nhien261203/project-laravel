@@ -91,10 +91,43 @@
                     <h3 class="text-lg font-semibold text-gray-700">Tạm tính</h3>
                     <p class="text-2xl font-bold text-red-600">{{ number_format($total, 0, ',', '.') }}₫</p>
 
-                    <a 
-                       class="block w-full text-center bg-green-600 text-white font-semibold py-3 rounded hover:bg-green-700 transition">
-                        Đặt hàng
-                    </a>
+                    <form method="POST" action="{{ route('user.orders.store') }}" class="space-y-4">
+                        @csrf
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Họ tên</label>
+                            <input type="text" name="customer_name" value="{{ old('customer_name', auth()->user()->name ?? '') }}"
+                                class="w-full border rounded px-3 py-2" >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Số điện thoại</label>
+                            <input type="text" name="customer_phone" value="{{ old('customer_phone', auth()->user()->phone ?? '') }}"
+                                class="w-full border rounded px-3 py-2" >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Email</label>
+                            <input type="email" name="customer_email" value="{{ old('customer_email', auth()->user()->email ?? '') }}"
+                                class="w-full border rounded px-3 py-2">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Địa chỉ nhận hàng</label>
+                            <textarea name="customer_address" rows="2" class="w-full border rounded px-3 py-2" >{{ old('customer_address') }}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Ghi chú (tuỳ chọn)</label>
+                            <textarea name="note" rows="2" class="w-full border rounded px-3 py-2">{{ old('note') }}</textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full text-center bg-green-600 text-white font-semibold py-3 rounded hover:bg-green-700 transition">
+                            Đặt hàng
+                        </button>
+                    </form>
+
 
                     <a href="{{ route('home') }}"
                        class="block w-full text-center border border-gray-300 text-gray-700 py-3 rounded hover:bg-gray-100 transition">
