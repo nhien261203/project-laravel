@@ -139,7 +139,7 @@ class ProductRepository implements ProductRepositoryInterface
     // search cho header
     public function searchProducts(string $keyword)
     {
-        $query = Product::with(['variants.images', 'category']) 
+        $query = Product::with(['variants.images', 'brand', 'category'])
             ->where(function ($q) use ($keyword) {
                 $q->where('name', 'like', "%{$keyword}%")
                     ->orWhereHas('variants', function ($q2) use ($keyword) {
@@ -147,8 +147,11 @@ class ProductRepository implements ProductRepositoryInterface
                             ->orWhere('storage', 'like', "%{$keyword}%")
                             ->orWhere('chip', 'like', "%{$keyword}%");
                     })
-                    ->orWhereHas('category', function ($q3) use ($keyword) {
-                        $q3->where('name', 'like', "%{$keyword}%");
+                    ->orWhereHas('brand', function ($q2) use ($keyword) {
+                        $q2->where('name', 'like', "%{$keyword}%");
+                    })
+                    ->orWhereHas('category', function ($q2) use ($keyword) {
+                        $q2->where('name', 'like', "%{$keyword}%");
                     });
             })
             ->where('status', 1)
@@ -158,6 +161,4 @@ class ProductRepository implements ProductRepositoryInterface
 
         return $this->appendProductExtras($products);
     }
-
-
 }
