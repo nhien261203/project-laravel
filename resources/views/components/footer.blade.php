@@ -18,7 +18,7 @@
                         <li><a href="#" class="text-gray-400 hover:text-white">Về chúng tôi</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white">New feed</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white">Phương thức thanh toán</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Tra cứu đơn hàng</a></li>
+                        <li><a href="{{ route('user.orders.index') }}" class="text-gray-400 hover:text-white">Tra cứu đơn hàng</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white">Liên hệ</a></li>
                     </ul>
                 </div>

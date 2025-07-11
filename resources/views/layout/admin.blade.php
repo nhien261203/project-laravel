@@ -85,9 +85,11 @@
             data-route="{{ route('admin.blogs.index') }}">
                 <i class="fa-solid fa-newspaper"></i> <span class="sidebar-text">Blogs</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.orders.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-receipt"></i> <span class="sidebar-text">Orders</span>
             </a>
+            <a href="{{ route('admin.comments.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+                <i class="fa-solid fa-comments"></i> <span class="sidebar-text">Comments</span></a>
 
             
             @can('view log')

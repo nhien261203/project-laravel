@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ForgotPasswordController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -24,7 +25,7 @@ use Illuminate\Support\Facades\Auth;
 
 // Trang chủ – cho tất cả (user cũng vào được)
 // Route::middleware('auto.merge.cart')->group(function () {
-   
+
 // });
 
 
@@ -106,6 +107,14 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/{id}', [OrderController::class, 'show'])->name('show');
+        Route::post('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
+        Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
+    });
+
+
 
 
     // Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
@@ -142,13 +151,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/register', [AdminAuthController::class, 'register']);
 
     // Đổi mật khẩu
-   
+
 
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
     Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
-    
+
     Route::middleware(['auth'])->group(function () {
         Route::get('/change-password', [AdminAuthController::class, 'showChangePassword'])->name('password.form');
         Route::post('/change-password', [AdminAuthController::class, 'changePassword'])->name('password.change');
