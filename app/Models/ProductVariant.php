@@ -31,7 +31,7 @@ class ProductVariant extends Model
 
 
     // xu li tru so luong khi don hang hoan thanh
-     public function deductStock(int $quantity)
+    public function deductStock(int $quantity)
     {
         if ($this->quantity < $quantity) {
             // Nếu muốn ngăn trừ vượt kho 

@@ -75,7 +75,7 @@
                         <input type="checkbox" name="remember" class="mr-2" />
                         <span class="text-sm text-gray-600">Ghi nhớ đăng nhập</span>
                     </label>
-                    <a class="text-sm text-blue-600 hover:underline">
+                    <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:underline">
                         Quên mật khẩu?
                     </a>
                 </div>

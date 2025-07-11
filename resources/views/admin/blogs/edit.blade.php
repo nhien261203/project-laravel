@@ -3,6 +3,14 @@
 @section('content')
 <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">✏️ Chỉnh sửa bài viết</h2>
+    {{-- lỗi tổng quát --}}
+    @if ($errors->any())
+        <div class="mb-4">
+            @foreach ($errors->all() as $error)
+                <p class="text-sm text-red-500 mt-1">{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
 
     <form action="{{ route('admin.blogs.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
         @csrf

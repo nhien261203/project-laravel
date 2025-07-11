@@ -64,4 +64,12 @@ class ProfileController extends Controller
         $roles = Role::all(); 
         return view('admin.profile.edit', compact('user', 'roles'));
     }
+
+    public function Userprofile()
+    {
+        $user = auth()->user();
+        $orders = $user->orders()->latest()->get(); 
+
+        return view('user.profile', compact('orders'));
+    }
 }

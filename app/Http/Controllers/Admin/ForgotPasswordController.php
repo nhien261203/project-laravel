@@ -30,7 +30,8 @@ class ForgotPasswordController extends Controller
             ['token' => $token, 'created_at' => now()]
         );
 
-        Mail::to($request->email)->send(new ResetPasswordMail($token, $request->email));
+        Mail::to($request->email)->send(new ResetPasswordMail($token, $request->email, true));
+
 
         return back()->with('success', 'Đã gửi liên kết đặt lại mật khẩu đến email của bạn.');
     }

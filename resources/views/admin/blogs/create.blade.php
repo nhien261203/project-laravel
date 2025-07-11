@@ -11,12 +11,18 @@
             <label class="font-semibold">Tiêu đề</label>
             <input type="text" name="title" value="{{ old('title') }}" 
             class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
+            @error('title')
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4">
             <label class="font-semibold">Slug (bỏ trống để tự tạo)</label>
             <input type="text" name="slug" value="{{ old('slug') }}" 
             class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
+            @error('slug')
+                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
 
@@ -72,6 +78,9 @@
         <div class="mb-4">
             <label class="font-semibold">Nội dung</label>
             <textarea name="content" id="summernote">{{ old('content') }}</textarea>
+            @error('content')
+                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4">

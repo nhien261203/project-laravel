@@ -16,6 +16,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserCommentController;
+use App\Http\Controllers\User\UserForgotPasswordController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserProductController;
 use Illuminate\Support\Facades\Mail;
@@ -51,7 +52,7 @@ Route::get('/search', [UserProductController::class, 'search'])->name('product.s
 Route::get('/blogs', [UserBlogController::class, 'index'])->name('blogs.index');
 Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.show');
 
-Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
+//Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
 
 
 
@@ -135,8 +136,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
-// 🟩 Quên mật khẩu
-
+// Quên mật khẩu
+Route::prefix('password')->name('password.')->group(function () {
+    Route::get('forgot', [UserForgotPasswordController::class, 'showForm'])->name('request');
+    Route::post('forgot', [UserForgotPasswordController::class, 'sendResetLink'])->name('email');
+    Route::get('reset', [UserForgotPasswordController::class, 'showResetForm'])->name('reset');
+    Route::post('reset', [UserForgotPasswordController::class, 'resetPassword'])->name('update');
+});
 
 //auth cho admin 
 

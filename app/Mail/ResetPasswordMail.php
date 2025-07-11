@@ -16,15 +16,18 @@ class ResetPasswordMail extends Mailable
 
     public $token;
     public $email;
+    public $isAdmin;
 
     /**
      * Tạo một instance mới.
      */
-    public function __construct($token, $email)
+    public function __construct($token, $email, $isAdmin = false)
     {
         $this->token = $token;
         $this->email = $email;
+        $this->isAdmin = $isAdmin;
     }
+
 
     /**
      * Tiêu đề email.
@@ -45,14 +48,19 @@ class ResetPasswordMail extends Mailable
             view: 'emails.reset-password',
             with: [
                 'email' => $this->email,
-                'resetUrl' => URL::route('admin.password.reset', [
-                    'token' => $this->token,
-                    'email' => $this->email,
-                ], true),
+                'resetUrl' => $this->isAdmin
+                    ? URL::route('admin.password.reset', [
+                        'token' => $this->token,
+                        'email' => $this->email,
+                    ], true)
+                    : URL::route('password.reset', [
+                        'token' => $this->token,
+                        'email' => $this->email,
+                    ], true),
             ],
-
         );
     }
+
 
     /**
      * Đính kèm nếu cần (ở đây không có).
