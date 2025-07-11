@@ -53,6 +53,7 @@ class CartRepository implements CartRepositoryInterface
             'snapshot_price' => $variant->price,
             'snapshot_original_price' => $variant->original_price,
             'snapshot_sale_percent' => $variant->sale_percent,
+            'snapshot_description' => $variant->product->description, 
 
 
             'snapshot_image' => $variant->images->first()->image_path ?? null,

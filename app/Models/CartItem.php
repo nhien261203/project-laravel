@@ -30,6 +30,7 @@ class CartItem extends Model
         'snapshot_cost_price',
         'snapshot_sale_percent',
         'snapshot_image',
+        'snapshot_description',
     ];
 
     // Quan hệ: thuộc giỏ hàng
