@@ -1,37 +1,77 @@
 @extends('layout.user')
 
-@section('content')
+@section('content') 
 <div class="container mx-auto pt-20 pb-10">
-    <div class="flex items-center text-sm text-gray-600 space-x-2 p-1">
-        <a href="{{ route('home') }}" class="flex items-center hover:text-blue-600">
-            Trang chủ
-        </a>
+    {{-- Breadcrumb --}}
+    <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
+        <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>
         <span class="text-gray-800 font-medium">Laptop</span>
     </div>
-    <div class="bg-white p-6 rounded-xl shadow">
-        {{-- Tiêu đề --}}
-        {{-- <h2 class="text-2xl font-bold text-gray-800 mb-6">📱 Danh sách laptop</h2> --}}
+    <div class="bg-white p-6 rounded-xl shadow space-y-6 mb-8">
+        <form method="GET" id="filterForm"></form>
 
-        {{-- Bộ lọc theo brand --}}
-        @if ($brands->count())
-            <div class="flex flex-wrap gap-4 mb-8">
-                @foreach($brands as $brand)
-                    <a href="{{ request()->fullUrlWithQuery(['brand_id' => $brand->id]) }}"
-                       class="flex items-center gap-2 bg-gray-50 border border-gray-200 px-4 py-2 rounded-xl shadow-sm hover:bg-gray-100 transition
-                       {{ request('brand_id') == $brand->id ? 'ring-2 ring-blue-400' : '' }}">
-                        @if($brand->logo)
-                            <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="w-12 h-6 object-contain">
-                        @endif
-                        
-                    </a>
-                @endforeach
-                @if(request()->has('brand_id'))
-                    <a href="{{ route('product.laptop') }}"
-                       class="text-sm text-blue-600 underline self-center ml-2">🔄 Reset lọc</a>
-                @endif
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            {{-- Thương hiệu --}}
+            @if ($brands->count())
+                <div>
+                    <h3 class="text-base font-semibold text-gray-800 mb-3">Thương hiệu</h3>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($brands as $brand)
+                            <button type="button"
+                                class="btn-filter px-3 py-2 rounded-full border text-sm flex items-center gap-2 transition
+                                    {{ in_array($brand->id, request('brand_ids', [])) ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
+                                data-name="brand_ids[]"
+                                data-value="{{ $brand->id }}">
+                                @if($brand->logo)
+                                    <img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" class="w-12 h-4 object-contain">
+                                @else
+                                    {{ $brand->name }}
+                                @endif
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Lọc theo giá --}}
+            <div>
+                <h3 class="text-base font-semibold text-gray-800 mb-3">Lọc theo giá</h3>
+                <div class="flex flex-wrap gap-2 text-sm">
+                    @foreach(['under_15' => 'Dưới 15 triệu', 'from_15_to_30' => '15 – 30 triệu', 'over_30' => 'Trên 30 triệu'] as $key => $label)
+                        <button type="button"
+                            class="btn-filter px-3 py-2 rounded-full border transition
+                                {{ in_array($key, request('price_ranges', [])) ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
+                            data-name="price_ranges[]"
+                            data-value="{{ $key }}">
+                            {{ $label }}
+                        </button>
+                    @endforeach
+                </div>
             </div>
-        @endif
+
+            {{-- Sắp xếp --}}
+            {{-- <div>
+                <h3 class="text-base font-semibold text-gray-800 mb-3">Sắp xếp</h3>
+                <div class="flex flex-wrap gap-2 text-sm">
+                    @foreach(['price_asc' => 'Giá thấp → cao', 'price_desc' => 'Giá cao → thấp'] as $sortValue => $label)
+                        <button type="button"
+                            class="btn-filter px-3 py-2 rounded-full border transition
+                                {{ request('sort') === $sortValue ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
+                            data-name="sort"
+                            data-value="{{ $sortValue }}">
+                            {{ $label }}
+                        </button>
+                    @endforeach
+                </div>
+            </div> --}}
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow">
+        
+
+            
 
         {{-- Danh sách sản phẩm --}}
         @if($products->count())
@@ -45,7 +85,7 @@
                     @endphp
 
                     <a href="{{ route('product.detail', $product->slug) }}"
-                       class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:border-blue-400">
+                       class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:border-blue-400">
                         {{-- Ảnh --}}
                         @if($image)
                             <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}"
@@ -87,14 +127,51 @@
                     </a>
                 @endforeach
             </div>
-
-            {{-- Phân trang --}}
-            {{-- <div class="mt-8">
-                {{ $products->links('pagination::tailwind') }}
-            </div> --}}
         @else
-            <p class="text-gray-500">Không tìm thấy sản phẩm nào.</p>
+            <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
         @endif
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentParams = new URLSearchParams(window.location.search);
+    const pathname = window.location.pathname;
+
+    document.querySelectorAll('.btn-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const name = btn.getAttribute('data-name');
+            const value = btn.getAttribute('data-value');
+
+            // Nếu là mảng (checkbox price_ranges[])
+            if (name.endsWith('[]')) {
+                const allValues = currentParams.getAll(name);
+                if (allValues.includes(value)) {
+                    // Bỏ chọn
+                    const newValues = allValues.filter(v => v !== value);
+                    currentParams.delete(name);
+                    newValues.forEach(v => currentParams.append(name, v));
+                } else {
+                    // Thêm chọn
+                    currentParams.append(name, value);
+                }
+            } else {
+                // Nếu đã chọn rồi → bỏ đi
+                if (currentParams.get(name) === value) {
+                    currentParams.delete(name);
+                } else {
+                    currentParams.set(name, value);
+                }
+            }
+
+            // Redirect với query mới
+            const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
+            window.location.href = newUrl;
+        });
+    });
+});
+</script>
+@endpush
+

@@ -19,88 +19,36 @@ class UserProductController extends Controller
         $this->brandRepo = $brandRepo;
     }
 
+    protected function renderCategoryPage(string $slug, string $viewName)
+    {
+        $products = $this->productRepo->getProductsByCategorySlug($slug);
+        $brands = $this->brandRepo->getBrandsByCategorySlug($slug);
+
+        return view($viewName, compact('products', 'brands'));
+    }
+
     public function phoneCategory()
     {
-        // Danh sách sản phẩm trong danh mục "điện thoại", có thể lọc theo brand
-        $products = $this->productRepo->getProductsByCategorySlug('dien-thoai');
-
-        foreach ($products as $product) {
-            $firstVariant = $product->variants->first();
-            $storages = $product->variants->pluck('storage')->unique()->filter()->implode(' / ');
-            $product->all_storages = $storages;
-            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
-        }
-
-        // Danh sách các brand có sản phẩm thuộc danh mục "điện thoại"
-        $brands = $this->brandRepo->getBrandsByCategorySlug('dien-thoai');
-
-        return view('user.product.phone', compact('products', 'brands'));
+        return $this->renderCategoryPage('dien-thoai', 'user.product.phone');
     }
 
     public function laptopCategory()
     {
-        // Danh sách sản phẩm trong danh mục "laptop", có thể lọc theo brand
-        $products = $this->productRepo->getProductsByCategorySlug('laptop');
-
-        foreach ($products as $product) {
-            $firstVariant = $product->variants->first();
-            $storages = $product->variants->pluck('storage')->unique()->filter()->implode(' / ');
-            $product->all_storages = $storages;
-            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
-        }
-
-        // Danh sách các brand có sản phẩm thuộc danh mục "laptop"
-        $brands = $this->brandRepo->getBrandsByCategorySlug('laptop');
-
-        return view('user.product.laptop', compact('products', 'brands'));
+        return $this->renderCategoryPage('laptop', 'user.product.laptop');
     }
 
     public function accessoryCategory()
     {
-        // Lấy sản phẩm trong danh mục "phu-kien" và các danh mục con
-        $products = $this->productRepo->getProductsByCategorySlug('phu-kien');
-
-        foreach ($products as $product) {
-            $firstVariant = $product->variants->first();
-            $storages = $product->variants->pluck('storage')->filter()->unique()->implode(' / ');
-            $product->all_storages = $storages;
-            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
-        }
-
-        $brands = $this->brandRepo->getBrandsByCategorySlug('phu-kien');
-
-        return view('user.product.accessory', compact('products', 'brands'));
+        return $this->renderCategoryPage('phu-kien', 'user.product.accessory');
     }
-
 
     public function mobileAccessory()
     {
-        $products = $this->productRepo->getProductsByCategorySlug('phu-kien-di-dong');
-
-        foreach ($products as $product) {
-            $firstVariant = $product->variants->first();
-            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
-        }
-
-        $brands = $this->brandRepo->getBrandsByCategorySlug('phu-kien-di-dong');
-
-        return view('user.product.accessory_mobile', compact('products', 'brands'));
+        return $this->renderCategoryPage('phu-kien-di-dong', 'user.product.accessory_mobile');
     }
 
     public function audioAccessory()
     {
-        $products = $this->productRepo->getProductsByCategorySlug('thiet-bi-am-thanh');
-
-        foreach ($products as $product) {
-            $firstVariant = $product->variants->first();
-            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
-        }
-
-        $brands = $this->brandRepo->getBrandsByCategorySlug('thiet-bi-am-thanh');
-
-        return view('user.product.accessory_audio', compact('products', 'brands'));
+        return $this->renderCategoryPage('thiet-bi-am-thanh', 'user.product.accessory_audio');
     }
-
-
-
 }
