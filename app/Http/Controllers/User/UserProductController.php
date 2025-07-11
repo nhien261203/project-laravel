@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Brand\BrandRepositoryInterface;
+use Illuminate\Http\Request;
 
 class UserProductController extends Controller
 {
@@ -51,4 +53,17 @@ class UserProductController extends Controller
     {
         return $this->renderCategoryPage('thiet-bi-am-thanh', 'user.product.accessory_audio');
     }
+
+    // tim kiem tren header
+    public function search(Request $request)
+    {
+        $keyword = $request->input('q');
+
+        // Dùng Repository để tìm kiếm và lấy thêm all_storages, sale_percent
+        $products = $this->productRepo->searchProducts($keyword);
+
+        return view('user.search_result', compact('products', 'keyword'));
+    }
+
+
 }

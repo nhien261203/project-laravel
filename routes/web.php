@@ -41,6 +41,10 @@ Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.d
 
 Route::get('/phu-kien/{slug}', [HomeController::class, 'showAccessory'])->name('product.detailAccessory');
 
+// nut tim kiem tren header 
+Route::get('/search', [UserProductController::class, 'search'])->name('product.search');
+
+
 // blog cho user
 Route::get('/blogs', [UserBlogController::class, 'index'])->name('blogs.index');
 Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.show');

@@ -15,6 +15,8 @@ interface ProductRepositoryInterface
     // lay san pham dien-thoai cho trang dien thoai (user )
     public function getProductsByCategorySlug(string $slug);
 
+    public function searchProducts(string $keyword);
+
     // public function queryProductsByCategorySlug(string $slug);
     // public function getOperatingSystems();
 

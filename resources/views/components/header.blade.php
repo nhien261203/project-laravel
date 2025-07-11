@@ -94,7 +94,15 @@
         {{-- Search Overlay --}}
         <div id="searchOverlay" class="fixed inset-0 bg-black/70 z-50 hidden items-start justify-center pt-5">
             <div class="bg-white w-[90%] max-w-lg p-3 rounded shadow-lg" id="searchBox">
-                <input type="text" placeholder="Bạn cần tìm kiếm gì ..." class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none" />
+                <form action="{{ route('product.search') }}" method="GET" id="searchForm">
+                    <input
+                        type="text"
+                        name="q"
+                        placeholder="Bạn cần tìm kiếm gì ..."
+                        class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none"
+                        required
+                    />
+                </form>
             </div>
         </div>
 
@@ -151,4 +159,16 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const input = document.querySelector('#searchForm input[name="q"]');
+            input.addEventListener("keydown", function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById("searchForm").submit();
+                }
+            });
+        });
+    </script>
+
 

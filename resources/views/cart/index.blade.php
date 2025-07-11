@@ -1,7 +1,7 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container py-10">
+<div class="container pt-20">
     <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">🛒 Giỏ hàng của bạn</h2>
 
     @if ($cart->items->isEmpty())
@@ -25,11 +25,26 @@
                         {{-- Thông tin --}}
                         <div class="flex-1 space-y-1">
                             <h3 class="text-lg font-semibold text-gray-800">{{ $item->snapshot_product_name }}</h3>
+                            {{-- Màu + Bộ nhớ --}}
                             <p class="text-sm text-gray-600">
-                                Màu: <strong>{{ $item->snapshot_color }}</strong> |
-                                Bộ nhớ: <strong>{{ $item->snapshot_storage }}</strong>
+                                @if($item->snapshot_color)
+                                    Màu: <strong>{{ $item->snapshot_color }}</strong>
+                                @endif
+
+                                @if($item->snapshot_color && $item->snapshot_storage)
+                                    |
+                                @endif
+
+                                @if($item->snapshot_storage)
+                                    Bộ nhớ: <strong>{{ $item->snapshot_storage }}</strong>
+                                @endif
                             </p>
-                            <p class="text-sm text-gray-600">Chip: {{ $item->snapshot_chip }}</p>
+
+                            {{-- Chip --}}
+                            @if($item->snapshot_chip)
+                                <p class="text-sm text-gray-600">Chip: {{ $item->snapshot_chip }}</p>
+                            @endif
+
 
                             {{-- Giá & số lượng --}}
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-3">
