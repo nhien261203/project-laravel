@@ -1,7 +1,21 @@
 <div class="bg-white my-8 p-4 rounded-lg shadow">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">🔥 Thế giới Iphone trong tầm tay</h2>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-2 sm:gap-0">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-800">
+            Thế giới iPhone trong tầm tay bạn
+        </h2>
+
+        <a href="{{ route('user.iphone.all') }}"
+        class="text-sm sm:text-base text-blue-500 font-medium hover:text-blue-600 transition">
+            Xem tất cả
+        </a>
+    </div>
+
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+        
+
+        {{-- Hiển thị các sản phẩm iPhone --}}  
+
         @foreach($iphoneProducts as $product)
             @php
                 $firstVariant = $product->variants->first();

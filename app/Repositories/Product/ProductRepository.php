@@ -52,6 +52,7 @@ class ProductRepository implements ProductRepositoryInterface
         return $product->delete();
     }
 
+    // lay 5 sản phẩm iPhone cho home page
     public function getIphoneProducts(int $limit = 5)
     {
         return Product::with(['variants.images'])
@@ -64,15 +65,131 @@ class ProductRepository implements ProductRepositoryInterface
             ->get();
     }
 
-    protected function appendProductExtras($products)
-    {
-        foreach ($products as $product) {
-            $firstVariant = $product->variants->first();
-            $product->all_storages = $product->variants->pluck('storage')->unique()->filter()->implode(' / ');
-            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
-        }
+    // Lấy tất cả sản phẩm iPhone để cho xem tất cả trên home page
+    // public function getAllIphoneProducts()
+    // {
+    //     $products = Product::with(['variants.images'])
+    //         ->where('status', 1)
+    //         ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
+    //         ->whereHas('brand', fn($q) =>
+    //             $q->where('name', 'like', '%Apple%')->orWhere('name', 'like', '%iPhone%'))
+    //         ->latest('id')
+    //         ->get();
 
-        return $products;
+    //     return $this->appendProductExtras($products);
+    // }
+
+    public function getAllIphoneProducts()
+    {
+        $query = Product::with(['variants.images'])
+            ->where('status', 1)
+            ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
+            ->whereHas('brand', fn($q) =>
+                $q->where('name', 'like', '%Apple%')->orWhere('name', 'like', '%iPhone%'));
+
+        $query = $this->applyProductFilters($query);
+
+        return $this->appendProductExtras($query->latest('id')->get());
+    }
+
+
+    public function getLaptopProducts(int $limit = 5)
+    {
+        return Product::with(['variants.images'])
+            ->where('status', 1)
+            ->whereHas('category', fn($q) => $q->where('name', 'like', '%Laptop%'))
+            ->latest('id')
+            ->limit($limit)
+            ->get();
+    }
+
+    
+    // public function getProductsByCategorySlug(string $slug)
+    // {
+    //     $category = Category::where('slug', $slug)->where('status', 1)->firstOrFail();
+
+    //     $categoryIds = Category::where('id', $category->id)
+    //         ->orWhere('parent_id', $category->id)
+    //         ->pluck('id');
+
+    //     $query = Product::with(['variants' => fn($q) => $q->orderBy('price'), 'variants.images', 'category'])
+    //         ->whereIn('category_id', $categoryIds)
+    //         ->where('status', 1)
+    //         ->when(request('brand_ids'), function ($q) {
+    //             $q->whereIn('brand_id', request('brand_ids'));
+    //         });
+
+
+    //     // Lọc giá
+    //     if ($priceRanges = request('price_ranges')) {
+    //         $query->whereHas('variants', function ($q) use ($priceRanges) {
+    //             $q->where(function ($q2) use ($priceRanges) {
+    //                 foreach ($priceRanges as $range) {
+    //                     $q2->orWhere(function ($sub) use ($range) {
+    //                         if ($range === 'under_1') {
+    //                             $sub->where('price', '<', 1000000);
+    //                         } elseif ($range === 'from_1_to_5') {
+    //                             $sub->whereBetween('price', [1000000, 5000000]);
+    //                         } elseif ($range === 'over_5') {
+    //                             $sub->where('price', '>', 5000000);
+    //                         } elseif ($range === 'under_10') {
+    //                             $sub->where('price', '<', 10000000);
+    //                         } elseif ($range === 'from_10_to_20') {
+    //                             $sub->whereBetween('price', [10000000, 20000000]);
+    //                         } elseif ($range === 'over_20') {
+    //                             $sub->where('price', '>', 20000000);
+    //                         } elseif ($range === 'under_15') {
+    //                             $sub->where('price', '<', 15000000);
+    //                         } elseif ($range === 'from_15_to_30') {
+    //                             $sub->whereBetween('price', [15000000, 30000000]);
+    //                         } elseif ($range === 'over_30') {
+    //                             $sub->where('price', '>', 30000000);
+    //                         }
+    //                     });
+    //                 }
+    //             });
+    //         });
+    //     }
+
+    //     // Sắp xếp
+    //     if ($sort = request('sort')) {
+    //         if ($sort === 'price_asc') {
+    //             $query->withMin('variants', 'price')->orderBy('variants_min_price');
+    //         } elseif ($sort === 'price_desc') {
+    //             $query->withMax('variants', 'price')->orderByDesc('variants_max_price');
+    //         }
+    //     }
+
+    //     $products = $query->latest('id')->get();
+
+    //     return $this->appendProductExtras($products);
+    // }
+
+
+    // search cho header
+    public function searchProducts(string $keyword)
+    {
+        $query = Product::with(['variants.images', 'brand', 'category'])
+            ->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                    ->orWhereHas('variants', function ($q2) use ($keyword) {
+                        $q2->where('color', 'like', "%{$keyword}%")
+                            ->orWhere('storage', 'like', "%{$keyword}%")
+                            ->orWhere('chip', 'like', "%{$keyword}%");
+                    })
+                    ->orWhereHas('brand', function ($q2) use ($keyword) {
+                        $q2->where('name', 'like', "%{$keyword}%");
+                    })
+                    ->orWhereHas('category', function ($q2) use ($keyword) {
+                        $q2->where('name', 'like', "%{$keyword}%");
+                    });
+            })
+            ->where('status', 1)
+            ->latest();
+
+        $products = $query->get();
+
+        return $this->appendProductExtras($products);
     }
 
     public function getProductsByCategorySlug(string $slug)
@@ -90,8 +207,26 @@ class ProductRepository implements ProductRepositoryInterface
                 $q->whereIn('brand_id', request('brand_ids'));
             });
 
+        $query = $this->applyProductFilters($query);
 
-        // Lọc giá
+        return $this->appendProductExtras($query->latest('id')->get());
+    }
+
+
+    protected function appendProductExtras($products)
+    {
+        foreach ($products as $product) {
+            $firstVariant = $product->variants->first();
+            $product->all_storages = $product->variants->pluck('storage')->unique()->filter()->implode(' / ');
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
+        }
+
+        return $products;
+    }
+
+    // bộ lọc sản phẩm
+    protected function applyProductFilters($query)
+    {
         if ($priceRanges = request('price_ranges')) {
             $query->whereHas('variants', function ($q) use ($priceRanges) {
                 $q->where(function ($q2) use ($priceRanges) {
@@ -122,7 +257,6 @@ class ProductRepository implements ProductRepositoryInterface
             });
         }
 
-        // Sắp xếp
         if ($sort = request('sort')) {
             if ($sort === 'price_asc') {
                 $query->withMin('variants', 'price')->orderBy('variants_min_price');
@@ -131,34 +265,6 @@ class ProductRepository implements ProductRepositoryInterface
             }
         }
 
-        $products = $query->latest('id')->get();
-
-        return $this->appendProductExtras($products);
-    }
-
-    // search cho header
-    public function searchProducts(string $keyword)
-    {
-        $query = Product::with(['variants.images', 'brand', 'category'])
-            ->where(function ($q) use ($keyword) {
-                $q->where('name', 'like', "%{$keyword}%")
-                    ->orWhereHas('variants', function ($q2) use ($keyword) {
-                        $q2->where('color', 'like', "%{$keyword}%")
-                            ->orWhere('storage', 'like', "%{$keyword}%")
-                            ->orWhere('chip', 'like', "%{$keyword}%");
-                    })
-                    ->orWhereHas('brand', function ($q2) use ($keyword) {
-                        $q2->where('name', 'like', "%{$keyword}%");
-                    })
-                    ->orWhereHas('category', function ($q2) use ($keyword) {
-                        $q2->where('name', 'like', "%{$keyword}%");
-                    });
-            })
-            ->where('status', 1)
-            ->latest();
-
-        $products = $query->get();
-
-        return $this->appendProductExtras($products);
+        return $query;
     }
 }

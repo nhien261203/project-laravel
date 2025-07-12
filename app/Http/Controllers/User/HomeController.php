@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariantImage;
@@ -69,6 +70,16 @@ class HomeController extends Controller
             // 'parentCategories'
         ));
     }
+
+    public function allIphone()
+    {
+        
+        $iphoneProducts = $this->productRepo->getAllIphoneProducts(); // không phân trang
+
+        return view('user.product.all-iphone', compact('iphoneProducts'));
+    }
+
+
 
     /**
      * Trả về đường dẫn ảnh đại diện đầu tiên từ danh mục

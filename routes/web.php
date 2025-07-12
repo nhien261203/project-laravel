@@ -44,6 +44,10 @@ Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.d
 
 Route::get('/phu-kien/{slug}', [HomeController::class, 'showAccessory'])->name('product.detailAccessory');
 
+// xem tất cả sản phẩm iPhone
+Route::get('/iphone', [HomeController::class, 'allIphone'])->name('user.iphone.all');
+
+
 // nut tim kiem tren header 
 Route::get('/search', [UserProductController::class, 'search'])->name('product.search');
 

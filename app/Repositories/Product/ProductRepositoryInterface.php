@@ -12,6 +12,8 @@ interface ProductRepositoryInterface
     // lay 5 sp iphone cho section iphone ( user )
     public function getIphoneProducts(int $limit = 5);
 
+    public function getAllIphoneProducts();
+
     // lay san pham dien-thoai cho trang dien thoai (user )
     public function getProductsByCategorySlug(string $slug);
 

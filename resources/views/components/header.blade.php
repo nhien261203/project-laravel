@@ -98,7 +98,7 @@
                     <input
                         type="text"
                         name="q"
-                        placeholder="Bạn cần tìm kiếm gì ..."
+                        placeholder="Bạn cần tìm sản phẩm gì ..."
                         class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none"
                         required
                     />
