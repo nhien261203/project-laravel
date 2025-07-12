@@ -56,7 +56,7 @@ Route::get('/search', [UserProductController::class, 'search'])->name('product.s
 Route::get('/blogs', [UserBlogController::class, 'index'])->name('blogs.index');
 Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.show');
 
-//Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
+Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
 
 
 

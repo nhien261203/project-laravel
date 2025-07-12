@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
+use App\Models\Blog;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
@@ -57,16 +58,40 @@ class HomeController extends Controller
 
             $product->sale_percent = $firstVariant?->sale_percent ?? 0;
         }
+
+
+        $laptopProducts = $this->productRepo->getLaptopProducts(5);
+
+        foreach ($laptopProducts as $product) {
+            $firstVariant = $product->variants->first();
+            $storages = $product->variants
+                        ->pluck('storage')
+                        ->unique()
+                        ->filter()
+                        ->values()
+                        ->map(fn($s) => strtoupper($s))
+                        ->implode(' / ');
+
+            $product->all_storages = $storages;
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
+        }
         // Lấy banner cho trang chủ
         $banners = Banner::where('status', 1)
             ->latest('id')
             ->limit(4)
             ->get();
 
+        $latestBlogs = Blog::where('status', 1)
+        ->latest('id')
+        ->limit(4)
+        ->get();
+
         return view('user.home', compact(
             //'categoriesWithChildren',
             'banners',
-            'iphoneProducts'
+            'iphoneProducts',
+            'laptopProducts',
+            'latestBlogs'
             // 'parentCategories'
         ));
     }

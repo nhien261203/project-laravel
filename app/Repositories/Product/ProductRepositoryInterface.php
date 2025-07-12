@@ -14,6 +14,8 @@ interface ProductRepositoryInterface
 
     public function getAllIphoneProducts();
 
+    public function getLaptopProducts(int $limit = 5);
+
     // lay san pham dien-thoai cho trang dien thoai (user )
     public function getProductsByCategorySlug(string $slug);
 

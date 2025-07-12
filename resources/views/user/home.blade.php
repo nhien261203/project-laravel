@@ -51,6 +51,19 @@
         @isset($iphoneProducts)
             @include('components.iphone-section', ['iphoneProducts' => $iphoneProducts])
         @endisset
+
+
+        {{-- section laptop card --}}
+        @isset($laptopProducts)
+            @include('components.laptop-section', ['laptopProducts' => $laptopProducts])
+        @endisset
+
+        @isset($latestBlogs)
+            @include('components.blog-section', ['blogs' => $latestBlogs])
+        @endisset
+
+
+        
     </div>
 
     {{-- Nội dung khác --}}
