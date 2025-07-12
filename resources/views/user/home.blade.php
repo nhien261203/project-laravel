@@ -62,13 +62,15 @@
             @include('components.blog-section', ['blogs' => $latestBlogs])
         @endisset
 
+        @isset($accessoryProducts)
+            @include('components.accessory-section', ['accessoryProducts' => $accessoryProducts])
+        @endisset
 
-        
     </div>
 
     {{-- Nội dung khác --}}
-    <div class="bg-white p-6 rounded shadow mt-10">
+    {{-- <div class="bg-white p-6 rounded shadow mt-10">
         <h2 class="text-2xl font-bold mb-4">👋 Chào mừng bạn đến Nexus</h2>
         <p class="text-gray-700">Đây là trang chủ. Bạn có thể xem sản phẩm mới nhất, danh mục nổi bật, và nhiều hơn.</p>
-    </div>
+    </div> --}}
 @endsection

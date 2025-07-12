@@ -33,13 +33,13 @@
                             <a href="{{ route('product.detail', $product->slug) }}"
                                class="block bg-white border rounded-lg shadow hover:shadow-lg transition overflow-hidden hover:text-blue-600">
                                 {{-- Ảnh sản phẩm --}}
-                                <div class="relative bg-gray-50 aspect-[4/5] flex items-center justify-center">
+                                <div class="relative bg-white aspect-[4/5] flex items-center justify-center">
                                     @if($image)
                                         <img src="{{ asset('storage/' . $image) }}"
                                              alt="{{ $product->name }}"
                                              class="object-contain max-h-full max-w-full p-2">
                                     @else
-                                        <span class="text-gray-400 text-sm">Không có ảnh</span>
+                                        <span class="text-white text-sm">Không có ảnh</span>
                                     @endif
 
                                     @if($salePercent)

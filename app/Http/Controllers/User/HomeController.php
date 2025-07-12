@@ -75,6 +75,24 @@ class HomeController extends Controller
             $product->all_storages = $storages;
             $product->sale_percent = $firstVariant?->sale_percent ?? 0;
         }
+
+
+        $accessoryProducts = $this->productRepo->getAccessoryProducts(5);
+
+        foreach ($accessoryProducts as $product) {
+            $firstVariant = $product->variants->first();
+            $storages = $product->variants
+                        ->pluck('storage')
+                        ->unique()
+                        ->filter()
+                        ->values()
+                        ->map(fn($s) => strtoupper($s))
+                        ->implode(' / ');
+
+            $product->all_storages = $storages;
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
+        }
+
         // Lấy banner cho trang chủ
         $banners = Banner::where('status', 1)
             ->latest('id')
@@ -91,7 +109,8 @@ class HomeController extends Controller
             'banners',
             'iphoneProducts',
             'laptopProducts',
-            'latestBlogs'
+            'latestBlogs',
+            'accessoryProducts',
             // 'parentCategories'
         ));
     }

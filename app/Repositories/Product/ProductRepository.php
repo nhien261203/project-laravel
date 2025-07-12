@@ -85,7 +85,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->where('status', 1)
             ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
             ->whereHas('brand', fn($q) =>
-                $q->where('name', 'like', '%Apple%')->orWhere('name', 'like', '%iPhone%'));
+            $q->where('name', 'like', '%Apple%')->orWhere('name', 'like', '%iPhone%'));
 
         $query = $this->applyProductFilters($query);
 
@@ -103,7 +103,42 @@ class ProductRepository implements ProductRepositoryInterface
             ->get();
     }
 
-    
+    public function getAccessoryProducts(int $limit = 5)
+    {
+        // Nếu đã có ID trong session thì lấy ra
+        $productIds = session('random_accessory_ids');
+
+        if (!$productIds) {
+            $rootCategory = Category::where('name', 'like', '%phụ kiện%')->first();
+
+            if (!$rootCategory) {
+                return collect(); // Không có danh mục, trả về collection rỗng
+            }
+
+            // Lấy ID danh mục gốc và các danh mục con (1 cấp)
+            $categoryIds = Category::where('id', $rootCategory->id)
+                ->orWhere('parent_id', $rootCategory->id)
+                ->pluck('id');
+
+            // Lấy ngẫu nhiên các ID sản phẩm
+            $productIds = Product::where('status', 1)
+                ->whereIn('category_id', $categoryIds)
+                ->inRandomOrder()
+                ->limit($limit)
+                ->pluck('id')
+                ->toArray();
+
+            // Lưu ID vào session
+            session(['random_accessory_ids' => $productIds]);
+        }
+
+        // Truy vấn lại chi tiết sản phẩm từ ID
+        return Product::with(['variants.images'])
+            ->whereIn('id', $productIds)
+            ->get();
+    }
+
+
     // public function getProductsByCategorySlug(string $slug)
     // {
     //     $category = Category::where('slug', $slug)->where('status', 1)->firstOrFail();
