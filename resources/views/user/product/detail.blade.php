@@ -190,21 +190,47 @@
         document.getElementById('variantPrice').innerText = new Intl.NumberFormat().format(variant.price) + '₫';
         document.getElementById('formVariantId').value = variant.id;
 
+        // const originalPriceEl = document.getElementById('variantOriginalPrice');
+        // if (variant.original_price && variant.original_price > variant.price) {
+        //     originalPriceEl.classList.remove('hidden');
+        //     originalPriceEl.innerText = new Intl.NumberFormat().format(variant.original_price) + '₫';
+        // } else {
+        //     originalPriceEl.classList.add('hidden');
+        // }
+        
+
+        // fix lỗi: Cannot read properties of null (reading 'classList') 
         const originalPriceEl = document.getElementById('variantOriginalPrice');
-        if (variant.original_price && variant.original_price > variant.price) {
-            originalPriceEl.classList.remove('hidden');
-            originalPriceEl.innerText = new Intl.NumberFormat().format(variant.original_price) + '₫';
-        } else {
-            originalPriceEl.classList.add('hidden');
+        if (originalPriceEl) {
+            if (variant.original_price && variant.original_price > variant.price) {
+                originalPriceEl.classList.remove('hidden');
+                originalPriceEl.innerText = new Intl.NumberFormat().format(variant.original_price) + '₫';
+            } else {
+                originalPriceEl.classList.add('hidden');
+                originalPriceEl.innerText = '';
+            }
         }
 
+
+        //const salePercentEl = document.getElementById('variantSalePercent');
+        // if (variant.sale_percent) {
+        //     salePercentEl.classList.remove('hidden');
+        //     salePercentEl.innerText = '-' + variant.sale_percent + '%';
+        // } else {
+        //     salePercentEl.classList.add('hidden');
+        // }
+
         const salePercentEl = document.getElementById('variantSalePercent');
-        if (variant.sale_percent) {
-            salePercentEl.classList.remove('hidden');
-            salePercentEl.innerText = '-' + variant.sale_percent + '%';
-        } else {
-            salePercentEl.classList.add('hidden');
+        if (salePercentEl) {
+            if (variant.sale_percent > 0) {
+                salePercentEl.classList.remove('hidden');
+                salePercentEl.innerText = '-' + variant.sale_percent + '%';
+            } else {
+                salePercentEl.classList.add('hidden');
+                salePercentEl.innerText = '';
+            }
         }
+
 
         document.getElementById('detailColor').innerText = variant.color ?? '';
         document.getElementById('detailStorage').innerText = variant.storage ?? '';
