@@ -9,6 +9,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariantImage;
+use App\Models\UserRecentProduct;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 
@@ -39,12 +40,12 @@ class HomeController extends Controller
         // }
 
         $iphoneProducts = $this->productRepo->getIphoneProducts(5);
-        
+
 
         foreach ($iphoneProducts as $product) {
 
             $firstVariant = $product->variants->first();
-            
+
             $storages = $product->variants
                 ->pluck('storage')
                 ->unique()
@@ -53,7 +54,7 @@ class HomeController extends Controller
                 ->map(fn($s) => strtoupper($s))
                 ->implode(' / ');
 
-            
+
             $product->all_storages = $storages;
 
             $product->sale_percent = $firstVariant?->sale_percent ?? 0;
@@ -65,12 +66,12 @@ class HomeController extends Controller
         foreach ($laptopProducts as $product) {
             $firstVariant = $product->variants->first();
             $storages = $product->variants
-                        ->pluck('storage')
-                        ->unique()
-                        ->filter()
-                        ->values()
-                        ->map(fn($s) => strtoupper($s))
-                        ->implode(' / ');
+                ->pluck('storage')
+                ->unique()
+                ->filter()
+                ->values()
+                ->map(fn($s) => strtoupper($s))
+                ->implode(' / ');
 
             $product->all_storages = $storages;
             $product->sale_percent = $firstVariant?->sale_percent ?? 0;
@@ -82,12 +83,12 @@ class HomeController extends Controller
         foreach ($accessoryProducts as $product) {
             $firstVariant = $product->variants->first();
             $storages = $product->variants
-                        ->pluck('storage')
-                        ->unique()
-                        ->filter()
-                        ->values()
-                        ->map(fn($s) => strtoupper($s))
-                        ->implode(' / ');
+                ->pluck('storage')
+                ->unique()
+                ->filter()
+                ->values()
+                ->map(fn($s) => strtoupper($s))
+                ->implode(' / ');
 
             $product->all_storages = $storages;
             $product->sale_percent = $firstVariant?->sale_percent ?? 0;
@@ -100,9 +101,9 @@ class HomeController extends Controller
             ->get();
 
         $latestBlogs = Blog::where('status', 1)
-        ->latest('id')
-        ->limit(4)
-        ->get();
+            ->latest('id')
+            ->limit(4)
+            ->get();
 
         return view('user.home', compact(
             //'categoriesWithChildren',
@@ -117,7 +118,7 @@ class HomeController extends Controller
 
     public function allIphone()
     {
-        
+
         $iphoneProducts = $this->productRepo->getAllIphoneProducts(); // không phân trang
 
         return view('user.product.all-iphone', compact('iphoneProducts'));
@@ -184,7 +185,27 @@ class HomeController extends Controller
             }
         }
 
-        return view('user.product.detail', compact('product', 'colors', 'storages'));
+        // Lấy sản phẩm đã xem gần đây
+        $recentQuery = UserRecentProduct::query()
+            ->where('product_id', '!=', $product->id)
+            ->orderByDesc('viewed_at');
+
+        if (auth()->check()) {
+            $recentQuery->where('user_id', auth()->id());
+        } else {
+            $recentQuery->where('session_id', session()->getId());
+        }
+
+        $recentIds = $recentQuery->limit(10)->pluck('product_id');
+
+        $recentlyViewed = Product::with('variants.images')
+            ->whereIn('id', $recentIds)
+            ->get()
+            ->sortBy(function ($p) use ($recentIds) {
+                return array_search($p->id, $recentIds->toArray());
+            });
+
+        return view('user.product.detail', compact('product', 'colors', 'storages', 'recentlyViewed'));
     }
 
 
@@ -204,6 +225,27 @@ class HomeController extends Controller
             }
         }
 
-        return view('user.product.detail-accessory', compact('product', 'colors', 'storages'));
+
+        // Lấy sản phẩm đã xem gần đây
+        $recentQuery = UserRecentProduct::query()
+            ->where('product_id', '!=', $product->id)
+            ->orderByDesc('viewed_at');
+
+        if (auth()->check()) {
+            $recentQuery->where('user_id', auth()->id());
+        } else {
+            $recentQuery->where('session_id', session()->getId());
+        }
+
+        $recentIds = $recentQuery->limit(10)->pluck('product_id');
+
+        $recentlyViewed = Product::with('variants.images')
+            ->whereIn('id', $recentIds)
+            ->get()
+            ->sortBy(function ($p) use ($recentIds) {
+                return array_search($p->id, $recentIds->toArray());
+            });
+
+        return view('user.product.detail-accessory', compact('product', 'colors', 'storages','recentlyViewed'));
     }
 }

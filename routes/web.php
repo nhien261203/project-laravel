@@ -19,6 +19,7 @@ use App\Http\Controllers\User\UserCommentController;
 use App\Http\Controllers\User\UserForgotPasswordController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserProductController;
+use App\Http\Controllers\User\UserRecentProductController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,8 @@ Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.sho
 
 Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
 
+Route::post('/viewed-products/{product}', [UserRecentProductController::class, 'store'])->name('recently.viewed.store');
+// Route::post('/viewed-products/sync', [UserRecentProductController::class, 'sync'])->middleware('auth');
 
 
 Route::prefix('cart')->name('cart.')->group(function () {

@@ -122,7 +122,88 @@
             Đọc thêm
         </button>
     </div>
+
+    {{-- Sản phẩm đã xem --}}
+    @if($recentlyViewed->count())
+        <div class="mt-10">
+            <h3 class="text-base font-semibold text-gray-700 mb-4">Sản phẩm bạn đã xem gần đây</h3>
+
+            <!-- Swiper Container -->
+            <div class="swiper-container group relative overflow-hidden">
+                <!-- Wrapper -->
+                <div class="swiper-wrapper">
+                    @foreach($recentlyViewed as $item)
+                        @php
+                            $variant = $item->variants->first();
+                            $image = $variant && $variant->images->first()
+                                ? asset('storage/' . $variant->images->first()->image_path)
+                                : 'https://via.placeholder.com/300x300?text=No+Image';
+                        @endphp
+                        <div class="swiper-slide">
+                            <a href="{{ route('product.detail', $item->slug) }}" class="block bg-white border rounded hover:shadow transition overflow-hidden">
+                                <img src="{{ $image }}" class="w-full h-36 md:h-40 object-contain bg-gray-50">
+                                <div class="p-2">
+                                    <h4 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">{{ $item->name }}</h4>
+                                    @if($variant)
+                                        {{-- Bộ nhớ --}}
+                                        @if($variant->storage)
+                                            <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $variant->storage }}</p>
+                                        @endif
+
+                                        {{-- Giá và giảm giá --}}
+                                        <p class="text-xs mt-1">
+                                            <span class="text-red-600 font-semibold">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
+
+                                            @if($variant->original_price > $variant->price)
+                                                <span class="text-gray-400 line-through ml-1 text-xs">
+                                                    {{ number_format($variant->original_price, 0, ',', '.') }}₫
+                                                </span>
+                                                @if($variant->sale_percent)
+                                                    <span class="ml-1 text-green-600 text-xs bg-green-100 px-1.5 py-0.5 rounded">
+                                                        -{{ $variant->sale_percent }}%
+                                                    </span>
+                                                @endif
+                                            @endif
+                                        </p>
+                                    @endif
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+
+                
+                <!-- Nút điều hướng -->
+                <div class="swiper-button-prev custom-swiper-btn hidden sm:flex"></div>
+                <div class="swiper-button-next custom-swiper-btn hidden sm:flex"></div>
+
+            </div>
+        </div>
+    @endif
+
 </div>
+
+{{-- style mui ten --}}
+<style>
+    .custom-swiper-btn {
+        @apply absolute top-1/2 -translate-y-1/2 z-10 bg-gray-200/80 text-gray-800 w-10 h-10 rounded-full shadow-md flex items-center justify-center transition hover:bg-gray-300;
+    }
+
+    .swiper-button-prev.custom-swiper-btn {
+        left: 0.25rem;
+    }
+
+    .swiper-button-next.custom-swiper-btn {
+        right: 0.25rem;
+    }
+
+    /* Icon mũi tên bên trong */
+    .custom-swiper-btn::after {
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+
 
 {{-- Scripts --}}
 <script>
@@ -301,4 +382,45 @@
         this.innerText = desc.classList.contains('line-clamp-3') ? 'Đọc thêm' : 'Thu gọn';
     });
 </script>
+
+<script>
+    // Lưu vào localStorage
+    let viewedProducts = JSON.parse(localStorage.getItem("recently_viewed") || "[]");
+
+    const productId = {{ $product->id }};
+    viewedProducts = viewedProducts.filter(id => id !== productId); // loại trùng
+    viewedProducts.unshift(productId); // thêm đầu
+    viewedProducts = viewedProducts.slice(0, 10); // giữ tối đa 10
+
+    localStorage.setItem("recently_viewed", JSON.stringify(viewedProducts));
+
+    // Gửi vào DB (gọi luôn cho cả khách & user)
+    fetch("{{ route('recently.viewed.store', $product->id) }}", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": '{{ csrf_token() }}',
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({})
+    });
+</script>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    new Swiper('.swiper-container', {
+        slidesPerView: 2,
+        spaceBetween: 16,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            640: { slidesPerView: 3 },
+            768: { slidesPerView: 4 },
+            1024: { slidesPerView: 5 },
+        },
+    });
+</script>
+
 @endsection

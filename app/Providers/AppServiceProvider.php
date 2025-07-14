@@ -14,6 +14,8 @@ use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\ProductVariant\ProductVariantRepository;
 use App\Repositories\ProductVariant\ProductVariantRepositoryInterface;
+use App\Repositories\UserRecentProduct\UserRecentProductRepository;
+use App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +41,11 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+
+        $this->app->bind(
+            UserRecentProductRepositoryInterface::class,
+            UserRecentProductRepository::class
+        );
     }
 
     /**

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Middleware\AutoMergeCartMiddleware;
 
 class AuthController extends Controller
 {
@@ -42,6 +42,9 @@ class AuthController extends Controller
             // Gọi mergeCart thủ công với session ID cũ
             app(\App\Repositories\Cart\CartRepositoryInterface::class)
                 ->mergeCart(Auth::id(), $oldSessionId);
+
+            app(\App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface::class)
+            ->mergeRecentViewed(Auth::id(), $oldSessionId);
 
             // Đánh dấu đã merge nếu cần
             session(['cart_merged' => true]);

@@ -1,5 +1,5 @@
 {{-- HEADER --}}
-    <div class="bg-[#515154] duration-200 w-full z-40 shadow-xl fixed top-0 left-0 right-0">
+    <div class="bg-[#515154] duration-200 w-full z-40 shadow-xl fixed top-0 left-0 right-0 ">
         <div class="container mx-auto flex justify-between items-center">
             {{-- Logo + Menu --}}
             <div class="flex items-center justify-between gap-6 w-full lg:w-auto ">
