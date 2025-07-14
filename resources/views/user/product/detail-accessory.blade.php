@@ -43,7 +43,7 @@
                         {{ number_format($defaultVariant->original_price, 0, ',', '.') }}₫
                     </span>
                 @endif
-                @if($defaultVariant->sale_percent)
+                @if($defaultVariant->sale_percent > 0)
                     <span id="variantSalePercent" class="text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded ml-2">
                         -{{ $defaultVariant->sale_percent }}%
                     </span>

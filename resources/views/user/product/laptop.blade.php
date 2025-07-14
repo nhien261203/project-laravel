@@ -114,7 +114,7 @@
                                             {{ number_format($originalPrice, 0, ',', '.') }}₫
                                         </span>
                                     @endif
-                                    @if($product->sale_percent)
+                                    @if($product->sale_percent > 0)
                                         <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded">
                                             -{{ $product->sale_percent }}%
                                         </span>
