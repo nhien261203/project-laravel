@@ -41,6 +41,9 @@ class AdminAuthController extends Controller
             app(\App\Repositories\Cart\CartRepositoryInterface::class)
                 ->mergeCart(Auth::id(), $oldSessionId);
 
+            app(\App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface::class)
+                ->mergeRecentViewed(Auth::id(), $oldSessionId);
+
             // Đánh dấu đã merge nếu cần
             session(['cart_merged' => true]);
 

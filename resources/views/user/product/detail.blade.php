@@ -140,7 +140,8 @@
                                 : 'https://via.placeholder.com/300x300?text=No+Image';
                         @endphp
                         <div class="swiper-slide">
-                            <a href="{{ route('product.detail', $item->slug) }}" class="block bg-white border rounded hover:shadow transition overflow-hidden">
+                            
+                            <a href="{{ $item->is_accessory ? route('product.detailAccessory', $item->slug) : route('product.detail', $item->slug) }}" class="block bg-white border rounded hover:shadow transition overflow-hidden">
                                 <img src="{{ $image }}" class="w-full h-36 md:h-40 object-contain bg-gray-50">
                                 <div class="p-2">
                                     <h4 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">{{ $item->name }}</h4>

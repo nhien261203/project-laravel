@@ -176,7 +176,6 @@ class HomeController extends Controller
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
 
-        // Tìm biến thể đầu tiên có ảnh thật
         $fallbackVariantWithImage = $product->variants->firstWhere(fn($v) => $v->images->isNotEmpty());
 
         foreach ($product->variants as $variant) {
@@ -185,7 +184,6 @@ class HomeController extends Controller
             }
         }
 
-        // Lấy sản phẩm đã xem gần đây
         $recentQuery = UserRecentProduct::query()
             ->where('product_id', '!=', $product->id)
             ->orderByDesc('viewed_at');
@@ -198,15 +196,19 @@ class HomeController extends Controller
 
         $recentIds = $recentQuery->limit(10)->pluck('product_id');
 
-        $recentlyViewed = Product::with('variants.images')
+        $recentlyViewed = Product::with(['variants.images', 'category.parent']) // ⚠️ thêm parent
             ->whereIn('id', $recentIds)
             ->get()
-            ->sortBy(function ($p) use ($recentIds) {
-                return array_search($p->id, $recentIds->toArray());
-            });
+            ->map(function ($p) use ($recentIds) {
+                $p->is_accessory = $p->category?->slug === 'phu-kien' || $p->category?->parent?->slug === 'phu-kien';
+                return $p;
+            })
+            ->sortBy(fn($p) => array_search($p->id, $recentIds->toArray()));
+
 
         return view('user.product.detail', compact('product', 'colors', 'storages', 'recentlyViewed'));
     }
+
 
 
     public function showAccessory($slug)
@@ -216,7 +218,6 @@ class HomeController extends Controller
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
 
-        // Tìm biến thể đầu tiên có ảnh thật
         $fallbackVariantWithImage = $product->variants->firstWhere(fn($v) => $v->images->isNotEmpty());
 
         foreach ($product->variants as $variant) {
@@ -225,8 +226,6 @@ class HomeController extends Controller
             }
         }
 
-
-        // Lấy sản phẩm đã xem gần đây
         $recentQuery = UserRecentProduct::query()
             ->where('product_id', '!=', $product->id)
             ->orderByDesc('viewed_at');
@@ -239,13 +238,16 @@ class HomeController extends Controller
 
         $recentIds = $recentQuery->limit(10)->pluck('product_id');
 
-        $recentlyViewed = Product::with('variants.images')
+        $recentlyViewed = Product::with(['variants.images', 'category.parent']) // ⚠️ thêm parent
             ->whereIn('id', $recentIds)
             ->get()
-            ->sortBy(function ($p) use ($recentIds) {
-                return array_search($p->id, $recentIds->toArray());
-            });
+            ->map(function ($p) use ($recentIds) {
+                $p->is_accessory = $p->category?->slug === 'phu-kien' || $p->category?->parent?->slug === 'phu-kien';
+                return $p;
+            })
+            ->sortBy(fn($p) => array_search($p->id, $recentIds->toArray()));
 
-        return view('user.product.detail-accessory', compact('product', 'colors', 'storages','recentlyViewed'));
+
+        return view('user.product.detail-accessory', compact('product', 'colors', 'storages', 'recentlyViewed'));
     }
 }
