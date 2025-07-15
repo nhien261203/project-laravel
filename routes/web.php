@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BrandController;
@@ -126,6 +127,10 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
         Route::post('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('updateStatus');
         Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
     });
+
+    Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+    Route::post('/reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
+    Route::post('/reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
 
 
 

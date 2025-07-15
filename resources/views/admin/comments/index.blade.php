@@ -4,7 +4,11 @@
 
 @section('content')
 <div class="container mx-auto py-6">
-    <h1 class="text-2xl font-bold mb-4">🗨️ Quản lý bình luận</h1>
+    
+    <div class="flex justify-between items-center mb-6">
+        <a href="{{ route('admin.comments.index') }}" class="text-2xl font-bold mb-4">Quản lý bình luận blog</a>
+        <a href="{{ route('admin.reviews.index') }}" class="text-2xl font-bold mb-4">Quản lý bình đánh giá sản phẩm</a>
+    </div>
 
     {{-- Filter --}}
     <form method="GET" class="mb-6 flex flex-wrap gap-4 items-end">
