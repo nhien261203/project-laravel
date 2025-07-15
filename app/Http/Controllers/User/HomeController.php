@@ -7,6 +7,7 @@ use App\Models\Banner;
 use App\Models\Blog;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariantImage;
 use App\Models\UserRecentProduct;
@@ -171,7 +172,11 @@ class HomeController extends Controller
     // chi tiet sp trang home
     public function show($slug)
     {
-        $product = Product::with(['variants.images'])->where('slug', $slug)->firstOrFail();
+        $product = Product::with([
+            'variants.images',
+            'approvedReviews.user' //  load đánh giá đã duyệt
+        ])->where('slug', $slug)->firstOrFail();
+
 
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
@@ -196,7 +201,7 @@ class HomeController extends Controller
 
         $recentIds = $recentQuery->limit(10)->pluck('product_id');
 
-        $recentlyViewed = Product::with(['variants.images', 'category.parent']) // ⚠️ thêm parent
+        $recentlyViewed = Product::with(['variants.images', 'category.parent']) // thêm parent
             ->whereIn('id', $recentIds)
             ->get()
             ->map(function ($p) use ($recentIds) {
@@ -205,15 +210,36 @@ class HomeController extends Controller
             })
             ->sortBy(fn($p) => array_search($p->id, $recentIds->toArray()));
 
+        $canReview = false;
 
-        return view('user.product.detail', compact('product', 'colors', 'storages', 'recentlyViewed'));
+        if (auth()->check()) {
+            $hasReviewed = $product->reviews->where('user_id', auth()->id())->count() > 0;
+
+            if (!$hasReviewed) {
+                $hasPurchased = Order::where('user_id', auth()->id())
+                    ->whereIn('status', ['completed'])
+                    ->whereHas('items.variant', function ($q) use ($product) {
+                        $q->where('product_id', $product->id);
+                    })
+                    ->exists();
+
+
+                $canReview = $hasPurchased;
+            }
+        }
+
+
+
+        return view('user.product.detail', compact('product', 'colors', 'storages', 'recentlyViewed', 'canReview'));
     }
-
-
 
     public function showAccessory($slug)
     {
-        $product = Product::with(['variants.images'])->where('slug', $slug)->firstOrFail();
+        $product = Product::with([
+            'variants.images',
+            'approvedReviews.user' // load đánh giá đã duyệt
+        ])->where('slug', $slug)->firstOrFail();
+
 
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
@@ -247,7 +273,24 @@ class HomeController extends Controller
             })
             ->sortBy(fn($p) => array_search($p->id, $recentIds->toArray()));
 
+        $canReview = false;
 
-        return view('user.product.detail-accessory', compact('product', 'colors', 'storages', 'recentlyViewed'));
+        if (auth()->check()) {
+            $hasReviewed = $product->reviews->where('user_id', auth()->id())->count() > 0;
+
+            if (!$hasReviewed) {
+                $hasPurchased = Order::where('user_id', auth()->id())
+                    ->whereIn('status', ['completed'])
+                    ->whereHas('items.variant', function ($q) use ($product) {
+                        $q->where('product_id', $product->id);
+                    })
+                    ->exists();
+
+
+                $canReview = $hasPurchased;
+            }
+        }
+
+        return view('user.product.detail-accessory', compact('product', 'colors', 'storages', 'recentlyViewed', 'canReview'));
     }
 }

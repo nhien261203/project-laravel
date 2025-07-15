@@ -123,6 +123,57 @@
         </button>
     </div>
 
+    @if ($canReview)
+        <form action="{{ route('user.reviews.store') }}" method="POST" class="mt-4">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+            {{-- Chọn sao --}}
+            <label class="block mb-1">Đánh giá sao:</label>
+            <div class="flex items-center space-x-1" id="starRating">
+                @for ($i = 1; $i <= 5; $i++)
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        data-star="{{ $i }}"
+                        class="w-6 h-6 cursor-pointer text-gray-300 hover:text-yellow-400 transition"
+                        fill="currentColor"
+                        viewBox="0 0 24 24">
+                        <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.886L19.335 24 12 20.013 4.665 24l1.399-8.808L0 9.306l8.332-1.151z"/>
+                    </svg>
+                @endfor
+            </div>
+            <input type="hidden" name="rating" id="ratingInput" value="">
+
+
+            <label for="comment" class="block mt-2">Nội dung:</label>
+            <textarea name="comment" rows="3" class="w-full border p-2"></textarea>
+
+            <button type="submit" class="mt-2 bg-blue-500 text-white px-3 py-1 rounded">Gửi đánh giá</button>
+        </form>
+    @endif
+
+    {{-- Hiển thị đánh giá --}}
+    <h3 class="text-lg font-semibold text-gray-800 mt-10 mb-4">Đánh giá sản phẩm</h3>
+
+    @forelse($product->approvedReviews as $review)
+        <div class="w-full md:w-1/2 mb-4 p-4 bg-gray-50 rounded-lg shadow-sm">
+            <div class="flex items-center justify-between mb-1">
+                <div class="font-medium text-gray-800">{{ $review->user->name }}</div>
+                <div class="flex items-center">
+                    @for ($i = 1; $i <= 5; $i++)
+                        <svg class="w-5 h-5 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.965a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.965c.3.921-.755 1.688-1.538 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.783.57-1.838-.197-1.538-1.118l1.287-3.965a1 1 0 00-.364-1.118L2.05 9.392c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.965z"/>
+                        </svg>
+                    @endfor
+                </div>
+            </div>
+            @if($review->comment)
+                <p class="text-sm text-gray-700 mt-1">{{ $review->comment }}</p>
+            @endif
+        </div>
+    @empty
+        <p class="text-sm text-gray-500">Bạn hãy mua hàng để là người đầu tiên đánh giá sản phẩm này.</p>
+    @endforelse
+
     {{-- Sản phẩm đã xem --}}
     @if($recentlyViewed->count())
         <div class="mt-10">
@@ -423,5 +474,31 @@
         },
     });
 </script>
+
+
+{{-- xu li danh gia  --}}
+<script>
+    const stars = document.querySelectorAll('#starRating svg');
+    const ratingInput = document.getElementById('ratingInput');
+
+    stars.forEach((star, index) => {
+        star.addEventListener('click', () => {
+            const rating = index + 1;
+            ratingInput.value = rating;
+
+            // Highlight sao
+            stars.forEach((s, i) => {
+                if (i < rating) {
+                    s.classList.remove('text-gray-300');
+                    s.classList.add('text-yellow-400');
+                } else {
+                    s.classList.remove('text-yellow-400');
+                    s.classList.add('text-gray-300');
+                }
+            });
+        });
+    });
+</script>
+
 
 @endsection

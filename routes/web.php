@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserCommentController;
 use App\Http\Controllers\User\UserForgotPasswordController;
@@ -62,6 +63,10 @@ Route::middleware('auth')->post('/comments', [UserCommentController::class, 'sto
 Route::post('/viewed-products/{product}', [UserRecentProductController::class, 'store'])->name('recently.viewed.store');
 // Route::post('/viewed-products/sync', [UserRecentProductController::class, 'sync'])->middleware('auth');
 
+
+Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
+    Route::post('reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
+});
 
 Route::prefix('cart')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
