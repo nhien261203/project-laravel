@@ -13,7 +13,7 @@ class AuthController extends Controller
     // Hiển thị form đăng nhập
     public function showLogin()
     {
-        return view('auth.login');
+        return view('user.auth.login');
     }
 
     // Xử lý đăng nhập
@@ -59,7 +59,7 @@ class AuthController extends Controller
     // Hiển thị form đăng ký
     public function showRegister()
     {
-        return view('auth.register');
+        return view('user.auth.register');
     }
 
     // Xử lý đăng ký
@@ -99,28 +99,29 @@ class AuthController extends Controller
     }
 
 
-    // public function showChangePassword()
-    // {
-    //     return view('auth.change-password');
-    // }
+    // doi mat khau
+    public function showChangePassword()
+    {
+        return view('user.auth.change-password');
+    }
 
-    // public function changePassword(Request $request)
-    // {
-    //     $request->validate([
-    //         'current_password' => 'required',
-    //         'new_password' => 'required|min:6|confirmed',
-    //     ]);
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
 
-    //     $user = Auth::user();
+        $user = Auth::user();
 
-    //     if (!Hash::check($request->current_password, $user->password)) {
-    //         return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng.']);
-    //     }
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng.']);
+        }
 
-    //     $user->update([
-    //         'password' => Hash::make($request->new_password),
-    //     ]);
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
 
-    //     return back()->with('success', 'Mật khẩu đã được thay đổi thành công!');
-    // }
+        return back()->with('success', 'Mật khẩu đã được thay đổi thành công!');
+    }
 }

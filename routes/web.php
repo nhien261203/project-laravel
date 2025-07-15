@@ -64,7 +64,6 @@ Route::middleware('auth')->post('/comments', [UserCommentController::class, 'sto
 Route::post('/viewed-products/{product}', [UserRecentProductController::class, 'store'])->name('recently.viewed.store');
 // Route::post('/viewed-products/sync', [UserRecentProductController::class, 'sync'])->middleware('auth');
 
-
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::post('reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
 });
@@ -153,6 +152,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
+Route::middleware(['auth'])->group(function () {
+        Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
+        Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.change');
+});
+
 // Quên mật khẩu
 Route::prefix('password')->name('password.')->group(function () {
     Route::get('forgot', [UserForgotPasswordController::class, 'showForm'])->name('request');
@@ -160,6 +164,8 @@ Route::prefix('password')->name('password.')->group(function () {
     Route::get('reset', [UserForgotPasswordController::class, 'showResetForm'])->name('reset');
     Route::post('reset', [UserForgotPasswordController::class, 'resetPassword'])->name('update');
 });
+
+
 
 //auth cho admin 
 
