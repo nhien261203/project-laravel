@@ -16,6 +16,8 @@ use App\Repositories\ProductVariant\ProductVariantRepository;
 use App\Repositories\ProductVariant\ProductVariantRepositoryInterface;
 use App\Repositories\UserRecentProduct\UserRecentProductRepository;
 use App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface;
+use App\Repositories\Voucher\VoucherRepository;
+use App\Repositories\Voucher\VoucherRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +48,8 @@ class AppServiceProvider extends ServiceProvider
             UserRecentProductRepositoryInterface::class,
             UserRecentProductRepository::class
         );
+
+        $this->app->bind(VoucherRepositoryInterface::class, VoucherRepository::class);
     }
 
     /**

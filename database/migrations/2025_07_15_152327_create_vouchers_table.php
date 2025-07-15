@@ -30,7 +30,6 @@ return new class extends Migration
             $table->dateTime('end_date')->nullable(); // Ngày hết hạn
 
             $table->boolean('is_active')->default(true); // Đã kích hoạt chưa
-
             $table->timestamps();
         });
     }

@@ -22,6 +22,8 @@ class Order extends Model
         'customer_email',
         'customer_address',
         'note',
+        'voucher_code',    // Mã voucher đã sử dụng
+        'discount_amount', // Số tiền giảm giá từ voucher
     ];
 
     // Quan hệ: Order có nhiều OrderItem
