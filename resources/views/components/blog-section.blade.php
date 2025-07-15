@@ -16,7 +16,7 @@
             <a href="{{ route('blogs.show', $blog->slug) }}" class="group block bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden">
                 @if($blog->thumbnail)
                     <img src="{{ asset('storage/' . $blog->thumbnail) }}" alt="{{ $blog->title }}"
-                         class="w-full h-40 object-cover">
+                         class="w-full h-40 object-cover" loading="lazy">
                 @else
                     <div class="w-full h-40 bg-gray-100 flex items-center justify-center text-gray-400">
                         Không có ảnh
@@ -44,7 +44,7 @@
                         <a href="{{ route('blogs.show', $blog->slug) }}" class="group block bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden">
                             @if($blog->thumbnail)
                                 <img src="{{ asset('storage/' . $blog->thumbnail) }}" alt="{{ $blog->title }}"
-                                     class="w-full aspect-[5/3] object-cover">
+                                     class="w-full aspect-[5/3] object-cover" loading="lazy">
                             @else
                                 <div class="w-full aspect-[5/3] bg-gray-100 flex items-center justify-center text-gray-400">
                                     Không có ảnh

@@ -11,7 +11,7 @@
         <div class="md:col-span-1">
             <img src="https://images.pexels.com/photos/5698417/pexels-photo-5698417.jpeg"
                  alt="Laptop Banner"
-                 class="w-full h-[320px] object-cover rounded-lg shadow">
+                 class="w-full h-[320px] object-cover rounded-lg shadow" loading="lazy">
         </div>
 
         {{-- Cột phải: Swiper hiển thị sản phẩm --}}
@@ -37,7 +37,7 @@
                                     @if($image)
                                         <img src="{{ asset('storage/' . $image) }}"
                                              alt="{{ $product->name }}"
-                                             class="object-contain max-h-full max-w-full p-2">
+                                             class="object-contain max-h-full max-w-full p-2" loading="lazy">
                                     @else
                                         <span class="text-white text-sm">Không có ảnh</span>
                                     @endif
