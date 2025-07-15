@@ -38,9 +38,18 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Order::class);
     }
 
+    public function vouchers()
+    {
+        return $this->belongsToMany(Voucher::class, 'voucher_user')
+            ->withPivot('used_at', 'order_id')
+            ->withTimestamps();
+    }
+
+
     // app/Models/User.php
 
-    public function recentProducts() {
+    public function recentProducts()
+    {
         return $this->hasMany(UserRecentProduct::class);
     }
 

@@ -55,4 +55,15 @@ class Order extends Model
             default => 'Không xác định',
         };
     }
+
+    public function voucherUser()
+    {
+        return $this->hasOne(VoucherUser::class);
+    }
+
+    // Lấy mã voucher đã dùng (nếu có)
+    public function usedVoucherCode()
+    {
+        return $this->voucherUser?->voucher?->code;
+    }
 }
