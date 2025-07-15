@@ -16,6 +16,9 @@
 
     {{-- Swiper CSS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <!-- alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100">
 
@@ -76,6 +79,34 @@
             });
         });
     </script>
+
+    
+{{-- trang thai alert --}}
+<script>
+    @if (session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: '{{ session('success') }}',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    @endif
+
+    @if (session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: '{{ session('error') }}',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    @endif
+</script>
 
 </body>
 </html>

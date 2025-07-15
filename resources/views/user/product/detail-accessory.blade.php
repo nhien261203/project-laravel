@@ -105,7 +105,7 @@
 
     {{-- Mô tả sản phẩm --}}
     <div class="mt-6 md:w-1/2 w-full">
-        <h3 class="text-base font-semibold text-gray-700 mb-2">📘 Mô tả sản phẩm</h3>
+        <h3 class="text-base font-semibold text-gray-700 mb-2">Thông tin sản phẩm</h3>
 
         <div id="techSpecWrapper" class="overflow-hidden transition-all duration-300 max-h-[200px]">
             <div class="prose max-w-none text-sm text-gray-800">

@@ -114,7 +114,7 @@
 
     {{-- Mô tả sản phẩm --}}
     <div class="mt-6 md:w-1/2 w-full">
-        <h3 class="text-base font-semibold text-gray-700 mb-2">📘 Mô tả sản phẩm</h3>
+        <h3 class="text-base font-semibold text-gray-700 mb-2">Mô tả sản phẩm</h3>
         <div id="productDescription" class="prose max-w-none text-sm text-gray-800 overflow-hidden transition-all duration-300 line-clamp-3">
             {!! $product->description !!}
         </div>
