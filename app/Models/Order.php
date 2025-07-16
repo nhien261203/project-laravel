@@ -16,7 +16,6 @@ class Order extends Model
         'total_quantity',
         'payment_status',  // unpaid | paid
         'status',          // pending | processing | completed | cancelled
-
         'customer_name',
         'customer_phone',
         'customer_email',
@@ -24,6 +23,7 @@ class Order extends Model
         'note',
         'voucher_code',    // Mã voucher đã sử dụng
         'discount_amount', // Số tiền giảm giá từ voucher
+        'subtotal',        // Tổng tiền trước khi áp dụng voucher
     ];
 
     // Quan hệ: Order có nhiều OrderItem

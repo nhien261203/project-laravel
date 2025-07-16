@@ -59,7 +59,7 @@
                         <th class="border p-3">Sản phẩm</th>
                         <th class="border p-3">Số lượng</th>
                         <th class="border p-3">Giá</th>
-                        <th class="border p-3">Thành tiền</th>
+                        {{-- <th class="border p-3">Thành tiền</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -82,9 +82,9 @@
                             <td class="border p-3 text-red-600 align-top">
                                 {{ number_format($item->price, 0, ',', '.') }}₫
                             </td>
-                            <td class="border p-3 text-red-600 font-semibold align-top">
+                            {{-- <td class="border p-3 text-red-600 font-semibold align-top">
                                 {{ number_format($item->price * $item->quantity, 0, ',', '.') }}₫
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>
@@ -92,9 +92,25 @@
         </div>
 
         {{-- Tổng tiền --}}
-        <div class="text-right mt-6 text-xl font-bold text-gray-800">
-            Tổng tiền: {{ number_format($order->total_amount, 0, ',', '.') }}₫
+        <div class="text-right mt-6 space-y-2 text-base text-gray-700">
+            @if ($order->voucher_code)
+                <p>
+                    Mã giảm giá: <span class="font-semibold text-blue-600">{{ $order->voucher_code }}</span>
+                </p>
+                <p>
+                    Số tiền đã giảm: <span class="text-red-600 font-semibold">-{{ number_format($order->discount_amount, 0, ',', '.') }}₫</span>
+                </p>
+            @endif
+
+            <p>
+                Tạm tính: <span class="font-medium">{{ number_format($order->subtotal, 0, ',', '.') }}₫</span>
+            </p>
+
+            <p class="text-xl font-bold text-gray-800">
+                Tổng thanh toán: {{ number_format($order->total_amount, 0, ',', '.') }}₫
+            </p>
         </div>
+
     </div>
 </div>
 @endsection

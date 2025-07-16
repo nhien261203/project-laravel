@@ -84,12 +84,93 @@
             {{-- Cột phải: Tổng tiền & thanh toán --}}
             <div>
                 @php
-                    $total = $cart->items->sum(fn($item) => $item->snapshot_price * $item->quantity);
-                @endphp
+                $total = $cart->items->sum(fn($item) => $item->snapshot_price * $item->quantity);
+            @endphp
+
+            <div class="bg-white p-6 rounded shadow-md space-y-4 sticky top-6">
+                {{-- <h3 class="text-lg font-semibold text-gray-700">Tạm tính</h3>
+                <p class="text-2xl font-bold text-red-600">{{ number_format($total, 0, ',', '.') }}₫</p> --}}
+                {{-- Nhập mã giảm giá --}}
+                @if(session('error_voucher'))
+                    <p class="text-sm text-red-600">{{ session('error_voucher') }}</p>
+                @endif
+
+                @if(session('success_voucher'))
+                    <p class="text-sm text-green-600">{{ session('success_voucher') }}</p>
+                @endif
+
+                <form method="POST" action="{{ route('cart.apply-voucher') }}" class="flex gap-2 mb-4">
+                    @csrf
+                    <input type="text" name="voucher_code" placeholder="Nhập mã giảm giá..."
+                        class="flex-1 border rounded px-3 py-2 text-sm" required>
+                    <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                        Áp dụng
+                    </button>
+                </form>
+
+                @if(isset($vouchers) && $vouchers->count())
+                    <div class="space-y-3 border-t pt-4">
+                        <h4 class="text-sm font-semibold text-gray-600">Mã giảm giá đang có:</h4>
+
+                        @foreach ($vouchers as $voucher)
+                            <div class="border p-3 rounded flex justify-between items-center hover:bg-gray-50">
+                                <div>
+                                    <p class="font-semibold text-blue-700 text-sm">{{ $voucher->code }}</p>
+                                    <p class="text-xs text-gray-600">
+                                        {{ $voucher->type === 'percent' ? "Giảm {$voucher->value}%" : "Giảm ".number_format($voucher->value, 0, ',', '.')."₫" }}
+                                        @if($voucher->min_order_amount)
+                                            – Đơn từ {{ number_format($voucher->min_order_amount, 0, ',', '.') }}₫
+                                        @endif
+                                        @if($voucher->only_for_new_user)
+                                            – <span class="text-green-600 font-medium">Khách mới</span>
+                                        @endif
+                                    </p>
+                                    @if($voucher->end_date)
+                                        <p class="text-xs text-gray-400">HSD: {{ $voucher->end_date->format('d/m/Y') }}</p>
+                                    @endif
+                                </div>
+                                <button onclick="copyToClipboard('{{ $voucher->code }}')" class="text-blue-600 text-xs hover:underline">📋 Sao chép</button>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
 
                 <div class="bg-white p-6 rounded shadow-md space-y-4 sticky top-6">
-                    <h3 class="text-lg font-semibold text-gray-700">Tạm tính</h3>
-                    <p class="text-2xl font-bold text-red-600">{{ number_format($total, 0, ',', '.') }}₫</p>
+                    @php
+                        $voucher = session('applied_voucher');
+                        $discount = 0;
+
+                        if ($voucher) {
+                            $discount = $voucher['type'] === 'percent'
+                                ? floor($total * $voucher['value'] / 100)
+                                : $voucher['value'];
+
+                            if (!empty($voucher['max_discount']) && $discount > $voucher['max_discount']) {
+                                $discount = $voucher['max_discount'];
+                            }
+
+                            $totalAfterDiscount = $total - $discount;
+                        }
+                    @endphp
+
+                    @if($voucher)
+                        <p class="text-sm text-green-700"> Đã áp dụng mã: <strong>{{ $voucher['code'] }}</strong></p>
+                        <p class="text-sm text-gray-700">Giảm: <strong>{{ number_format($discount, 0, ',', '.') }}₫</strong></p>
+                        <p class="text-xl font-bold text-red-600">Tổng: {{ number_format($totalAfterDiscount, 0, ',', '.') }}₫</p>
+                    @else
+                        <p class="text-2xl font-bold text-red-600">{{ number_format($total, 0, ',', '.') }}₫</p>
+                    @endif
+                    @if(session('applied_voucher'))
+                        <div class="mt-2 text-sm">
+                            <span class="text-green-700">Đã áp dụng mã: <strong>{{ session('applied_voucher.code') }}</strong></span>
+                            <form method="POST" action="{{ route('cart.remove-voucher') }}" class="inline-block ml-2">
+                                @csrf
+                                <button type="submit" class="text-red-500 hover:underline text-xs">Bỏ mã</button>
+                            </form>
+                        </div>
+                    @endif
+
 
                     <form method="POST" action="{{ route('user.orders.store') }}" class="space-y-4">
                         @csrf
@@ -139,3 +220,15 @@
     @endif
 </div>
 @endsection
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Đã sao chép mã: ' + text);
+        }).catch(() => {
+            alert('Không thể sao chép mã.');
+        });
+    }
+</script>
+
+

@@ -75,6 +75,10 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/add', [CartController::class, 'add'])->name('add');
     Route::put('/update/{variantId}', [CartController::class, 'update'])->name('update');
     Route::delete('/remove/{variantId}', [CartController::class, 'remove'])->name('remove');
+
+    Route::post('/apply-voucher', [CartController::class, 'applyVoucher'])->name('apply-voucher');
+    Route::post('/remove-voucher', [CartController::class, 'removeVoucher'])->name('remove-voucher');
+
 });
 
 Route::middleware(['auth'])->prefix('orders')->name('user.orders.')->group(function () {
