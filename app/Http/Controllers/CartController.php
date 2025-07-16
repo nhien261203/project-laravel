@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductVariant;
 use App\Models\Voucher;
 use App\Models\VoucherUser;
 use Illuminate\Http\Request;
@@ -34,6 +35,22 @@ class CartController extends Controller
         return view('cart.index', compact('cart', 'vouchers'));
     }
 
+    // public function add(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         'variant_id' => 'required|exists:product_variants,id',
+    //         'quantity' => 'required|integer|min:1'
+    //     ]);
+
+    //     $this->repo->addToCart(Auth::id(), $request->session()->getId(), $data['variant_id'], $data['quantity']);
+
+    //     if ($request->ajax() || $request->expectsJson()) {
+    //         return response()->json(['message' => 'Đã thêm vào giỏ']);
+    //     }
+
+    //     return redirect()->route('cart.index')->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
+    // }
+
     public function add(Request $request)
     {
         $data = $request->validate([
@@ -41,7 +58,25 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
-        $this->repo->addToCart(Auth::id(), $request->session()->getId(), $data['variant_id'], $data['quantity']);
+        $variant = ProductVariant::findOrFail($data['variant_id']);
+
+        // Kiểm tra tồn kho
+        if ($data['quantity'] > $variant->quantity) {
+            $message = 'Hiện tại cửa hàng chỉ còn ' . $variant->quantity . ' sản phẩm.';
+
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json(['error' => $message], 400);
+            }
+
+            return redirect()->back()->with('error', $message);
+        }
+
+        $this->repo->addToCart(
+            Auth::id(),
+            $request->session()->getId(),
+            $data['variant_id'],
+            $data['quantity']
+        );
 
         if ($request->ajax() || $request->expectsJson()) {
             return response()->json(['message' => 'Đã thêm vào giỏ']);
@@ -49,7 +84,6 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
     }
-
 
     public function remove(Request $request, $variantId)
     {
@@ -69,6 +103,9 @@ class CartController extends Controller
 
     public function applyVoucher(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để mua hàng.');
+        }
         if ($request->session()->has('applied_voucher')) {
             return back()->with(['error' => 'Bạn đã áp dụng một mã giảm giá. Vui lòng bỏ mã hiện tại trước khi áp dụng mã mới.']);
         }

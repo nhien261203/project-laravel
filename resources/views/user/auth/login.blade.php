@@ -5,6 +5,8 @@
     <title>Đăng nhập</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite('resources/css/app.css') {{-- Tailwind CSS --}}
+    <!-- alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100">
 
@@ -117,4 +119,30 @@
 </div>
 
 </body>
+{{-- trang thai alert --}}
+<script>
+    @if (session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: '{{ session('success') }}',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    @endif
+
+    @if (session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: '{{ session('error') }}',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
+    @endif
+</script>
 </html>

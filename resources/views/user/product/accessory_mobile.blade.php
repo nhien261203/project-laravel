@@ -103,7 +103,7 @@
                         @endif
 
                         {{-- Nội dung --}}
-                        <div class="p-4">
+                        <div class="p-4 relative">
                             <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
                                 {{ $product->name }}
                             </h3>
@@ -129,6 +129,9 @@
                             @else
                                 <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
                             @endif
+                            <div class="absolute bottom-2 right-2 text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                Đã bán: {{ $product->variants->sum('sold') }}
+                            </div>
                         </div>
                     </a>
                 @endforeach

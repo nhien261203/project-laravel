@@ -5,6 +5,10 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Request;
+
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -27,4 +31,13 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    // public function unauthenticated($request, AuthenticationException $exception)
+    // {
+    //     // Nếu là request từ trình duyệt (không phải API)
+    //     if ($request->expectsJson()) {
+    //         return response()->json(['message' => 'Bạn cần đăng nhập.'], 401);
+    //     }
+
+    //     return redirect()->guest(route('login'))->with('error', 'Bạn cần đăng nhập trước khi thực hiện hành động này.');
+    // }
 }
