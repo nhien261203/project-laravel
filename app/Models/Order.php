@@ -19,11 +19,20 @@ class Order extends Model
         'customer_name',
         'customer_phone',
         'customer_email',
-        'customer_address',
+        // 'customer_address',
         'note',
         'voucher_code',    // Mã voucher đã sử dụng
         'discount_amount', // Số tiền giảm giá từ voucher
         'subtotal',        // Tổng tiền trước khi áp dụng voucher
+
+        // dia chi nhan hang
+        'province_code',
+        'province_name',
+        'district_code',
+        'district_name',
+        'ward_code',
+        'ward_name',
+        'address_detail',
     ];
 
     // Quan hệ: Order có nhiều OrderItem

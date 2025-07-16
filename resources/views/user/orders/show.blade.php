@@ -12,6 +12,13 @@
             <p><strong>Trạng thái đơn hàng:</strong>
                 <span class="font-semibold text-blue-600">{{ ucfirst($order->status) }}</span>
             </p>
+            <p>
+                <strong>Địa chỉ giao hàng:</strong>
+                {{ $order->address_detail }},
+                {{ $order->ward_name }},
+                {{ $order->district_name }},
+                {{ $order->province_name }}
+            </p>
             <p><strong>Thanh toán:</strong>
                 <span class="font-semibold text-green-600">{{ $order->payment_status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}</span>
             </p>

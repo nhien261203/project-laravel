@@ -55,8 +55,15 @@ class UserOrderController extends Controller
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'required|string|max:20',
             'customer_email' => 'nullable|email',
-            'customer_address' => 'required|string|max:500',
+            // 'customer_address' => 'required|string|max:500',
             'note' => 'nullable|string|max:1000',
+            'province_code'     => 'required|string|max:10',
+            'province_name'     => 'required|string|max:100',
+            'district_code'     => 'required|string|max:10',
+            'district_name'     => 'required|string|max:100',
+            'ward_code'         => 'required|string|max:10',
+            'ward_name'         => 'required|string|max:100',
+            'address_detail'    => 'required|string|max:255', // số nhà, tên đường
         ]);
 
         try {

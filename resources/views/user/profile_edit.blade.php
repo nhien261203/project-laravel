@@ -24,11 +24,11 @@
             @error('phone') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
-        <div>
+        {{-- <div>
             <label class="block font-medium text-gray-700 mb-1">Địa chỉ</label>
             <input type="text" name="address" class="w-full border rounded px-4 py-2" value="{{ old('address', $user->address) }}">
             @error('address') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
-        </div>
+        </div> --}}
     </div>
 
     <div class="mt-6">

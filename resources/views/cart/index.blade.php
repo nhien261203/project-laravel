@@ -195,10 +195,35 @@
                                 class="w-full border rounded px-3 py-2">
                         </div>
 
-                        <div>
+                        {{-- <div>
                             <label class="block text-sm font-semibold mb-1">Địa chỉ nhận hàng</label>
                             <textarea name="customer_address" rows="2" class="w-full border rounded px-3 py-2" >{{ old('customer_address') }}</textarea>
+                        </div> --}}
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Tỉnh / Thành phố</label>
+                            <select name="province_code" id="province" class="w-full border rounded px-3 py-2 text-sm" required></select>
                         </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Quận / Huyện</label>
+                            <select name="district_code" id="district" class="w-full border rounded px-3 py-2 text-sm" required></select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Phường / Xã</label>
+                            <select name="ward_code" id="ward" class="w-full border rounded px-3 py-2 text-sm" required></select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Địa chỉ chi tiết (số nhà, tên đường...)</label>
+                            <input type="text" name="address_detail" class="w-full border rounded px-3 py-2 text-sm" required value="{{ old('address_detail') }}">
+                        </div>
+
+                        
+                        <input type="hidden" name="province_name" id="province_name">
+                        <input type="hidden" name="district_name" id="district_name">
+                        <input type="hidden" name="ward_name" id="ward_name">
 
                         <div>
                             <label class="block text-sm font-semibold mb-1">Ghi chú (tuỳ chọn)</label>
@@ -240,5 +265,60 @@
         });
     }
 </script>
+<script>
+    async function loadProvinces() {
+        const res = await fetch('https://provinces.open-api.vn/api/p/');
+        const provinces = await res.json();
+        const provinceSelect = document.getElementById('province');
+        provinceSelect.innerHTML = `<option value="">-- Chọn tỉnh --</option>`;
+        provinces.forEach(p => {
+            provinceSelect.innerHTML += `<option value="${p.code}" data-name="${p.name}">${p.name}</option>`;
+        });
+    }
+
+    async function loadDistricts(provinceCode) {
+        const res = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
+        const data = await res.json();
+        const districtSelect = document.getElementById('district');
+        districtSelect.innerHTML = `<option value="">-- Chọn quận/huyện --</option>`;
+        data.districts.forEach(d => {
+            districtSelect.innerHTML += `<option value="${d.code}" data-name="${d.name}">${d.name}</option>`;
+        });
+        document.getElementById('ward').innerHTML = `<option value="">-- Chọn phường/xã --</option>`;
+    }
+
+    async function loadWards(districtCode) {
+        const res = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+        const data = await res.json();
+        const wardSelect = document.getElementById('ward');
+        wardSelect.innerHTML = `<option value="">-- Chọn phường/xã --</option>`;
+        data.wards.forEach(w => {
+            wardSelect.innerHTML += `<option value="${w.code}" data-name="${w.name}">${w.name}</option>`;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        loadProvinces();
+
+        document.getElementById('province').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            document.getElementById('province_name').value = selectedOption.getAttribute('data-name');
+            loadDistricts(this.value);
+        });
+
+        document.getElementById('district').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            document.getElementById('district_name').value = selectedOption.getAttribute('data-name');
+            loadWards(this.value);
+        });
+
+        document.getElementById('ward').addEventListener('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            document.getElementById('ward_name').value = selectedOption.getAttribute('data-name');
+        });
+
+    });
+</script>
+
 
 

@@ -10,8 +10,15 @@
         <p><strong>Họ tên:</strong> {{ $order->customer_name }}</p>
         <p><strong>Số điện thoại:</strong> {{ $order->customer_phone }}</p>
         <p><strong>Email:</strong> {{ $order->customer_email ?? 'Không có' }}</p>
-        <p><strong>Địa chỉ:</strong> {{ $order->customer_address }}</p>
-        <p><strong>Ghi chú:</strong> {{ $order->note ?? 'Không có' }}</p>
+        {{-- <p><strong>Địa chỉ:</strong> {{ $order->customer_address }}</p> --}}
+        <p>
+            <strong>Địa chỉ:</strong>
+            {{ $order->address_detail }},
+            {{ $order->ward_name }},
+            {{ $order->district_name }},
+            {{ $order->province_name }}
+        </p>
+
     </div>
 
     {{-- Trạng thái và cập nhật --}}

@@ -102,9 +102,19 @@ class OrderRepository implements OrderRepositoryInterface
                 'customer_name'   => $formData['customer_name'],
                 'customer_phone'  => $formData['customer_phone'],
                 'customer_email'  => $formData['customer_email'] ?? null,
-                'customer_address' => $formData['customer_address'],
+                // 'customer_address' => $formData['customer_address'],
                 'note'            => $formData['note'] ?? null,
                 'total_quantity'  => $cart->totalQuantity(),
+
+// Thông tin địa chỉ nhận hàng
+                'province_code'    => $formData['province_code'] ?? null,
+                'province_name'    => $formData['province_name'] ?? null,
+                'district_code'    => $formData['district_code'] ?? null,
+                'district_name'    => $formData['district_name'] ?? null,
+                'ward_code'        => $formData['ward_code'] ?? null,
+                'ward_name'        => $formData['ward_name'] ?? null,
+                'address_detail'   => $formData['address_detail'] ?? null,
+
             ]);
 
             // Tạo các item đơn hàng

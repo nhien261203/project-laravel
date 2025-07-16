@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('customer_name');
             $table->string('customer_phone');
             $table->string('customer_email')->nullable();
-            $table->text('customer_address');
+            // $table->text('customer_address');
 
             $table->text('note')->nullable();
 
