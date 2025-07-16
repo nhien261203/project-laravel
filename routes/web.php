@@ -23,6 +23,7 @@ use App\Http\Controllers\User\UserCommentController;
 use App\Http\Controllers\User\UserForgotPasswordController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserProductController;
+use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserRecentProductController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,12 @@ Route::post('/viewed-products/{product}', [UserRecentProductController::class, '
 
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
     Route::post('reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
+});
+
+Route::middleware(['auth'])->name('user.')->group(function () {
+    Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
+    Route::get('/edit', [UserProfileController::class, 'edit'])->name('edit');
+    Route::post('/update', [UserProfileController::class, 'update'])->name('update');
 });
 
 Route::prefix('cart')->name('cart.')->group(function () {

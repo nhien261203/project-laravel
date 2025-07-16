@@ -1,6 +1,6 @@
-@extends('layout.user')
+@extends('layout.user_profile')
 
-@section('content')
+@section('user_profile_content')
 <div class="container pt-20 pb-10">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">📦 Chi tiết đơn hàng</h2>
 

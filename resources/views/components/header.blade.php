@@ -76,8 +76,9 @@
                                 <li><a  class="block px-4 py-2 hover:bg-gray-100 text-blue-600 font-semibold">Tạo tài khoản</a></li>
                                 <li><a href="{{ route('login') }}"  class="block px-4 py-2 hover:bg-gray-100">Đăng nhập</a></li>
                             @else
-                                <li><a href="{{ route('password.form') }}" class="block px-4 py-2 hover:bg-gray-100">Đổi mật khẩu</a></li>
-                                <li><a href="{{ route('user.orders.index') }}" class="block px-4 py-2 hover:bg-gray-100">Đơn hàng</a></li>
+                                {{-- <li><a href="{{ route('password.form') }}" class="block px-4 py-2 hover:bg-gray-100">Đổi mật khẩu</a></li> --}}
+                                {{-- <li><a href="{{ route('user.orders.index') }}" class="block px-4 py-2 hover:bg-gray-100">Đơn hàng</a></li> --}}
+                                <li><a href="{{route('user.profile')}}" class="block px-4 py-2 hover:bg-gray-100">Thông tin</a></li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
