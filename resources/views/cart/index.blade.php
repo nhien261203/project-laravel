@@ -2,6 +2,8 @@
 
 @section('content')
 <div class="container pt-20">
+    
+
     <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">🛒 Giỏ hàng của bạn</h2>
 
     @if ($cart->items->isEmpty())
@@ -208,7 +210,15 @@
                             Đặt hàng
                         </button>
                     </form>
-
+                    @if ($errors->any())
+                        <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
+                            <ul class="text-sm list-disc pl-5">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <a href="{{ route('home') }}"
                        class="block w-full text-center border border-gray-300 text-gray-700 py-3 rounded hover:bg-gray-100 transition">

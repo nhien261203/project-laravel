@@ -47,6 +47,10 @@ class UserOrderController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check()) {
+            return back()->with('error', 'Bạn cần đăng nhập để đặt hàng.');
+        }
+        
         $data = $request->validate([
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'required|string|max:20',

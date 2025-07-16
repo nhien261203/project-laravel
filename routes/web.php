@@ -83,8 +83,9 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::put('/update/{variantId}', [CartController::class, 'update'])->name('update');
     Route::delete('/remove/{variantId}', [CartController::class, 'remove'])->name('remove');
 
-    Route::post('/apply-voucher', [CartController::class, 'applyVoucher'])->name('apply-voucher')->middleware('auth');
-    Route::post('/remove-voucher', [CartController::class, 'removeVoucher'])->name('remove-voucher')->middleware('auth');
+    // su dung check auth trong controller ( nen k co middleware auth o day)
+    Route::post('/apply-voucher', [CartController::class, 'applyVoucher'])->name('apply-voucher');
+    Route::post('/remove-voucher', [CartController::class, 'removeVoucher'])->name('remove-voucher');
 
 });
 

@@ -104,8 +104,9 @@ class CartController extends Controller
     public function applyVoucher(Request $request)
     {
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để mua hàng.');
+            return back()->with('error', 'Bạn cần đăng nhập để sử dụng voucher và đặt hàng.');
         }
+
         if ($request->session()->has('applied_voucher')) {
             return back()->with(['error' => 'Bạn đã áp dụng một mã giảm giá. Vui lòng bỏ mã hiện tại trước khi áp dụng mã mới.']);
         }
