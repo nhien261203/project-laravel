@@ -92,6 +92,10 @@
                 <i class="fa-solid fa-comments"></i> <span class="sidebar-text">Comments</span></a>
 
             
+
+            <a href="{{ route('admin.vouchers.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+                <i class="fa-solid fa-ticket"></i> <span class="sidebar-text">Vouchers</span></a>
+            
             @can('view log')
                 <a href="{{ route('admin.logs.index') }}" 
                 class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"

@@ -41,7 +41,7 @@ class VoucherController extends Controller
             'type' => 'required|in:fixed,percent',
             'value' => 'required|integer|min:1',
 
-            'max_usage' => 'nullable|integer|min:1',
+            // 'max_usage' => 'nullable|integer|min:1',
             'max_usage_per_user' => 'nullable|integer|min:1',
             'min_order_amount' => 'nullable|integer|min:0',
             'max_discount' => 'nullable|integer|min:0',
@@ -70,7 +70,7 @@ class VoucherController extends Controller
             'type' => 'required|in:fixed,percent',
             'value' => 'required|integer|min:1',
 
-            'max_usage' => 'nullable|integer|min:1',
+            // 'max_usage' => 'nullable|integer|min:1',
             'max_usage_per_user' => 'nullable|integer|min:1',
             'min_order_amount' => 'nullable|integer|min:0',
             'max_discount' => 'nullable|integer|min:0',

@@ -59,13 +59,16 @@
                         <td class="p-2">{{ $voucher->id }}</td>
                         <td class="p-2 font-medium">{{ $voucher->code }}</td>
                         <td class="p-2">{{ ucfirst($voucher->type) }}</td>
-                        <td class="p-2">{{ $voucher->value }}</td>
+                        <td>
+                            {{ $voucher->type === 'percent' ? $voucher->value . '%' : number_format($voucher->value) . '₫' }}
+                        </td>
+
                         <td class="p-2">
                             <span class="px-2 py-1 rounded text-xs font-semibold {{ $voucher->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                 {{ $voucher->is_active ? 'Bật' : 'Tắt' }}
                             </span>
                         </td>
-                        <td class="p-2">{{ $voucher->only_for_new_user ? '✔' : '' }}</td>
+                        <td class="p-2">{{ $voucher->only_for_new_user ? '✔' : 'X' }}</td>
                         <td class="p-2">{{ optional($voucher->start_date)->format('d/m/Y') }}</td>
                         <td class="p-2">{{ optional($voucher->end_date)->format('d/m/Y') }}</td>
                         <td class="p-2 text-right space-x-2">

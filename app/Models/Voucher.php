@@ -13,7 +13,7 @@ class Voucher extends Model
         'code',
         'type',
         'value',
-        'max_usage',
+        // 'max_usage',
         'max_usage_per_user',
         'min_order_amount',
         'max_discount',
@@ -56,9 +56,9 @@ class Voucher extends Model
         }
 
         // Kiểm tra số lượt dùng toàn hệ thống
-        if ($this->max_usage !== null && $this->voucherUsers()->count() >= $this->max_usage) {
-            return false;
-        }
+        // if ($this->max_usage !== null && $this->voucherUsers()->count() >= $this->max_usage) {
+        //     return false;
+        // }
 
         // Kiểm tra số lượt dùng của user
         $userUsed = $this->voucherUsers()->where('user_id', $user->id)->count();

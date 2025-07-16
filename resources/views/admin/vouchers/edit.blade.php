@@ -34,11 +34,11 @@
 
         {{-- Các giới hạn --}}
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div>
+            {{-- <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tổng lượt dùng</label>
                 <input type="number" name="max_usage" value="{{ old('max_usage', $voucher->max_usage) }}" min="1"
                     class="w-full px-4 py-2 border rounded">
-            </div>
+            </div> --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tối đa / User</label>
                 <input type="number" name="max_usage_per_user" value="{{ old('max_usage_per_user', $voucher->max_usage_per_user) }}"

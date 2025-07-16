@@ -19,7 +19,7 @@ class VoucherSeeder extends Seeder
             'type' => 'fixed', // 'fixed' hoặc 'percent'
             'value' => 50000,
             'min_order_amount' => 0,
-            'max_usage' => 1000,
+            // 'max_usage' => 1000,
             'max_usage_per_user' => 1,
             'only_for_new_user' => true,
             'start_date' => now(),
