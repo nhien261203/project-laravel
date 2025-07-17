@@ -49,7 +49,7 @@ class AuthController extends Controller
             // Đánh dấu đã merge nếu cần
             session(['cart_merged' => true]);
 
-            return redirect('/')->with('success', 'Đăng nhập thành công!');
+            return redirect('/')->with('success', 'Chào mừng bạn đến với Nexus shop !');
         }
 
         return back()->with('error', 'Thông tin đăng nhập không chính xác.')->withInput();

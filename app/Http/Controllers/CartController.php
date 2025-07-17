@@ -61,6 +61,17 @@ class CartController extends Controller
         $variant = ProductVariant::findOrFail($data['variant_id']);
 
         // Kiểm tra tồn kho
+
+        if ($variant->quantity == 0) {
+            $message = 'Sản phẩm tạm thời hết hàng.';
+
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json(['error' => $message], 400);
+            }
+
+            return redirect()->back()->with('error', $message);
+        }
+
         if ($data['quantity'] > $variant->quantity) {
             $message = 'Hiện tại cửa hàng chỉ còn ' . $variant->quantity . ' sản phẩm.';
 

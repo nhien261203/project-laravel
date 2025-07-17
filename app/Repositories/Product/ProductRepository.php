@@ -55,11 +55,17 @@ class ProductRepository implements ProductRepositoryInterface
     // lay 5 sản phẩm iPhone cho home page
     public function getIphoneProducts(int $limit = 5)
     {
-        return Product::with(['variants.images'])
+        return Product::with([
+            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images')
+        ])
             ->where('status', 1)
+            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
             ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
-            ->whereHas('brand', fn($q) =>
-            $q->where('name', 'like', '%Apple%')->orWhere('name', 'like', '%iPhone%'))
+            ->whereHas(
+                'brand',
+                fn($q) =>
+                $q->where('name', 'like', '%Apple%')->orWhere('name', 'like', '%iPhone%')
+            )
             ->latest('id')
             ->limit($limit)
             ->get();
@@ -81,7 +87,11 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getAllIphoneProducts()
     {
-        $query = Product::with(['variants.images'])
+        $query = Product::with([
+            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images')
+        ])
+            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+
             ->where('status', 1)
             ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
             ->whereHas('brand', fn($q) =>
@@ -95,8 +105,11 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getLaptopProducts(int $limit = 5)
     {
-        return Product::with(['variants.images'])
+        return Product::with([
+            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images')
+        ])
             ->where('status', 1)
+            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
             ->whereHas('category', fn($q) => $q->where('name', 'like', '%Laptop%'))
             ->latest('id')
             ->limit($limit)
@@ -123,6 +136,7 @@ class ProductRepository implements ProductRepositoryInterface
             // Lấy ngẫu nhiên các ID sản phẩm
             $productIds = Product::where('status', 1)
                 ->whereIn('category_id', $categoryIds)
+                ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
                 ->inRandomOrder()
                 ->limit($limit)
                 ->pluck('id')
@@ -133,7 +147,10 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
         // Truy vấn lại chi tiết sản phẩm từ ID
-        return Product::with(['variants.images'])
+        return Product::with([
+            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images')
+        ])
+            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
             ->whereIn('id', $productIds)
             ->get();
     }
@@ -204,7 +221,13 @@ class ProductRepository implements ProductRepositoryInterface
     // search cho header
     public function searchProducts(string $keyword)
     {
-        $query = Product::with(['variants.images', 'brand', 'category'])
+        Product::with([
+            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images'),
+            'brand',
+            'category'
+        ])
+            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+
             ->where(function ($q) use ($keyword) {
                 $q->where('name', 'like', "%{$keyword}%")
                     ->orWhereHas('variants', function ($q2) use ($keyword) {
@@ -235,9 +258,11 @@ class ProductRepository implements ProductRepositoryInterface
             ->orWhere('parent_id', $category->id)
             ->pluck('id');
 
-        $query = Product::with(['variants' => fn($q) => $q->orderBy('price'), 'variants.images', 'category'])
+        $query = Product::with(['variants' => fn($q) => $q->where('quantity', '>', 0)->orderBy('price')->with('images'), 'category'])
+
             ->whereIn('category_id', $categoryIds)
             ->where('status', 1)
+            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
             ->when(request('brand_ids'), function ($q) {
                 $q->whereIn('brand_id', request('brand_ids'));
             });

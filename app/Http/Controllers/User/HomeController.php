@@ -173,9 +173,12 @@ class HomeController extends Controller
     public function show($slug)
     {
         $product = Product::with([
-            'variants.images',
-            'approvedReviews.user' //  load đánh giá đã duyệt
+            'variants' => function ($q) {
+                $q->where('quantity', '>', 0)->with('images');
+            },
+            'approvedReviews.user'
         ])->where('slug', $slug)->firstOrFail();
+
 
 
         $colors = $product->variants->pluck('color')->unique()->filter();
@@ -236,9 +239,12 @@ class HomeController extends Controller
     public function showAccessory($slug)
     {
         $product = Product::with([
-            'variants.images',
-            'approvedReviews.user' // load đánh giá đã duyệt
+            'variants' => function ($q) {
+                $q->where('quantity', '>', 0)->with('images');
+            },
+            'approvedReviews.user'
         ])->where('slug', $slug)->firstOrFail();
+
 
 
         $colors = $product->variants->pluck('color')->unique()->filter();

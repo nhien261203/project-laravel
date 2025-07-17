@@ -4,7 +4,7 @@
 <div class="max-w-3xl mx-auto bg-white shadow p-6 rounded-lg">
     <h2 class="text-xl font-bold text-gray-800 mb-6">🔍 Chi tiết biến thể sản phẩm: {{ $variant->product->name ?? 'Không xác định' }}</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+    {{-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
         <div><strong>SKU:</strong> {{ $variant->sku }}</div>
         <div><strong>Giá niêm yết:</strong> {{ number_format($variant->original_price) }} đ</div>
         <div><strong>Giảm giá:</strong> {{ $variant->sale_percent }}%</div>
@@ -21,7 +21,67 @@
         <div><strong>Trọng lượng:</strong> {{ $variant->weight }}</div>
         <div><strong>Hệ điều hành:</strong> {{ $variant->operating_system }}</div>
         <div><strong>Trạng thái:</strong> {{ $variant->status ? 'Hiển thị' : 'Ẩn' }}</div>
+    </div> --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        @if(!empty($variant->sku))
+            <div><strong>SKU:</strong> {{ $variant->sku }}</div>
+        @endif
+
+        @if(!empty($variant->original_price))
+            <div><strong>Giá niêm yết:</strong> {{ number_format($variant->original_price) }} đ</div>
+        @endif
+
+        @if(!empty($variant->sale_percent))
+            <div><strong>Giảm giá:</strong> {{ $variant->sale_percent }}%</div>
+        @endif
+
+        @if(!empty($variant->price))
+            <div><strong>Giá bán:</strong> {{ number_format($variant->price) }} đ</div>
+        @endif
+
+        @if(!empty($variant->import_price))
+            <div><strong>Giá nhập:</strong> {{ number_format($variant->import_price) }} đ</div>
+        @endif
+
+        @if(!empty($variant->quantity))
+            <div><strong>Số lượng:</strong> {{ $variant->quantity }}</div>
+        @endif
+
+        @if(!empty($variant->ram))
+            <div><strong>RAM:</strong> {{ $variant->ram }}</div>
+        @endif
+
+        @if(!empty($variant->storage))
+            <div><strong>Bộ nhớ:</strong> {{ $variant->storage }}</div>
+        @endif
+
+        @if(!empty($variant->color))
+            <div><strong>Màu sắc:</strong> {{ $variant->color }}</div>
+        @endif
+
+        @if(!empty($variant->screen_size))
+            <div><strong>Màn hình:</strong> {{ $variant->screen_size }}</div>
+        @endif
+
+        @if(!empty($variant->battery))
+            <div><strong>Pin:</strong> {{ $variant->battery }}</div>
+        @endif
+
+        @if(!empty($variant->chip))
+            <div><strong>Chip:</strong> {{ $variant->chip }}</div>
+        @endif
+
+        @if(!empty($variant->weight))
+            <div><strong>Trọng lượng:</strong> {{ $variant->weight }}</div>
+        @endif
+
+        @if(!empty($variant->operating_system))
+            <div><strong>Hệ điều hành:</strong> {{ $variant->operating_system }}</div>
+        @endif
+
+        <div><strong>Trạng thái:</strong> {{ $variant->status ? 'Hiển thị' : 'Ẩn' }}</div>
     </div>
+
 
     <div class="mt-6">
         <h3 class="font-semibold text-gray-700 mb-2">Ảnh biến thể:</h3>
