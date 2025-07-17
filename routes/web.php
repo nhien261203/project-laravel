@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
@@ -107,6 +108,7 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::resource('banners', BannerController::class);
 
     Route::resource('blogs', BlogController::class);
+    Route::resource('users', UserController::class);
 
     Route::post('blogs/upload', [BlogController::class, 'upload'])->name('blogs.upload');
 

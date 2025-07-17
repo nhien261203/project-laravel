@@ -53,7 +53,7 @@
             >
                 <i class="fas fa-tachometer-alt"></i> <span class="sidebar-text">Dashboard</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-user"></i> <span class="sidebar-text">Users</span>
             </a>
             <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
