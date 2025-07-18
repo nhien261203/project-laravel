@@ -1,56 +1,104 @@
 @extends('layout.admin')
 
 @section('content')
-<div class="p-6 bg-gray-100 min-h-screen">
-    <div class="max-w-6xl mx-auto bg-white rounded shadow-md p-6">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Danh sách người dùng</h2>
+<div class="p-4">
+    <h2 class="text-xl font-semibold mb-6">Danh sách người dùng</h2>
 
-        <table class="min-w-full table-auto text-sm text-left border border-gray-200">
-            <thead class="bg-gray-100 text-gray-700">
+    {{-- Form lọc --}}
+    <form method="GET" class="mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            {{-- Ô tìm kiếm --}}
+            <div>
+                <label for="keyword" class="block text-sm font-medium text-gray-700 mb-1">Tìm kiếm</label>
+                <input 
+                    type="text" 
+                    name="keyword" 
+                    id="keyword"
+                    value="{{ request('keyword') }}" 
+                    placeholder="🔍 Tên hoặc email..." 
+                    class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+            </div>
+
+            {{-- Dropdown quyền --}}
+            <div>
+                <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Quyền</label>
+                <select 
+                    name="role" 
+                    id="role"
+                    class="w-full px-4 py-2 border rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+                    <option value="">-- Tất cả quyền --</option>
+                    @foreach($roles as $role)
+                        <option value="{{ $role->name }}" {{ request('role') == $role->name ? 'selected' : '' }}>
+                            {{ ucfirst($role->name) }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Nút lọc --}}
+            <div class="flex flex-col sm:flex-row gap-2">
+                {{-- Nút lọc --}}
+                <button 
+                    type="submit" 
+                    class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                >
+                    Lọc
+                </button>
+
+                {{-- Nút reset --}}
+                <a 
+                    href="{{ route('admin.users.index') }}" 
+                    class="w-full sm:w-auto text-center px-6 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 transition"
+                >
+                    Reset
+                </a>
+            </div>
+
+        </div>
+    </form>
+
+    {{-- Bảng danh sách --}}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border text-sm">
+            <thead class="bg-gray-100">
                 <tr>
-                    <th class="px-4 py-2 border">ID</th>
-                    <th class="px-4 py-2 border">Tên</th>
-                    <th class="px-4 py-2 border">Email</th>
-                    <th class="px-4 py-2 border">Quyền</th>
-                    <th class="px-4 py-2 border text-center" colspan="3">Hành động</th>
+                    <th class="border p-2">ID</th>
+                    <th class="border p-2">Tên</th>
+                    <th class="border p-2">Email</th>
+                    <th class="border p-2">Quyền</th>
+                    <th class="border p-2">Hành động</th>
                 </tr>
             </thead>
-            <tbody class="bg-white">
+            <tbody>
                 @forelse ($users as $user)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-2 border">{{ $user->id }}</td>
-                    <td class="px-4 py-2 border">{{ $user->name }}</td>
-                    <td class="px-4 py-2 border">{{ $user->email }}</td>
-                    <td class="px-4 py-2 border">{{ $user->roles->pluck('name')->implode(', ') }}</td>
-                    <td class="px-4 py-2 border text-center">
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                            Sửa
-                        </a>
-                    </td>
-                    <td class="px-4 py-2 border text-center">
-                        <a href="{{ route('admin.users.show', $user->id) }}" class="text-green-600 hover:text-green-800 font-medium">
-                            Xem
-                        </a>
-                    </td>
-                    <td class="border p-3">
-                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xoá người dùng này?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:underline">Xoá</button>
+                <tr>
+                    <td class="border p-2">{{ $user->id }}</td>
+                    <td class="border p-2">{{ $user->name }}</td>
+                    <td class="border p-2">{{ $user->email }}</td>
+                    <td class="border p-2">{{ $user->roles->pluck('name')->implode(', ') }}</td>
+                    <td class="border p-2 space-x-2">
+                        <a href="{{ route('admin.users.show', $user->id) }}" class="text-blue-500 hover:underline">Xem</a>
+                        <a href="{{ route('admin.users.edit', $user->id) }}" class="text-green-500 hover:underline">Sửa</a>
+                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Xác nhận xóa?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-red-500 hover:underline">Xóa</button>
                         </form>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-center py-4 text-gray-500">Không có người dùng nào.</td>
+                    <td colspan="5" class="text-center p-4">Không có người dùng nào.</td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
+    </div>
 
-        <div class="mt-6">
-            {{ $users->links('pagination::tailwind') }}
-        </div>
+    {{-- Phân trang --}}
+    <div class="mt-4">
+        {{ $users->links() }}
     </div>
 </div>
 @endsection

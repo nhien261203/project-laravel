@@ -10,11 +10,30 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles')->paginate(10);
-        return view('admin.users.index', compact('users'));
+        $query = User::with('roles');
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->filled('role')) {
+            $query->whereHas('roles', function ($q) use ($request) {
+                $q->where('name', $request->role);
+            });
+        }
+
+        $users = $query->paginate(10)->appends($request->query());
+
+        $roles = \Spatie\Permission\Models\Role::all(); // lấy danh sách quyền
+
+        return view('admin.users.index', compact('users', 'roles'));
     }
+
 
     public function edit($id)
     {

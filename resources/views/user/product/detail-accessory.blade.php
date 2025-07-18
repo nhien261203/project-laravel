@@ -93,11 +93,11 @@
                 <input type="hidden" name="quantity" id="formQuantity" value="1">
 
                 <button type="submit" class="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600">
-                    🛒 Thêm vào giỏ
+                    Thêm vào giỏ
                 </button>
 
                 <button type="button" onclick="buyNow()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                    ⚡ Mua ngay
+                    Mua ngay
                 </button>
             </form>
         </div>
@@ -105,7 +105,7 @@
 
     {{-- Mô tả sản phẩm --}}
     <div class="mt-6 md:w-1/2 w-full">
-        <h3 class="text-base font-semibold text-gray-700 mb-2">Thông tin sản phẩm</h3>
+        <h3 class="w-1/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Thông tin sản phẩm</h3>
 
         <div id="techSpecWrapper" class="overflow-hidden transition-all duration-300 max-h-[200px]">
             <div class="prose max-w-none text-sm text-gray-800">
