@@ -8,6 +8,8 @@ use App\Repositories\Cart\CartRepository;
 use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Dashboard\DashboardRepository;
+use App\Repositories\Dashboard\DashboardRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
@@ -50,6 +52,8 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(VoucherRepositoryInterface::class, VoucherRepository::class);
+
+        $this->app->bind(DashboardRepositoryInterface::class, DashboardRepository::class);
     }
 
     /**
