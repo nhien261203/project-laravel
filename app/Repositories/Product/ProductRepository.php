@@ -221,7 +221,7 @@ class ProductRepository implements ProductRepositoryInterface
     // search cho header
     public function searchProducts(string $keyword)
     {
-        Product::with([
+        $query= Product::with([
             'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images'),
             'brand',
             'category'
