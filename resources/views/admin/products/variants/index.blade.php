@@ -17,7 +17,8 @@
                     <th class="px-4 py-2">#</th>
                     <th class="px-4 py-2">SKU</th>
                     <th class="px-4 py-2">Giá bán</th>
-                    <th class="px-4 py-2">Số lượng</th>
+                    <th class="px-4 py-2">Số lượng nhập</th>
+                    <th class="px-4 py-2">Đã bán</th>
                     <th class="px-4 py-2">Ảnh</th>
                     <th class="px-4 py-2">Trạng thái</th>
                     <th class="px-4 py-2">Hành động</th>
@@ -30,6 +31,7 @@
                         <td class="px-4 py-2">{{ $variant->sku }}</td>
                         <td class="px-4 py-2">{{ number_format($variant->price) }} đ</td>
                         <td class="px-4 py-2">{{ $variant->quantity }}</td>
+                        <td class="px-4 py-2">{{ $variant->sold }}</td>
                         <td class="px-4 py-2">
                             @php
                                 $firstImage = $variant->images->first();

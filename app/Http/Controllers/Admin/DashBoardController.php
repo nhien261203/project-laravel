@@ -19,6 +19,7 @@ class DashBoardController extends Controller
     // Trang dashboard
     public function index()
     {
+        
         return view('admin.dashboard');
     }
 
@@ -28,29 +29,23 @@ class DashBoardController extends Controller
         $start = $request->input('start_date');
         $end = $request->input('end_date');
         $status = $request->input('status');
+        
+        
 
-        // Nếu chưa chọn ngày thì tự lấy ngày gần nhất có dữ liệu (order/user/revenue)
+        // Nếu chưa chọn ngày thì tự lấy 7 ngay (order/user/revenue)
         if (!$start || !$end) {
-            $latestDate = $this->dashboard->getLatestDateHavingData();
-
-            if ($latestDate) {
-                $start = \Carbon\Carbon::parse($latestDate)->startOfDay()->toDateString();
-                $end = \Carbon\Carbon::parse($latestDate)->endOfDay()->toDateString();
-            } else {
-                // Không có dữ liệu
-                return response()->json([
-                    'orders' => [],
-                    'revenues' => [],
-                    'users' => [],
-                ]);
-            }
+            $end = now()->toDateString(); // hôm nay
+            $start = now()->subDays(6)->toDateString(); // 7 ngày
         }
 
         $orders = $this->dashboard->getOrderStatistics($start, $end, $status);
         $revenues = $this->dashboard->getRevenueStatistics($start, $end);
         $users = $this->dashboard->getUserStatistics($start, $end);
+        $revenueByCategory = $this->dashboard->getRevenueByCategory($start, $end, $request->input('category_id'));
 
         return response()->json([
+            'startDateDefault' => $start,
+            'endDateDefault' => $end,
             'orders' => [
                 'labels' => $orders->pluck('date'),
                 'values' => $orders->pluck('total'),
@@ -66,8 +61,25 @@ class DashBoardController extends Controller
                 'values' => $users->pluck('total'),
                 'label' => 'Người dùng mới'
             ],
+            'revenueByCategory' => [
+                'labels' => $revenueByCategory->pluck('category_name'),
+                'values' => $revenueByCategory->pluck('total'),
+                'label' => 'Doanh thu theo danh mục'
+            ],
             'start_date' => $start,
             'end_date' => $end,
         ]);
     }
+
+    public function revenueByCategory(Request $request)
+    {
+        $data = $this->dashboard->getRevenueByCategory(
+            $request->start_date,
+            $request->end_date,
+            $request->category_id
+        );
+
+        return response()->json($data);
+    }
+
 }

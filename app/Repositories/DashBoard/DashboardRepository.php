@@ -3,6 +3,7 @@
 namespace App\Repositories\Dashboard;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 
@@ -41,20 +42,45 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->orderBy('date')
             ->get();
     }
-    public function getLatestDateHavingData()
+    // public function getLatestDateHavingData()
+    // {
+    //     $latestOrder = \App\Models\Order::orderByDesc('created_at')->value('created_at');
+    //     $latestRevenue = \App\Models\Order::orderByDesc('created_at')->value('created_at'); // nếu doanh thu tính từ Order
+    //     $latestUser = \App\Models\User::orderByDesc('created_at')->value('created_at');
+
+    //     $dates = array_filter([$latestOrder, $latestRevenue, $latestUser]);
+
+    //     if (empty($dates)) {
+    //         return null;
+    //     }
+
+    //     return collect($dates)->sortDesc()->first(); // lấy ngày mới nhất trong 3 bảng
+    // }
+
+    public function getRevenueByCategory(?string $startDate = null, ?string $endDate = null, ?int $categoryId = null)
     {
-        $latestOrder = \App\Models\Order::orderByDesc('created_at')->value('created_at');
-        $latestRevenue = \App\Models\Order::orderByDesc('created_at')->value('created_at'); // nếu doanh thu tính từ Order
-        $latestUser = \App\Models\User::orderByDesc('created_at')->value('created_at');
+        
+        $query = OrderItem::query()
+            ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
+            ->join('products', 'product_variants.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->selectRaw('categories.name as category_name, SUM(order_items.quantity * order_items.price) as total_revenue')
+            ->where('orders.status', '!=', 'cancelled')
+            ->groupBy('categories.id', 'categories.name');
 
-        $dates = array_filter([$latestOrder, $latestRevenue, $latestUser]);
-
-        if (empty($dates)) {
-            return null;
+        if ($startDate) {
+            $query->whereDate('orders.created_at', '>=', $startDate);
         }
 
-        return collect($dates)->sortDesc()->first(); // lấy ngày mới nhất trong 3 bảng
-    }
-    
+        if ($endDate) {
+            $query->whereDate('orders.created_at', '<=', $endDate);
+        }
 
+        if ($categoryId) {
+            $query->where('categories.id', $categoryId);
+        }
+
+        return $query->get();
+    }
 }

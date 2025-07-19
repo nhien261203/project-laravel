@@ -68,6 +68,8 @@
                 <th class="p-3 text-center">Slug</th>
                 <th class="p-3 text-center">Danh mục</th>
                 <th class="p-3 text-center">Thương hiệu</th>
+                <th class="p-3 text-center">Số lượng nhập</th>
+                <th class="p-3 text-center">Đã bán</th>
                 <th class="p-3 text-center">Trạng thái</th>
                 <th class="p-3 text-center">Hành động</th>
             </tr>
@@ -86,6 +88,8 @@
                     <td class="p-3 text-center">{{ $product->slug }}</td>
                     <td class="p-3 text-center">{{ $product->category->name ?? '-' }}</td>
                     <td class="p-3 text-center">{{ $product->brand->name ?? '-' }}</td>
+                    <td class="p-3 text-center">{{ $product->variants->sum('quantity') }}</td>
+                    <td class="p-3 text-center">{{ $product->variants->sum('sold') }}</td>
                     <td class="p-3 text-center">
                         <span class="px-2 py-1 text-xs rounded {{ $product->status ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
                             {{ $product->status ? 'Hiển thị' : 'Ẩn' }}

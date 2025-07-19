@@ -49,6 +49,8 @@
             </div>
             <canvas id="userChart" height="200"></canvas>
         </div>
+
+        
     </div>
 </div>
 
@@ -97,9 +99,10 @@
     }
 
     function fetchChartData(chartType, startDate, endDate) {
-        let url = `/admin/dashboard/statistics?start_date=${startDate}&end_date=${endDate}`;
+        const chartDiv = document.getElementById(chartRefs[chartType].id).parentElement;
+        chartDiv.classList.add('opacity-50'); // tạo hiệu ứng loading
 
-        // Nếu là orders thì lấy thêm status
+        let url = `/admin/dashboard/statistics?start_date=${startDate}&end_date=${endDate}`;
         if (chartType === 'orders') {
             const status = document.getElementById('orders_status').value;
             if (status) url += `&status=${status}`;
@@ -110,8 +113,17 @@
             .then(data => {
                 const info = data[chartType];
                 renderChart(chartType, info.labels, info.values, info.label);
-            });
+
+                const startInput = document.getElementById(`${chartType}_start`);
+                const endInput = document.getElementById(`${chartType}_end`);
+
+                if (!startInput.value) startInput.value = data.start_date;
+                if (!endInput.value) endInput.value = data.end_date;
+            })
+            .finally(() => chartDiv.classList.remove('opacity-50'));
     }
+
+
 
     function loadChart(chartType) {
         const start = document.getElementById(`${chartType}_start`).value;
@@ -119,19 +131,22 @@
         fetchChartData(chartType, start, end);
     }
 
-    function setDefaultDates(idPrefix, start, end) {
-        const today = new Date();
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(today.getDate() - 7);
+    // function setDefaultDates(idPrefix, start, end) {
+    // // Gán luôn giá trị trả từ controller, không cần tính -7 ngày
+    //     if (start) {
+    //         document.getElementById(`${idPrefix}_start`).value = start;
+    //     }
 
-        document.getElementById(`${idPrefix}_start`).value = start ?? sevenDaysAgo.toISOString().slice(0, 10);
-        document.getElementById(`${idPrefix}_end`).value = end ?? today.toISOString().slice(0, 10);
-    }
+    //     if (end) {
+    //         document.getElementById(`${idPrefix}_end`).value = end;
+    //     }
+    // }
+
 
     document.addEventListener('DOMContentLoaded', function () {
-        setDefaultDates('orders');
-        setDefaultDates('revenues');
-        setDefaultDates('users');
+        // setDefaultDates('orders');
+        // setDefaultDates('revenues');
+        // setDefaultDates('users');
 
         loadChart('orders');
         loadChart('revenues');
