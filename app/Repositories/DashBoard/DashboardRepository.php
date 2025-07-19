@@ -57,30 +57,5 @@ class DashboardRepository implements DashboardRepositoryInterface
     //     return collect($dates)->sortDesc()->first(); // lấy ngày mới nhất trong 3 bảng
     // }
 
-    public function getRevenueByCategory(?string $startDate = null, ?string $endDate = null, ?int $categoryId = null)
-    {
-        
-        $query = OrderItem::query()
-            ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
-            ->join('products', 'product_variants.product_id', '=', 'products.id')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->selectRaw('categories.name as category_name, SUM(order_items.quantity * order_items.price) as total_revenue')
-            ->where('orders.status', '!=', 'cancelled')
-            ->groupBy('categories.id', 'categories.name');
-
-        if ($startDate) {
-            $query->whereDate('orders.created_at', '>=', $startDate);
-        }
-
-        if ($endDate) {
-            $query->whereDate('orders.created_at', '<=', $endDate);
-        }
-
-        if ($categoryId) {
-            $query->where('categories.id', $categoryId);
-        }
-
-        return $query->get();
-    }
+    
 }

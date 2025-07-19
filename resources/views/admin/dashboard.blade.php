@@ -26,6 +26,9 @@
         </div>
 
             <canvas id="orderChart" height="200"></canvas>
+            
+            <p class="mt-2 text-sm text-gray-600">Tổng đơn hàng: <span id="totalOrders" class="font-semibold">0</span></p>
+
         </div>
 
         {{-- Doanh thu --}}
@@ -37,6 +40,7 @@
                 <button onclick="loadChart('revenues')" class="bg-green-600 text-white px-4 py-1 rounded">Lọc</button>
             </div>
             <canvas id="revenueChart" height="200"></canvas>
+            <p class="mt-2 text-sm text-gray-600">Tổng doanh thu: <span id="totalRevenues" class="font-semibold">0</span></p>
         </div>
 
         {{-- Người dùng --}}
@@ -48,9 +52,11 @@
                 <button onclick="loadChart('users')" class="bg-purple-600 text-white px-4 py-1 rounded">Lọc</button>
             </div>
             <canvas id="userChart" height="200"></canvas>
+            <p class="mt-2 text-sm text-gray-600">Tổng người dùng mới: <span id="totalUsers" class="font-semibold">0</span></p>
         </div>
 
         
+
     </div>
 </div>
 
@@ -112,6 +118,16 @@
             .then(res => res.json())
             .then(data => {
                 const info = data[chartType];
+                const total = info.values.reduce((sum, val) => sum + Number(val), 0);
+
+                if (chartType === 'orders') {
+                    document.getElementById('totalOrders').textContent = total;
+                } else if (chartType === 'revenues') {
+                    document.getElementById('totalRevenues').textContent = total.toLocaleString('vi-VN') + ' ₫';
+                } else if (chartType === 'users') {
+                    document.getElementById('totalUsers').textContent = total;
+                }
+                
                 renderChart(chartType, info.labels, info.values, info.label);
 
                 const startInput = document.getElementById(`${chartType}_start`);

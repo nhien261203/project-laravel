@@ -8,6 +8,6 @@ interface DashboardRepositoryInterface
     public function getRevenueStatistics($startDate, $endDate);
     public function getUserStatistics($startDate, $endDate);
     // public function getLatestDateHavingData();
-    public function getRevenueByCategory(?string $startDate = null, ?string $endDate = null, ?int $categoryId = null);
+    
 
 }
