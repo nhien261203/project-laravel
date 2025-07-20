@@ -8,6 +8,7 @@ interface DashboardRepositoryInterface
     public function getRevenueStatistics($startDate, $endDate);
     public function getUserStatistics($startDate, $endDate);
     // public function getLatestDateHavingData();
+    public function getAvailableStatuses();
     
 
 }

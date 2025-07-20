@@ -21,9 +21,10 @@ class DashBoardController extends Controller
     // Trang dashboard
     public function index()
     {
-
-        return view('admin.dashboard');
+        $statuses = $this->dashboard->getAvailableStatuses();
+        return view('admin.dashboard', compact('statuses'));
     }
+
 
     // API trả dữ liệu cho biểu đồ
     public function getStatistics(Request $request)

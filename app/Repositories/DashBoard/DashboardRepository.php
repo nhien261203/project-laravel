@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardRepository implements DashboardRepositoryInterface
 {
@@ -42,6 +43,14 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->orderBy('date')
             ->get();
     }
+    public function getAvailableStatuses()
+    {
+        return DB::table('orders')
+            ->select('status')
+            ->distinct()
+            ->pluck('status');
+    }
+
     // public function getLatestDateHavingData()
     // {
     //     $latestOrder = \App\Models\Order::orderByDesc('created_at')->value('created_at');
@@ -57,5 +66,5 @@ class DashboardRepository implements DashboardRepositoryInterface
     //     return collect($dates)->sortDesc()->first(); // lấy ngày mới nhất trong 3 bảng
     // }
 
-    
+
 }

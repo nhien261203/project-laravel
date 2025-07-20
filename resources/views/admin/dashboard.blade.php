@@ -14,13 +14,20 @@
             <input type="date" id="orders_start" class="border rounded px-2 py-1 w-full md:w-auto">
             <input type="date" id="orders_end" class="border rounded px-2 py-1 w-full md:w-auto">
 
-            <select id="orders_status" class="border rounded px-2 py-1 w-full md:w-auto">
+            {{-- <select id="orders_status" class="border rounded px-2 py-1 w-full md:w-auto">
                 <option value="">Tất cả trạng thái</option>
                 <option value="pending">Chờ xử lý</option>
                 <option value="processing">Đang xử lý</option>
                 <option value="completed">Hoàn tất</option>
                 <option value="cancelled">Đã hủy</option>
+            </select> --}}
+            <select id="orders_status" class="border rounded px-2 py-1 w-full md:w-auto">
+                <option value="">Tất cả trạng thái</option>
+                @foreach ($statuses as $status)
+                    <option value="{{ $status }}">{{ ucfirst($status) }}</option>
+                @endforeach
             </select>
+
 
             <button onclick="loadChart('orders')" class="bg-blue-600 text-white px-4 py-1 rounded">Lọc</button>
         </div>
