@@ -1,27 +1,26 @@
 @extends('layout.user_profile')
 
 @section('user_profile_content')
-<div class="container pt-20 pb-10">
+<div class="container pt-15 pb-10">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">📦 Chi tiết đơn hàng</h2>
 
-    <div class="bg-white shadow rounded p-6 space-y-4">
-        <div class="text-gray-600">
-            <h3 class="text-lg font-semibold text-gray-700">Mã đơn hàng: #{{ $order->code }}</h3>
-
-            <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
-            <p><strong>Trạng thái đơn hàng:</strong>
-                <span class="font-semibold text-blue-600">{{ ucfirst($order->status) }}</span>
-            </p>
-            <p>
-                <strong>Địa chỉ giao hàng:</strong>
-                {{ $order->address_detail }},
-                {{ $order->ward_name }},
-                {{ $order->district_name }},
-                {{ $order->province_name }}
-            </p>
-            <p><strong>Thanh toán:</strong>
-                <span class="font-semibold text-green-600">{{ $order->payment_status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}</span>
-            </p>
+    <div class="bg-white shadow-md rounded-xl p-6 space-y-6">
+        {{-- thông tin đơn hàng --}}
+        <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-700">
+            <div>
+                <p><strong>Mã đơn hàng:</strong> <span class="text-blue-600 font-medium">#{{ $order->code }}</span></p>
+                <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
+                <p><strong>Trạng thái:</strong> <span class="font-semibold text-blue-600">{{ ucfirst($order->status) }}</span></p>
+            </div>
+            <div>
+                <p><strong>Thanh toán:</strong>
+                    <span class="{{ $order->payment_status === 'paid' ? 'text-green-600' : 'text-yellow-600' }} font-semibold">
+                        {{ $order->payment_status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}
+                    </span>
+                </p>
+                <p><strong>Địa chỉ giao hàng:</strong></p>
+                <p>{{ $order->address_detail }}, {{ $order->ward_name }}, {{ $order->district_name }}, {{ $order->province_name }}</p>
+            </div>
         </div>
 
         <div class="border-t pt-4">
@@ -29,15 +28,15 @@
 
             <div class="space-y-4">
                 @foreach ($order->items as $item)
-                    <div class="flex items-start gap-4">
+                    <div class="flex items-start gap-4 border border-gray-100 p-4 rounded-lg">
                         <div class="w-24 h-24 flex-shrink-0 border rounded overflow-hidden">
                             <img src="{{ asset('storage/' . $item->image) }}"
-                                class="w-full h-full object-cover"
+                                class="w-full h-full object-contain"
                                 alt="{{ $item->product_name }}">
                         </div>
 
                         <div class="flex-1 space-y-1">
-                            <h4 class="text-base font-bold text-gray-800">
+                            <h4 class="font-semibold text-gray-800">
                                 {{ $item->product_name }}
                             </h4>
                             <p class="text-sm text-gray-600">
@@ -71,7 +70,7 @@
                 Tổng đơn: {{ number_format($order->total_amount, 0, ',', '.') }}₫
             </p>
         </div> --}}
-        <div class="border-t pt-4 text-right space-y-1">
+        <div class="border-t pt-4 text-right space-y-1 text-sm text-gray-700">
             @if ($order->voucher_code)
                 <p class="text-sm text-gray-600">
                     Mã giảm giá: <span class="font-semibold text-blue-600">{{ $order->voucher_code }}</span>
