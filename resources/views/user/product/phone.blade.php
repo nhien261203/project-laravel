@@ -131,6 +131,11 @@
             <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
         @endif
     </div>
+    <div class="mt-4 flex justify-center">
+        {{-- Phân trang --}}
+        {{ $products->appends(request()->except('page'))->links('pagination.custom-user') }}
+    </div>
+
 </div>
 @endsection
 
@@ -166,9 +171,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
+           
+           // Xoá tham số page khi thay đổi bộ lọc
+            currentParams.delete('page');
+
             // Redirect với query mới
             const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
             window.location.href = newUrl;
+
         });
     });
 });

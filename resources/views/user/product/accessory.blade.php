@@ -142,6 +142,10 @@
             <p class="text-gray-500">Không tìm thấy sản phẩm nào.</p>
         @endif
     </div>
+    <div class="mt-4 flex justify-center">
+        {{-- Phân trang --}}
+        {{ $products->appends(request()->except('page'))->links('pagination.custom-user') }}
+    </div>
 </div>
 @endsection
 @push('scripts')
@@ -175,6 +179,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentParams.set(name, value);
                 }
             }
+
+            // Xoá tham số page khi thay đổi bộ lọc
+            currentParams.delete('page');
 
             // Redirect với query mới
             const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');

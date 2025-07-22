@@ -269,7 +269,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         $query = $this->applyProductFilters($query);
 
-        return $this->appendProductExtras($query->latest('id')->get());
+        return $this->appendProductExtras($query->latest('id')->paginate(8)->withQueryString());
     }
 
 

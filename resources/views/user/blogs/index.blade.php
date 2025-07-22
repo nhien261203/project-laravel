@@ -92,8 +92,9 @@
         </div>
 
         {{-- Phân trang --}}
-        <div class="mt-10">
-            {{ $blogs->links('pagination.custom-tailwind') }}
+        <div class="mt-6 flex justify-center">
+            {{-- Sử dụng custom pagination --}}
+            {{ $blogs->links('pagination.custom-user') }}
         </div>
     @else
         <p class="text-gray-500 text-center mt-10">Không tìm thấy bài viết nào.</p>
