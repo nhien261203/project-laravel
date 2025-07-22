@@ -9,6 +9,7 @@ interface DashboardRepositoryInterface
     public function getUserStatistics($startDate, $endDate);
     // public function getLatestDateHavingData();
     public function getAvailableStatuses();
+    public function getProductCountByCategory($brandId = null);
     
 
 }

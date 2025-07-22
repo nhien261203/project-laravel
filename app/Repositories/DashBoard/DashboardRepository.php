@@ -50,6 +50,22 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->distinct()
             ->pluck('status');
     }
+    public function getProductCountByCategory($brandId = null)
+    {
+        $query = DB::table('products')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->selectRaw('categories.name as category, COUNT(*) as total')
+            ->groupBy('categories.name');
+
+        if ($brandId) {
+            $query->where('products.brand_id', $brandId);
+        }
+        
+
+        // dd($result);
+        return $query->get();
+    }
+
 
     // public function getLatestDateHavingData()
     // {

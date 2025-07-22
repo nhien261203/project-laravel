@@ -95,6 +95,7 @@ Route::middleware(['auth'])->prefix('orders')->name('user.orders.')->group(funct
     Route::get('/', [UserOrderController::class, 'index'])->name('index');
     Route::get('/{id}', [UserOrderController::class, 'show'])->name('show');
     Route::post('/place', [UserOrderController::class, 'store'])->name('store'); // Đặt hàng từ giỏ hàng
+    Route::post('/{id}/cancel', [UserOrderController::class, 'cancel'])->name('cancel');
 });
 
 
@@ -103,6 +104,8 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     // Hiển thị giao diện dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/statistics', [DashboardController::class, 'getStatistics'])->name('dashboard.statistics');
+    Route::get('/dashboard/category-pie', [DashBoardController::class, 'getCategoryPieChart']);
+
 
 
     Route::resource('brands', BrandController::class);

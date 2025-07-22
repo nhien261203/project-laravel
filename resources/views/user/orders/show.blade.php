@@ -90,6 +90,18 @@
             <p class="text-xl font-bold text-gray-800">
                 Tổng đơn: {{ number_format($order->total_amount, 0, ',', '.') }}₫
             </p>
+
+            {{-- Hủy đơn --}}
+            @if ($order->status === 'pending' && $order->payment_status === 'unpaid')
+                <form method="POST" action="{{ route('user.orders.cancel', $order->id) }}" class="mt-4 text-right">
+                    @csrf
+                    <button type="submit"
+                        onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')"
+                        class="inline-block px-4 py-2 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition">
+                        Hủy đơn hàng
+                    </button>
+                </form>
+            @endif
         </div>
 
     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\ProductVariant;
 use App\Models\Voucher;
 use App\Models\VoucherUser;
@@ -176,4 +177,7 @@ class CartController extends Controller
         session()->forget('applied_voucher');
         return back()->with('success', ' Đã bỏ mã giảm giá.');
     }
+
+
+    
 }

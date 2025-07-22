@@ -6,7 +6,7 @@
 <div class="p-6 bg-white rounded shadow">
     <h1 class="text-2xl font-semibold mb-6">Thống kê</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 ">
         {{-- Đơn hàng --}}
         <div class="bg-gray-50 p-4 rounded shadow">
             <h2 class="text-lg font-semibold mb-4">Đơn hàng</h2>
@@ -51,7 +51,35 @@
         </div>
 
         {{-- Người dùng --}}
-        <div class="bg-gray-50 p-4 rounded shadow md:col-span-2">
+        
+
+        
+
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        {{-- Biểu đồ tròn sản phẩm theo danh mục --}}
+        <div class="bg-gray-50 p-4 rounded shadow ">
+            <h2 class="text-lg font-semibold mb-4">Sản phẩm theo danh mục</h2>
+
+                <div class="mb-4 flex gap-2 items-end">
+                    <div>
+
+                        <select id="brandFilter" class="w-64 p-2 border rounded">
+                            <option value="">-- Tất cả thương hiệu --</option>
+                            @foreach ($brands as $brand)
+                                <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <button id="filterPieBtn" class="h-[38px] px-4 py-1 rounded bg-indigo-600 text-white">Lọc</button>
+                </div>
+
+            <canvas id="categoryPieChart" width="400" height="200"></canvas>
+            <p class="mt-2 text-sm text-gray-600">Tổng sản phẩm: <span id="totalProducts" class="font-semibold">0</span></p>
+
+        </div>
+        <div class="bg-gray-50 p-4 rounded shadow ">
             <h2 class="text-lg font-semibold mb-4">Người dùng mới</h2>
             <div class="flex flex-wrap items-center gap-2 mb-4">
                 <input type="date" id="users_start" class="border rounded px-2 py-1 w-full md:w-auto">
@@ -61,8 +89,6 @@
             <canvas id="userChart" height="200"></canvas>
             <p class="mt-2 text-sm text-gray-600">Tổng người dùng mới: <span id="totalUsers" class="font-semibold">0</span></p>
         </div>
-
-        
 
     </div>
 </div>
@@ -176,4 +202,61 @@
         loadChart('users');
     });
 </script>
+<script>
+    let pieChartInstance;
+
+    function loadCategoryPieChart(brandId = '') {
+        fetch(`/admin/dashboard/category-pie?brand_id=${brandId}`)
+            .then(res => res.json())
+            .then(data => {
+                const ctx = document.getElementById('categoryPieChart').getContext('2d');
+
+                // Nếu đã có biểu đồ thì hủy trước khi vẽ lại
+                if (pieChartInstance) pieChartInstance.destroy();
+
+                const total = data.values.reduce((sum, val) => sum + Number(val), 0);
+                document.getElementById('totalProducts').textContent = total;
+
+
+                pieChartInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: data.label,
+                            data: data.values,
+                            backgroundColor: [
+                                '#60A5FA', '#34D399', '#FBBF24', '#F87171',
+                                '#A78BFA', '#F472B6', '#2DD4BF', '#FCD34D',
+                                '#818CF8', '#4ADE80'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            title: {
+                                display: true,
+                                text: data.label
+                            }
+                        }
+                    }
+                });
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Load mặc định tất cả danh mục
+        loadCategoryPieChart();
+
+        // Bắt sự kiện thay đổi brand
+        document.getElementById('filterPieBtn').addEventListener('click', function () {
+            const brandId = document.getElementById('brandFilter').value;
+            loadCategoryPieChart(brandId);
+        });
+
+    });
+</script>
+
 @endsection

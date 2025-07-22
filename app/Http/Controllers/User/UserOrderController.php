@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Repositories\Order\OrderRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -74,5 +75,19 @@ class UserOrderController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Đặt hàng thất bại: ' . $e->getMessage());
         }
+    }
+
+    public function cancel($id)
+    {
+        $order = Order::findOrFail($id);
+
+        if ($order->status !== 'pending' || $order->payment_status !== 'unpaid') {
+            return redirect()->back()->with('error', 'Chỉ có thể hủy đơn đang chờ xử lý và chưa thanh toán.');
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        return redirect()->back()->with('success', 'Đơn hàng đã được hủy.');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Repositories\Dashboard\DashboardRepositoryInterface;
 use Carbon\CarbonPeriod;
@@ -21,10 +22,27 @@ class DashBoardController extends Controller
     // Trang dashboard
     public function index()
     {
+        $categories = Category::all();
+        $brands = Brand::whereHas('products')->get();
         $statuses = $this->dashboard->getAvailableStatuses();
-        return view('admin.dashboard', compact('statuses'));
+        return view('admin.dashboard', compact('statuses', 'categories', 'brands'));
     }
 
+
+    // API trả dữ liệu biểu đồ tròn
+    public function getCategoryPieChart(Request $request)
+    {
+        $data = $this->dashboard->getProductCountByCategory($request->brand_id);
+
+        $labels = $data->pluck('category')->toArray(); // field đúng
+        $values = $data->pluck('total')->toArray();
+
+        return response()->json([
+            'labels' => $labels,
+            'values' => $values,
+            'label' => 'Số lượng sản phẩm theo danh mục'
+        ]);
+    }
 
     // API trả dữ liệu cho biểu đồ
     public function getStatistics(Request $request)
