@@ -229,11 +229,24 @@
                             <label class="block text-sm font-semibold mb-1">Ghi chú (tuỳ chọn)</label>
                             <textarea name="note" rows="2" class="w-full border rounded px-3 py-2">{{ old('note') }}</textarea>
                         </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-1">Phương thức thanh toán</label>
+                            <select name="payment_method" class="w-full border rounded px-3 py-2 text-sm" required>
+                                <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                                <option value="vnpay">Thanh toán qua VNPay</option>
+                            </select>
+                        </div>
 
                         <button type="submit"
                             class="w-full text-center bg-green-600 text-white font-semibold py-3 rounded hover:bg-green-700 transition">
                             Đặt hàng
                         </button>
+
+                        
+                            
+                            
+                            
+                        
                     </form>
                     @if ($errors->any())
                         <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
@@ -254,6 +267,7 @@
         </div>
     @endif
 </div>
+
 @endsection
 
 <script>

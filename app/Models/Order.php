@@ -16,6 +16,7 @@ class Order extends Model
         'total_quantity',
         'payment_status',  // unpaid | paid
         'status',          // pending | processing | completed | cancelled
+        'payment_method',  // vnpay | cod
         'customer_name',
         'customer_phone',
         'customer_email',

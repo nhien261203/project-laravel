@@ -114,6 +114,7 @@ class OrderRepository implements OrderRepositoryInterface
                 'ward_code'        => $formData['ward_code'] ?? null,
                 'ward_name'        => $formData['ward_name'] ?? null,
                 'address_detail'   => $formData['address_detail'] ?? null,
+                'payment_method'  => $formData['payment_method'] ?? 'cod',
 
             ]);
 

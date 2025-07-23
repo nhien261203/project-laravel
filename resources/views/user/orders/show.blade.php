@@ -104,5 +104,15 @@
         </div>
 
     </div>
+    {{-- <form action="{{ route('user.orders.vnpay', ['id' => $order->id]) }}" method="GET" class="mt-6">
+        
+
+        @csrf
+        
+        <button type="submit"
+        class="w-full text-center bg-blue-600 text-white font-semibold py-3 rounded hover:bg-blue-700 transition">
+            Thanh toán qua VNPay
+        </button>
+    </form> --}}
 </div>
 @endsection

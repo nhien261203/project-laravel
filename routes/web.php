@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserCommentController;
@@ -96,8 +97,13 @@ Route::middleware(['auth'])->prefix('orders')->name('user.orders.')->group(funct
     Route::get('/{id}', [UserOrderController::class, 'show'])->name('show');
     Route::post('/place', [UserOrderController::class, 'store'])->name('store'); // Đặt hàng từ giỏ hàng
     Route::post('/{id}/cancel', [UserOrderController::class, 'cancel'])->name('cancel');
-});
 
+    Route::get('/{id}/payment/vnpay', [UserOrderController::class, 'vnpayPayment'])->name('vnpay');
+    Route::get('/vnpay/return', [UserOrderController::class, 'vnpayReturn'])->name('vnpay.return');
+
+
+});
+// Route::post('/vnpay-payment', [PaymentController::class, 'vnpayPayment'])->name('vnpay_payment')->middleware('auth');
 
 //  Admin - toàn quyền (chỉ admin, staff dung permission chặn 1 số quyền ở controller va view)
 Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')->group(function () {
@@ -157,7 +163,7 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::post('/reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
     Route::post('/reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
 
-
+    
 
 
     // Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
