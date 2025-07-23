@@ -1,8 +1,8 @@
 @extends('layout.user_profile')
 
 @section('user_profile_content')
-<div class="pt-24">
-    <div class="max-w-md mx-auto bg-white p-6 rounded shadow mt-6">
+<div >
+    <div class="max-w-md mx-auto ">
         <h2 class="text-xl font-bold mb-4">Thay đổi mật khẩu</h2>
 
         {{-- @if (session('success'))

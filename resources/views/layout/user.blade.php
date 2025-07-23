@@ -25,8 +25,8 @@
     {{-- HEADER --}}
     @include('components.header')
 
-    {{-- Main content --}}
-    <main class="min-h-screen">
+    {{-- Main content: bỏ class="min-h-screen"  --}}
+    <main>
         @yield('content')
     </main>
 

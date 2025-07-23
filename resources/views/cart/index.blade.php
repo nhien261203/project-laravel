@@ -1,27 +1,39 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container pt-20">
+<div class="container pt-20 pb-5 overflow-hidden">
     
 
-    <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">🛒 Giỏ hàng của bạn</h2>
+    
 
     @if ($cart->items->isEmpty())
-        <div class="bg-white shadow rounded p-8 text-center">
-            <p class="text-gray-600 text-lg mb-4">Chưa có sản phẩm nào trong giỏ hàng.</p>
-            <a href="{{ route('home') }}" class="inline-block px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                🛍️ Tiếp tục mua sắm
+        <div class="bg-white flex-grow shadow-md rounded-lg p-6 text-center space-y-5 max-w-md mx-auto">
+            <img src="https://happyphone.vn/template/assets/images/crt-empty.png" alt="Giỏ hàng trống" class="w-60 mx-auto opacity-80">
+            
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800 mb-1">Giỏ hàng của bạn đang trống</h2>
+                <p class="text-sm text-gray-500">Bạn chưa thêm sản phẩm nào. Khám phá ngay để lựa chọn món đồ yêu thích!</p>
+            </div>
+
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                🛍️ <span>Tiếp tục mua sắm</span>
             </a>
         </div>
     @else
-        <div class="grid md:grid-cols-3 gap-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Giỏ hàng của bạn</h1>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             {{-- Cột trái: Danh sách sản phẩm (chiếm 2/3) --}}
-            <div class="md:col-span-2 space-y-6">
+            
+            {{-- Cột phải: Tổng tiền & thanh toán --}}
+            
+           
+
+            <div class="col-span-1 md:col-span-2 space-y-6">
                 @foreach ($cart->items as $item)
                     <div class="flex flex-col md:flex-row bg-white shadow rounded p-4 gap-4">
                         {{-- Hình ảnh --}}
                         <div class="w-full md:w-28 h-28 flex-shrink-0 border rounded overflow-hidden">
-                            <img src="{{ asset('storage/' . $item->snapshot_image) }}" alt="Ảnh sản phẩm" class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/' . $item->snapshot_image) }}" alt="Ảnh sản phẩm" class="w-full h-full object-contain">
                         </div>
 
                         {{-- Thông tin --}}
@@ -52,7 +64,7 @@
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-3">
                                 <div>
                                     <span class="text-lg font-bold text-red-600">
-                                        {{ number_format($item->snapshot_price, 0, ',', '.') }}₫
+                                         {{ number_format($item->snapshot_price, 0, ',', '.') }}₫
                                     </span>
                                     @if($item->snapshot_original_price > $item->snapshot_price)
                                         <span class="text-sm text-gray-400 line-through ml-2">
@@ -74,25 +86,14 @@
                                     {{-- Xoá --}}
                                     <form method="POST" action="{{ route('cart.remove', $item->product_variant_id) }}">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:underline text-sm">❌ Xoá</button>
+                                        <button type="submit" class="text-red-500 hover:underline text-sm">Xoá</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
-            </div>
 
-            {{-- Cột phải: Tổng tiền & thanh toán --}}
-            <div>
-                @php
-                $total = $cart->items->sum(fn($item) => $item->snapshot_price * $item->quantity);
-            @endphp
-
-            <div class="bg-white p-6 rounded shadow-md space-y-4 sticky top-6">
-                {{-- <h3 class="text-lg font-semibold text-gray-700">Tạm tính</h3>
-                <p class="text-2xl font-bold text-red-600">{{ number_format($total, 0, ',', '.') }}₫</p> --}}
-                {{-- Nhập mã giảm giá --}}
                 @if(session('error_voucher'))
                     <p class="text-sm text-red-600">{{ session('error_voucher') }}</p>
                 @endif
@@ -104,7 +105,7 @@
                 <form method="POST" action="{{ route('cart.apply-voucher') }}" class="flex gap-2 mb-4">
                     @csrf
                     <input type="text" name="voucher_code" placeholder="Nhập mã giảm giá..."
-                        class="flex-1 border rounded px-3 py-2 text-sm" required>
+                        class="flex-1 border rounded px-3 py-2 text-sm">
                     <button type="submit"
                             class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
                         Áp dụng
@@ -112,34 +113,48 @@
                 </form>
 
                 @if(isset($vouchers) && $vouchers->count())
-                    <div class="space-y-3 border-t pt-4">
+                    <div class="pt-4 bg-white p-6 rounded shadow-md">
                         <h4 class="text-sm font-semibold text-gray-600">Mã giảm giá đang có:</h4>
-
-                        @foreach ($vouchers as $voucher)
-                            <div class="border p-3 rounded flex justify-between items-center hover:bg-gray-50">
-                                <div>
-                                    <p class="font-semibold text-blue-700 text-sm">{{ $voucher->code }}</p>
-                                    <p class="text-xs text-gray-600">
-                                        {{ $voucher->type === 'percent' ? "Giảm {$voucher->value}%" : "Giảm ".number_format($voucher->value, 0, ',', '.')."₫" }}
-                                        @if($voucher->min_order_amount)
-                                            – Đơn từ {{ number_format($voucher->min_order_amount, 0, ',', '.') }}₫
+                        <div class="flex space-x-4 overflow-x-auto pb-2">
+                            @foreach ($vouchers as $voucher)
+                                <div class="min-w-[250px] border p-3 rounded flex justify-between items-center hover:bg-gray-50 shrink-0">
+                                    <div>
+                                        <p class="font-semibold text-blue-700 text-sm">{{ $voucher->code }}</p>
+                                        <p class="text-xs text-gray-600">
+                                            {{ $voucher->type === 'percent' ? "Giảm {$voucher->value}%" : "Giảm ".number_format($voucher->value, 0, ',', '.')."₫" }}
+                                            @if($voucher->min_order_amount)
+                                                – Đơn từ {{ number_format($voucher->min_order_amount, 0, ',', '.') }}₫
+                                            @endif
+                                            @if($voucher->only_for_new_user)
+                                                – <span class="text-green-600 font-medium">Khách mới</span>
+                                            @endif
+                                        </p>
+                                        @if($voucher->end_date)
+                                            <p class="text-xs text-gray-400">HSD: {{ $voucher->end_date->format('d/m/Y') }}</p>
                                         @endif
-                                        @if($voucher->only_for_new_user)
-                                            – <span class="text-green-600 font-medium">Khách mới</span>
+                                        @if($voucher->max_discount)
+                                            <p class="text-xs text-gray-400">Giảm tối đa: {{ number_format($voucher->max_discount, 0, ',', '.') }}₫</p>
                                         @endif
-                                    </p>
-                                    @if($voucher->end_date)
-                                        <p class="text-xs text-gray-400">HSD: {{ $voucher->end_date->format('d/m/Y') }}</p>
-                                    @endif
+                                        @if($voucher->max_usage_per_user)
+                                            <p class="text-xs text-gray-400">Sử dụng tối đa: {{ $voucher->max_usage_per_user }} lần</p>
+                                        @endif
+                                    </div>
+                                    <button onclick="copyToClipboard('{{ $voucher->code }}')"
+                                            class=" text-blue-600 text-lg hover:scale-110 transition">
+                                        📋
+                                    </button>
                                 </div>
-                                <button onclick="copyToClipboard('{{ $voucher->code }}')" class="text-blue-600 text-xs hover:underline">📋 Sao chép</button>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
+
+                        
                     </div>
                 @endif
 
-                <div class="bg-white p-6 rounded shadow-md space-y-4 sticky top-6">
-                    @php
+                 @php
+                    $total = $cart->items->sum(fn($item) => $item->snapshot_price * $item->quantity);
+                @endphp
+                @php
                         $voucher = session('applied_voucher');
                         $discount = 0;
 
@@ -156,22 +171,61 @@
                         }
                     @endphp
 
+                    <div class="bg-gray-50 p-4 rounded border border-gray-200 space-y-2 text-sm">
                     @if($voucher)
-                        <p class="text-sm text-green-700"> Đã áp dụng mã: <strong>{{ $voucher['code'] }}</strong></p>
-                        <p class="text-sm text-gray-700">Giảm: <strong>{{ number_format($discount, 0, ',', '.') }}₫</strong></p>
-                        <p class="text-xl font-bold text-red-600">Tổng: {{ number_format($totalAfterDiscount, 0, ',', '.') }}₫</p>
+                        <div class="flex justify-between">
+                            <span class="text-gray-700 font-medium">Tạm tính:</span>
+                            <span class="text-gray-900 font-bold">{{ number_format($total, 0, ',', '.') }}₫</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-green-700 font-medium">Mã giảm: {{ $voucher['code'] }}</span>
+                            <span class="text-green-700 font-bold">-{{ number_format($discount, 0, ',', '.') }}₫</span>
+                        </div>
+                        <hr class="my-2 border-gray-300">
+                        <div class="flex justify-between text-base">
+                            <span class="text-gray-800 font-semibold">Tổng thanh toán:</span>
+                            <span class="text-red-600 text-lg font-bold">{{ number_format($totalAfterDiscount, 0, ',', '.') }}₫</span>
+                        </div>
                     @else
-                        <p class="text-2xl font-bold text-red-600">{{ number_format($total, 0, ',', '.') }}₫</p>
+                        <div class="flex justify-between text-base">
+                            <span class="text-gray-800 font-semibold">Tổng thanh toán:</span>
+                            <span class="text-red-600 text-lg font-bold">{{ number_format($total, 0, ',', '.') }}₫</span>
+                        </div>
                     @endif
+
                     @if(session('applied_voucher'))
-                        <div class="mt-2 text-sm">
-                            <span class="text-green-700">Đã áp dụng mã: <strong>{{ session('applied_voucher.code') }}</strong></span>
-                            <form method="POST" action="{{ route('cart.remove-voucher') }}" class="inline-block ml-2">
+                        <div class="mt-2 text-sm flex items-center justify-between">
+                            <span class="text-green-700">
+                                Đã áp dụng mã: <strong>{{ session('applied_voucher.code') }}</strong>
+                            </span>
+                            <form method="POST" action="{{ route('cart.remove-voucher') }}">
                                 @csrf
                                 <button type="submit" class="text-red-500 hover:underline text-xs">Bỏ mã</button>
                             </form>
                         </div>
                     @endif
+                </div>
+
+            </div>
+
+            {{-- <button 
+                class="block md:hidden w-full text-center bg-blue-600 text-white font-semibold py-3 rounded hover:bg-blue-700 transition">
+                Xác nhận thanh toán
+            </button> --}}
+
+            
+
+            <div class="col-span-1 md:col-span-2 space-y-4 md:sticky top-6 pb-3 ">
+                {{-- <h3 class="text-lg font-semibold text-gray-700">Tạm tính</h3>
+                <p class="text-2xl font-bold text-red-600">{{ number_format($total, 0, ',', '.') }}₫</p> --}}
+                {{-- Nhập mã giảm giá --}}
+
+                
+                
+
+                <div class="bg-white p-6 rounded shadow-md space-y-4 top-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Thông tin đặt hàng</h3>
+                    <p class="text-gray-600 mb-4">Vui lòng điền thông tin bên dưới để hoàn tất đơn hàng.</p>
 
 
                     <form method="POST" action="{{ route('user.orders.store') }}" class="space-y-4">
@@ -200,24 +254,28 @@
                             <textarea name="customer_address" rows="2" class="w-full border rounded px-3 py-2" >{{ old('customer_address') }}</textarea>
                         </div> --}}
 
-                        <div>
-                            <label class="block text-sm font-semibold mb-1">Tỉnh / Thành phố</label>
-                            <select name="province_code" id="province" class="w-full border rounded px-3 py-2 text-sm" required></select>
-                        </div>
+                        <div class="flex flex-col md:flex-row gap-4">
+                            
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">Tỉnh / Thành phố</label>
+                                <select name="province_code" id="province" class="w-full border rounded px-3 py-2 text-sm" ></select>
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold mb-1">Quận / Huyện</label>
-                            <select name="district_code" id="district" class="w-full border rounded px-3 py-2 text-sm" required></select>
-                        </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">Quận / Huyện</label>
+                                <select name="district_code" id="district" class="w-full border rounded px-3 py-2 text-sm" ></select>
+                            </div>
 
-                        <div>
-                            <label class="block text-sm font-semibold mb-1">Phường / Xã</label>
-                            <select name="ward_code" id="ward" class="w-full border rounded px-3 py-2 text-sm" required></select>
+                            <div>
+                                <label class="block text-sm font-semibold mb-1">Phường / Xã</label>
+                                <select name="ward_code" id="ward" class="w-full border rounded px-3 py-2 text-sm" ></select>
+                            </div>
+
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold mb-1">Địa chỉ chi tiết (số nhà, tên đường...)</label>
-                            <input type="text" name="address_detail" class="w-full border rounded px-3 py-2 text-sm" required value="{{ old('address_detail') }}">
+                            <input type="text" name="address_detail" class="w-full border rounded px-3 py-2 text-sm" value="{{ old('address_detail') }}">
                         </div>
 
                         
@@ -231,7 +289,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1">Phương thức thanh toán</label>
-                            <select name="payment_method" class="w-full border rounded px-3 py-2 text-sm" required>
+                            <select name="payment_method" class="w-full border rounded px-3 py-2 text-sm" >
                                 <option value="cod">Thanh toán khi nhận hàng (COD)</option>
                                 <option value="vnpay">Thanh toán qua VNPay</option>
                             </select>
@@ -264,6 +322,10 @@
                     </a>
                 </div>
             </div>
+            
+
+
+
         </div>
     @endif
 </div>

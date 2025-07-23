@@ -2,16 +2,25 @@
 
 @section('user_profile_content')
 <div class="container pt-15 pb-10">
-    <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">Đơn hàng của bạn</h2>
-
+    
     @if ($orders->isEmpty())
-        <div class="bg-white p-6 rounded shadow text-center">
-            <p class="text-gray-600 text-lg mb-4">Bạn chưa có đơn hàng nào.</p>
-            <a href="{{ route('home') }}" class="inline-block px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                🛍️ Tiếp tục mua sắm
+        <div class="min-h-[60vh] flex flex-col items-center justify-center text-center space-y-6  p-6">
+            <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Không có đơn hàng"
+                class="w-40 h-40 mx-auto opacity-80">
+
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800">Bạn chưa có đơn hàng nào</h2>
+                <p class="text-sm text-gray-500">Bắt đầu hành trình mua sắm để đặt những sản phẩm yêu thích!</p>
+            </div>
+
+            <a href="{{ route('home') }}"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                🛍️ <span>Tiếp tục mua sắm</span>
             </a>
         </div>
     @else
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8">Đơn hàng của bạn</h2>
+
         <div class="space-y-6">
             @foreach ($orders as $order)
                 <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 hover:shadow-lg transition">

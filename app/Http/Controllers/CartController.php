@@ -100,6 +100,20 @@ class CartController extends Controller
     public function remove(Request $request, $variantId)
     {
         $this->repo->removeFromCart(Auth::id(), $request->session()->getId(), $variantId);
+
+        // Kiểm tra nếu có voucher đã áp dụng: neu co 2 sp xoa 1 sp, muc gia giam di k du ap voucher tu dong xoa voucher luon
+        if (session()->has('applied_voucher')) {
+            $voucher = session('applied_voucher');
+            $cart = $this->repo->getUserCart(Auth::id(), $request->session()->getId());
+            $subtotal = $cart->items->sum(fn($i) => $i->snapshot_price * $i->quantity);
+
+            if ($voucher['min_order_amount'] && $subtotal < $voucher['min_order_amount']) {
+                session()->forget('applied_voucher');
+                return redirect()->route('cart.index')->with([
+                    'success' => 'Đã xoá sản phẩm khỏi giỏ. Mã giảm giá đã bị huỷ vì không đủ điều kiện sử dụng.'
+                ]);
+            }
+        }
         return redirect()->route('cart.index')->with('success', 'Đã xoá sản phẩm khỏi giỏ');
     }
 
