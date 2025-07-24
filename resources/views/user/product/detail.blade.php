@@ -180,7 +180,7 @@
             <h3 class="text-base font-semibold text-gray-700 mb-4">Sản phẩm bạn đã xem gần đây</h3>
 
             <!-- Swiper Container -->
-            <div class="swiper-container group relative overflow-hidden">
+            <div class="swiper-container relative overflow-hidden">
                 <!-- Wrapper -->
                 <div class="swiper-wrapper">
                     @foreach($recentlyViewed as $item)
@@ -195,7 +195,7 @@
                             <a href="{{ $item->is_accessory ? route('product.detailAccessory', $item->slug) : route('product.detail', $item->slug) }}" class="block bg-white border rounded hover:shadow transition overflow-hidden">
                                 <img src="{{ $image }}" class="w-full h-36 md:h-40 object-contain bg-gray-50">
                                 <div class="p-2">
-                                    <h4 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">{{ $item->name }}</h4>
+                                    <h4 class="text-sm font-semibold text-gray-800 hover:text-blue-600 truncate">{{ $item->name }}</h4>
                                     @if($variant)
                                         {{-- Bộ nhớ --}}
                                         @if($variant->storage)

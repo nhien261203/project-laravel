@@ -47,7 +47,7 @@ class AdminAuthController extends Controller
             // Đánh dấu đã merge nếu cần
             session(['cart_merged' => true]);
 
-            return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công!');
+            return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công! Đây là tổng quan quản trị.');
         }
 
         return back()->with('error', 'Thông tin đăng nhập không chính xác.')->withInput();

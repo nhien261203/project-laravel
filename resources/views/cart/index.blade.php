@@ -231,7 +231,7 @@
             
 
             <div id="mobileCheckoutForm"
-                class="hidden space-y-4 md:block md:col-span-2 md:sticky md:top-6 md:p-6"
+                class="hidden space-y-4 md:block md:col-span-2 md:sticky "
                 style="z-index: 0">
 
 
