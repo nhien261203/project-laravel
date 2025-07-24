@@ -22,6 +22,13 @@
         </div>
         @endif
 
+        @if($banner->link)
+        <div>
+            <label class="block text-gray-600 font-semibold">Liên kết:</label>
+            <a href="{{ $banner->link }}" class="text-blue-600 hover:underline" target="_blank">{{ $banner->link }}</a>
+        </div>
+        @endif
+
         <div>
             <label class="block text-gray-600 font-semibold">Vị trí:</label>
             <div class="text-gray-900">{{ $banner->position }}</div>

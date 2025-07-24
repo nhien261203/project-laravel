@@ -2,14 +2,15 @@
     <div class="swiper myBannerSwiper md:aspect-[16/5] relative">
         <div class="swiper-wrapper">
             @foreach ($banners as $banner)
-                <div class="swiper-slide">
-                    <picture>
-                        <source media="(min-width: 768px)" srcset="{{ asset('storage/' . $banner->image_desk) }}">
-                        <img src="{{ asset('storage/' . $banner->image_mobile) }}"
-                             alt="{{ $banner->title }}"
-                             
-                             class="w-full h-full object-cover block rounded-xl" />
-                    </picture>
+                <div class="swiper-slide cursor-pointer"
+                    onclick="redirectTo('{{ $banner->link }}')" >
+                        <picture>
+                            <source media="(min-width: 768px)" srcset="{{ asset('storage/' . $banner->image_desk) }}">
+                            <img src="{{ asset('storage/' . $banner->image_mobile) }}"
+                                alt="{{ $banner->title }}"
+                                class="w-full h-full object-cover block rounded-xl" />
+                        </picture>
+                    
                 </div>
             @endforeach
         </div>
@@ -74,4 +75,12 @@
             });
         });
     </script>
+    <script>
+        function redirectTo(link) {
+            if (link) {
+                window.location.href = link;
+            }
+        }
+    </script>
+
 </div>

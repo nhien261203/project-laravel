@@ -70,6 +70,18 @@
                 <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
             @enderror
         </div>
+        {{-- link --}}
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Liên kết (tuỳ chọn)</label>
+            <input
+                type="text"
+                name="link"
+                value="{{ old('link', $banner->link) }}"
+                class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
+            @error('link')
+                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+            @enderror
+        </div>
 
         {{-- Vị trí --}}
         <div>

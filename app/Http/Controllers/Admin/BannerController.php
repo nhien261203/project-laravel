@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Banner;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
@@ -39,9 +40,18 @@ class BannerController extends Controller
             'title' => 'required|string|max:255',
             'image_desk' => 'required|image',
             'image_mobile' => 'nullable|image',
+            'link' => 'nullable|string|max:255',
             'position' => 'required|string|max:255',
             'status' => 'required|boolean',
         ]);
+
+        // Chuyển 'route' thành URL thật
+        if (preg_match("/^route\('(.+?)'\)$/", $data['link'] ?? '', $matches)) {
+            $routeName = $matches[1];
+            if (Route::has($routeName)) {
+                $data['link'] = route($routeName);
+            }
+        }
 
         // Upload ảnh
         $data['image_desk'] = $request->file('image_desk')->store('banners', 'public');
@@ -68,7 +78,17 @@ class BannerController extends Controller
             'status'        => 'required|boolean',
             'image_desk'    => 'nullable|image|max:2048',
             'image_mobile'  => 'nullable|image|max:2048',
+            'link' => 'nullable|string|max:255'
         ]);
+
+        // Chuyển 'route' thành URL thật
+        if (preg_match("/^route\('(.+?)'\)$/", $data['link'] ?? '', $matches)) {
+            $routeName = $matches[1];
+            if (Route::has($routeName)) {
+                $data['link'] = route($routeName);
+            }
+        }
+
 
         // Xử lý ảnh desktop nếu có upload mới
         if ($request->hasFile('image_desk')) {

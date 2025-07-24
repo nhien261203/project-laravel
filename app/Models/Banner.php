@@ -12,6 +12,7 @@ class Banner extends Model
         'title',
         'image_desk',
         'image_mobile',
+        'link',
         'position',
         'status',
     ];

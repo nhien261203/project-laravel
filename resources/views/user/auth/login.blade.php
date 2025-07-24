@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Đăng nhập</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     @vite('resources/css/app.css') {{-- Tailwind CSS --}}
     <!-- alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -59,13 +60,21 @@
                 {{-- Mật khẩu --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Mật khẩu</label>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Nhập mật khẩu"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:ring-blue-500 focus:border-blue-500"
-                        required
-                    />
+                    <div class="relative">
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Nhập mật khẩu"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 pr-10 focus:ring-blue-500 focus:border-blue-500"
+                            required
+                        />
+                        <button type="button" onclick="togglePassword()"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none">
+                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+
                     @error('password')
                         <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -120,6 +129,8 @@
 
 </body>
 {{-- trang thai alert --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     @if (session('success'))
         Swal.fire({
@@ -145,4 +156,21 @@
         });
     @endif
 </script>
+<script>
+    function togglePassword() {
+        const input = document.getElementById("password");
+        const icon = document.getElementById("eyeIcon");
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>
+
 </html>
