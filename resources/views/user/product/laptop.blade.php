@@ -123,11 +123,39 @@
                             @else
                                 <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
                             @endif
-                            {{-- số lượng đã bán --}}
-                            <div class="absolute bottom-2 right-2 text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                                Đã bán: {{ $product->variants->sum('sold') }}
+                            <div class="flex justify-between items-center mt-4">
+                                <button
+                                    type="button"
+                                    onclick="event.stopPropagation(); event.preventDefault(); addToCompare({{ $product->id }}, '{{ request()->segment(1) }}')"
+                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-xs border rounded-full text-blue-600 border-blue-500 hover:bg-blue-500 hover:text-white transition"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h8m-8 6h16" />
+                                    </svg>
+                                    So sánh
+                                </button>
+
+                                <div class="text-xs text-gray-500 flex items-center gap-1">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h18M9 3v18m6-18v18" />
+                                    </svg>
+                                    <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
+                                </div>
                             </div>
+                                
                         </div>
+                        {{-- <button
+                            type="button"
+                            onclick="event.stopPropagation(); event.preventDefault(); addToCompare({{ $product->id }}, '{{ request()->segment(1) }}')"
+                            class="mt-3 inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs border rounded-full text-blue-600 border-blue-500 hover:bg-blue-500 hover:text-white transition"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 6h16M4 12h8m-8 6h16" />
+                            </svg>
+                                So sánh
+                        </button> --}}
                     </a>
                 @endforeach
             </div>
@@ -135,6 +163,10 @@
             <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
         @endif
     </div>
+    <button onclick="goToComparePage('{{ request()->segment(1) }}')" 
+                                        class="fixed bottom-5 right-5 px-4 py-2 bg-blue-600 text-white rounded shadow-lg z-50">
+                                    So sánh (<span id="compareCount">0</span>)
+                                </button>
     <div class="mt-4 flex justify-center">
         {{-- Phân trang --}}
         {{ $products->appends(request()->except('page'))->links('pagination.custom-user') }}
@@ -147,6 +179,27 @@
 document.addEventListener('DOMContentLoaded', function () {
     const currentParams = new URLSearchParams(window.location.search);
     const pathname = window.location.pathname;
+    function updateCompareCount() {
+        const category = "{{ request()->segment(1) }}";
+        const compareList = JSON.parse(localStorage.getItem('compare_products')) || {};
+        const selected = compareList[category] || [];
+        const countEl = document.getElementById('compareCount');
+        const btnCompare = document.querySelector('[onclick^="goToComparePage"]');
+
+        countEl.textContent = selected.length;
+
+        // Ẩn hoặc hiện nút "So sánh"
+        if (selected.length === 0) {
+            btnCompare.style.display = 'none';
+        } else {
+            btnCompare.style.display = 'block';
+        }
+    }
+
+
+    updateCompareCount();
+
+
 
     document.querySelectorAll('.btn-filter').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -174,15 +227,63 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            // Xoá tham số page khi thay đổi bộ lọc
+           
+           // Xoá tham số page khi thay đổi bộ lọc
             currentParams.delete('page');
 
             // Redirect với query mới
             const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
             window.location.href = newUrl;
+
+
+            // Cập nhật số lượng so sánh
+            const category = "{{ request()->segment(1) }}";
+            const compareList = JSON.parse(localStorage.getItem('compare_products')) || {};
+            const selected = compareList[category] || [];
+            document.getElementById('compareCount').textContent = selected.length;
+
+
         });
     });
 });
+function getCompareList(categorySlug) {
+    const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
+    return compare[categorySlug] || [];
+}
+
+function addToCompare(productId, categorySlug) {
+    const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
+    compare[categorySlug] = compare[categorySlug] || [];
+
+    if (compare[categorySlug].includes(productId)) return;
+    if (compare[categorySlug].length >= 4) {
+        alert("Chỉ được so sánh tối đa 4 sản phẩm.");
+        return;
+    }
+
+    compare[categorySlug].push(productId);
+    localStorage.setItem("compare_products", JSON.stringify(compare));
+    updateCompareCount();
+
+    alert("Đã thêm vào danh sách so sánh");
+}
+function goToComparePage(categorySlug) {
+    const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
+    const ids = compare[categorySlug] || [];
+
+    if (ids.length < 2) {
+        alert("Bạn cần chọn ít nhất 2 sản phẩm để so sánh.");
+        return;
+    }
+
+    // Chuyển sang trang so sánh, ví dụ: /so-sanh/dien-thoai?ids[]=1&ids[]=2
+    const query = ids.map(id => `ids[]=${id}`).join('&');
+    window.location.href = `/so-sanh/${categorySlug}?${query}`;
+}
+
+
+
 </script>
 @endpush
+
 

@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\User\CompareController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ReviewController;
@@ -68,6 +69,10 @@ Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.sho
 Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
 
 Route::post('/viewed-products/{product}', [UserRecentProductController::class, 'store'])->name('recently.viewed.store');
+// web.php
+Route::get('so-sanh/{slug}', [CompareController::class, 'compare'])->name('product.compare');
+
+
 // Route::post('/viewed-products/sync', [UserRecentProductController::class, 'sync'])->middleware('auth');
 
 Route::middleware(['auth'])->prefix('user')->name('user.')->group(function () {
