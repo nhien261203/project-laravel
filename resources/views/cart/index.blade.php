@@ -1,6 +1,20 @@
 @extends('layout.user')
 
 @section('content')
+<style>
+    @media (max-width: 767px) {
+        #mobileCheckoutForm.mobile-active {
+            position: fixed !important;
+            inset: 0;
+            z-index: 50;
+            background: white;
+            overflow-y: auto;
+            padding: 1rem;
+            display: block !important;
+        }
+}
+
+</style>
 <div class="container pt-20 pb-5 overflow-hidden">
     
 
@@ -171,7 +185,7 @@
                         }
                     @endphp
 
-                    <div class="bg-gray-50 p-4 rounded border border-gray-200 space-y-2 text-sm">
+                <div class="bg-gray-50 p-4 rounded border border-gray-200 space-y-2 text-sm">
                     @if($voucher)
                         <div class="flex justify-between">
                             <span class="text-gray-700 font-medium">Tạm tính:</span>
@@ -208,14 +222,21 @@
 
             </div>
 
-            {{-- <button 
+            <button onclick="toggleCheckoutForm(true)"
                 class="block md:hidden w-full text-center bg-blue-600 text-white font-semibold py-3 rounded hover:bg-blue-700 transition">
                 Xác nhận thanh toán
-            </button> --}}
+            </button>
+
 
             
 
-            <div class="col-span-1 md:col-span-2 space-y-4 md:sticky top-6 pb-3 ">
+            <div id="mobileCheckoutForm"
+                class="hidden space-y-4 md:block md:col-span-2 md:sticky md:top-6 md:p-6"
+                style="z-index: 0">
+
+
+
+
                 {{-- <h3 class="text-lg font-semibold text-gray-700">Tạm tính</h3>
                 <p class="text-2xl font-bold text-red-600">{{ number_format($total, 0, ',', '.') }}₫</p> --}}
                 {{-- Nhập mã giảm giá --}}
@@ -223,8 +244,18 @@
                 
                 
 
-                <div class="bg-white p-6 rounded shadow-md space-y-4 top-6">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Thông tin đặt hàng</h3>
+                <div class="bg-white p-6 rounded shadow-md space-y-4 pt-20 md:pt-3">
+                    
+                    <div class="flex justify-between items-center mb-4 ">
+                        <div class="text-lg font-semibold text-gray-700">Thông tin đặt hàng</div>
+
+                        <button onclick="toggleCheckoutForm(false)"
+                            class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 text-xl hover:bg-gray-200 transition md:hidden">
+                            ×
+                        </button>
+                    </div>
+
+                    
                     <p class="text-gray-600 mb-4">Vui lòng điền thông tin bên dưới để hoàn tất đơn hàng.</p>
 
 
@@ -395,6 +426,24 @@
 
     });
 </script>
+<script>
+    function toggleCheckoutForm(show) {
+        const form = document.getElementById('mobileCheckoutForm');
+
+        if (window.innerWidth < 768) {
+            if (show) {
+                form.classList.add('mobile-active');
+                form.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                form.classList.remove('mobile-active');
+                form.classList.add('hidden');
+            }
+        }
+    }
+</script>
+
+
 
 
 

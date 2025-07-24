@@ -4,7 +4,8 @@
 <div class="container pt-24 pb-10 bg-white rounded shadow">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {{-- Hình ảnh --}}
-        <div>
+        <div class="bg-white rounded-lg shadow-md p-4">
+            {{-- Ảnh lớn --}}
             @php
                 $defaultVariant = $product->variants->first();
                 $defaultImages = $defaultVariant->images;
@@ -13,7 +14,7 @@
 
             <div id="mainImage" class="border rounded-lg overflow-hidden shadow-md">
                 @if($defaultImages->count())
-                    <img src="{{ asset('storage/' . $defaultImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
+                    <img src="{{ asset('storage/' . $defaultImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain bg-white " id="previewImage">
                 @elseif($fallbackImages && $fallbackImages->count())
                     <img src="{{ asset('storage/' . $fallbackImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
                 @else
@@ -24,7 +25,7 @@
             {{-- Ảnh nhỏ --}}
             <div class="flex mt-4 gap-3 overflow-x-auto pb-2" id="thumbnailWrapper">
                 @foreach(($defaultImages->count() ? $defaultImages : $fallbackImages ?? []) as $img)
-                    <img src="{{ asset('storage/' . $img->image_path) }}" class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition" onclick="changeMainImage('{{ asset('storage/' . $img->image_path) }}')">
+                    <img src="{{ asset('storage/' . $img->image_path) }}" class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition " onclick="changeMainImage('{{ asset('storage/' . $img->image_path) }}')">
                 @endforeach
             </div>
         </div>
@@ -104,22 +105,26 @@
     </div>
 
     {{-- Mô tả sản phẩm --}}
-    <div class="mt-6 md:w-1/2 w-full">
-        <h3 class="w-1/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Thông tin sản phẩm</h3>
+    @if (!empty($product->description))
+        <div class="mt-6 md:w-1/2 w-full border border-gray-200 rounded-lg shadow-sm p-4">
+            <h3 class="w-1/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Thông tin sản phẩm</h3>
 
-        <div id="techSpecWrapper" class="overflow-hidden transition-all duration-300 max-h-[200px]">
-            <div class="prose max-w-none text-sm text-gray-800">
-                {!! $product->description !!}
+            <div id="techSpecWrapper" class="overflow-hidden transition-all duration-300 max-h-[200px]">
+                <div class="prose max-w-none text-sm text-gray-800">
+                    {!! $product->description !!}
+                </div>
             </div>
-        </div>
 
-        <button id="toggleSpecBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-200 text-sm font-medium focus:outline-none">
-            Đọc thêm
-        </button>
-    </div>
+            <button id="toggleSpecBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-200 text-sm font-medium focus:outline-none">
+                Đọc thêm
+            </button>
+        </div>
+    @endif
+
+    {{-- Đánh giá sản phẩm --}}
 
     @if ($canReview)
-        <form action="{{ route('user.reviews.store') }}" method="POST" class="mt-4">
+        <form action="{{ route('user.reviews.store') }}" method="POST" class="mt-4 border border-gray-200 rounded-lg shadow-sm p-4">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
 
@@ -147,7 +152,7 @@
     @endif
 
     {{-- Hiển thị đánh giá --}}
-    <h3 class="text-lg font-semibold text-gray-800 mt-10 mb-4">Đánh giá sản phẩm</h3>
+    <h3 class="text-lg font-semibold text-gray-800 mt-10 mb-4 ">Đánh giá sản phẩm</h3>
 
     @forelse($product->approvedReviews as $review)
         <div class="w-full md:w-1/2 mb-4 p-4 bg-gray-50 rounded-lg shadow-sm">
@@ -171,7 +176,7 @@
 
     {{-- Sản phẩm đã xem --}}
     @if($recentlyViewed->count())
-        <div class="mt-10">
+        <div class="mt-10 bg-white rounded-lg shadow-md p-4">
             <h3 class="text-base font-semibold text-gray-700 mb-4">Sản phẩm bạn đã xem gần đây</h3>
 
             <!-- Swiper Container -->

@@ -11,6 +11,7 @@
                 <p><strong>Mã đơn hàng:</strong> <span class="text-blue-600 font-medium">#{{ $order->code }}</span></p>
                 <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
                 <p><strong>Trạng thái:</strong> <span class="font-semibold text-blue-600">{{ ucfirst($order->status) }}</span></p>
+                <p><strong>Phương thức thanh toán:</strong> <span>{{ $order->payment_method }}</span> </p>
             </div>
             <div>
                 <p><strong>Thanh toán:</strong>

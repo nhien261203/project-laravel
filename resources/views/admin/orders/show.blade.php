@@ -46,6 +46,13 @@
                     <option value="paid" {{ $order->payment_status == 'paid' ? 'selected' : '' }}>Đã thanh toán</option>
                 </select>
             </div>
+            <div class="md:col-span-2">
+                <p class="mt-2 text-gray-700">
+                    <strong>Phương thức thanh toán:</strong>
+                    {{ $order->payment_method }}
+                </p>
+            </div>
+
 
             <div class="md:col-span-2">
                 <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
