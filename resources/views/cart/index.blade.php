@@ -1,8 +1,6 @@
 @extends('layout.user')
 
 @section('content')
-
-
 <style>
 
 #mobileCheckoutForm.mobile-active {
@@ -27,6 +25,18 @@
     border-radius: 0.75rem;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
     margin-top: 0 !important;
+    animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 </style>
 
@@ -487,9 +497,3 @@
     @endif
 
 </script>
-
-
-
-
-
-
