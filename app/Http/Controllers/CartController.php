@@ -136,9 +136,13 @@ class CartController extends Controller
         if ($request->session()->has('applied_voucher')) {
             return back()->with(['error' => 'Bạn đã áp dụng một mã giảm giá. Vui lòng bỏ mã hiện tại trước khi áp dụng mã mới.']);
         }
-        $request->validate([
-            'voucher_code' => 'required|string',
-        ]);
+        // $request->validate([
+        //     'voucher_code' => 'required|string',
+        // ]);
+
+        if (! $request->filled('voucher_code')) {
+            return back()->with('error', 'Vui lòng nhập mã giảm giá trước khi áp dụng!');
+        }
 
         $code = $request->voucher_code;
         $user = Auth::user();
