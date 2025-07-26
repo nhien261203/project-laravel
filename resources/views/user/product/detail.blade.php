@@ -55,7 +55,13 @@
                 <label class="block text-sm font-semibold mb-1">Màu sắc:</label>
                 <div class="flex flex-wrap gap-2" id="colorOptions">
                     @foreach($colors as $color)
-                        <button class="color-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100" data-color="{{ $color }}" onclick="selectColor(this, '{{ $color }}')">
+                        @php
+                            $isActive = $color === $defaultVariant->color;
+                        @endphp
+                        <button
+                            class="color-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100 {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
+                            data-color="{{ $color }}"
+                            onclick="selectColor(this, '{{ $color }}')">
                             {{ $color }}
                         </button>
                     @endforeach
@@ -67,12 +73,19 @@
                 <label class="block text-sm font-semibold mb-1">Bộ nhớ:</label>
                 <div class="flex flex-wrap gap-2" id="storageOptions">
                     @foreach($storages as $storage)
-                        <button class="storage-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100" data-storage="{{ $storage }}" onclick="selectStorage(this, '{{ $storage }}')">
+                        @php
+                            $isActive = $storage === $defaultVariant->storage;
+                        @endphp
+                        <button
+                            class="storage-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100 {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
+                            data-storage="{{ $storage }}"
+                            onclick="selectStorage(this, '{{ $storage }}')">
                             {{ $storage }}
                         </button>
                     @endforeach
                 </div>
             </div>
+
 
             {{-- Số lượng --}}
             <div class="mb-4">
@@ -133,7 +146,7 @@
         <div id="productDescription" class="prose max-w-none text-sm text-gray-800 overflow-hidden transition-all duration-300 line-clamp-3">
             {!! $product->description !!}
         </div>
-        <button id="toggleDescriptionBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-200 text-sm font-medium focus:outline-none">
+        <button id="toggleDescriptionBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
             Đọc thêm
         </button>
     </div>

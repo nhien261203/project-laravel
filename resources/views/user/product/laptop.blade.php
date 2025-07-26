@@ -127,18 +127,19 @@
                                 <button
                                     type="button"
                                     onclick="event.stopPropagation(); event.preventDefault(); addToCompare({{ $product->id }}, '{{ request()->segment(1) }}')"
-                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-xs border rounded-full text-blue-600 border-blue-500 hover:bg-blue-500 hover:text-white transition"
+                                    class="w-8 h-8 flex items-center justify-center rounded-full border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition"
+                                    title="Thêm vào so sánh"
                                 >
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h8m-8 6h16" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                                     </svg>
-                                    So sánh
                                 </button>
 
                                 <div class="text-xs text-gray-500 flex items-center gap-1">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    {{-- <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h18M9 3v18m6-18v18" />
-                                    </svg>
+                                    </svg> --}}
                                     <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
                                 </div>
                             </div>
@@ -175,10 +176,8 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const currentParams = new URLSearchParams(window.location.search);
-    const pathname = window.location.pathname;
     function updateCompareCount() {
         const category = "{{ request()->segment(1) }}";
         const compareList = JSON.parse(localStorage.getItem('compare_products')) || {};
@@ -186,104 +185,109 @@ document.addEventListener('DOMContentLoaded', function () {
         const countEl = document.getElementById('compareCount');
         const btnCompare = document.querySelector('[onclick^="goToComparePage"]');
 
-        countEl.textContent = selected.length;
+        if (countEl) countEl.textContent = selected.length;
 
         // Ẩn hoặc hiện nút "So sánh"
-        if (selected.length === 0) {
-            btnCompare.style.display = 'none';
-        } else {
-            btnCompare.style.display = 'block';
+        if (btnCompare) {
+            btnCompare.style.display = selected.length > 0 ? 'block' : 'none';
         }
     }
 
+    function addToCompare(productId, categorySlug) {
+        const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
+        compare[categorySlug] = compare[categorySlug] || [];
 
-    updateCompareCount();
+        if (compare[categorySlug].includes(productId)) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Đã có trong danh sách so sánh',
+                toast: true,
+                position: 'top-end',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            return;
+        }
 
+        if (compare[categorySlug].length >= 4) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Chỉ được so sánh tối đa 4 sản phẩm',
+                toast: true,
+                position: 'top-end',
+                timer: 3000,
+                showConfirmButton: false
+            });
+            return;
+        }
 
+        compare[categorySlug].push(productId);
+        localStorage.setItem("compare_products", JSON.stringify(compare));
+        updateCompareCount();
 
-    document.querySelectorAll('.btn-filter').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const name = btn.getAttribute('data-name');
-            const value = btn.getAttribute('data-value');
+        Swal.fire({
+            icon: 'success',
+            title: 'Đã thêm vào danh sách so sánh!',
+            toast: true,
+            position: 'top-end',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
 
-            // Nếu là mảng (checkbox price_ranges[])
-            if (name.endsWith('[]')) {
-                const allValues = currentParams.getAll(name);
-                if (allValues.includes(value)) {
-                    // Bỏ chọn
-                    const newValues = allValues.filter(v => v !== value);
-                    currentParams.delete(name);
-                    newValues.forEach(v => currentParams.append(name, v));
+    function goToComparePage(categorySlug) {
+        const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
+        const ids = compare[categorySlug] || [];
+
+        if (ids.length < 2) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Bạn cần chọn ít nhất 2 sản phẩm để so sánh.',
+                toast: true,
+                position: 'top-end',
+                timer: 2500,
+                showConfirmButton: false
+            });
+            return;
+        }
+
+        const query = ids.map(id => `ids[]=${id}`).join('&');
+        window.location.href = `/so-sanh/${categorySlug}?${query}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateCompareCount();
+
+        const currentParams = new URLSearchParams(window.location.search);
+        const pathname = window.location.pathname;
+
+        document.querySelectorAll('.btn-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const name = btn.getAttribute('data-name');
+                const value = btn.getAttribute('data-value');
+
+                if (name.endsWith('[]')) {
+                    const allValues = currentParams.getAll(name);
+                    if (allValues.includes(value)) {
+                        const newValues = allValues.filter(v => v !== value);
+                        currentParams.delete(name);
+                        newValues.forEach(v => currentParams.append(name, v));
+                    } else {
+                        currentParams.append(name, value);
+                    }
                 } else {
-                    // Thêm chọn
-                    currentParams.append(name, value);
+                    if (currentParams.get(name) === value) {
+                        currentParams.delete(name);
+                    } else {
+                        currentParams.set(name, value);
+                    }
                 }
-            } else {
-                // Nếu đã chọn rồi → bỏ đi
-                if (currentParams.get(name) === value) {
-                    currentParams.delete(name);
-                } else {
-                    currentParams.set(name, value);
-                }
-            }
 
-           
-           // Xoá tham số page khi thay đổi bộ lọc
-            currentParams.delete('page');
-
-            // Redirect với query mới
-            const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
-            window.location.href = newUrl;
-
-
-            // Cập nhật số lượng so sánh
-            const category = "{{ request()->segment(1) }}";
-            const compareList = JSON.parse(localStorage.getItem('compare_products')) || {};
-            const selected = compareList[category] || [];
-            document.getElementById('compareCount').textContent = selected.length;
-
-
+                currentParams.delete('page');
+                const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
+                window.location.href = newUrl;
+            });
         });
     });
-});
-function getCompareList(categorySlug) {
-    const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
-    return compare[categorySlug] || [];
-}
-
-function addToCompare(productId, categorySlug) {
-    const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
-    compare[categorySlug] = compare[categorySlug] || [];
-
-    if (compare[categorySlug].includes(productId)) return;
-    if (compare[categorySlug].length >= 4) {
-        alert("Chỉ được so sánh tối đa 4 sản phẩm.");
-        return;
-    }
-
-    compare[categorySlug].push(productId);
-    localStorage.setItem("compare_products", JSON.stringify(compare));
-    updateCompareCount();
-
-    alert("Đã thêm vào danh sách so sánh");
-}
-function goToComparePage(categorySlug) {
-    const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
-    const ids = compare[categorySlug] || [];
-
-    if (ids.length < 2) {
-        alert("Bạn cần chọn ít nhất 2 sản phẩm để so sánh.");
-        return;
-    }
-
-    // Chuyển sang trang so sánh, ví dụ: /so-sanh/dien-thoai?ids[]=1&ids[]=2
-    const query = ids.map(id => `ids[]=${id}`).join('&');
-    window.location.href = `/so-sanh/${categorySlug}?${query}`;
-}
-
-
-
 </script>
 @endpush
-
-
