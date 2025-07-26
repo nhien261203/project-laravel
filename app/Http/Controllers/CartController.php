@@ -56,46 +56,67 @@ class CartController extends Controller
     {
         $data = $request->validate([
             'variant_id' => 'required|exists:product_variants,id',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
         ]);
 
         $variant = ProductVariant::findOrFail($data['variant_id']);
 
-        // Kiểm tra tồn kho
+        $userId = Auth::id();
+        $sessionId = $request->session()->getId();
 
+        $cart = $this->repo->getUserCart($userId, $sessionId);
+
+        $existingItem = $cart
+            ? $cart->items->firstWhere('product_variant_id', $variant->id)
+            : null;
+
+        $existingQty = $existingItem ? $existingItem->quantity : 0;
+
+        $totalRequestedQty = $existingQty + $data['quantity'];
+
+        // Kiểm tra tồn kho
         if ($variant->quantity == 0) {
             $message = 'Sản phẩm tạm thời hết hàng.';
 
-            if ($request->ajax() || $request->expectsJson()) {
-                return response()->json(['error' => $message], 400);
-            }
-
-            return redirect()->back()->with('error', $message);
+            return $request->expectsJson()
+                ? response()->json(['error' => $message], 400)
+                : redirect()->back()->with('error', $message)
+                ->with('selected_color', $variant->color)
+                ->with('selected_storage', $variant->storage);
         }
 
-        if ($data['quantity'] > $variant->quantity) {
-            $message = 'Hiện tại cửa hàng chỉ còn ' . $variant->quantity . ' sản phẩm.';
+        if ($totalRequestedQty > $variant->quantity) {
+            $message = $existingQty > 0
+                ? 'Sản phẩm này chỉ còn ' . $variant->quantity . ' chiếc và bạn đã thêm ' . $existingQty . ' vào giỏ hàng.'
+                : 'Hiện tại cửa hàng chỉ còn ' . $variant->quantity . ' sản phẩm.';
 
-            if ($request->ajax() || $request->expectsJson()) {
-                return response()->json(['error' => $message], 400);
-            }
-
-            return redirect()->back()->with('error', $message);
+            return $request->expectsJson()
+                ? response()->json(['error' => $message], 400)
+                : redirect()->back()->with('error', $message)
+                ->with('selected_color', $variant->color)
+                ->with('selected_storage', $variant->storage);
         }
 
-        $this->repo->addToCart(
-            Auth::id(),
-            $request->session()->getId(),
-            $data['variant_id'],
-            $data['quantity']
-        );
+        // thêm vào giỏ
+        $this->repo->addToCart($userId, $sessionId, $variant->id, $data['quantity']);
 
-        if ($request->ajax() || $request->expectsJson()) {
-            return response()->json(['message' => 'Đã thêm vào giỏ']);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã thêm vào giỏ hàng!'
+            ]);
         }
 
-        return redirect()->route('cart.index')->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
+        if ($request->input('redirect_to_cart') == 1) {
+            return redirect()->route('cart.index')->with('success', 'Đã thêm sản phẩm vào giỏ hàng!');
+        }
+
+        return redirect()->back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng!')
+            ->with('selected_color', $variant->color)
+            ->with('selected_storage', $variant->storage);
     }
+
+
 
     public function remove(Request $request, $variantId)
     {
@@ -197,5 +218,11 @@ class CartController extends Controller
     }
 
 
-    
+    public function count()
+    {
+        $cart = $this->repo->getUserCart(Auth::id(), session()->getId());
+        $qty = $cart ? $cart->items->sum('quantity') : 0;
+
+        return response()->json(['count' => $qty]);
+    }
 }

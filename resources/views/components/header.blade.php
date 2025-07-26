@@ -59,9 +59,18 @@
 
                 <a href="{{ route('cart.index') }}" class="relative py-3">
                     <i class="fas fa-shopping-cart text-white text-xl hover:text-slate-300"></i>
-                    @if($cartQty > 0)
+                    {{-- @if($cartQty > 0)
                         <div class="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 left-[9px] flex items-center justify-center text-xs">
                             {{ $cartQty }}
+                        </div>
+                    @endif --}}
+                    @if($cartQty > 0)
+                        <div id="cartQtyHeader" class="w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 left-[9px] flex items-center justify-center text-xs">
+                            {{ $cartQty }}
+                        </div>
+                    @else
+                        <div id="cartQtyHeader" class="hidden w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 left-[9px] flex items-center justify-center text-xs">
+                            0
                         </div>
                     @endif
                 </a>
@@ -170,6 +179,20 @@
                 }
             });
         });
+    </script>
+    <script>
+        function updateCartQty() {
+            fetch('{{ route("cart.count") }}')
+                .then(res => res.json())
+                .then(data => {
+                    const qtyEl = document.getElementById('cartQtyHeader');
+                    if (qtyEl) {
+                        qtyEl.innerText = data.count;
+                        qtyEl.classList.toggle('hidden', data.count === 0);
+                    }
+                });
+        }
+
     </script>
 
 

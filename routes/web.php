@@ -95,6 +95,10 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/apply-voucher', [CartController::class, 'applyVoucher'])->name('apply-voucher');
     Route::post('/remove-voucher', [CartController::class, 'removeVoucher'])->name('remove-voucher');
 
+    // routes/web.php
+    Route::get('/count', [CartController::class, 'count'])->name('count');
+
+
 });
 
 Route::middleware(['auth'])->prefix('orders')->name('user.orders.')->group(function () {

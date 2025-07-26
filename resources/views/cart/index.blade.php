@@ -223,16 +223,16 @@
                 @endif
             </div>
 
-            <button onclick="toggleCheckoutForm(true)"
-                class="w-full text-center bg-blue-600 text-white font-semibold py-3 mt-3 rounded hover:bg-blue-700 transition">
-                Xác nhận thanh toán
-            </button>
-            
+            <div class="flex justify-center">
+                <button onclick="toggleCheckoutForm(true)"
+                    class="w-1/3 text-center bg-blue-600 text-white font-semibold py-3 mt-3 rounded hover:bg-blue-700 transition">
+                    Xác nhận đơn hàng
+                </button>
+            </div>
+
             <div id="mobileCheckoutForm"
                 class="hidden">
-
-
-
+                
                 <div class="checkout-box bg-white shadow-xl rounded-lg p-6 w-full max-w-xl mt-10">
                     <div class="flex justify-between items-center mb-4">
                         <div class="text-lg font-semibold text-gray-700">Thông tin đặt hàng</div>

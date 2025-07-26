@@ -2,31 +2,31 @@
 
 @section('content')
 <div class="container mx-auto py-10 pt-20">
-    <h1 class="text-2xl font-bold mb-6 ">So sánh sản phẩm</h1>
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">🔍 So sánh sản phẩm</h1>
 
     @if($products->count() >= 2)
-    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-        <table class="table-auto w-full text-sm border-collapse border rounded overflow-hidden">
-            <thead>
+    <div class="overflow-x-auto bg-white shadow-xl rounded-xl ring-1 ring-gray-200">
+        <table class="table-auto min-w-[800px] w-full text-sm text-gray-700 border-separate border-spacing-0">
+            <thead class="sticky top-0 z-10 bg-gray-100 text-xs uppercase text-gray-600">
                 <tr>
-                    <th class="border p-3 bg-gray-100 text-left font-semibold">Thuộc tính</th>
+                    <th class="p-4 border-r font-bold text-left bg-gray-200">Thuộc tính</th>
                     @foreach ($products as $p)
-                        <th class="border p-3 bg-white text-center relative align-top">
-                            <div class="font-semibold">{{ $p->name }}</div>
+                        <th class="p-4 border-r text-center bg-white relative group align-top min-w-[200px]">
+                            <div class="text-base font-semibold text-gray-800 mb-2">{{ $p->name }}</div>
                             <button onclick="removeFromCompare({{ $p->id }})"
-                                    class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition">
+                                class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-red-500 text-white text-sm rounded-full hover:bg-red-600 transition group-hover:scale-110">
                                 &times;
                             </button>
                         </th>
                     @endforeach
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-sm">
                 @php
                     $rows = [
                         'Ảnh' => fn($p) => optional($p->variants->first()?->images->first())->image_path
-                            ? '<img src="' . asset('storage/' . optional($p->variants->first()?->images->first())->image_path) . '" class="h-20 mx-auto object-contain" />'
-                            : '<span class="text-gray-400">Không có ảnh</span>',
+                            ? '<img src="' . asset('storage/' . optional($p->variants->first()?->images->first())->image_path) . '" class="h-28 mx-auto object-contain rounded shadow-md" />'
+                            : '<div class="text-gray-400 italic">Không có ảnh</div>',
 
                         'Giá' => fn($p) => $p->variants->pluck('price')->filter()->unique()
                             ->map(fn($v) => number_format($v, 0, ',', '.') . '₫')->implode(' / ') ?: 'N/A',
@@ -44,10 +44,10 @@
                 @endphp
 
                 @foreach ($rows as $label => $callback)
-                    <tr>
-                        <td class="border p-3 bg-gray-50 font-medium">{{ $label }}</td>
+                    <tr class="border-t">
+                        <td class="p-4 bg-gray-50 font-medium text-gray-700 border-r whitespace-nowrap">{{ $label }}</td>
                         @foreach ($products as $p)
-                            <td class="border p-3 text-center">{!! $callback($p) !!}</td>
+                            <td class="p-4 text-center">{!! $callback($p) !!}</td>
                         @endforeach
                     </tr>
                 @endforeach
@@ -55,7 +55,9 @@
         </table>
     </div>
     @else
-        <p class="text-gray-500">Bạn cần chọn ít nhất 2 sản phẩm để so sánh.</p>
+        <div class="text-gray-500 text-center py-8 bg-white rounded-lg shadow">
+            Bạn cần chọn ít nhất <strong>2 sản phẩm</strong> để so sánh.
+        </div>
     @endif
 </div>
 @endsection

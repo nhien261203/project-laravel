@@ -85,7 +85,21 @@
             </div>
 
             {{-- Nút hành động --}}
-            <form method="POST" action="{{ route('cart.add') }}" class="flex gap-3 items-center">
+            {{-- <form method="POST" action="{{ route('cart.add') }}" class="flex gap-3 items-center">
+                @csrf
+                <input type="hidden" name="variant_id" id="formVariantId" value="{{ $defaultVariant->id }}">
+                <input type="hidden" name="quantity" id="formQuantity" value="1">
+                <input type="hidden" name="redirect_to_cart" id="redirectToCart" value="0">
+
+                <button type="submit" class="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600">
+                    Thêm vào giỏ
+                </button>
+
+                <button type="button" onclick="buyNow()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                    Mua ngay
+                </button>
+            </form> --}}
+            <form id="addToCartForm" class="flex gap-3 items-center" onsubmit="return addToCart(event)">
                 @csrf
                 <input type="hidden" name="variant_id" id="formVariantId" value="{{ $defaultVariant->id }}">
                 <input type="hidden" name="quantity" id="formQuantity" value="1">
@@ -98,6 +112,7 @@
                     Mua ngay
                 </button>
             </form>
+
 
             {{-- Thông số kỹ thuật --}}
             <div class="mt-5 bg-gray-100 p-4 rounded-lg space-y-1 text-sm md:text-base" id="variantDetails">
@@ -260,8 +275,8 @@
 {{-- Scripts --}}
 <script>
     const variants = @json($product->variants);
-    let selectedColor = '{{ $defaultVariant->color }}';
-    let selectedStorage = '{{ $defaultVariant->storage }}';
+    let selectedColor = '{{ session('selected_color', $defaultVariant->color) }}';
+    let selectedStorage = '{{ session('selected_storage', $defaultVariant->storage) }}';
 
     window.onload = () => {
         updateOptions();
@@ -420,9 +435,16 @@
         inputQty.name = 'quantity';
         inputQty.value = quantity;
 
+
+        const redirectInput = document.createElement('input');
+        redirectInput.type = 'hidden';
+        redirectInput.name = 'redirect_to_cart';
+        redirectInput.value = '1'; //chuyển trang
+
         form.appendChild(csrf);
         form.appendChild(inputVariant);
         form.appendChild(inputQty);
+        form.appendChild(redirectInput);
 
         document.body.appendChild(form);
         form.submit();
@@ -498,6 +520,61 @@
             });
         });
     });
+</script>
+
+<script>
+    function addToCart(event) {
+    event.preventDefault();
+
+    const variantId = document.getElementById('formVariantId').value;
+    const quantity = document.getElementById('formQuantity').value;
+
+    fetch('{{ route('cart.add') }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ variant_id: variantId, quantity: quantity })
+    })
+    .then(response => {
+        return response.json().then(data => {
+            if (!response.ok) throw data;
+            return data;
+        });
+    })
+    .then(data => {
+        updateCartQty();
+
+        if (data.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Đã thêm vào giỏ hàng!',
+                timer: 2000,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Thêm vào giỏ thất bại!',
+            text: error.error || 'Đã xảy ra lỗi, vui lòng thử lại.',
+            timer: 3000,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    });
+
+
+    return false;
+}
+
+
 </script>
 
 
