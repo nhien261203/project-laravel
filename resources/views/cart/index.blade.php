@@ -53,7 +53,7 @@
                 <p class="text-sm text-gray-500">Bạn chưa thêm sản phẩm nào. Khám phá ngay để lựa chọn món đồ yêu thích!</p>
             </div>
 
-            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+            <a href="{{ route('product.phone') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
                 🛍️ <span>Tiếp tục mua sắm</span>
             </a>
         </div>
@@ -62,7 +62,12 @@
     
 
     <div class="max-w-5xl mx-auto">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Giỏ hàng của bạn</h1>
+        <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
+            <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
+            <span class="text-gray-400">›</span>
+            <span class="text-gray-800 font-medium">Giỏ hàng</span>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         {{-- Cột trái: Danh sách sản phẩm --}}
         <div class="md:col-span-1 space-y-6 ">
@@ -224,10 +229,18 @@
             </div>
 
             <div class="flex justify-center">
-                <button onclick="toggleCheckoutForm(true)"
-                    class="w-1/3 text-center bg-blue-600 text-white font-semibold py-3 mt-3 rounded hover:bg-blue-700 transition">
-                    Xác nhận đơn hàng
-                </button>
+                @auth
+                    <button onclick="toggleCheckoutForm(true)"
+                        class="w-1/3 text-center bg-blue-600 text-white font-semibold py-3 mt-3 rounded hover:bg-blue-700 transition">
+                        Xác nhận đơn hàng
+                    </button>
+                @endauth
+
+                @guest
+                    <div class="text-center mt-3 text-red-600 font-semibold">
+                        Vui lòng <a href="{{ route('login') }}" class="underline hover:text-red-700">đăng nhập</a> để mua hàng
+                    </div>
+                @endguest
             </div>
 
             <div id="mobileCheckoutForm"
@@ -331,7 +344,7 @@
                     </form>
                     
 
-                    <a href="{{ route('home') }}"
+                    <a href="{{ route('product.phone') }}"
                         class="block w-full text-center border border-gray-300 text-gray-700 py-3 rounded hover:bg-gray-100 transition">
                         Tiếp tục mua sắm
                     </a>

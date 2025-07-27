@@ -47,7 +47,13 @@
 </style>
 
 <div class="container mx-auto py-10 pt-20">
-    <h1 class="text-3xl font-bold mb-8 text-gray-800">So sánh sản phẩm</h1>
+    {{-- <h1 class="text-3xl font-bold mb-8 text-gray-800">So sánh sản phẩm</h1> --}}
+
+    <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
+        <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
+        <span class="text-gray-400">›</span>
+        <span class="text-gray-800 font-medium">So sánh sản phẩm</span>
+    </div>
 
     @if($products->count() >= 2)
     <div class="overflow-auto bg-white rounded-xl shadow-xl ring-1 ring-gray-200">

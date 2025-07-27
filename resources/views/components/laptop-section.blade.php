@@ -1,3 +1,7 @@
+
+
+{{-- <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"> --}}
+
 <div class="bg-white my-8 p-4 rounded-lg shadow">
     <div class="mb-4 flex items-center justify-between">
         <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Laptop ưu đãi đặc biệt</h2>
@@ -10,8 +14,9 @@
         {{-- Cột trái: Banner ảnh --}}
         <div class="md:col-span-1">
             <img src="https://images.pexels.com/photos/5698417/pexels-photo-5698417.jpeg"
-                 alt="Laptop Banner"
-                 class="w-full h-[320px] object-cover rounded-lg shadow" loading="lazy">
+                alt="Laptop Banner"
+                class="w-full h-[320px] object-cover rounded-lg shadow" >
+                {{-- data-aos="fade-up" --}}
         </div>
 
         {{-- Cột phải: Swiper hiển thị sản phẩm --}}
@@ -31,13 +36,13 @@
 
                         <div class="swiper-slide">
                             <a href="{{ route('product.detail', $product->slug) }}"
-                               class="block bg-white border rounded-lg shadow hover:shadow-lg transition overflow-hidden hover:text-blue-600">
+                            class="block bg-white border rounded-lg shadow hover:shadow-lg transition overflow-hidden hover:text-blue-600">
                                 {{-- Ảnh sản phẩm --}}
                                 <div class="relative bg-white aspect-[4/5] flex items-center justify-center">
                                     @if($image)
                                         <img src="{{ asset('storage/' . $image) }}"
-                                             alt="{{ $product->name }}"
-                                             class="object-contain max-h-full max-w-full p-2" loading="lazy">
+                                            alt="{{ $product->name }}"
+                                            class="object-contain max-h-full max-w-full p-2" loading="lazy">
                                     @else
                                         <span class="text-white text-sm">Không có ảnh</span>
                                     @endif
@@ -82,6 +87,15 @@
     </div>
 </div>
 @push('scripts')
+{{-- <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init({
+        once: true, // animation chỉ chạy 1 lần
+        duration: 800, // thời gian animation
+        offset: 100, // khoảng cách trước khi trigger
+    });
+</script> --}}
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         new Swiper('.laptop-swiper', {

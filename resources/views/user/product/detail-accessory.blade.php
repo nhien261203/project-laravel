@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="container pt-24 pb-10 bg-white rounded shadow">
+    <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
+        <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
+        <span class="text-gray-400">›</span>
+        <span class="text-gray-800 font-medium">Chi tiết sản phẩm: {{ $product->name }}</span>
+    </div>
+    
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {{-- Hình ảnh --}}
         <div class="bg-white rounded-lg shadow-md p-4">

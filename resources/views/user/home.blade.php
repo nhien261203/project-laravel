@@ -15,13 +15,15 @@
                 @include('components.category-card', [
                     
                     'title' => 'Điện thoại',
-                    'image' => 'https://cdn.mobilecity.vn/mobilecity-vn/images/2024/12/dien-thoai-chup-anh-dep-nhat-2025-2.jpg.webp',
+                    'image' => 'https://images.pexels.com/photos/1398339/pexels-photo-1398339.jpeg',
+                    //'image' => asset('storage/card/phone-img.webp'),
                     'link' => route('product.phone') 
                 ])
 
                 @include('components.category-card', [
                     'title' => 'Laptop',
                     'image' => 'https://images.pexels.com/photos/3975680/pexels-photo-3975680.jpeg',
+                    //'image' => asset('storage/card/lap.webp'),
                     'link' => route('product.laptop')
                 ])
 
@@ -34,15 +36,16 @@
                 @include('components.category-card', [
                     'title' => 'Phụ kiện di động',
                     'image' => 'https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg',
+                    // 'image' => asset('storage/card/phu-kien.webp'),
                     'link' => route('product.accessory.mobile')
                 ])
 
                 @include('components.category-card', [
                     'title' => 'Phụ kiện âm thanh',
                     'image' => 'https://images.pexels.com/photos/32880383/pexels-photo-32880383.jpeg',
+                    //'image' => asset('storage/card/am-thanh.webp'),
                     'link' => route('product.accessory.audio')
                 ])
-
 
             </div>
         </div>
