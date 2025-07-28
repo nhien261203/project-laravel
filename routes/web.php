@@ -121,6 +121,9 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::get('/dashboard/statistics', [DashboardController::class, 'getStatistics'])->name('dashboard.statistics');
     Route::get('/dashboard/category-pie', [DashBoardController::class, 'getCategoryPieChart']);
 
+    Route::get('/dashboard/monthly-summary', [DashBoardController::class, 'getMonthlySummary'])->name('dashboard.monthly-summary');
+
+
 
 
     Route::resource('brands', BrandController::class);

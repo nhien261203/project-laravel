@@ -10,6 +10,7 @@ interface DashboardRepositoryInterface
     // public function getLatestDateHavingData();
     public function getAvailableStatuses();
     public function getProductCountByCategory($brandId = null);
+    public function getMonthlyRevenueAndUsers($year = null);
     
 
 }

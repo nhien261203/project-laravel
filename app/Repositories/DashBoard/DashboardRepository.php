@@ -60,10 +60,36 @@ class DashboardRepository implements DashboardRepositoryInterface
         if ($brandId) {
             $query->where('products.brand_id', $brandId);
         }
-        
+
 
         // dd($result);
         return $query->get();
+    }
+
+    // DashboardRepository.php
+    public function getMonthlyRevenueAndUsers($year = null)
+    {
+        $year = $year ?? now()->year;
+
+        // Doanh thu mỗi tháng
+        $revenues = DB::table('orders')
+            ->selectRaw('MONTH(created_at) as month, SUM(total_amount) as total')
+            ->whereYear('created_at', $year)
+            ->where('status', 'completed')
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        // Người dùng đăng ký mới mỗi tháng
+        $users = DB::table('users')
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $year)
+            ->groupBy('month')
+            ->pluck('total', 'month');
+
+        return [
+            'revenues' => $revenues,
+            'users' => $users,
+        ];
     }
 
 

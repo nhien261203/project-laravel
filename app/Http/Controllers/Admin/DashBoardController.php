@@ -9,6 +9,7 @@ use App\Repositories\Dashboard\DashboardRepositoryInterface;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class DashBoardController extends Controller
 {
@@ -47,6 +48,18 @@ class DashBoardController extends Controller
     // API trả dữ liệu cho biểu đồ
     public function getStatistics(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'status' => 'nullable|string|in:pending,processing,completed,cancelled',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Dữ liệu không hợp lệ: ' . $validator->errors()->first()
+            ], 422);
+        }
         $start = $request->input('start_date');
         $end = $request->input('end_date');
         $status = $request->input('status');
@@ -90,6 +103,30 @@ class DashBoardController extends Controller
             ],
             'start_date' => $start,
             'end_date' => $end,
+        ]);
+    }
+    public function getMonthlySummary(Request $request)
+    {
+        $year = $request->input('year', now()->year);
+        $data = $this->dashboard->getMonthlyRevenueAndUsers($year);
+
+        $months = collect(range(1, 12));
+        $labels = $months->map(fn($m) => 'Tháng ' . $m);
+        $revenues = $months->map(fn($m) => $data['revenues'][$m] ?? 0);
+        $users = $months->map(fn($m) => $data['users'][$m] ?? 0);
+
+        return response()->json([
+            'revenues' => [
+                'labels' => $labels,
+                'values' => $revenues,
+                'label' => 'Doanh thu theo tháng',
+            ],
+            'users' => [
+                'labels' => $labels,
+                'values' => $users,
+                'label' => 'Người dùng mới theo tháng',
+            ],
+            'year' => $year,
         ]);
     }
 }
