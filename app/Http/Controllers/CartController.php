@@ -144,6 +144,15 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
+        //kiem tra so luong cua bien the
+        $variant = ProductVariant::findOrFail($variantId);
+
+        if ($data['quantity'] > $variant->quantity) {
+            return redirect()->back()->with('error', 'Hiện chỉ còn ' . $variant->quantity . ' sản phẩm trong kho.')
+                ->with('selected_color', $variant->color)
+                ->with('selected_storage', $variant->storage);
+        }
+
         $this->repo->updateQuantity(Auth::id(), $request->session()->getId(), $variantId, $data['quantity']);
         return redirect()->route('cart.index')->with('success', 'Đã cập nhật số lượng');
     }
