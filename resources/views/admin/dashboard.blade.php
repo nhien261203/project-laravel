@@ -61,7 +61,7 @@
             {{-- Biểu đồ doanh thu theo ngày --}}
             <div id="revenueDayWrapper">
                 <div class="flex flex-wrap items-center gap-2 mb-4">
-                    <input type="date" id="revenues_start" class="border rounded px-2 py-1 w-full md:w-auto">
+                    <input type="date" id="revenues_start"  class="border rounded px-2 py-1 w-full md:w-auto">
                     <input type="date" id="revenues_end" class="border rounded px-2 py-1 w-full md:w-auto">
                     <button onclick="loadChart('revenues')" class="bg-green-600 text-white px-4 py-1 rounded">Lọc</button>
                 </div>
@@ -124,8 +124,8 @@
             {{-- Biểu đồ theo ngày --}}
             <div id="userDayWrapper">
                 <div class="flex flex-wrap items-center gap-2 mb-4">
-                    <input type="date" id="users_start" class="border rounded px-2 py-1 w-full md:w-auto">
-                    <input type="date" id="users_end" class="border rounded px-2 py-1 w-full md:w-auto">
+                    <input type="date"  id="users_start"  class="border rounded px-2 py-1 w-full md:w-auto">
+                    <input type="date" id="users_end"  class="border rounded px-2 py-1 w-full md:w-auto">
                     <button onclick="loadChart('users')" class="bg-purple-600 text-white px-4 py-1 rounded">Lọc</button>
                 </div>
                 <canvas id="userChart" height="200"></canvas>
@@ -146,44 +146,14 @@
         </div>
 
     </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-    {{-- Biểu đồ cột doanh thu theo 12 tháng --}}
-        {{-- <div class="bg-gray-50 p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-4">Doanh thu 12 tháng</h2>
-            <canvas id="monthlyRevenueChart" height="200"></canvas>
-            <p class="mt-2 text-sm text-gray-600">Tổng doanh thu năm: 
-                <span id="totalRevenueYear" class="font-semibold">0 ₫</span>
-            </p>
-        </div> --}}
-
-
-        {{-- Biểu đồ cột người dùng mới theo 12 tháng --}}
-        {{-- <div class="bg-gray-50 p-4 rounded shadow">
-            <h2 class="text-lg font-semibold mb-4">Người dùng mới 12 tháng</h2>
-            <canvas id="monthlyUserChart" height="200"></canvas>
-            <p class="mt-2 text-sm text-gray-600">Tổng người dùng mới năm: 
-                <span id="totalUsersYear" class="font-semibold">0</span>
-            </p>
-        </div> --}}
-
-    </div>
-
-
 
 </div>
-
-
 
 <style>
     #revenueDayWrapper, #revenueYearWrapper {
         transition: opacity 0.3s ease;
-    };
-    
-
-
+    }    
 </style>
-
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -251,7 +221,7 @@
 
                 if (data.success === false) {
                     Swal.fire({
-                        icon: 'success',
+                        icon: 'error',
                         title: 'Lỗi',
                         text: data.message,
                         timer: 2000,
@@ -282,8 +252,14 @@
                 const startInput = document.getElementById(`${chartType}_start`);
                 const endInput = document.getElementById(`${chartType}_end`);
 
-                if (!startInput.value) startInput.value = data.start_date;
-                if (!endInput.value) endInput.value = data.end_date;
+                // Gán giá trị nếu input chưa có
+                if (!startInput.value && data.start_date) {
+                    startInput.value = data.start_date.substring(0, 10); // lấy YYYY-MM-DD
+                }
+                if (!endInput.value && data.end_date) {
+                    endInput.value = data.end_date.substring(0, 10);
+                }
+
             })
 
 
@@ -324,18 +300,6 @@
         
         fetchChartData(chartType, start, end);
     }
-
-    // function setDefaultDates(idPrefix, start, end) {
-    // // Gán luôn giá trị trả từ controller, không cần tính -7 ngày
-    //     if (start) {
-    //         document.getElementById(`${idPrefix}_start`).value = start;
-    //     }
-
-    //     if (end) {
-    //         document.getElementById(`${idPrefix}_end`).value = end;
-    //     }
-    // }
-
 
     document.addEventListener('DOMContentLoaded', function () {
         // setDefaultDates('orders');
@@ -506,7 +470,5 @@
         }
     });
 </script>
-
-
 
 @endsection

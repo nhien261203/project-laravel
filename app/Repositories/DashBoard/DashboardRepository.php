@@ -29,7 +29,7 @@ class DashboardRepository implements DashboardRepositoryInterface
     {
         return Order::where('status', 'completed')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('DATE(created_at) as date, SUM(total_amount) as total')
+            ->selectRaw('DATE(created_at) as date, COALESCE(SUM(total_amount), 0) as total')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -73,7 +73,7 @@ class DashboardRepository implements DashboardRepositoryInterface
 
         // Doanh thu mỗi tháng
         $revenues = DB::table('orders')
-            ->selectRaw('MONTH(created_at) as month, SUM(total_amount) as total')
+            ->selectRaw('MONTH(created_at) as month, COALESCE(SUM(total_amount), 0) as total')
             ->whereYear('created_at', $year)
             ->where('status', 'completed')
             ->groupBy('month')

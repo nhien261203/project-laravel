@@ -64,11 +64,14 @@ class DashBoardController extends Controller
         $end = $request->input('end_date');
         $status = $request->input('status');
 
-        if (!$start || !$end) {
-            $end = now()->toDateString();
-            $start = now()->subDays(6)->toDateString();
+        if (empty($start) || empty($end)) {
+            $end = now()->endOfDay();
+            $start = now()->subDays(6)->startOfDay();
+        } else {
+            $start = Carbon::parse($start)->startOfDay();
+            $end = Carbon::parse($end)->endOfDay();
         }
-
+        
         // Danh sách ngày đầy đủ
         $period = CarbonPeriod::create($start, $end);
         $allDates = collect($period)->map(fn($date) => $date->toDateString());
