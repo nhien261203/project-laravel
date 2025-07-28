@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Dashboard;
 
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
@@ -92,7 +93,52 @@ class DashboardRepository implements DashboardRepositoryInterface
         ];
     }
 
+    public function getTopSellingProducts($limit = 5, $start = null, $end = null, $categoryId = null)
+    {
+        $query = DB::table('order_items')
+            ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
+            ->join('products', 'product_variants.product_id', '=', 'products.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->select(
+                'products.id',
+                'products.name',
+                'products.slug',
+                
+                DB::raw('SUM(order_items.quantity) as total_sold')
+            )
+            // ->whereNull('orders.deleted_at') // nếu có soft delete
+            ->where('orders.status', 'completed')
+            ->groupBy('products.id', 'products.name', 'products.slug')
+            ->orderByDesc('total_sold');
 
+        // Lọc theo thời gian
+        if ($start && $end) {
+            $query->whereBetween('orders.created_at', [$start, $end]);
+        }
+
+        // Lọc theo danh mục
+        if ($categoryId) {
+            $query->where('products.category_id', $categoryId);
+        }
+
+        return $query->take($limit)->get();
+    }
+
+    public function getMonthlyOrders($year, $status = null)
+    {
+        $query = Order::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->whereYear('created_at', $year);
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->groupBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
+    }
+
+    
     // public function getLatestDateHavingData()
     // {
     //     $latestOrder = \App\Models\Order::orderByDesc('created_at')->value('created_at');

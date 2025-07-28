@@ -123,6 +123,10 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
 
     Route::get('/dashboard/monthly-summary', [DashBoardController::class, 'getMonthlySummary'])->name('dashboard.monthly-summary');
 
+    Route::get('/dashboard/top-products', [DashBoardController::class, 'getTopSellingProducts']);
+
+    Route::get('/dashboard/monthly-orders', [DashBoardController::class, 'getMonthlyOrderSummary']);
+
 
 
 

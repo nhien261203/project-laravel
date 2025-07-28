@@ -26,7 +26,11 @@ class DashBoardController extends Controller
         $categories = Category::all();
         $brands = Brand::whereHas('products')->get();
         $statuses = $this->dashboard->getAvailableStatuses();
-        return view('admin.dashboard', compact('statuses', 'categories', 'brands'));
+        
+         // Lấy danh mục có sản phẩm đã từng được đặt hàng (có trong order_items)
+        $cateForOrder = Category::whereHas('products.variants.orderItems')->get();
+
+        return view('admin.dashboard', compact('statuses', 'categories', 'brands', 'cateForOrder'));
     }
 
 
@@ -71,7 +75,7 @@ class DashBoardController extends Controller
             $start = Carbon::parse($start)->startOfDay();
             $end = Carbon::parse($end)->endOfDay();
         }
-        
+
         // Danh sách ngày đầy đủ
         $period = CarbonPeriod::create($start, $end);
         $allDates = collect($period)->map(fn($date) => $date->toDateString());
@@ -132,4 +136,62 @@ class DashBoardController extends Controller
             'year' => $year,
         ]);
     }
+
+    public function getTopSellingProducts(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after:start_date',
+            'category_id' => 'nullable|exists:categories,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Dữ liệu không hợp lệ: ' . $validator->errors()->first()
+            ], 422);
+        }
+
+        $start = $request->input('start_date');
+        $end = $request->input('end_date');
+        $categoryId = $request->input('category_id');
+        $limit = $request->input('limit', 5);
+
+        if (!$start || !$end) {
+            $end = Carbon::now()->endOfDay();
+            $start = Carbon::now()->subDays(6)->startOfDay(); // 7 ngày gần nhất
+        } else {
+            $start = Carbon::parse($start)->startOfDay();
+            $end = Carbon::parse($end)->endOfDay();
+        }
+
+        $products = $this->dashboard->getTopSellingProducts($limit, $start, $end, $categoryId);
+
+        return response()->json([
+            'labels' => $products->pluck('name'),
+            'values' => $products->pluck('total_sold'),
+            'label' => 'Top 5 sản phẩm bán chạy',
+            'start_date' => $start->toDateString(),
+            'end_date' => $end->toDateString(),
+        ]);
+    }
+    public function getMonthlyOrderSummary(Request $request)
+    {
+        $year = $request->input('year', now()->year);
+        $status = $request->input('status'); // Có thể null
+
+        $data = $this->dashboard->getMonthlyOrders($year, $status); // Gọi từ repository
+
+        $months = collect(range(1, 12));
+        $labels = $months->map(fn($m) => 'Tháng ' . $m);
+        $values = $months->map(fn($m) => $data[$m] ?? 0);
+
+        return response()->json([
+            'labels' => $labels,
+            'values' => $values,
+            'label' => 'Đơn hàng theo tháng',
+            'year' => $year,
+        ]);
+    }
+
 }
