@@ -18,11 +18,11 @@
                 <h2 class="text-lg font-semibold">Đơn hàng</h2>
                 <button id="toggleOrderMode"
                     class="text-sm text-blue-600 hover:text-blue-800 hover:underline font-medium transition">
-                    <span id="toggleOrderText">Đơn hàng theo mỗi tháng</span>
+                    <span id="toggleOrderText">Đơn hàng theo mỗi ngày</span>
                 </button>
             </div>
             
-            <div id="orderDayWrapper">
+            <div id="orderDayWrapper" class="hidden mt-4">
                 <div class="flex flex-wrap items-center gap-2 mb-4">
                     <input type="date" id="orders_start" class="border rounded px-2 py-1 w-full md:w-auto">
                     <input type="date" id="orders_end" class="border rounded px-2 py-1 w-full md:w-auto">
@@ -41,7 +41,7 @@
             </div>
 
             {{-- Biểu đồ đơn hàng theo tháng --}}
-            <div id="orderMonthWrapper" class="hidden mt-4">
+            <div id="orderMonthWrapper" >
                 <div class="flex flex-wrap items-center gap-2 mb-4">
                     <select id="order_month_status" class="border rounded px-2 py-1 w-full md:w-auto">
                         <option value="">Tất cả trạng thái</option>
@@ -102,13 +102,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15 19l-7-7 7-7" />
                     </svg>
-                    <span id="toggleRevenueText">Doanh thu theo mỗi tháng</span>
+                    <span id="toggleRevenueText">Doanh thu theo mỗi ngày</span>
                 </button>
 
             </div>
 
             {{-- Biểu đồ doanh thu theo ngày --}}
-            <div id="revenueDayWrapper">
+            <div id="revenueDayWrapper" class="hidden">
                 <div class="flex flex-wrap items-center gap-2 mb-4">
                     <input type="date" id="revenues_start"  class="border rounded px-2 py-1 w-full md:w-auto">
                     <input type="date" id="revenues_end" class="border rounded px-2 py-1 w-full md:w-auto">
@@ -122,7 +122,7 @@
             </div>
 
             {{-- Biểu đồ doanh thu theo 12 tháng (ẩn mặc định) --}}
-            <div id="revenueYearWrapper" class="hidden">
+            <div id="revenueYearWrapper" >
                 <canvas id="monthlyRevenueChart" height="200"></canvas>
                 <p class="mt-2 text-sm text-gray-600">Tổng doanh cả năm: 
                     <span id="totalRevenueYear" class="font-semibold">0 ₫</span>
@@ -136,12 +136,12 @@
                 <h2 class="text-lg font-semibold">Người dùng mới</h2>
                 <button id="toggleUserMode"
                     class="text-sm text-purple-600 hover:text-purple-800 hover:underline font-medium transition">
-                    <span id="toggleUserText">Người dùng theo mỗi tháng</span>
+                    <span id="toggleUserText">Người dùng theo mỗi ngày</span>
                 </button>
             </div>
 
             {{-- Biểu đồ theo ngày --}}
-            <div id="userDayWrapper">
+            <div id="userDayWrapper" class="hidden">
                 <div class="flex flex-wrap items-center gap-2 mb-4">
                     <input type="date"  id="users_start"  class="border rounded px-2 py-1 w-full md:w-auto">
                     <input type="date" id="users_end"  class="border rounded px-2 py-1 w-full md:w-auto">
@@ -155,18 +155,15 @@
             </div>
 
             {{-- Biểu đồ theo năm (12 tháng) --}}
-            <div id="userYearWrapper" class="hidden">
+            <div id="userYearWrapper" >
                 <canvas id="monthlyUserChart" height="200"></canvas>
                 <p class="mt-2 text-sm text-gray-600">
                     Tổng người dùng mới năm: <span id="totalUsersYear" class="font-semibold">0</span>
                 </p>
             </div>
 
-            
         </div>
         {{-- Biểu đồ top sản phẩm bán chạy --}}
-
-
 
     </div>
         <div class="bg-gray-50 p-4 rounded shadow w-full md:w-1/2 mx-auto mt-3">
@@ -218,6 +215,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     let orderChart, revenueChart, userChart;
+    
 
     const chartRefs = {
         orders: { id: 'orderChart', chart: () => orderChart, set: c => orderChart = c },
@@ -342,11 +340,21 @@
         fetchChartData(chartType, start, end);
     }
 
-    document.addEventListener('DOMContentLoaded',  function () {
+    document.addEventListener('DOMContentLoaded', function () {
         loadChart('orders');
         loadChart('revenues');
         loadChart('users');
+        loadMonthlyOrderChart();
+
+        if (!hasLoadedMonthlySummary) {
+            loadMonthlySummaryChart();
+            hasLoadedMonthlySummary = true;
+        }
+
+        hasLoadedOrderMonthChart = true;
     });
+
+
 
 </script>
 <script>
@@ -472,36 +480,41 @@
     });
 </script>
 <script>
+    // let hasLoadedRevenueMonthly = false;
+    // let hasLoadedUserMonthly = false;
     let hasLoadedMonthlySummary = false;
 
+
+    // Toggle doanh thu ngày/tháng
     document.getElementById('toggleRevenueMode').addEventListener('click', function () {
-    const dayChart = document.getElementById('revenueDayWrapper');
-    const yearChart = document.getElementById('revenueYearWrapper');
-    const toggleBtn = document.getElementById('toggleRevenueMode');
+        const dayChart = document.getElementById('revenueDayWrapper');
+        const yearChart = document.getElementById('revenueYearWrapper');
+        const toggleBtn = document.getElementById('toggleRevenueMode');
 
-    const showingDay = !dayChart.classList.contains('hidden');
+        const showingDay = !dayChart.classList.contains('hidden');
 
-    if (showingDay) {
-        dayChart.classList.add('hidden');
-        yearChart.classList.remove('hidden');
-        document.getElementById('toggleRevenueText').textContent = 'Doanh thu theo ngày';
+        if (showingDay) {
+            dayChart.classList.add('hidden');
+            yearChart.classList.remove('hidden');
+            document.getElementById('toggleRevenueText').textContent = 'Doanh thu theo ngày';
+        } else {
+            yearChart.classList.add('hidden');
+            dayChart.classList.remove('hidden');
+            document.getElementById('toggleRevenueText').textContent = 'Doanh thu theo năm';
+        }
 
-    } else {
-        yearChart.classList.add('hidden');
-        dayChart.classList.remove('hidden');
-        document.getElementById('toggleRevenueText').textContent = 'Doanh thu theo năm';
+        // if (!hasLoadedRevenueMonthly) {
+        //     loadMonthlySummaryChart(); // Hàm này đã xử lý cả revenue và user
+        //     hasLoadedRevenueMonthly = true;
+        // }
+        if (!hasLoadedMonthlySummary) {
+            loadMonthlySummaryChart();
+            hasLoadedMonthlySummary = true;
+        }
 
-    }
-    if (!hasLoadedMonthlySummary) {
-        loadMonthlySummaryChart();
-        hasLoadedMonthlySummary = true;
-    }
-});
+    });
 
-</script>
-<script>
-
-    
+    // Toggle người dùng ngày/tháng
     document.getElementById('toggleUserMode').addEventListener('click', function () {
         const dayChart = document.getElementById('userDayWrapper');
         const yearChart = document.getElementById('userYearWrapper');
@@ -523,6 +536,7 @@
             loadMonthlySummaryChart();
             hasLoadedMonthlySummary = true;
         }
+
     });
 </script>
 <script>
