@@ -21,14 +21,28 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $filters = $request->only(['keyword', 'category_id', 'brand_id','status']);
+        $filters = $request->only(['keyword', 'brand_id', 'status']);
+
+        // Nếu có chọn category_id, lấy cả danh mục con
+        if ($request->filled('category_id')) {
+            $categoryIds = Category::where('id', $request->category_id)
+                ->orWhere('parent_id', $request->category_id)
+                ->pluck('id')
+                ->toArray();
+
+            $filters['category_ids'] = $categoryIds;
+        }
+
+        // Lấy sản phẩm theo filter (bao gồm category_ids nếu có)
         $products = $this->productRepo->getAll($filters, 10);
-        // Chỉ lấy category có ít nhất 1 sản phẩm
-        $categories = Category::whereHas('products')->get();
+
+        // Dữ liệu dropdown
+        $categories = Category::all();
         $brands = Brand::all();
 
         return view('admin.products.index', compact('products', 'categories', 'brands'));
     }
+
 
     public function create()
     {

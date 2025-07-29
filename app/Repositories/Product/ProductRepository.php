@@ -15,9 +15,10 @@ class ProductRepository implements ProductRepositoryInterface
             $query->where('name', 'like', '%' . $filters['keyword'] . '%');
         }
 
-        if (!empty($filters['category_id'])) {
-            $query->where('category_id', $filters['category_id']);
+        if (!empty($filters['category_ids'])) {
+            $query->whereIn('category_id', $filters['category_ids']);
         }
+
 
         if (!empty($filters['brand_id'])) {
             $query->where('brand_id', $filters['brand_id']);
