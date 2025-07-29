@@ -23,7 +23,8 @@ class ProductController extends Controller
     {
         $filters = $request->only(['keyword', 'category_id', 'brand_id','status']);
         $products = $this->productRepo->getAll($filters, 10);
-        $categories = Category::all();
+        // Chỉ lấy category có ít nhất 1 sản phẩm
+        $categories = Category::whereHas('products')->get();
         $brands = Brand::all();
 
         return view('admin.products.index', compact('products', 'categories', 'brands'));

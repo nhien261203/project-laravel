@@ -11,6 +11,12 @@
     </div>
 
     <div class="overflow-x-auto">
+        @php
+            $hasStorage = $variants->contains(function ($v) {
+                return !empty($v->storage);
+            });
+        @endphp
+
         <table class="min-w-full text-sm text-left">
             <thead>
                 <tr class="bg-gray-100 text-gray-700">
@@ -18,6 +24,11 @@
                     <th class="px-4 py-2">SKU</th>
                     <th class="px-4 py-2">Giá bán</th>
                     <th class="px-4 py-2">Số lượng nhập</th>
+                    <th class="px-4 py-2">Màu sắc</th>
+                    @if($hasStorage)
+                        <th class="px-4 py-2">Bộ nhớ</th>
+                    @endif
+
                     <th class="px-4 py-2">Đã bán</th>
                     <th class="px-4 py-2">Ảnh</th>
                     <th class="px-4 py-2">Trạng thái</th>
@@ -31,6 +42,10 @@
                         <td class="px-4 py-2">{{ $variant->sku }}</td>
                         <td class="px-4 py-2">{{ number_format($variant->price) }} đ</td>
                         <td class="px-4 py-2">{{ $variant->quantity }}</td>
+                        <td class="px-4 py-2">{{ $variant->color }}</td>
+                        @if($hasStorage)
+                            <td class="px-4 py-2">{{ $variant->storage }}</td>
+                        @endif
                         <td class="px-4 py-2">{{ $variant->sold }}</td>
                         <td class="px-4 py-2">
                             @php

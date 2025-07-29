@@ -341,6 +341,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date();
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(today.getDate() - 6);
+
+        const formatDate = (date) => date.toISOString().split('T')[0];
+
+        document.getElementById('orders_start').value = formatDate(sevenDaysAgo);
+        document.getElementById('orders_end').value = formatDate(today);
+        
+        document.getElementById('revenues_start').value = formatDate(sevenDaysAgo);
+        document.getElementById('revenues_end').value = formatDate(today);
+        
+        document.getElementById('users_start').value = formatDate(sevenDaysAgo);
+        document.getElementById('users_end').value = formatDate(today);
+
         loadChart('orders');
         loadChart('revenues');
         loadChart('users');
@@ -353,8 +368,6 @@
 
         hasLoadedOrderMonthChart = true;
     });
-
-
 
 </script>
 <script>
@@ -541,123 +554,124 @@
 </script>
 <script>
     let topProductsChart;
+
     function loadTopProductsChart() {
-    const start = document.getElementById('top_start').value;
-    const end = document.getElementById('top_end').value;
-    showGlobalLoading();
+        const start = document.getElementById('top_start').value;
+        const end = document.getElementById('top_end').value;
+        const categoryId = document.getElementById('top_category').value;
+        const limit = parseInt(document.getElementById('top_limit').value) || 5;
 
-    if (start && end && new Date(start) > new Date(end)) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Ngày không hợp lệ',
-            text: 'Ngày bắt đầu không được lớn hơn ngày kết thúc!',
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 2000
-        });
-        hideGlobalLoading();
-        return;
-    }
+        showGlobalLoading();
 
-    const categoryId = document.getElementById('top_category').value;
-    const limit = parseInt(document.getElementById('top_limit').value) || 5;
-
-    let url = `/admin/dashboard/top-products?`;
-    if (start) url += `start_date=${start}&`;
-    if (end) url += `end_date=${end}&`;
-    if (categoryId) url += `category_id=${categoryId}&`;
-    if (limit) url += `limit=${limit}`;
-
-    fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            const actualCount = data.values.length;
-
-            if (actualCount < limit) {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Không đủ sản phẩm',
-                    text: `Chỉ có ${actualCount} sản phẩm bán ra trong khoảng thời gian đã chọn.`,
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 2500
-                });
-
-                // Không vẽ biểu đồ mới nếu không đủ sản phẩm
-                return;
-            }
-
-            // Nếu đủ -> vẽ biểu đồ
-            const ctx = document.getElementById('topProductsChart').getContext('2d');
-            if (topProductsChart) topProductsChart.destroy();
-
-            topProductsChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: `Top ${limit} sản phẩm bán chạy`,
-                        data: data.values,
-                        backgroundColor: '#F87171'
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    animation: {
-                        duration: 500,
-                        easing: 'easeOutQuart'
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        title: {
-                            display: true,
-                            text: `Top ${limit} sản phẩm bán chạy`
-                        }
-                    },
-                    scales: {
-                        x: { beginAtZero: true }
-                    }
-                }
-            });
-        })
-        .catch(err => {
-            console.error(err);
+        // Validate: nếu có cả 2 ngày thì kiểm tra tính hợp lệ
+        if (start && end && new Date(start) > new Date(end)) {
             Swal.fire({
-                icon: 'error',
-                title: 'Lỗi tải dữ liệu',
-                text: 'Không thể tải biểu đồ sản phẩm.',
+                icon: 'warning',
+                title: 'Ngày không hợp lệ',
+                text: 'Ngày bắt đầu không được lớn hơn ngày kết thúc!',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 2000
             });
-        })
-        .finally(() => {
             hideGlobalLoading();
-        });
-}
+            return;
+        }
 
+        // Tạo URL
+        let url = `/admin/dashboard/top-products?`;
+        if (start) url += `start_date=${start}&`;
+        if (end) url += `end_date=${end}&`;
+        if (categoryId) url += `category_id=${categoryId}&`;
+        url += `limit=${limit}`;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                const actualCount = data.values.length;
+
+                // Nếu không đủ sản phẩm thì không vẽ lại, giữ biểu đồ cũ
+                if (actualCount < limit) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Không đủ sản phẩm',
+                        text: `Chỉ có ${actualCount} sản phẩm bán ra trong khoảng thời gian đã chọn.`,
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                    return;
+                }
+                if ((start && !end) || (!start && end)) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Thiếu ngày lọc',
+                        text: 'Vui lòng chọn cả ngày bắt đầu và ngày kết thúc!',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    hideGlobalLoading();
+                    return;
+                }
+
+                const ctx = document.getElementById('topProductsChart').getContext('2d');
+                if (topProductsChart) topProductsChart.destroy();
+
+                topProductsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: `Top ${limit} sản phẩm bán chạy`,
+                            data: data.values,
+                            backgroundColor: '#F87171'
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        animation: {
+                            duration: 500,
+                            easing: 'easeOutQuart'
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: `Top ${limit} sản phẩm bán chạy`
+                            }
+                        },
+                        scales: {
+                            x: { beginAtZero: true }
+                        }
+                    }
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi tải dữ liệu',
+                    text: 'Không thể tải biểu đồ sản phẩm.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            })
+            .finally(() => {
+                hideGlobalLoading();
+            });
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Gán mặc định 7 ngày gần nhất cho top sản phẩm
-        const today = new Date();
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(today.getDate() - 6);
-
-        // Format YYYY-MM-DD
-        const formatDate = (date) => {
-            return date.toISOString().split('T')[0];
-        };
-
-        document.getElementById('top_start').value = formatDate(sevenDaysAgo);
-        document.getElementById('top_end').value = formatDate(today);
-
-        // Sau khi gán ngày -> load biểu đồ
-        loadTopProductsChart();
+        loadTopProductsChart(); // KHÔNG gán ngày mặc định
     });
+
+    // GIỮ HÀM GRADIENT GỐC CỦA BẠN
     function getGradient(ctx, color = 'blue') {
         const gradient = ctx.createLinearGradient(0, 0, 0, 200);
         const colorMap = {
@@ -668,7 +682,6 @@
         };
 
         const [start, end] = colorMap[color] || colorMap.blue;
-
         gradient.addColorStop(0, start);
         gradient.addColorStop(1, end);
         return gradient;
@@ -681,8 +694,8 @@
     function hideGlobalLoading() {
         document.getElementById('global-loading').classList.add('hidden');
     }
-
 </script>
+
 <script>
     let orderMonthChart;
 let hasLoadedOrderMonthChart = false;
@@ -759,10 +772,19 @@ function loadMonthlyOrderChart() {
 
 // nut reset bieu do
 function resetOrdersFilter() {
-    document.getElementById('orders_start').value = '';
-    document.getElementById('orders_end').value = '';
+    setLast7Days('orders_start', 'orders_end');
     document.getElementById('orders_status').value = '';
-    loadChart('orders'); // gọi lại biểu đồ mặc định
+    loadChart('orders');
+}
+
+function resetRevenueChart() {
+    setLast7Days('revenues_start', 'revenues_end');
+    loadChart('revenues');
+}
+
+function resetUserChart() {
+    setLast7Days('users_start', 'users_end');
+    loadChart('users');
 }
 function resetMonthlyOrderFilter() {
     document.getElementById('order_month_status').value = '';
@@ -774,29 +796,24 @@ function resetCategoryPieFilter() {
     loadCategoryPieChart(); // gọi lại API với tất cả thương hiệu
 }
 
-function resetRevenueChart() {
-    document.getElementById('revenues_start').value = '';
-    document.getElementById('revenues_end').value = '';
-    loadChart('revenues');
-}
-function resetUserChart() {
-    document.getElementById('users_start').value = '';
-    document.getElementById('users_end').value = '';
-    loadChart('users');
-}
+
 function resetTopProductsChart() {
+    document.getElementById('top_start').value = '';
+    document.getElementById('top_end').value = '';
+    document.getElementById('top_category').value = '';
+    document.getElementById('top_limit').value = 5;
+    loadTopProductsChart();
+}
+
+
+function setLast7Days(startId, endId) {
     const today = new Date();
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(today.getDate() - 6);
+    const formatDate = date => date.toISOString().split('T')[0];
 
-    const formatDate = (date) => date.toISOString().split('T')[0];
-
-    document.getElementById('top_start').value = formatDate(sevenDaysAgo);
-    document.getElementById('top_end').value = formatDate(today);
-    document.getElementById('top_category').value = '';
-    document.getElementById('top_limit').value = 5;
-
-    loadTopProductsChart();
+    document.getElementById(startId).value = formatDate(sevenDaysAgo);
+    document.getElementById(endId).value = formatDate(today);
 }
 
 </script>

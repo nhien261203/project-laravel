@@ -26,8 +26,8 @@ class DashBoardController extends Controller
         $categories = Category::all();
         $brands = Brand::whereHas('products')->get();
         $statuses = $this->dashboard->getAvailableStatuses();
-        
-         // Lấy danh mục có sản phẩm đã từng được đặt hàng (có trong order_items)
+
+        // Lấy danh mục có sản phẩm đã từng được đặt hàng (có trong order_items)
         $cateForOrder = Category::whereHas('products.variants.orderItems')->get();
 
         return view('admin.dashboard', compact('statuses', 'categories', 'brands', 'cateForOrder'));
@@ -141,8 +141,9 @@ class DashBoardController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after:start_date',
-            'category_id' => 'nullable|exists:categories,id'
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'category_id' => 'nullable|exists:categories,id',
+            'limit' => 'nullable|integer|min:1'
         ]);
 
         if ($validator->fails()) {
@@ -152,29 +153,25 @@ class DashBoardController extends Controller
             ], 422);
         }
 
-        $start = $request->input('start_date');
-        $end = $request->input('end_date');
-        $categoryId = $request->input('category_id');
         $limit = $request->input('limit', 5);
+        $categoryId = $request->input('category_id');
 
-        if (!$start || !$end) {
-            $end = Carbon::now()->endOfDay();
-            $start = Carbon::now()->subDays(6)->startOfDay(); // 7 ngày gần nhất
-        } else {
-            $start = Carbon::parse($start)->startOfDay();
-            $end = Carbon::parse($end)->endOfDay();
-        }
+        // Nếu có ngày thì dùng, không thì để null
+        $start = $request->filled('start_date') ? Carbon::parse($request->input('start_date'))->startOfDay() : null;
+        $end   = $request->filled('end_date') ? Carbon::parse($request->input('end_date'))->endOfDay() : null;
 
+        // Gọi hàm xử lý
         $products = $this->dashboard->getTopSellingProducts($limit, $start, $end, $categoryId);
 
         return response()->json([
             'labels' => $products->pluck('name'),
             'values' => $products->pluck('total_sold'),
-            'label' => 'Top 5 sản phẩm bán chạy',
-            'start_date' => $start->toDateString(),
-            'end_date' => $end->toDateString(),
+            'label' => "Top {$limit} sản phẩm bán chạy",
+            'start_date' => $start?->toDateString(),
+            'end_date' => $end?->toDateString(),
         ]);
     }
+
     public function getMonthlyOrderSummary(Request $request)
     {
         $year = $request->input('year', now()->year);
@@ -204,5 +201,4 @@ class DashBoardController extends Controller
 
         return response()->json($data);
     }
-
 }
