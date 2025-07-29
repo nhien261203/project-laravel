@@ -121,6 +121,11 @@ class DashboardRepository implements DashboardRepositoryInterface
             $query->where('products.category_id', $categoryId);
         }
 
+        // Nếu có limit, mới giới hạn
+        if ($limit !== null) {
+            $query->take($limit);
+        }
+
         return $query->take($limit)->get();
     }
 

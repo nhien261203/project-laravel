@@ -33,6 +33,7 @@
                         @endforeach
                     </select>
                     <button onclick="loadChart('orders')" class="bg-blue-600 text-white px-4 py-1 rounded">Lọc</button>
+                    <button onclick="resetOrdersFilter()" class="bg-gray-300 text-black px-4 py-1 rounded">Reset</button>
                 </div>
 
                 <canvas id="orderChart" height="200"></canvas>
@@ -49,6 +50,7 @@
                         @endforeach
                     </select>
                     <button onclick="loadMonthlyOrderChart()" class="bg-blue-500 text-white px-4 py-1 rounded">Lọc</button>
+                    <button onclick="resetMonthlyOrderFilter()" class="bg-gray-300 text-black px-4 py-1 rounded">Reset</button>
                 </div>
                 <canvas id="monthlyOrderChart" height="200"></canvas>
                 <p class="mt-2 text-sm text-gray-600">
@@ -75,6 +77,7 @@
                     </div>
 
                     <button id="filterPieBtn" class="h-[38px] px-4 py-1 rounded bg-indigo-600 text-white">Lọc</button>
+                    <button onclick="resetCategoryPieFilter()" class="h-[38px] px-4 py-1 rounded bg-gray-300 text-black">Reset</button>
                 </div>
 
             <div class="max-w-[350px] mx-auto">
@@ -110,6 +113,7 @@
                     <input type="date" id="revenues_start"  class="border rounded px-2 py-1 w-full md:w-auto">
                     <input type="date" id="revenues_end" class="border rounded px-2 py-1 w-full md:w-auto">
                     <button onclick="loadChart('revenues')" class="bg-green-600 text-white px-4 py-1 rounded">Lọc</button>
+                    <button onclick="resetRevenueChart()" class="bg-gray-300 text-black px-4 py-1 rounded">Reset</button>
                 </div>
                 <canvas id="revenueChart" height="200"></canvas>
                 <p class="mt-2 text-sm text-gray-600">Tổng doanh thu: 
@@ -142,6 +146,7 @@
                     <input type="date"  id="users_start"  class="border rounded px-2 py-1 w-full md:w-auto">
                     <input type="date" id="users_end"  class="border rounded px-2 py-1 w-full md:w-auto">
                     <button onclick="loadChart('users')" class="bg-purple-600 text-white px-4 py-1 rounded">Lọc</button>
+                    <button onclick="resetUserChart()" class="bg-gray-300 text-black px-4 py-1 rounded">Reset</button>
                 </div>
                 <canvas id="userChart" height="200"></canvas>
                 <p class="mt-2 text-sm text-gray-600">
@@ -176,6 +181,7 @@
                 <input type="number" id="top_limit" min="1" max="15" value="5" class="border rounded px-2 py-1 w-full md:w-auto" placeholder="Số lượng">
 
                 <button onclick="loadTopProductsChart()" class="bg-red-600 text-white px-4 py-1 rounded">Lọc</button>
+                <button onclick="resetTopProductsChart()" class="bg-gray-300 text-black px-4 py-1 rounded">Reset</button>
             </div>
 
 
@@ -541,77 +547,104 @@
 </script>
 <script>
     let topProductsChart;
-
     function loadTopProductsChart() {
-        const start = document.getElementById('top_start').value;
-        const end = document.getElementById('top_end').value;
-        showGlobalLoading();
+    const start = document.getElementById('top_start').value;
+    const end = document.getElementById('top_end').value;
+    showGlobalLoading();
 
-        if (start && end && new Date(start) > new Date(end)) {
+    if (start && end && new Date(start) > new Date(end)) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Ngày không hợp lệ',
+            text: 'Ngày bắt đầu không được lớn hơn ngày kết thúc!',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        hideGlobalLoading();
+        return;
+    }
+
+    const categoryId = document.getElementById('top_category').value;
+    const limit = parseInt(document.getElementById('top_limit').value) || 5;
+
+    let url = `/admin/dashboard/top-products?`;
+    if (start) url += `start_date=${start}&`;
+    if (end) url += `end_date=${end}&`;
+    if (categoryId) url += `category_id=${categoryId}&`;
+    if (limit) url += `limit=${limit}`;
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            const actualCount = data.values.length;
+
+            if (actualCount < limit) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Không đủ sản phẩm',
+                    text: `Chỉ có ${actualCount} sản phẩm bán ra trong khoảng thời gian đã chọn.`,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 2500
+                });
+
+                // Không vẽ biểu đồ mới nếu không đủ sản phẩm
+                return;
+            }
+
+            // Nếu đủ -> vẽ biểu đồ
+            const ctx = document.getElementById('topProductsChart').getContext('2d');
+            if (topProductsChart) topProductsChart.destroy();
+
+            topProductsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: `Top ${limit} sản phẩm bán chạy`,
+                        data: data.values,
+                        backgroundColor: '#F87171'
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    animation: {
+                        duration: 500,
+                        easing: 'easeOutQuart'
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: `Top ${limit} sản phẩm bán chạy`
+                        }
+                    },
+                    scales: {
+                        x: { beginAtZero: true }
+                    }
+                }
+            });
+        })
+        .catch(err => {
+            console.error(err);
             Swal.fire({
-                icon: 'warning',
-                title: 'Ngày không hợp lệ',
-                text: 'Ngày bắt đầu không được lớn hơn ngày kết thúc!',
+                icon: 'error',
+                title: 'Lỗi tải dữ liệu',
+                text: 'Không thể tải biểu đồ sản phẩm.',
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
                 timer: 2000
             });
+        })
+        .finally(() => {
             hideGlobalLoading();
-            return;
-        }
-
-        const categoryId = document.getElementById('top_category').value;
-        const limit = document.getElementById('top_limit').value || 5; // mặc định là 5 nếu không nhập
-
-        let url = `/admin/dashboard/top-products?`;
-
-        if (start) url += `start_date=${start}&`;
-        if (end) url += `end_date=${end}&`;
-        if (categoryId) url += `category_id=${categoryId}&`;
-        if (limit) url += `limit=${limit}`;
-        
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                const ctx = document.getElementById('topProductsChart').getContext('2d');
-                if (topProductsChart) topProductsChart.destroy();
-
-                topProductsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: `Top ${limit} sản phẩm bán chạy`,
-                            data: data.values,
-                            backgroundColor: '#F87171'
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        animation: {
-                            duration: 500, // thời gian hiệu ứng khi vẽ lại
-                            easing: 'easeOutQuart' // hiệu ứng mượt
-                        },
-                        plugins: {
-                            legend: { display: false },
-                            title: {
-                                display: true,
-                                text: `Top ${limit} sản phẩm bán chạy`
-                            }
-                        },
-                        scales: {
-                            x: { beginAtZero: true }
-                        }
-                    }
-                });
-                
-            })
-            .finally(() => {
-                hideGlobalLoading(); // ← Luôn ẩn loading sau khi fetch xong dù thành công hay không
-            });
-    }
+        });
+}
 
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -729,6 +762,49 @@ function loadMonthlyOrderChart() {
             hideGlobalLoading();
         });
 }
+
+// nut reset bieu do
+function resetOrdersFilter() {
+    document.getElementById('orders_start').value = '';
+    document.getElementById('orders_end').value = '';
+    document.getElementById('orders_status').value = '';
+    loadChart('orders'); // gọi lại biểu đồ mặc định
+}
+function resetMonthlyOrderFilter() {
+    document.getElementById('order_month_status').value = '';
+    loadMonthlyOrderChart(); // gọi lại API với trạng thái mặc định (tất cả)
+}
+
+function resetCategoryPieFilter() {
+    document.getElementById('brandFilter').value = '';
+    loadCategoryPieChart(); // gọi lại API với tất cả thương hiệu
+}
+
+function resetRevenueChart() {
+    document.getElementById('revenues_start').value = '';
+    document.getElementById('revenues_end').value = '';
+    loadChart('revenues');
+}
+function resetUserChart() {
+    document.getElementById('users_start').value = '';
+    document.getElementById('users_end').value = '';
+    loadChart('users');
+}
+function resetTopProductsChart() {
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 6);
+
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    document.getElementById('top_start').value = formatDate(sevenDaysAgo);
+    document.getElementById('top_end').value = formatDate(today);
+    document.getElementById('top_category').value = '';
+    document.getElementById('top_limit').value = 5;
+
+    loadTopProductsChart();
+}
+
 
 </script>
 
