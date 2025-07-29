@@ -360,6 +360,7 @@
         loadChart('revenues');
         loadChart('users');
         loadMonthlyOrderChart();
+        hasLoadedMonthlySummary = true;
 
         if (!hasLoadedMonthlySummary) {
             loadMonthlySummaryChart();

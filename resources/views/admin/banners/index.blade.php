@@ -53,7 +53,7 @@
                     <td class="p-2 border">{{ $banner->title }}</td>
                     <td class="p-2 border">
                         <img src="{{ asset('storage/' . $banner->image_desk) }}"
-                                class="w-40 h-24 object-cover mx-auto rounded border border-gray-200 shadow-sm">
+                                class="w-40 h-24 object-contain mx-auto rounded border border-gray-200 shadow-sm">
 
                     </td>
                     <td class="p-2 border">{{ $banner->position }}</td>

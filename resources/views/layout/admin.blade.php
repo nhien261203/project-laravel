@@ -58,9 +58,9 @@
             <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-user"></i> <span class="sidebar-text">Users</span>
             </a>
-            <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            {{-- <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-chart-bar"></i> <span class="sidebar-text">Reports</span>
-            </a>
+            </a> --}}
             <a href="{{ route('admin.products.index') }}" 
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
             data-route="{{ route('admin.products.index') }}">
@@ -90,12 +90,12 @@
             <a href="{{ route('admin.orders.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-receipt"></i> <span class="sidebar-text">Orders</span>
             </a>
-            <a href="{{ route('admin.comments.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.comments.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fa-solid fa-comments"></i> <span class="sidebar-text">Comments</span></a>
 
             
 
-            <a href="{{ route('admin.vouchers.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
+            <a href="{{ route('admin.vouchers.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fa-solid fa-ticket"></i> <span class="sidebar-text">Vouchers</span></a>
             
             @can('view log')
