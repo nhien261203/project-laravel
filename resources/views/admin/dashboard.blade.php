@@ -623,7 +623,11 @@
                 topProductsChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: data.labels,
+                        labels: data.labels.map((label, index) => {
+                            const category = data.categories?.[index] || '';
+                            return `${label}\n(${category})`; // dòng dưới gạch
+                        }),
+
                         datasets: [{
                             label: `Top ${limit} sản phẩm bán chạy`,
                             data: data.values,

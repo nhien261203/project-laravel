@@ -37,8 +37,12 @@ class ProductController extends Controller
         $products = $this->productRepo->getAll($filters, 10);
 
         // Dữ liệu dropdown
-        $categories = Category::all();
-        $brands = Brand::all();
+        // $categories = Category::all();
+        $categories = Category::where('status', 1)
+            ->get();
+
+        $brands = Brand::where('status', 1)
+            ->get();
 
         return view('admin.products.index', compact('products', 'categories', 'brands'));
     }
@@ -46,8 +50,10 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
-        $brands = Brand::all();
+        $categories = Category::where('status', 1)
+            ->get();
+        $brands = Brand::where('status', 1)
+            ->get();
         return view('admin.products.create', compact('categories', 'brands'));
     }
 
@@ -75,8 +81,10 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = $this->productRepo->find($id);
-        $categories = Category::all();
-        $brands = Brand::all();
+        $categories = Category::where('status', 1)
+            ->get();
+        $brands = Brand::where('status', 1)
+            ->get();
 
         return view('admin.products.edit', compact('product', 'categories', 'brands'));
     }
@@ -109,7 +117,7 @@ class ProductController extends Controller
         $product = $this->productRepo->find($id);
         $this->productRepo->delete($id);
 
-        // 📝 Ghi log xoá
+        // Ghi log xoá
         AdminLogHelper::log('delete_product', "Xóa sản phẩm: {$product->name}");
         return redirect()->back()->with('success', 'Xóa sản phẩm thành công!');
     }

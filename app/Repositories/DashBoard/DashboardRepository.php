@@ -53,19 +53,32 @@ class DashboardRepository implements DashboardRepositoryInterface
     }
     public function getProductCountByCategory($brandId = null)
     {
-        $query = DB::table('products')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->selectRaw('categories.name as category, COUNT(*) as total')
-            ->groupBy('categories.name');
+        $categories = Category::with('parent')
+            ->whereHas('products', function ($q) use ($brandId) {
+                if ($brandId) {
+                    $q->where('brand_id', $brandId);
+                }
+            })
+            ->withCount(['products as product_count' => function ($q) use ($brandId) {
+                if ($brandId) {
+                    $q->where('brand_id', $brandId);
+                }
+            }])
+            ->get();
 
-        if ($brandId) {
-            $query->where('products.brand_id', $brandId);
-        }
+        $result = $categories->map(function ($cat) {
+            $parentName = $cat->parent ? $cat->parent->name : null;
+            $label = $parentName ? "{$parentName} - {$cat->name}" : $cat->name;
 
+            return [
+                'category' => $label,
+                'total' => $cat->product_count,
+            ];
+        });
 
-        // dd($result);
-        return $query->get();
+        return $result->sortByDesc('total')->values();
     }
+
 
     // DashboardRepository.php
     public function getMonthlyRevenueAndUsers($year = null)
@@ -99,11 +112,12 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
             ->join('products', 'product_variants.product_id', '=', 'products.id')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
             ->select(
                 'products.id',
                 'products.name',
                 'products.slug',
-
+                'categories.name as category_name',
                 DB::raw('SUM(order_items.quantity) as total_sold')
             )
             // ->whereNull('orders.deleted_at') // nếu có soft delete
@@ -118,8 +132,15 @@ class DashboardRepository implements DashboardRepositoryInterface
 
         // Lọc theo danh mục
         if ($categoryId) {
-            $query->where('products.category_id', $categoryId);
+            // Tìm cả danh mục con của categoryId
+            $categoryIds = Category::where('id', $categoryId)
+                ->orWhere('parent_id', $categoryId)
+                ->pluck('id')
+                ->toArray();
+
+            $query->whereIn('products.category_id', $categoryIds);
         }
+
 
         // Nếu có limit, mới giới hạn
         if ($limit !== null) {

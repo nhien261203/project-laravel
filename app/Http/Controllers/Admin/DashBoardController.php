@@ -27,8 +27,21 @@ class DashBoardController extends Controller
         $brands = Brand::whereHas('products')->get();
         $statuses = $this->dashboard->getAvailableStatuses();
 
-        // Lấy danh mục có sản phẩm đã từng được đặt hàng (có trong order_items)
-        $cateForOrder = Category::whereHas('products.variants.orderItems')->get();
+        
+        // Lấy đầy đủ danh mục cha + con có đơn hàng
+        $categoryIdsWithOrders = Category::whereHas('products.variants.orderItems')
+            ->pluck('id')
+            ->toArray();
+
+        $parentIds = Category::whereIn('id', $categoryIdsWithOrders)
+            ->pluck('parent_id')
+            ->filter()
+            ->unique()
+            ->toArray();
+
+        $allIds = array_unique(array_merge($categoryIdsWithOrders, $parentIds));
+
+        $cateForOrder = Category::whereIn('id', $allIds)->get();
 
         return view('admin.dashboard', compact('statuses', 'categories', 'brands', 'cateForOrder'));
     }
@@ -167,6 +180,7 @@ class DashBoardController extends Controller
             'labels' => $products->pluck('name'),
             'values' => $products->pluck('total_sold'),
             'label' => "Top {$limit} sản phẩm bán chạy",
+            'categories' => $products->pluck('category_name'), 
             'start_date' => $start?->toDateString(),
             'end_date' => $end?->toDateString(),
         ]);
