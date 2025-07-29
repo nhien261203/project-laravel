@@ -127,7 +127,7 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
 
     Route::get('/dashboard/monthly-orders', [DashBoardController::class, 'getMonthlyOrderSummary']);
 
-
+    Route::get('/dashboard/monthly-top-products', [DashboardController::class, 'monthlyTopProducts']);
 
 
     Route::resource('brands', BrandController::class);

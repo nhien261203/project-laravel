@@ -194,4 +194,15 @@ class DashBoardController extends Controller
         ]);
     }
 
+    public function monthlyTopProducts(Request $request)
+    {
+        $year = $request->input('year', now()->year);
+        $limit = (int) $request->input('limit', 5);
+        $categoryId = $request->input('category_id');
+
+        $data = $this->dashboard->getMonthlyTopProducts($year, $limit, $categoryId);
+
+        return response()->json($data);
+    }
+
 }

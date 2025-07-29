@@ -55,7 +55,8 @@ class UserOrderController extends Controller
 
         $data = $request->validate([
             'customer_name' => 'required|string|max:255',
-            'customer_phone' => 'required|string|max:20',
+            'customer_phone' => ['required', 'regex:/^0\d{9}$/'],
+
             'customer_email' => 'nullable|email',
             // 'customer_address' => 'required|string|max:500',
             'note' => 'nullable|string|max:1000',

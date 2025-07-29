@@ -103,7 +103,7 @@ class DashboardRepository implements DashboardRepositoryInterface
                 'products.id',
                 'products.name',
                 'products.slug',
-                
+
                 DB::raw('SUM(order_items.quantity) as total_sold')
             )
             // ->whereNull('orders.deleted_at') // nếu có soft delete
@@ -143,21 +143,67 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->toArray();
     }
 
-    
-    // public function getLatestDateHavingData()
-    // {
-    //     $latestOrder = \App\Models\Order::orderByDesc('created_at')->value('created_at');
-    //     $latestRevenue = \App\Models\Order::orderByDesc('created_at')->value('created_at'); // nếu doanh thu tính từ Order
-    //     $latestUser = \App\Models\User::orderByDesc('created_at')->value('created_at');
 
-    //     $dates = array_filter([$latestOrder, $latestRevenue, $latestUser]);
+    public function getMonthlyTopProducts($year = null, $limit = 5, $categoryId = null)
+    {
+        $year = $year ?? now()->year;
 
-    //     if (empty($dates)) {
-    //         return null;
-    //     }
+        //Lấy top sản phẩm theo tổng số bán trong năm
+        $topProducts = DB::table('order_items')
+            ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
+            ->join('products', 'product_variants.product_id', '=', 'products.id')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->select('products.id', 'products.name', DB::raw('SUM(order_items.quantity) as total_sold'))
+            ->where('orders.status', 'completed')
+            ->whereYear('orders.created_at', $year)
+            ->when($categoryId, function ($query, $categoryId) {
+                $query->where('products.category_id', $categoryId);
+            })
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('total_sold')
+            ->take($limit)
+            ->get();
 
-    //     return collect($dates)->sortDesc()->first(); // lấy ngày mới nhất trong 3 bảng
-    // }
+        $datasets = [];
 
+        foreach ($topProducts as $product) {
+            //  Tính số lượng bán theo từng tháng
+            $monthlyData = array_fill(1, 12, 0); // từ tháng 1 đến 12
 
+            $monthlySales = DB::table('order_items')
+                ->join('product_variants', 'order_items.product_variant_id', '=', 'product_variants.id')
+                ->join('products', 'product_variants.product_id', '=', 'products.id')
+                ->join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->where('orders.status', 'completed')
+                ->whereYear('orders.created_at', $year)
+                ->where('products.id', $product->id)
+                ->when($categoryId, function ($query, $categoryId) {
+                    $query->where('products.category_id', $categoryId);
+                })
+                ->select(DB::raw('MONTH(orders.created_at) as month'), DB::raw('SUM(order_items.quantity) as total'))
+                ->groupBy(DB::raw('MONTH(orders.created_at)'))
+                ->pluck('total', 'month');
+
+            foreach ($monthlySales as $month => $total) {
+                $monthlyData[(int) $month] = (int) $total;
+            }
+
+            $datasets[] = [
+                'label' => $product->name,
+                'data' => array_values($monthlyData), // giữ đúng thứ tự từ 1 -> 12
+                'backgroundColor' => $this->getRandomColor()
+            ];
+        }
+
+        return [
+            'labels' => ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+            'datasets' => $datasets
+        ];
+    }
+
+    protected function getRandomColor()
+    {
+        $colors = ['#F87171', '#60A5FA', '#34D399', '#FBBF24', '#A78BFA', '#F472B6', '#2DD4BF', '#FCD34D', '#818CF8', '#4ADE80'];
+        return $colors[array_rand($colors)];
+    }
 }

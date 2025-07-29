@@ -65,7 +65,7 @@
         <div class="bg-gray-50 p-4 rounded shadow ">
             <h2 class="text-lg font-semibold mb-4">Sản phẩm theo danh mục</h2>
 
-                <div class="mb-4 flex gap-2 items-end">
+                <div class="flex flex-wrap items-center gap-2 mb-4">
                     <div>
 
                         <select id="brandFilter" class="w-64 p-2 border rounded">
@@ -165,30 +165,37 @@
             
         </div>
         {{-- Biểu đồ top sản phẩm bán chạy --}}
-        <div class="bg-gray-50 p-4 rounded shadow col-span-1 md:col-span-2">
-            <h2 class="text-lg font-semibold mb-4">Top sản phẩm bán chạy</h2>
-
-            <div class="flex flex-wrap items-center gap-2 mb-4">
-                <input type="date" id="top_start" class="border rounded px-2 py-1 w-full md:w-auto">
-                <input type="date" id="top_end" class="border rounded px-2 py-1 w-full md:w-auto">
-                <select id="top_category" class="border rounded px-2 py-1 w-full md:w-auto">
-                    <option value="">Tất cả danh mục</option>
-                    @foreach($cateForOrder as $cat)
-                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                    @endforeach
-                </select>
-
-                <input type="number" id="top_limit" min="1" max="15" value="5" class="border rounded px-2 py-1 w-full md:w-auto" placeholder="Số lượng">
-
-                <button onclick="loadTopProductsChart()" class="bg-red-600 text-white px-4 py-1 rounded">Lọc</button>
-                <button onclick="resetTopProductsChart()" class="bg-gray-300 text-black px-4 py-1 rounded">Reset</button>
-            </div>
 
 
-            <canvas id="topProductsChart" height="200"></canvas>
-        </div>
 
     </div>
+        <div class="bg-gray-50 p-4 rounded shadow w-full md:w-1/2 mx-auto mt-3">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold">Top sản phẩm bán chạy</h2>
+                {{-- <button id="toggleTopProductMode" class="bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                    <span id="toggleTopProductText">Theo ngày</span>
+                </button> --}}
+            </div>
+
+            {{-- Theo ngày --}}
+            <div id="topProductDayWrapper">
+                <div class="flex flex-wrap items-center gap-2 mb-4">
+                    <input type="date" id="top_start" class="border rounded px-2 py-1 w-full md:w-auto">
+                    <input type="date" id="top_end" class="border rounded px-2 py-1 w-full md:w-auto">
+                    <select id="top_category" class="border rounded px-2 py-1 w-full md:w-auto">
+                        <option value="">Tất cả danh mục</option>
+                        @foreach($cateForOrder as $cat)
+                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                        @endforeach
+                    </select>
+                    <input type="number" id="top_limit" min="1" max="15" value="5" class="border rounded px-2 py-1 w-full md:w-auto" placeholder="Số lượng">
+                    <button onclick="loadTopProductsChart()" class="bg-red-600 text-white px-4 py-1 rounded">Lọc</button>
+                    <button onclick="resetTopProductsChart()" class="bg-gray-300 text-black px-4 py-1 rounded">Reset</button>
+                </div>
+                <canvas id="topProductsChart" height="200"></canvas>
+            </div>
+
+        </div>
 
 </div>
 
@@ -319,44 +326,19 @@
                 }
 
             })
-
-
-            // .catch(err => {
-            //     Swal.fire({
-            //     icon: 'error',
-            //     title: 'Lỗi',
-            //     text: err.message || 'Đã xảy ra lỗi!',
-            //     timer: 2000,
-            //     toast: true,
-            //     position: 'top-end',
-            //     showConfirmButton: false
-            //     });
-
-            //     // Gán lại ngày cũ
-            //     startInput.value = oldStart;
-            //     endInput.value = oldEnd;
-            // })
             
             .finally(() => {
-                // document.getElementById('global-loading').classList.add('hidden');
                 hideGlobalLoading();
                 chartDiv.classList.remove('opacity-50', 'pointer-events-none');
-
 
             });
 
     }
 
-
-
     function loadChart(chartType) {
-        // const startInput = document.getElementById(`${chartType}_start`);
-        // const endInput = document.getElementById(`${chartType}_end`);  
-
+        
         const start = document.getElementById(`${chartType}_start`).value;
         const end = document.getElementById(`${chartType}_end`).value;
-
-        
         fetchChartData(chartType, start, end);
     }
 
@@ -378,13 +360,11 @@
                 const ctx = document.getElementById('categoryPieChart').getContext('2d');
 
                 // Nếu đã có biểu đồ thì hủy trước khi vẽ lại
-
                 if (pieChartInstance) pieChartInstance.destroy();
                 hideGlobalLoading();
                 
                 const total = data.values.reduce((sum, val) => sum + Number(val), 0);
                 document.getElementById('totalProducts').textContent = total;
-
 
                 pieChartInstance = new Chart(ctx, {
                     type: 'pie',
@@ -805,8 +785,5 @@ function resetTopProductsChart() {
     loadTopProductsChart();
 }
 
-
 </script>
-
-
 @endsection

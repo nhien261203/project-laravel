@@ -12,6 +12,7 @@ interface DashboardRepositoryInterface
     public function getProductCountByCategory($brandId = null);
     public function getMonthlyRevenueAndUsers($year = null);
     public function getTopSellingProducts($limit = 5, $start = null, $end = null, $categoryId = null);
+    public function getMonthlyTopProducts($year = null, $limit = 5, $categoryId = null);
 
     public function getMonthlyOrders($year, $status = null);
 }
