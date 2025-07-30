@@ -8,26 +8,29 @@ use Illuminate\Http\Request;
 
 class AdminReviewController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pendingReviews = Review::with(['user', 'product'])
-            ->where('status', 'pending')
-            ->latest()
-            ->get();
+        $query = Review::with(['user', 'product'])->latest();
 
-        $approvedReviews = Review::with(['user', 'product'])
-            ->where('status', 'approved')
-            ->latest()
-            ->get();
+        // Lọc theo trạng thái nếu có
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
 
-        $rejectedReviews = Review::with(['user', 'product'])
-            ->where('status', 'rejected')
-            ->latest()
-            ->get();
+        // Tìm kiếm theo nội dung comment hoặc tên người dùng
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('comment', 'like', "%$keyword%")
+                    ->orWhereHas('user', fn($user) => $user->where('name', 'like', "%$keyword%"));
+            });
+        }
 
-        return view('admin.reviews.index', compact('pendingReviews', 'approvedReviews', 'rejectedReviews'));
+        // Phân trang kết quả (10 đánh giá mỗi trang)
+        $reviews = $query->paginate(10)->withQueryString();
+
+        return view('admin.reviews.index', compact('reviews'));
     }
-
 
     public function approve(Review $review)
     {
@@ -39,5 +42,22 @@ class AdminReviewController extends Controller
     {
         $review->update(['status' => 'rejected']);
         return back()->with('success', 'Đã từ chối đánh giá.');
+    }
+
+    public function destroy(Review $review)
+    {
+        $review->delete();
+        return back()->with('success', 'Đã xoá đánh giá.');
+    }
+
+    public function updateStatus(Request $request, Review $review)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,pending,rejected',
+        ]);
+
+        $review->update(['status' => $request->status]);
+
+        return back()->with('success', 'Cập nhật trạng thái đánh giá thành công.');
     }
 }

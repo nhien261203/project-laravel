@@ -33,14 +33,12 @@ class ProductVariant extends Model
     // xu li tru so luong khi don hang hoan thanh
     public function deductStock(int $quantity)
     {
-        if ($this->quantity < $quantity) {
-            // Nếu muốn ngăn trừ vượt kho 
+        // Kiểm tra tồn kho còn lại
+        if (($this->quantity - $this->sold) < $quantity) {
             throw new \Exception("Không đủ hàng trong kho");
         }
 
-        $this->quantity = max(0, $this->quantity - $quantity);
         $this->sold += $quantity;
-
         $this->save();
     }
 

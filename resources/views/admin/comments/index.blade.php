@@ -3,6 +3,15 @@
 @section('title', 'Quản lý bình luận')
 
 @section('content')
+<style>
+    thead th {
+    position: sticky;
+    top: 0;
+    background: #f3f4f6; 
+    z-index: 1;
+}
+
+</style>
 <div class="container mx-auto py-6">
     
     <div class="flex justify-between items-center mb-6">
@@ -60,8 +69,8 @@
                         </td>
                         <td class="px-4 py-2 border">
                             <a href="{{ route('blogs.show', $comment->blog->slug) }}"
-                               class="text-blue-600 hover:underline" target="_blank">
-                               {{ Str::limit($comment->blog->title, 30) }}
+                                class="text-blue-600 hover:underline" target="_blank">
+                                {{ Str::limit($comment->blog->title, 30) }}
                             </a>
                         </td>
                         <td class="px-4 py-2 border text-gray-700">
@@ -69,10 +78,11 @@
                         </td>
                         <td class="px-4 py-2 border">
                             @if ($comment->approved)
-                                <span class="text-green-600 font-medium">Đã duyệt</span>
+                                <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">Đã duyệt</span>
                             @else
-                                <span class="text-yellow-600 font-medium">Chờ duyệt</span>
+                                <span class="inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">Chờ duyệt</span>
                             @endif
+
                         </td>
                         <td class="px-4 py-2 border text-gray-500">
                             {{ $comment->created_at->diffForHumans() }}
@@ -84,11 +94,11 @@
                                     @csrf
                                     <button class="text-green-600 hover:underline text-xs"
                                             onclick="return confirm('Duyệt bình luận này?')">Duyệt</button>
-                                </form
+                                </form>
                             @endif
 
                             <form method="POST" action="{{ route('admin.comments.destroy', $comment->id) }}"
-                                  class="inline">
+                                class="inline">
                                 @csrf @method('DELETE')
                                 <button class="text-red-600 hover:underline text-xs"
                                         onclick="return confirm('Xóa bình luận này?')">Xoá</button>

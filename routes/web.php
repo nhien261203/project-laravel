@@ -175,11 +175,11 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
         Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
     });
 
-    Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
-    Route::post('/reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
-    Route::post('/reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
+    Route::resource('reviews', AdminReviewController::class)->only(['index', 'destroy']);
+    Route::post('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
+    Route::post('reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
+    Route::post('reviews/{review}/update-status', [AdminReviewController::class, 'updateStatus'])->name('reviews.updateStatus');
 
-    
 
 
     // Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');

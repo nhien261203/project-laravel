@@ -15,7 +15,10 @@ class CartRepository implements CartRepositoryInterface
             return Cart::with('items')->firstOrCreate(['user_id' => $userId]);
         }
 
-        return Cart::with('items')->firstOrCreate(['session_id' => $sessionId]);
+        return Cart::with('items')->firstOrCreate([
+            'user_id' => $userId,
+            'session_id' => $sessionId,
+        ]);
     }
 
 
@@ -53,7 +56,7 @@ class CartRepository implements CartRepositoryInterface
             'snapshot_price' => $variant->price,
             'snapshot_original_price' => $variant->original_price,
             'snapshot_sale_percent' => $variant->sale_percent,
-            'snapshot_description' => $variant->product->description, 
+            'snapshot_description' => $variant->product->description,
 
 
             'snapshot_image' => $variant->images->first()->image_path ?? null,

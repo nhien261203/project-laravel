@@ -74,8 +74,11 @@ class CartController extends Controller
 
         $totalRequestedQty = $existingQty + $data['quantity'];
 
-        // Kiểm tra tồn kho
-        if ($variant->quantity == 0) {
+
+        $availableStock = $variant->quantity - $variant->sold;
+
+        if ($availableStock <= 0) {
+
             $message = 'Sản phẩm tạm thời hết hàng.';
 
             return $request->expectsJson()
@@ -85,10 +88,11 @@ class CartController extends Controller
                 ->with('selected_storage', $variant->storage);
         }
 
-        if ($totalRequestedQty > $variant->quantity) {
+        if ($totalRequestedQty > $availableStock) {
+
             $message = $existingQty > 0
-                ? 'Sản phẩm này chỉ còn ' . $variant->quantity . ' chiếc và bạn đã thêm ' . $existingQty . ' vào giỏ hàng.'
-                : 'Hiện tại cửa hàng chỉ còn ' . $variant->quantity . ' sản phẩm.';
+                ? 'Sản phẩm này chỉ còn ' .  $availableStock . ' chiếc và bạn đã thêm ' . $existingQty . ' vào giỏ hàng.'
+                : 'Hiện tại cửa hàng chỉ còn ' .  $availableStock . ' sản phẩm.';
 
             return $request->expectsJson()
                 ? response()->json(['error' => $message], 400)
@@ -144,18 +148,22 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
-        //kiem tra so luong cua bien the
         $variant = ProductVariant::findOrFail($variantId);
 
-        if ($data['quantity'] > $variant->quantity) {
-            return redirect()->back()->with('error', 'Hiện chỉ còn ' . $variant->quantity . ' sản phẩm trong kho.')
+        $availableStock = $variant->quantity - $variant->sold;
+
+        if ($data['quantity'] > $availableStock) {
+            return redirect()->back()
+                ->with('error', 'Hiện chỉ còn ' . $availableStock . ' sản phẩm trong kho.')
                 ->with('selected_color', $variant->color)
                 ->with('selected_storage', $variant->storage);
         }
 
         $this->repo->updateQuantity(Auth::id(), $request->session()->getId(), $variantId, $data['quantity']);
+
         return redirect()->route('cart.index')->with('success', 'Đã cập nhật số lượng');
     }
+
 
     public function applyVoucher(Request $request)
     {

@@ -284,11 +284,11 @@
                                 class="w-full border rounded px-3 py-2" >
                         </div>
 
-                        {{-- <div>
+                        <div>
                             <label class="block text-sm font-semibold mb-1">Email</label>
                             <input type="email" name="customer_email" value="{{ old('customer_email', auth()->user()->email ?? '') }}"
                                 class="w-full border rounded px-3 py-2">
-                        </div> --}}
+                        </div>
 
                         {{-- <div>
                             <label class="block text-sm font-semibold mb-1">Địa chỉ nhận hàng</label>
