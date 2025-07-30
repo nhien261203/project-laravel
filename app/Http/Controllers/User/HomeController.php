@@ -173,9 +173,7 @@ class HomeController extends Controller
     public function show($slug)
     {
         $product = Product::with([
-            'variants' => function ($q) {
-                $q->where('quantity', '>', 0)->with('images');
-            },
+            'variants' => fn($q) => $q->inStock()->with('images'),
             'approvedReviews.user'
         ])->where('slug', $slug)->firstOrFail();
 
@@ -239,9 +237,7 @@ class HomeController extends Controller
     public function showAccessory($slug)
     {
         $product = Product::with([
-            'variants' => function ($q) {
-                $q->where('quantity', '>', 0)->with('images');
-            },
+            'variants' => fn($q) => $q->inStock()->with('images'),
             'approvedReviews.user'
         ])->where('slug', $slug)->firstOrFail();
 
@@ -270,7 +266,7 @@ class HomeController extends Controller
 
         $recentIds = $recentQuery->limit(10)->pluck('product_id');
 
-        $recentlyViewed = Product::with(['variants.images', 'category.parent']) // ⚠️ thêm parent
+        $recentlyViewed = Product::with(['variants.images', 'category.parent']) // thêm parent
             ->whereIn('id', $recentIds)
             ->get()
             ->map(function ($p) use ($recentIds) {

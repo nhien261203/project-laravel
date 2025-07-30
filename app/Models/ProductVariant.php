@@ -42,6 +42,12 @@ class ProductVariant extends Model
         $this->save();
     }
 
+    // loc con hang
+    public function scopeInStock($query)
+    {
+        return $query->whereRaw('quantity - sold > 0');
+    }
+
     // Sản phẩm cha
     public function product()
     {

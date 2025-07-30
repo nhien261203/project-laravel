@@ -57,10 +57,12 @@ class ProductRepository implements ProductRepositoryInterface
     public function getIphoneProducts(int $limit = 5)
     {
         return Product::with([
-            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images')
+            'variants' => fn($q) => $q->inStock()->with('images')
+
         ])
             ->where('status', 1)
-            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+            ->whereHas('variants', fn($q) => $q->inStock())
+
             ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
             ->whereHas(
                 'brand',
@@ -89,9 +91,10 @@ class ProductRepository implements ProductRepositoryInterface
     public function getAllIphoneProducts()
     {
         $query = Product::with([
-            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images')
+            'variants' => fn($q) => $q->inStock()->with('images')
+
         ])
-            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+            ->whereHas('variants', fn($q) => $q->inStock())
 
             ->where('status', 1)
             ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
@@ -107,10 +110,11 @@ class ProductRepository implements ProductRepositoryInterface
     public function getLaptopProducts(int $limit = 5)
     {
         return Product::with([
-            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images')
+            'variants' => fn($q) => $q->inStock()->with('images')
+
         ])
             ->where('status', 1)
-            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+            ->whereHas('variants', fn($q) => $q->inStock())
             ->whereHas('category', fn($q) => $q->where('name', 'like', '%Laptop%'))
             ->latest('id')
             ->limit($limit)
@@ -137,7 +141,7 @@ class ProductRepository implements ProductRepositoryInterface
             // Lấy ngẫu nhiên các ID sản phẩm
             $productIds = Product::where('status', 1)
                 ->whereIn('category_id', $categoryIds)
-                ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+                ->whereHas('variants', fn($q) => $q->inStock())
                 ->inRandomOrder()
                 ->limit($limit)
                 ->pluck('id')
@@ -149,9 +153,10 @@ class ProductRepository implements ProductRepositoryInterface
 
         // Truy vấn lại chi tiết sản phẩm từ ID
         return Product::with([
-            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images')
+            'variants' => fn($q) => $q->inStock()->with('images')
+
         ])
-            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+            ->whereHas('variants', fn($q) => $q->inStock())
             ->whereIn('id', $productIds)
             ->get();
     }
@@ -223,11 +228,12 @@ class ProductRepository implements ProductRepositoryInterface
     public function searchProducts(string $keyword)
     {
         $query= Product::with([
-            'variants' => fn($q) => $q->where('quantity', '>', 0)->with('images'),
+            'variants' => fn($q) => $q->inStock()->with('images'),
             'brand',
             'category'
         ])
-            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+            ->whereHas('variants', fn($q) => $q->inStock())
+
 
             ->where(function ($q) use ($keyword) {
                 $q->where('name', 'like', "%{$keyword}%")
@@ -259,11 +265,11 @@ class ProductRepository implements ProductRepositoryInterface
             ->orWhere('parent_id', $category->id)
             ->pluck('id');
 
-        $query = Product::with(['variants' => fn($q) => $q->where('quantity', '>', 0)->orderBy('price')->with('images'), 'category'])
+        $query = Product::with(['variants' => fn($q) => $q->inStock()->orderBy('price')->with('images'), 'category'])
 
             ->whereIn('category_id', $categoryIds)
             ->where('status', 1)
-            ->whereHas('variants', fn($q) => $q->where('quantity', '>', 0))
+            ->whereHas('variants', fn($q) => $q->inStock())
             ->when(request('brand_ids'), function ($q) {
                 $q->whereIn('brand_id', request('brand_ids'));
             });
