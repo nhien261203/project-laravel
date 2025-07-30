@@ -172,6 +172,7 @@ class HomeController extends Controller
     // chi tiet sp trang home
     public function show($slug)
     {
+        // inStock goi tu phuong thuc scope ben Model ProductVariant
         $product = Product::with([
             'variants' => fn($q) => $q->inStock()->with('images'),
             'approvedReviews.user'

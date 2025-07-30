@@ -98,7 +98,7 @@
 
     {{-- Phân trang --}}
     <div class="mt-4">
-        {{ $users->links() }}
+        {{ $users->links('pagination.custom-tailwind') }}
     </div>
 </div>
 @endsection

@@ -56,6 +56,7 @@ class ProductRepository implements ProductRepositoryInterface
     // lay 5 sản phẩm iPhone cho home page
     public function getIphoneProducts(int $limit = 5)
     {
+        // inStock goi tu phuong thuc scope ben Model ProductVariant
         return Product::with([
             'variants' => fn($q) => $q->inStock()->with('images')
 
@@ -227,6 +228,7 @@ class ProductRepository implements ProductRepositoryInterface
     // search cho header
     public function searchProducts(string $keyword)
     {
+
         $query= Product::with([
             'variants' => fn($q) => $q->inStock()->with('images'),
             'brand',

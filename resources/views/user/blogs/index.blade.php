@@ -32,10 +32,10 @@
                 </a>
             @endforeach
 
-            @if (request()->has('tags'))
+            {{-- @if (request()->has('tags'))
                 <a href="{{ route('blogs.index') }}"
                    class="text-sm text-red-500 underline ml-3">✖ Bỏ lọc</a>
-            @endif
+            @endif --}}
         </div>
     @endif
 
