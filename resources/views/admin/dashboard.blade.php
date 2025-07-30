@@ -80,10 +80,10 @@
                     <button onclick="resetCategoryPieFilter()" class="h-[38px] px-4 py-1 rounded bg-gray-300 text-black">Reset</button>
                 </div>
 
-            <div class="max-w-[350px] mx-auto">
-                <canvas id="categoryPieChart"></canvas>
+            <div class="w-full sm:max-w-md mx-auto h-[350px]">
+                <canvas id="categoryPieChart" class="w-full h-full"></canvas>
             </div>
-
+            
             <p class="mt-2 text-sm text-gray-600">Tổng sản phẩm: <span id="totalProducts" class="font-semibold">0</span></p>
 
             
@@ -404,6 +404,8 @@
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
+
                         animation: {
                             duration: 500, // thời gian hiệu ứng khi vẽ lại
                             easing: 'easeOutQuart' // hiệu ứng mượt
@@ -555,6 +557,9 @@
 </script>
 <script>
     let topProductsChart;
+    function truncate(str, maxLength = 25) {
+        return str.length > maxLength ? str.slice(0, maxLength) + '...' : str;
+    }
 
     function loadTopProductsChart() {
         const start = document.getElementById('top_start').value;
@@ -624,10 +629,7 @@
                 topProductsChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: data.labels.map((label, index) => {
-                            const category = data.categories?.[index] || '';
-                            return `${label}\n(${category})`; // dòng dưới gạch
-                        }),
+                        labels: data.labels.map(label => truncate(label)),
 
                         datasets: [{
                             label: `Top ${limit} sản phẩm bán chạy`,
@@ -647,13 +649,36 @@
                             title: {
                                 display: true,
                                 text: `Top ${limit} sản phẩm bán chạy`
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (ctx) {
+                                        const fullName = data.labels[ctx.dataIndex];
+                                        const category = data.categories?.[ctx.dataIndex] || '';
+                                        return ` ${fullName} (${category}): ${ctx.raw}`;
+                                    }
+                                }
                             }
+
                         },
                         scales: {
-                            x: { beginAtZero: true }
+                            x: { beginAtZero: true },
+                            y: {
+                                ticks: {
+                                    callback: function (val, index) {
+                                        const name = truncate(data.labels[index], 25);
+                                        const category = truncate(data.categories?.[index] || '', 15);
+                                        return `${name} (${category})`;
+                                    },
+                                    autoSkip: false,
+                                    font: { size: 12 }
+                                }
+                            }
                         }
                     }
+
                 });
+
             })
             .catch(err => {
                 console.error(err);
