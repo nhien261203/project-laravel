@@ -25,7 +25,7 @@
     border-radius: 0.75rem;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
     margin-top: 0 !important;
-    animation: scaleIn 0.5s ease;
+    animation: scaleIn 0.8s ease;
 }
 
 @keyframes scaleIn {
@@ -243,9 +243,8 @@
                 @endguest
             </div>
 
-            <div id="mobileCheckoutForm"
-                class="hidden">
-                
+            <div id="mobileCheckoutForm" class="hidden">
+
                 <div class="checkout-box bg-white shadow-xl rounded-lg p-6 w-full max-w-xl mt-10">
                     <div class="flex justify-between items-center mb-4">
                         <div class="text-lg font-semibold text-gray-700">Thông tin đặt hàng</div>
@@ -260,10 +259,10 @@
                     <p class="text-gray-600 mb-4">Vui lòng điền thông tin bên dưới để hoàn tất đơn hàng.</p>
 
 
-                    <form method="POST" action="{{ route('user.orders.store') }}" class="space-y-4">
+                    <form method="POST" id="checkoutForm" action="{{ route('user.orders.store') }}" class="space-y-4">
                         @csrf
 
-                        @if ($errors->any())
+                        {{-- @if ($errors->any())
                             <div class="bg-red-100 text-red-700 p-4 rounded mb-4">
                                 <ul class="text-sm list-disc pl-5">
                                     @foreach ($errors->all() as $error)
@@ -271,23 +270,32 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        @endif
+                        @endif --}}
                         <div>
                             <label class="block text-sm font-semibold mb-1">Họ tên</label>
                             <input type="text" name="customer_name" value="{{ old('customer_name', auth()->user()->name ?? '') }}"
-                                class="w-full border rounded px-3 py-2" >
+                                class="w-full border rounded px-3 py-2" required>
+                            @error('customer_name')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold mb-1">Số điện thoại</label>
                             <input type="text" name="customer_phone" value="{{ old('customer_phone', auth()->user()->phone ?? '') }}"
-                                class="w-full border rounded px-3 py-2" >
+                                class="w-full border rounded px-3 py-2" required>
+                            @error('customer_phone')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold mb-1">Email</label>
                             <input type="email" name="customer_email" value="{{ old('customer_email', auth()->user()->email ?? '') }}"
-                                class="w-full border rounded px-3 py-2">
+                                class="w-full border rounded px-3 py-2" required>
+                            @error('customer_email')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         {{-- <div>
@@ -299,24 +307,38 @@
                             
                             <div>
                                 <label class="block text-sm font-semibold mb-1">Tỉnh / Thành phố</label>
-                                <select name="province_code" id="province" class="w-full border rounded px-3 py-2 text-sm" ></select>
+                                <select name="province_code" id="province" class="w-full border rounded px-3 py-2 text-sm" required></select>
+                                @error('province_code')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold mb-1">Quận / Huyện</label>
-                                <select name="district_code" id="district" class="w-full border rounded px-3 py-2 text-sm" ></select>
+                                <select name="district_code" id="district" class="w-full border rounded px-3 py-2 text-sm" required></select>
+                                @error('district_code')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
+
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold mb-1">Phường / Xã</label>
-                                <select name="ward_code" id="ward" class="w-full border rounded px-3 py-2 text-sm" ></select>
+                                <select name="ward_code" id="ward" class="w-full border rounded px-3 py-2 text-sm" required></select>
+                                @error('ward_code')
+                                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
 
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold mb-1">Địa chỉ chi tiết (số nhà, tên đường...)</label>
-                            <input type="text" name="address_detail" class="w-full border rounded px-3 py-2 text-sm" value="{{ old('address_detail') }}">
+                            <input type="text" name="address_detail" class="w-full border rounded px-3 py-2 text-sm" value="{{ old('address_detail') }}" required>
+                            @error('address_detail')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         
@@ -327,6 +349,9 @@
                         <div>
                             <label class="block text-sm font-semibold mb-1">Ghi chú (tuỳ chọn)</label>
                             <textarea name="note" rows="2" class="w-full border rounded px-3 py-2">{{ old('note') }}</textarea>
+                            @error('note')
+                                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-1">Phương thức thanh toán</label>
@@ -361,152 +386,242 @@
 </div>
 
 @endsection
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            alert('Đã sao chép mã: ' + text);
-        }).catch(() => {
-            alert('Không thể sao chép mã.');
-        });
-    }
-    
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Đã sao chép mã: ' + text);
+    }).catch(() => {
+        alert('Không thể sao chép mã.');
+    });
+}
 </script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const oldProvince = "{{ old('province_code') }}";
-        const oldDistrict = "{{ old('district_code') }}";
-        const oldWard = "{{ old('ward_code') }}";
-        let hasRestoredOld = false;
+document.addEventListener('DOMContentLoaded', function () {
+    const oldProvince = "{{ old('province_code') }}";
+    const oldDistrict = "{{ old('district_code') }}";
+    const oldWard = "{{ old('ward_code') }}";
+    let hasRestoredOld = false;
 
-        loadProvinces().then(() => {
-            if (oldProvince) {
-                const provinceSelect = document.getElementById('province');
-                provinceSelect.value = oldProvince;
-                provinceSelect.dispatchEvent(new Event('change'));
+    const provinceSelect = document.getElementById('province');
+    const districtSelect = document.getElementById('district');
+    const wardSelect = document.getElementById('ward');
+
+    loadProvinces().then(() => {
+        if (oldProvince) {
+            provinceSelect.value = oldProvince;
+            provinceSelect.dispatchEvent(new Event('change'));
+        }
+    });
+
+    provinceSelect.addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        document.getElementById('province_name').value = selectedOption.getAttribute('data-name') || '';
+
+        loadDistricts(this.value).then(() => {
+            if (oldDistrict && !hasRestoredOld) {
+                districtSelect.value = oldDistrict;
+                districtSelect.dispatchEvent(new Event('change'));
             }
-        });
-
-        document.getElementById('province').addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            document.getElementById('province_name').value = selectedOption.getAttribute('data-name');
-
-            loadDistricts(this.value).then(() => {
-                if (oldDistrict && !hasRestoredOld) {
-                    const districtSelect = document.getElementById('district');
-                    districtSelect.value = oldDistrict;
-                    districtSelect.dispatchEvent(new Event('change'));
-                }
-            });
-        });
-
-        document.getElementById('district').addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            document.getElementById('district_name').value = selectedOption.getAttribute('data-name');
-
-            loadWards(this.value).then(() => {
-                if (oldWard && !hasRestoredOld) {
-                    const wardSelect = document.getElementById('ward');
-                    wardSelect.value = oldWard;
-                    wardSelect.dispatchEvent(new Event('change'));
-                    hasRestoredOld = true;
-                }
-            });
-        });
-
-        document.getElementById('ward').addEventListener('change', function () {
-            const selectedOption = this.options[this.selectedIndex];
-            document.getElementById('ward_name').value = selectedOption.getAttribute('data-name');
         });
     });
 
+    districtSelect.addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        document.getElementById('district_name').value = selectedOption.getAttribute('data-name') || '';
 
-    async function loadProvinces() {
-        const provinceSelect = document.getElementById('province');
+        loadWards(this.value).then(() => {
+            if (oldWard && !hasRestoredOld) {
+                wardSelect.value = oldWard;
+                wardSelect.dispatchEvent(new Event('change'));
+                hasRestoredOld = true;
+            }
+        });
+    });
 
-        // Hiển thị loading trước khi dữ liệu được load về
-        provinceSelect.innerHTML = `<option value="">Đang tải danh sách tỉnh...</option>`;
+    wardSelect.addEventListener('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        document.getElementById('ward_name').value = selectedOption.getAttribute('data-name') || '';
+    });
+});
 
-        try {
-            const res = await fetch('https://provinces.open-api.vn/api/p/');
-            const provinces = await res.json();
+async function loadProvinces() {
+    const provinceSelect = document.getElementById('province');
+    provinceSelect.innerHTML = '';
 
-            provinceSelect.innerHTML = `<option value="">-- Chọn tỉnh --</option>`;
-            provinces.forEach(p => {
-                provinceSelect.innerHTML += `<option value="${p.code}" data-name="${p.name}">${p.name}</option>`;
-            });
-        } catch (error) {
-            provinceSelect.innerHTML = `<option value="">Lỗi khi tải tỉnh</option>`;
-            console.error('Lỗi tải tỉnh:', error);
-        }
+    const loadingOption = new Option('Đang tải danh sách tỉnh...', '');
+    loadingOption.disabled = true;
+    loadingOption.selected = true;
+    provinceSelect.appendChild(loadingOption);
+
+    try {
+        const res = await fetch('https://provinces.open-api.vn/api/p/');
+        const provinces = await res.json();
+
+        provinceSelect.innerHTML = '';
+        provinceSelect.appendChild(new Option('-- Chọn tỉnh --', ''));
+
+        provinces.forEach(p => {
+            const option = new Option(p.name, p.code);
+            option.setAttribute('data-name', p.name);
+            provinceSelect.appendChild(option);
+        });
+    } catch (error) {
+        provinceSelect.innerHTML = '';
+        const errorOption = new Option('Lỗi khi tải tỉnh', '');
+        errorOption.disabled = true;
+        errorOption.selected = true;
+        provinceSelect.appendChild(errorOption);
+        console.error('Lỗi loadProvinces:', error);
     }
+}
 
-    async function loadDistricts(provinceCode) {
-        const districtSelect = document.getElementById('district');
-        const wardSelect = document.getElementById('ward');
+async function loadDistricts(provinceCode) {
+    const districtSelect = document.getElementById('district');
+    const wardSelect = document.getElementById('ward');
 
-        // Hiển thị loading
-        districtSelect.innerHTML = `<option value="">Đang tải quận/huyện...</option>`;
-        wardSelect.innerHTML = `<option value="">-- Chọn phường/xã --</option>`; // reset
+    districtSelect.innerHTML = '';
+    const loadingOption = new Option('Đang tải quận/huyện...', '');
+    loadingOption.disabled = true;
+    loadingOption.selected = true;
+    districtSelect.appendChild(loadingOption);
 
-        try {
-            const res = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
-            const data = await res.json();
+    wardSelect.innerHTML = '';
+    wardSelect.appendChild(new Option('-- Chọn phường/xã --', ''));
 
-            districtSelect.innerHTML = `<option value="">-- Chọn quận/huyện --</option>`;
-            data.districts.forEach(d => {
-                districtSelect.innerHTML += `<option value="${d.code}" data-name="${d.name}">${d.name}</option>`;
-            });
-        } catch (error) {
-            districtSelect.innerHTML = `<option value="">Lỗi khi tải quận/huyện</option>`;
-            console.error('Lỗi loadDistricts:', error);
-        }
+    try {
+        const res = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
+        const data = await res.json();
+
+        districtSelect.innerHTML = '';
+        districtSelect.appendChild(new Option('-- Chọn quận/huyện --', ''));
+
+        data.districts.forEach(d => {
+            const option = new Option(d.name, d.code);
+            option.setAttribute('data-name', d.name);
+            districtSelect.appendChild(option);
+        });
+    } catch (error) {
+        districtSelect.innerHTML = '';
+        const errorOption = new Option('Lỗi khi tải quận/huyện', '');
+        errorOption.disabled = true;
+        errorOption.selected = true;
+        districtSelect.appendChild(errorOption);
+        console.error('Lỗi loadDistricts:', error);
     }
+}
 
+async function loadWards(districtCode) {
+    const wardSelect = document.getElementById('ward');
 
-    async function loadWards(districtCode) {
-        const wardSelect = document.getElementById('ward');
+    wardSelect.innerHTML = '';
+    const loadingOption = new Option('Đang tải phường/xã...', '');
+    loadingOption.disabled = true;
+    loadingOption.selected = true;
+    wardSelect.appendChild(loadingOption);
 
-        // Hiển thị loading
-        wardSelect.innerHTML = `<option value="">Đang tải phường/xã...</option>`;
+    try {
+        const res = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+        const data = await res.json();
 
-        try {
-            const res = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
-            const data = await res.json();
+        wardSelect.innerHTML = '';
+        wardSelect.appendChild(new Option('-- Chọn phường/xã --', ''));
 
-            wardSelect.innerHTML = `<option value="">-- Chọn phường/xã --</option>`;
-            data.wards.forEach(w => {
-                wardSelect.innerHTML += `<option value="${w.code}" data-name="${w.name}">${w.name}</option>`;
-            });
-        } catch (error) {
-            wardSelect.innerHTML = `<option value="">Lỗi khi tải phường/xã</option>`;
-            console.error('Lỗi loadWards:', error);
-        }
+        data.wards.forEach(w => {
+            const option = new Option(w.name, w.code);
+            option.setAttribute('data-name', w.name);
+            wardSelect.appendChild(option);
+        });
+    } catch (error) {
+        wardSelect.innerHTML = '';
+        const errorOption = new Option('Lỗi khi tải phường/xã', '');
+        errorOption.disabled = true;
+        errorOption.selected = true;
+        wardSelect.appendChild(errorOption);
+        console.error('Lỗi loadWards:', error);
     }
-
+}
 </script>
 
 <script>
-    function toggleCheckoutForm(show) {
-        const form = document.getElementById('mobileCheckoutForm');
-        if (show) {
-            form.classList.add('mobile-active');
-            document.body.style.overflow = 'hidden'; // Ngăn cuộn nền
-        } else {
-            form.classList.remove('mobile-active');
-            document.body.style.overflow = '';
+function toggleCheckoutForm(show) {
+    const form = document.getElementById('mobileCheckoutForm');
+    if (show) {
+        form.classList.add('mobile-active');
+        document.body.style.overflow = 'hidden';
+    } else {
+        form.classList.remove('mobile-active');
+        document.body.style.overflow = '';
+    }
+}
+</script>
+
+<script>
+// Gọi toggle nếu có lỗi để mở lại modal, KHÔNG delay và không scroll để tránh giật
+@if ($errors->any())
+    toggleCheckoutForm(true);
+@endif
+</script>
+
+
+<script>
+// Gửi đơn hàng bằng fetch
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('checkoutForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        // Xoá lỗi cũ
+        document.querySelectorAll('.error-msg').forEach(el => el.remove());
+
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerText;
+
+        submitBtn.disabled = true;
+        // submitBtn.innerText = 'Đang xử lý...';
+
+        try {
+            const res = await fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: formData
+            });
+
+            const data = await res.json();
+
+            if (res.status === 422) {
+                showValidationErrors(data.errors);
+            } else if (res.ok) {
+                window.location.href = data.redirect_url + '?success=1';
+            } else {
+                alert(data.message || 'Đặt hàng thất bại.');
+            }
+        } catch (err) {
+            alert('Đặt hàng thất bại. Vui lòng thử lại.');
+            console.error(err);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+        }
+    });
+
+    function showValidationErrors(errors) {
+        for (const key in errors) {
+            const input = form.querySelector(`[name="${key}"]`);
+            if (input) {
+                const errorText = document.createElement('p');
+                errorText.className = 'text-sm text-red-600 mt-1 error-msg';
+                errorText.textContent = errors[key][0];
+                input.insertAdjacentElement('afterend', errorText);
+            }
         }
     }
-
-    // Nếu có lỗi từ server, mở lại form sau reload
-    @if ($errors->any())
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                toggleCheckoutForm(true);
-                document.getElementById('mobileCheckoutForm')?.scrollIntoView({ behavior: 'smooth' });
-            }, 50);
-
-        });
-    @endif
-
+});
 </script>

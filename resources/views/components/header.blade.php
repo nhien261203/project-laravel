@@ -47,7 +47,7 @@
                     </li>
 
                     <li>
-                        <a href="" class="inline-block py-4 px-4 text-white hover:bg-gray-400" >Về chúng tôi</a>
+                        <a href="{{ route('about') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400" data-route>Về chúng tôi</a>
                     </li>
                 </ul>
 
@@ -149,8 +149,8 @@
                     </ul>
                 </li>
 
-                <li><a href="" class="block text-white py-2 border-b border-white/10">Chuyện công nghệ</a></li>
-                <li><a href="" class="block text-white py-2 border-b border-white/10">Về chúng tôi</a></li>
+                <li><a href="{{ route('blogs.index') }}" class="block text-white py-2 border-b border-white/10">Chuyện công nghệ</a></li>
+                <li><a href="{{ route('about') }}" class="block text-white py-2 border-b border-white/10">Về chúng tôi</a></li>
             </ul>
 
         </div>

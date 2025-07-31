@@ -117,3 +117,19 @@
     </form> --}}
 </div>
 @endsection
+@if (request()->has('success'))
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'success',
+            title: 'Đặt hàng thành công!',
+            timer: 2000,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    });
+</script>
+@endif
+

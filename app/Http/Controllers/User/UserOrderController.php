@@ -50,39 +50,61 @@ class UserOrderController extends Controller
     public function store(Request $request)
     {
         if (!Auth::check()) {
-            return back()->with('error', 'Bạn cần đăng nhập để đặt hàng.');
+            return $request->expectsJson()
+                ? response()->json(['message' => 'Bạn cần đăng nhập để đặt hàng.'], 401)
+                : back()->with('error', 'Bạn cần đăng nhập để đặt hàng.');
         }
 
-        $data = $request->validate([
-            'customer_name' => 'required|string|max:255',
+        $rules = [
+            'customer_name' => ['required', 'string', 'max:255', 'regex:/[a-zA-ZÀ-ỹ]/'],
             'customer_phone' => ['required', 'regex:/^0\d{9}$/'],
-
             'customer_email' => 'nullable|email',
-            // 'customer_address' => 'required|string|max:500',
-            'note' => 'nullable|string|max:1000',
-            'province_code'     => 'required|string|max:10',
-            'province_name'     => 'required|string|max:100',
-            'district_code'     => 'required|string|max:10',
-            'district_name'     => 'required|string|max:100',
-            'ward_code'         => 'required|string|max:10',
-            'ward_name'         => 'required|string|max:100',
-            'address_detail'    => 'required|string|max:255', // số nhà, tên đường
+            'note' => 'nullable|string|max:1000|regex:/[a-zA-ZÀ-ỹ]/',
+            'province_code' => 'required|string|max:10',
+            'province_name' => 'nullable|string|max:100',
+            'district_code' => 'required|string|max:10',
+            'district_name' => 'nullable|string|max:100',
+            'ward_code' => 'required|string|max:10',
+            'ward_name' => 'nullable|string|max:100',
+            'address_detail' => 'required|string|max:255|regex:/[a-zA-ZÀ-ỹ]/',
             'payment_method' => 'required|string|in:cod,vnpay'
-        ]);
+        ];
 
         try {
+            $data = $request->validate($rules);
+
             $order = $this->orderRepo->createOrderFromCart(Auth::id(), $data);
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'order_id' => $order->id,
+                    'redirect_url' => $data['payment_method'] === 'vnpay'
+                        ? route('user.orders.vnpay', ['id' => $order->id, 'redirect' => true])
+                        : route('user.orders.show', $order->id)
+                ]);
+            }
+
+            // Trường hợp không dùng fetch (fallback)
             if ($data['payment_method'] === 'vnpay') {
                 return redirect()->route('user.orders.vnpay', ['id' => $order->id, 'redirect' => true]);
             }
 
             return redirect()->route('user.orders.show', $order->id)
-                ->with('success', 'Đặt hàng thành công!');
+                    ->with('success', 'Đặt hàng thành công!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->expectsJson()) {
+                return response()->json(['errors' => $e->errors()], 422);
+            }
+            throw $e; // fallback to Laravel error bag
         } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Đặt hàng thất bại: ' . $e->getMessage());
+            return $request->expectsJson()
+                ? response()->json(['message' => 'Lỗi đặt hàng: ' . $e->getMessage()], 500)
+                : back()->with('error', 'Đặt hàng thất bại: ' . $e->getMessage());
         }
     }
+
 
     public function cancel($id)
     {
@@ -110,8 +132,8 @@ class UserOrderController extends Controller
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = route('user.orders.vnpay.return');
 
-        $vnp_TmnCode = "YQVA6LHM";
-        $vnp_HashSecret = "NEHGRPOYU0ZMF3HCNH8QXCFUJIQ6IXUN";
+        $vnp_TmnCode = env('VNP_TMNCODE');
+        $vnp_HashSecret = env('VNP_HASHSECRET');
 
         // Dữ liệu thanh toán
         $vnp_TxnRef = $order->id . '-' . time(); // hoặc mã ngẫu nhiên duy nhất

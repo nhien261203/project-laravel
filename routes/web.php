@@ -66,6 +66,11 @@ Route::get('/search', [UserProductController::class, 'search'])->name('product.s
 Route::get('/blogs', [UserBlogController::class, 'index'])->name('blogs.index');
 Route::get('/blog/{slug}', [UserBlogController::class, 'show'])->name('blogs.show');
 
+Route::get('/about', function () {
+    return view('user.about');
+})->name('about');
+
+
 Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
 
 Route::post('/viewed-products/{product}', [UserRecentProductController::class, 'store'])->name('recently.viewed.store');
