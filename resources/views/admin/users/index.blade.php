@@ -64,7 +64,7 @@
         <table class="min-w-full bg-white border text-sm">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="border p-2">ID</th>
+                    <th class="border p-2">STT</th>
                     <th class="border p-2">Tên</th>
                     <th class="border p-2">Email</th>
                     <th class="border p-2">Quyền</th>
@@ -72,9 +72,10 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($users as $user)
+                @forelse($users as $index => $user)
                 <tr>
-                    <td class="border p-2">{{ $user->id }}</td>
+                    <td class="border p-2">{{ ($users->currentPage() - 1) * $users->perPage() + $index + 1 }}</td>
+                    
                     <td class="border p-2">{{ $user->name }}</td>
                     <td class="border p-2">{{ $user->email }}</td>
                     <td class="border p-2">{{ $user->roles->pluck('name')->implode(', ') }}</td>

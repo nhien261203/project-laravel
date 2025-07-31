@@ -104,7 +104,7 @@
     <div class="container mx-auto text-center" data-aos="zoom-in">
         <h2 class="text-2xl font-semibold mb-4">Bạn cần tư vấn hoặc hỗ trợ?</h2>
         <p class="text-gray-700 mb-6">Liên hệ chúng tôi qua Fanpage, Hotline hoặc đến trực tiếp cửa hàng!</p>
-        <a href="" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg shadow transition">Liên hệ ngay</a>
+        <a href="{{ route('contact.show') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg shadow transition">Liên hệ ngay</a>
     </div>
 </section>
 

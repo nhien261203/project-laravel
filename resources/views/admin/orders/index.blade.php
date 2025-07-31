@@ -79,7 +79,7 @@
 
     {{-- Phân trang --}}
     <div class="mt-4">
-        {{ $orders->appends(request()->query())->links() }}
+        {{ $orders->appends(request()->query())->links('pagination.custom-tailwind') }}
     </div>
 </div>
 @endsection

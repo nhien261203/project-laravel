@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminContactController;
 use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\BannerController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ReviewController;
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserCommentController;
+use App\Http\Controllers\User\UserContactController;
 use App\Http\Controllers\User\UserForgotPasswordController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserProductController;
@@ -70,6 +72,8 @@ Route::get('/about', function () {
     return view('user.about');
 })->name('about');
 
+Route::get('/contact', [UserContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [UserContactController::class, 'submit'])->name('contact.submit');
 
 Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
 
@@ -185,7 +189,10 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::post('reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
     Route::post('reviews/{review}/update-status', [AdminReviewController::class, 'updateStatus'])->name('reviews.updateStatus');
 
-
+    Route::get('/contacts', [AdminContactController::class, 'index'])->name('contacts.index');
+    Route::get('/contacts/{contact}', [AdminContactController::class, 'show'])->name('contacts.show');
+    Route::patch('/contacts/{contact}/mark-replied', [AdminContactController::class, 'markReplied'])->name('contacts.markReplied');
+    Route::delete('/contacts/{contact}', [AdminContactController::class, 'destroy'])->name('contacts.destroy');
 
     // Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');
     // Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.change');
