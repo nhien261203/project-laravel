@@ -24,10 +24,15 @@ class UserOrderController extends Controller
      */
     public function index()
     {
-        $orders = Auth::user()->orders()->with('items')->latest()->get();
+        $orders = Auth::user()
+            ->orders()
+            ->with('items')
+            ->latest()
+            ->paginate(5);
 
         return view('user.orders.index', compact('orders'));
     }
+
 
     /**
      * Trang chi tiết đơn hàng

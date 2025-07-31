@@ -15,11 +15,11 @@
                 <div>
                     <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Thông tin</h3>
                     <ul class="mt-4 space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Về chúng tôi</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">New feed</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Phương thức thanh toán</a></li>
-                        <li><a href="{{ route('user.orders.index') }}" class="text-gray-400 hover:text-white">Tra cứu đơn hàng</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Liên hệ</a></li>
+                        <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white">Về chúng tôi</a></li>
+                        <li><a href="{{ route('blogs.index') }}" class="text-gray-400 hover:text-white">New feed</a></li>
+                        {{-- <li><a href="#" class="text-gray-400 hover:text-white">Phương thức thanh toán</a></li>
+                        <li><a href="{{ route('user.orders.index') }}" class="text-gray-400 hover:text-white">Tra cứu đơn hàng</a></li> --}}
+                        <li><a href="{{ route('contact.show') }}" class="text-gray-400 hover:text-white">Liên hệ</a></li>
                     </ul>
                 </div>
 
@@ -38,7 +38,7 @@
                 <div>
                     <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Thông tin khác</h3>
                     <ul class="mt-4 space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Thẻ thành viên</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Voucher - Khuyễn mãi</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white">Nội quy cửa hàng</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white">Câu hỏi thường gặp</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white">Lịch sử mua hàng</a></li>

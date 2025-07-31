@@ -55,4 +55,8 @@
         </div>
     @endif
 </div>
+<div class="flex justify-center">
+    {{ $orders->links('pagination.custom-user') }}
+</div>
+
 @endsection

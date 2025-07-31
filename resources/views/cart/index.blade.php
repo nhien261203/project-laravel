@@ -390,9 +390,25 @@
 <script>
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
-        alert('Đã sao chép mã: ' + text);
+        Swal.fire({
+            icon: 'success',
+            title: 'Đã sao chép mã thành công!',
+            toast: true,
+            position: 'top-end',
+            timer: 2000,
+            showConfirmButton: false
+            
+        });
     }).catch(() => {
-        alert('Không thể sao chép mã.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Không thể sao chép mã',
+            text: 'Vui lòng thử lại!',
+            toast: false,
+            position: 'top-end',
+            timer: 2500,
+            showConfirmButton: false
+        });
     });
 }
 </script>
@@ -558,10 +574,11 @@ function toggleCheckoutForm(show) {
 </script>
 
 <script>
-// Gọi toggle nếu có lỗi để mở lại modal, KHÔNG delay và không scroll để tránh giật
-@if ($errors->any())
-    toggleCheckoutForm(true);
-@endif
+document.addEventListener('DOMContentLoaded', function () {
+    @if ($errors->any())
+        toggleCheckoutForm(true);
+    @endif
+});
 </script>
 
 
