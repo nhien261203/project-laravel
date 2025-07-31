@@ -75,6 +75,17 @@
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md transition">
                     Đăng nhập
                 </button>
+                <div class="flex flex-col gap-2">
+                    <a href="{{ route('admin.redirect.google') }}"
+                       class="flex items-center justify-center gap-2 w-full border py-2 rounded-md hover:bg-gray-500">
+                        <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21.8 10.1H12v3.9h5.7c-.8 2.1-3 3.5-5.7 3.5-3.3 0-6-2.7-6-6s2.7-6 6-6c1.6 0 3 .6 4.1 1.7l2.9-2.9C17.7 2.6 15 1.5 12 1.5 6.8 1.5 2.5 5.8 2.5 11s4.3 9.5 9.5 9.5 9-3.6 9-9c0-.6-.1-1.2-.2-1.4z"/>
+                        </svg>
+                        Đăng nhập với Google
+                    </a>
+
+                    
+                </div>
             </form>
 
             {{-- Đăng ký --}}

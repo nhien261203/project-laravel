@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\CompareController;
@@ -227,8 +228,12 @@ Route::prefix('password')->name('password.')->group(function () {
 
 
 
-//auth cho admin 
+//auth gg
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('redirect.google');
+Route::get('auth/google/callback',[GoogleController::class, 'handleGoogleCallback']);
 
+Route::get('admin/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('admin.redirect.google');
+Route::get('admin/auth/google/callback', [GoogleController::class, 'handleGoogleCallbackForAdmin']);
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
