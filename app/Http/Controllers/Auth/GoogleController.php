@@ -19,6 +19,7 @@ class GoogleController extends Controller
     public function handleGoogleCallback()
     {
         try {
+            $oldSessionId = session()->getId(); 
             $googleUser = Socialite::driver('google')->user();
 
             // Tìm theo google_id
@@ -55,13 +56,13 @@ class GoogleController extends Controller
                 }
             }
 
-            // Merge cart & recent product
-            $sessionId = session()->getId();
+            // // Merge cart & recent product
+            // $sessionId = session()->getId();
             app(\App\Repositories\Cart\CartRepositoryInterface::class)
-                ->mergeCart(Auth::id(), $sessionId);
+                ->mergeCart(Auth::id(), $oldSessionId);
 
             app(\App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface::class)
-                ->mergeRecentViewed(Auth::id(), $sessionId);
+                ->mergeRecentViewed(Auth::id(), $oldSessionId);
 
             session(['cart_merged' => true]);
 
@@ -74,6 +75,7 @@ class GoogleController extends Controller
     public function handleGoogleCallbackForAdmin()
     {
         try {
+            $oldSessionId = session()->getId(); 
             $googleUser = Socialite::driver('google')->user();
 
             // Tìm user theo google_id
@@ -108,12 +110,12 @@ class GoogleController extends Controller
             Auth::login($finduser);
 
             // Gọi merge sau khi login
-            $sessionId = session()->getId();
+        
             app(\App\Repositories\Cart\CartRepositoryInterface::class)
-                ->mergeCart(Auth::id(), $sessionId);
+                ->mergeCart(Auth::id(), $oldSessionId);
 
             app(\App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface::class)
-                ->mergeRecentViewed(Auth::id(), $sessionId);
+                ->mergeRecentViewed(Auth::id(), $oldSessionId);
 
             session(['cart_merged' => true]);
 

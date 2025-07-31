@@ -37,6 +37,9 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền truy cập.');
+        }
         $user = User::findOrFail($id);
         $roles = Role::pluck('name', 'name');
         return view('admin.users.edit', compact('user', 'roles'));
@@ -44,22 +47,30 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
         $request->validate([
             'name'  => 'required',
             'email' => 'required|email',
-            'role'  => 'required|exists:roles,name',
+            'role' => 'required|array',
+            'role.*' => 'exists:roles,name',
+
         ]);
 
         $user = User::findOrFail($id);
         $user->update($request->only('name', 'email'));
 
-        $user->syncRoles([$request->role]);
+        $user->syncRoles($request->role);
 
         return redirect()->route('admin.users.index')->with('success', 'Cập nhật thành công');
     }
 
     public function destroy($id)
     {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
         $user = User::findOrFail($id);
         if ($user->hasRole('admin')) {
             return back()->with('error', 'Không thể xoá tài khoản quản trị viên chính.');

@@ -20,7 +20,7 @@
 
         <div class="mb-4">
             <label class="block mb-1 font-medium">Quyền</label>
-            <select name="role" class="w-full border p-2 rounded">
+            <select name="role[]" class="w-full border p-2 rounded" multiple>
                 @foreach ($roles as $role)
                     <option value="{{ $role }}" {{ $user->hasRole($role) ? 'selected' : '' }}>
                         {{ ucfirst($role) }}
