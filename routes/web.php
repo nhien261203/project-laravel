@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\ForgotPasswordController;
+use App\Http\Controllers\Admin\GithubController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductVariantController;
@@ -235,6 +236,9 @@ Route::get('auth/google/callback',[GoogleController::class, 'handleGoogleCallbac
 Route::get('admin/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('admin.redirect.google');
 Route::get('admin/auth/google/callback', [GoogleController::class, 'handleGoogleCallbackForAdmin']);
 
+//auth github admin
+Route::get('admin/auth/github', [GithubController::class, 'redirectToGithub'])->name('admin.redirect.github');
+Route::get('admin/auth/github/callback', [GithubController::class, 'handleGithubCallback']);
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');

@@ -5,6 +5,21 @@
 <div class="p-6 bg-white rounded shadow">
     <h1 class="text-2xl font-semibold mb-4">Danh sách liên hệ</h1>
 
+    <form method="GET" action="{{ route('admin.contacts.index') }}" class="flex flex-col md:flex-row items-center gap-4 mb-6">
+    <input type="text" name="keyword" placeholder="Tìm tên, email, nội dung..." value="{{ request('keyword') }}"
+           class="border rounded px-3 py-1">
+
+    <select name="is_replied" class="border rounded px-3 py-1">
+        <option value="">-- Tất cả --</option>
+        <option value="1" {{ request('is_replied') == '1' ? 'selected' : '' }}>Đã phản hồi</option>
+        <option value="0" {{ request('is_replied') == '0' ? 'selected' : '' }}>Chưa phản hồi</option>
+    </select>
+
+    <button type="submit" class="bg-blue-500 text-white px-4 py-1 rounded">Lọc</button>
+    <a href="{{ route('admin.contacts.index') }}" class="text-gray-600 underline px-2">Reset</a>
+</form>
+
+
     @if (session('success'))
         <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
             {{ session('success') }}

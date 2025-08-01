@@ -8,11 +8,29 @@ use Illuminate\Http\Request;
 
 class AdminContactController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $contacts = Contact::latest()->paginate(10);
+        $query = Contact::query();
+
+        // Tìm theo từ khóa
+        if ($request->filled('keyword')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('email', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('message', 'like', '%' . $request->keyword . '%');
+            });
+        }
+
+        // Lọc theo trạng thái đã phản hồi
+        if ($request->filled('is_replied')) {
+            $query->where('is_replied', $request->is_replied);
+        }
+
+        $contacts = $query->latest()->paginate(10)->appends($request->query());
+
         return view('admin.contacts.index', compact('contacts'));
     }
+
 
     public function show(Contact $contact)
     {

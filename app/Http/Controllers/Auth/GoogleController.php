@@ -101,8 +101,8 @@ class GoogleController extends Controller
                 }
             }
 
-            // Gán quyền 'staff' nếu chưa có 'admin' hoặc 'staff'
-            if (!$finduser->hasAnyRole(['admin', 'staff'])) {
+            // Gán quyền 'staff' nếu chưa có bat ky quyen nao
+            if ($finduser->roles()->count() === 0) {
                 $finduser->assignRole('staff');
             }
 
