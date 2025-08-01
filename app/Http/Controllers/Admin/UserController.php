@@ -50,35 +50,53 @@ class UserController extends Controller
         if (!auth()->user()->hasRole('admin')) {
             abort(403, 'Bạn không có quyền thực hiện thao tác này.');
         }
-        $request->validate([
-            'name'  => 'required',
-            'email' => 'required|email',
-            'role' => 'required|array',
-            'role.*' => 'exists:roles,name',
 
+        $request->validate([
+            'name'   => 'required',
+            'email'  => 'required|email',
+            'role'   => 'required|array',
+            'role.*' => 'exists:roles,name',
+            'active' => 'nullable|in:0,1',
         ]);
 
         $user = User::findOrFail($id);
+
+        // Cập nhật name & email
         $user->update($request->only('name', 'email'));
 
+        // Đồng bộ quyền
         $user->syncRoles($request->role);
+
+        // Nếu không phải tài khoản admin thì mới được cập nhật trạng thái
+        if (!$user->hasRole('admin')) {
+            $user->active = $request->has('active') ? (bool)$request->active : $user->active;
+            $user->save(); // Lưu lại thay đổi trạng thái
+        }
 
         return redirect()->route('admin.users.index')->with('success', 'Cập nhật thành công');
     }
 
-    public function destroy($id)
+    public function toggleActiveStatus($id)
     {
         if (!auth()->user()->hasRole('admin')) {
             abort(403, 'Bạn không có quyền thực hiện thao tác này.');
         }
+
         $user = User::findOrFail($id);
+
         if ($user->hasRole('admin')) {
-            return back()->with('error', 'Không thể xoá tài khoản quản trị viên chính.');
+            return back()->with('error', 'Không thể thay đổi trạng thái tài khoản quản trị viên.');
         }
 
-        $user->delete();
-        return back()->with('success', 'Xoá thành công');
+        $user->active = !$user->active;
+        $user->save();
+
+        $statusText = $user->active ? 'hoạt động' : 'vô hiệu hóa';
+
+        return back()->with('success', "Tài khoản đã được chuyển sang trạng thái $statusText.");
     }
+
+
 
     public function show($id)
     {

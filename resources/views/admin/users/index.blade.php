@@ -68,6 +68,7 @@
                     <th class="border p-2">Tên</th>
                     <th class="border p-2">Email</th>
                     <th class="border p-2">Quyền</th>
+                    <th class="border p-2">Trạng thái</th>
                     <th class="border p-2">Hành động</th>
                 </tr>
             </thead>
@@ -79,6 +80,13 @@
                     <td class="border p-2">{{ $user->name }}</td>
                     <td class="border p-2">{{ $user->email }}</td>
                     <td class="border p-2">{{ $user->roles->pluck('name')->implode(', ') }}</td>
+                    <td class="border p-2">
+                        @if ($user->active)
+                            <span class="text-green-600 font-medium">Hoạt động</span>
+                        @else
+                            <span class="text-red-600 font-medium">Vô hiệu hóa</span>
+                        @endif
+                    </td>
                     <td class="border p-2 space-x-2">
                         <a href="{{ route('admin.users.show', $user->id) }}" class="text-blue-500 hover:underline">👁️</a>
 
@@ -89,10 +97,17 @@
                                 @csrf @method('DELETE')
                                 <button type="submit" class="text-red-500 hover:underline">Xóa</button>
                             </form> --}}
+                            {{-- Nút toggle bật/tắt trạng thái (nếu không phải admin) --}}
+                            @if (!$user->hasRole('admin'))
+                                <form action="{{ route('admin.users.toggle-active', $user->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Xác nhận thay đổi trạng thái?')">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="text-sm {{ $user->active ? 'text-red-500' : 'text-green-500' }} hover:underline">
+                                        {{ $user->active ? 'Vô hiệu hóa' : 'Kích hoạt' }}
+                                    </button>
+                                </form>
+                            @endif
 
-                            @include('partials.delete-confirm', [
-                                'action' => route('admin.users.destroy', $user->id) 
-                            ])
                         @endif
                     </td>
 

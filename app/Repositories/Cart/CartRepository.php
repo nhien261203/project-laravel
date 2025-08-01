@@ -5,6 +5,7 @@ namespace App\Repositories\Cart;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\ProductVariant;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class CartRepository implements CartRepositoryInterface
@@ -12,8 +13,15 @@ class CartRepository implements CartRepositoryInterface
     public function getUserCart($userId = null, $sessionId = null)
     {
         if ($userId) {
+            // Nếu user không tồn tại, không tạo cart
+            if (!User::where('id', $userId)->exists()) {
+                logger()->error(" Không thể tạo cart: user_id {$userId} không tồn tại.");
+                return null;
+            }
+
             return Cart::with('items')->firstOrCreate(['user_id' => $userId]);
         }
+
 
         return Cart::with('items')->firstOrCreate([
             'user_id' => $userId,

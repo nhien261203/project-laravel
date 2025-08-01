@@ -29,6 +29,22 @@
             </select>
         </div>
 
+        {{-- Chỉ cho phép cập nhật trạng thái nếu không phải admin --}}
+        @if (!$user->hasRole('admin'))
+        <div class="mb-4">
+            <label class="block mb-1 font-medium">Trạng thái tài khoản</label>
+            <select name="active" class="w-full border p-2 rounded">
+                <option value="1" {{ $user->active ? 'selected' : '' }}>Hoạt động</option>
+                <option value="0" {{ !$user->active ? 'selected' : '' }}>Vô hiệu hóa</option>
+            </select>
+        </div>
+        @else
+            <div class="mb-4">
+                <label class="block mb-1 font-medium">Trạng thái tài khoản</label>
+                <input type="text" value="Hoạt động (Admin - không thể thay đổi)" disabled class="w-full border p-2 rounded bg-gray-100 text-gray-700">
+            </div>
+        @endif
+
         <button class="bg-blue-500 text-white px-4 py-2 rounded">Cập nhật</button>
     </form>
 </div>

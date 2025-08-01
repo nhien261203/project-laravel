@@ -19,6 +19,42 @@ class AuthController extends Controller
     // Xử lý đăng nhập
 
 
+    // public function login(Request $request)
+    // {
+    //     $request->validate([
+    //         'login'    => 'required|string',
+    //         'password' => 'required|string',
+    //     ]);
+
+    //     $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+
+    //     $credentials = [
+    //         $loginType => $request->login,
+    //         'password' => $request->password,
+    //         'active' => true,
+    //     ];
+
+    //     // Lưu session_id cũ trước khi đăng nhập
+    //     $oldSessionId = $request->session()->getId();
+
+    //     if (Auth::attempt($credentials, $request->remember)) {
+    //         $request->session()->regenerate(); // Tạo session mới
+
+    //         // Gọi mergeCart thủ công với session ID cũ
+    //         app(\App\Repositories\Cart\CartRepositoryInterface::class)
+    //             ->mergeCart(Auth::id(), $oldSessionId);
+
+    //         app(\App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface::class)
+    //         ->mergeRecentViewed(Auth::id(), $oldSessionId);
+
+    //         // Đánh dấu đã merge nếu cần
+    //         session(['cart_merged' => true]);
+
+    //         return redirect('/')->with('success', 'Chào mừng bạn đến với Nexus shop !');
+    //     }
+
+    //     return back()->with('error', 'Thông tin đăng nhập không chính xác hoặc tài khoản bị vô hiệu hóa')->withInput();
+    // }
     public function login(Request $request)
     {
         $request->validate([
@@ -28,33 +64,40 @@ class AuthController extends Controller
 
         $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
 
-        $credentials = [
-            $loginType => $request->login,
-            'password' => $request->password,
-        ];
+        $user = User::where($loginType, $request->login)->first();
 
-        // Lưu session_id cũ trước khi đăng nhập
-        $oldSessionId = $request->session()->getId();
-
-        if (Auth::attempt($credentials, $request->remember)) {
-            $request->session()->regenerate(); // Tạo session mới
-
-            // Gọi mergeCart thủ công với session ID cũ
-            app(\App\Repositories\Cart\CartRepositoryInterface::class)
-                ->mergeCart(Auth::id(), $oldSessionId);
-
-            app(\App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface::class)
-            ->mergeRecentViewed(Auth::id(), $oldSessionId);
-
-            // Đánh dấu đã merge nếu cần
-            session(['cart_merged' => true]);
-
-            return redirect('/')->with('success', 'Chào mừng bạn đến với Nexus shop !');
+        if (!$user) {
+            return back()->with('error', 'Tài khoản không tồn tại.')->withInput();
         }
 
-        return back()->with('error', 'Thông tin đăng nhập không chính xác.')->withInput();
-    }
+        if (!$user->active) {
+            return back()->with('error', 'Tài khoản đã bị vô hiệu hóa.')->withInput();
+        }
 
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->with('error', 'Thông tin đăng nhập không chính xác.')->withInput();
+        }
+
+
+        // Lưu session_id cũ TRƯỚC khi login
+        $oldSessionId = $request->session()->getId();
+
+        Auth::login($user, $request->remember);
+
+        // Sau khi login mới regenerate
+        $request->session()->regenerate();
+
+        // Merge bằng session cũ
+        app(\App\Repositories\Cart\CartRepositoryInterface::class)
+            ->mergeCart(Auth::id(), $oldSessionId);
+
+        app(\App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface::class)
+            ->mergeRecentViewed(Auth::id(), $oldSessionId);
+
+        session(['cart_merged' => true]);
+
+        return redirect('/')->with('success', 'Chào mừng bạn đến với Nexus shop !');
+    }
 
     // Hiển thị form đăng ký
     public function showRegister()
@@ -76,6 +119,7 @@ class AuthController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'phone'    => $request->phone,
+            'active' => true,
             'password' => Hash::make($request->password),
         ]);
 

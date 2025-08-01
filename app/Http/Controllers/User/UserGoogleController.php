@@ -18,35 +18,44 @@ class UserGoogleController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $oldSessionId = session()->getId(); 
+            $oldSessionId = session()->getId();
             $googleUser = Socialite::driver('google')->user();
 
             // Tìm theo google_id
             $finduser = User::where('google_id', $googleUser->id)->first();
 
             if ($finduser) {
+                // Kiểm tra nếu tài khoản bị vô hiệu hóa
+                if (!$finduser->active) {
+                    return redirect('/login')->with('error', 'Tài khoản của bạn đã bị vô hiệu hóa.');
+                }
+
                 Auth::login($finduser);
             } else {
                 // Tìm theo email
                 $existingUser = User::where('email', $googleUser->email)->first();
 
                 if ($existingUser) {
-                    // Gán google_id nếu chưa có
+                    if (!$existingUser->active) {
+                        return redirect('/login')->with('error', 'Tài khoản của bạn đã bị vô hiệu hóa.');
+                    }
+
                     if (!$existingUser->google_id) {
                         $existingUser->update(['google_id' => $googleUser->id]);
                     }
 
                     Auth::login($existingUser);
                 } else {
-                    // Tạo user mới
+                    
                     $newUser = User::create([
                         'name'       => $googleUser->name,
                         'email'      => $googleUser->email,
                         'google_id'  => $googleUser->id,
-                        'password'   => bcrypt('123456dummy'),
+                        'active'     => true,
+                        'password'   => bcrypt('123456dummy'), // hoặc Hash::make(Str::random(32))
                     ]);
 
-                    // Gán quyền mặc định nếu chưa có quyền nào
+                    // Gán quyền mặc định
                     if ($newUser->roles()->count() === 0) {
                         $newUser->assignRole('user');
                     }
@@ -54,6 +63,7 @@ class UserGoogleController extends Controller
                     Auth::login($newUser);
                 }
             }
+
 
             // // Merge cart & recent product
             // $sessionId = session()->getId();
@@ -70,5 +80,4 @@ class UserGoogleController extends Controller
             return redirect('/login')->with('error', 'Đăng nhập Google thất bại: ' . $e->getMessage());
         }
     }
-    
 }

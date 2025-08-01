@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 // Trang chủ – cho tất cả (user cũng vào được)
 // Route::middleware('auto.merge.cart')->group(function () {
@@ -150,7 +151,10 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::resource('banners', BannerController::class);
 
     Route::resource('blogs', BlogController::class);
+
     Route::resource('users', UserController::class);
+    Route::patch('users/{id}/toggle-active', [UserController::class, 'toggleActiveStatus'])->name('users.toggle-active');
+
 
     Route::post('blogs/upload', [BlogController::class, 'upload'])->name('blogs.upload');
 
@@ -265,10 +269,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 
-// 🟩 Test gửi mail
+//  Test gửi mail
 Route::get('/test-mail', function () {
     Mail::raw('Test email from Laravel', function ($msg) {
         $msg->to('youremail@gmail.com')->subject('Test Mail');
     });
     return 'Gửi mail xong!';
 });
+
+
+// xoa cart dinh ky
+// Route::get('/clear-cart-data', function () {
+//     DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+//     DB::table('cart_items')->truncate();
+//     DB::table('carts')->truncate();
+
+//     DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+//     return 'Đã xoá toàn bộ dữ liệu carts và cart_items.';
+// });

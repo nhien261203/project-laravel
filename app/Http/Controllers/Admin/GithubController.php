@@ -39,6 +39,7 @@ class GithubController extends Controller
                     $finduser = User::create([
                         'name'       => $githubUser->name,
                         'email'      => $githubUser->email,
+                        'active' => true, // mặc định
                         'github_id'  => $githubUser->id,
                         'password'   => bcrypt('123456dummy'), // chỉ tạo dummy nếu hoàn toàn mới
                     ]);
