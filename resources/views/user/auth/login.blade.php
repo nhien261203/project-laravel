@@ -22,7 +22,7 @@
                 class="w-full h-full object-contain"
             />
             <div class="absolute inset-0 bg-gradient-to-tr from-black/60 to-transparent flex items-end p-6">
-                <h2 class="text-white text-xl font-semibold">Welcome back to ElectroShop</h2>
+                <h2 class="text-white text-xl font-semibold">Welcome back to NexusPhone</h2>
             </div>
         </div>
 

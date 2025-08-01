@@ -14,7 +14,7 @@
         {{-- Ảnh trái --}}
         <div class="hidden md:block md:w-1/2 bg-cover bg-center relative" style="background-image: url('https://cdn.tgdd.vn/2022/10/banner/TGDD-540x270.png')">
             <div class="absolute inset-0 bg-black/60 flex items-center justify-center p-6">
-                <h2 class="text-2xl font-bold text-white text-center">Hệ thống quản trị <br> ElectroShop</h2>
+                <h2 class="text-2xl font-bold text-white text-center">Hệ thống quản trị <br> NexusPhone</h2>
             </div>
         </div>
 

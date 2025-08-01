@@ -80,15 +80,19 @@
                     <td class="border p-2">{{ $user->email }}</td>
                     <td class="border p-2">{{ $user->roles->pluck('name')->implode(', ') }}</td>
                     <td class="border p-2 space-x-2">
-                        <a href="{{ route('admin.users.show', $user->id) }}" class="text-blue-500 hover:underline">Xem</a>
+                        <a href="{{ route('admin.users.show', $user->id) }}" class="text-blue-500 hover:underline">👁️</a>
 
                         @if (auth()->user()->hasRole('admin'))
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="text-green-500 hover:underline">Sửa</a>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="text-green-500 hover:underline">✏️</a>
 
-                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Xác nhận xóa?')">
+                            {{-- <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Xác nhận xóa?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="text-red-500 hover:underline">Xóa</button>
-                            </form>
+                            </form> --}}
+
+                            @include('partials.delete-confirm', [
+                                'action' => route('admin.users.destroy', $user->id) 
+                            ])
                         @endif
                     </td>
 
