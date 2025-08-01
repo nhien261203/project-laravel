@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminContactController;
+use App\Http\Controllers\Admin\AdminGoogleController;
 use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\BannerController;
@@ -18,7 +19,7 @@ use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
-use App\Http\Controllers\Auth\GoogleController;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\CompareController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserCommentController;
 use App\Http\Controllers\User\UserContactController;
 use App\Http\Controllers\User\UserForgotPasswordController;
+use App\Http\Controllers\User\UserGoogleController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\UserProductController;
 use App\Http\Controllers\User\UserProfileController;
@@ -230,11 +232,11 @@ Route::prefix('password')->name('password.')->group(function () {
 
 
 //auth gg
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('redirect.google');
-Route::get('auth/google/callback',[GoogleController::class, 'handleGoogleCallback']);
+Route::get('auth/google', [UserGoogleController::class, 'redirectToGoogle'])->name('redirect.google');
+Route::get('auth/google/callback',[UserGoogleController::class, 'handleGoogleCallback']);
 
-Route::get('admin/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('admin.redirect.google');
-Route::get('admin/auth/google/callback', [GoogleController::class, 'handleGoogleCallbackForAdmin']);
+// Route::get('admin/auth/google', [AdminGoogleController::class, 'redirectToGoogle'])->name('admin.redirect.google');
+// Route::get('admin/auth/google/callback', [AdminGoogleController::class, 'handleGoogleCallbackForAdmin']);
 
 //auth github admin
 Route::get('admin/auth/github', [GithubController::class, 'redirectToGithub'])->name('admin.redirect.github');

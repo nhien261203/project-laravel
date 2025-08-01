@@ -77,7 +77,7 @@
                 </button>
                 <div class="flex flex-row gap-2">
                     {{-- Google Login --}}
-                    <a href="{{ route('admin.redirect.google') }}"
+                    {{-- <a href="{{ route('admin.redirect.google') }}"
                     class="flex items-center justify-center gap-2 flex-1 border py-2 rounded-md hover:bg-gray-400">
                         <svg class="w-5 h-5 text-red-500" viewBox="0 0 48 48">
                             <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.2 2.3 29.9 0 24 0 14.6 0 6.5 5.8 2.6 14.1l7.9 6.1C12.3 13.5 17.6 9.5 24 9.5z"/>
@@ -86,7 +86,7 @@
                             <path fill="#34A853" d="M24 48c6.5 0 12-2.1 16-5.7l-7.9-6.1c-2.3 1.6-5.3 2.5-8.1 2.5-6.4 0-11.7-4-13.6-9.5l-7.9 6.1C6.5 42.2 14.6 48 24 48z"/>
                         </svg>
                         Đăng nhập Google
-                    </a>
+                    </a> --}}
 
                     {{-- GitHub Login --}}
                     <a href="{{ route('admin.redirect.github') }}"

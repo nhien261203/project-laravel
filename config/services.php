@@ -36,6 +36,13 @@ return [
         'redirect' => env('GOOGLE_CLIENT_REDIRECT'),
     ],
 
+    // 'google_admin' => [
+    //     'client_id' => env('GOOGLE_CLIENT_ID_ADMIN'),
+    //     'client_secret' => env('GOOGLE_CLIENT_SECRET_ADMIN'),
+    //     'redirect' => env('GOOGLE_REDIRECT_URI_ADMIN'),
+    // ],
+
+
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
