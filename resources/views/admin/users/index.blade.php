@@ -98,7 +98,7 @@
                                 <button type="submit" class="text-red-500 hover:underline">Xóa</button>
                             </form> --}}
                             {{-- Nút toggle bật/tắt trạng thái (nếu không phải admin) --}}
-                            @if (!$user->hasRole('admin'))
+                            {{-- @if (!$user->hasRole('admin'))
                                 <form action="{{ route('admin.users.toggle-active', $user->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Xác nhận thay đổi trạng thái?')">
                                     @csrf
                                     @method('PATCH')
@@ -106,7 +106,7 @@
                                         {{ $user->active ? 'Vô hiệu hóa' : 'Kích hoạt' }}
                                     </button>
                                 </form>
-                            @endif
+                            @endif --}}
 
                         @endif
                     </td>

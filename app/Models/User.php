@@ -27,7 +27,8 @@ class User extends Authenticatable
         'address',
         'gender',
         'avatar',
-        'google_id'
+        'google_id',
+        'github_id'
     ];
 
     public function cart()

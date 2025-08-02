@@ -41,6 +41,10 @@ class UserController extends Controller
             abort(403, 'Bạn không có quyền truy cập.');
         }
         $user = User::findOrFail($id);
+        if ($user->hasRole('admin')) {
+            return back()->with('error', 'Không thể chỉnh sửa tài khoản có quyền admin.');
+        }
+        $user = User::findOrFail($id);
         $roles = Role::pluck('name', 'name');
         return view('admin.users.edit', compact('user', 'roles'));
     }
