@@ -48,7 +48,7 @@ class GithubController extends Controller
                         'email'      => $githubUser->getEmail(),
                         'active'     => true,
                         'github_id'  => $githubUser->getId(),
-                        'password'   => bcrypt('123456dummy'),
+                        // 'password'   => bcrypt('123456dummy'),
                     ]);
                 }
             }

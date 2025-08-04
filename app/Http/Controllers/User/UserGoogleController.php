@@ -52,7 +52,7 @@ class UserGoogleController extends Controller
                         'email'      => $googleUser->email,
                         'google_id'  => $googleUser->id,
                         'active'     => true,
-                        'password'   => bcrypt('123456dummy'), // hoặc Hash::make(Str::random(32))
+                        // 'password'   => bcrypt('123456dummy'), // hoặc Hash::make(Str::random(32))
                     ]);
 
                     // Gán quyền mặc định

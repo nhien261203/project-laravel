@@ -151,21 +151,30 @@ class AuthController extends Controller
 
     public function changePassword(Request $request)
     {
-        $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|min:6|confirmed',
-        ]);
-
         $user = Auth::user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng.']);
+        // Ghi nhớ trạng thái trước khi đổi
+        $isFirstTimeSetPassword = empty($user->password);
+
+        if (!$isFirstTimeSetPassword) {
+            $request->validate([
+                'current_password' => 'required',
+                'new_password' => 'required|min:6|confirmed',
+            ]);
+
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->with('error', 'Mật khẩu hiện tại không đúng.')->withInput();
+            }
+        } else {
+            $request->validate([
+                'new_password' => 'required|min:6|confirmed',
+            ]);
         }
 
         $user->update([
             'password' => Hash::make($request->new_password),
         ]);
 
-        return back()->with('success', 'Mật khẩu đã được thay đổi thành công!');
+        return back()->with('success', $isFirstTimeSetPassword ? 'Đặt mật khẩu thành công!' : 'Đổi mật khẩu thành công!');
     }
 }
