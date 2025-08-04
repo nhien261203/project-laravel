@@ -105,13 +105,25 @@
         <div id="searchOverlay" class="fixed inset-0 bg-black/70 z-50 hidden items-start justify-center pt-5">
             <div class="bg-white w-[90%] max-w-lg p-3 rounded shadow-lg" id="searchBox">
                 <form action="{{ route('product.search') }}" method="GET" id="searchForm">
-                    <input
-                        type="text"
-                        name="q"
-                        placeholder="Bạn cần tìm sản phẩm gì ..."
-                        class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none"
-                        required
-                    />
+                    <div class="relative">
+                        <input
+                            type="text"
+                            id="search-input"
+                            name="q"
+                            placeholder="Bạn cần tìm sản phẩm gì ..."
+                            class="w-full text-sm border border-gray-300 rounded px-3 py-2 pr-10 focus:outline-none"
+                            required
+                        />
+
+                        <button
+                            type="button"
+                            id="voice-search-btn"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
+                            title="Tìm kiếm bằng giọng nói"
+                        >
+                            🎤
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -194,5 +206,74 @@
         }
 
     </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById('search-input');
+        const searchForm = document.getElementById('searchForm');
+        const searchOverlay = document.getElementById('searchOverlay');
+        const btnOpenSearch = document.getElementById('btnOpenSearch');
+        const btnVoice = document.getElementById('voice-search-btn');
+
+        // Mở khung tìm kiếm khi click kính lúp
+        btnOpenSearch.addEventListener('click', function () {
+            searchOverlay.classList.remove('hidden');
+            searchOverlay.classList.add('flex');
+
+            setTimeout(() => searchInput.focus(), 200);
+        });
+
+        // Nhấn Enter để tìm
+        searchInput.addEventListener("keydown", function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchForm.submit();
+            }
+        });
+
+        // Voice Search
+        btnVoice.addEventListener('click', function () {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                alert('Trình duyệt của bạn không hỗ trợ tìm kiếm bằng giọng nói.');
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'vi-VN';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.start();
+
+            recognition.onstart = function () {
+                searchInput.placeholder = "🎙️ Đang nghe...";
+            };
+
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+                searchInput.value = transcript;
+                searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
+
+                // Delay 1000ms để người dùng có thể chỉnh sửa thêm nếu muốn
+                setTimeout(() => {
+                    searchForm.submit();
+                }, 1000);
+            };
+
+            recognition.onerror = function (event) {
+                console.error('Lỗi nhận diện:', event.error);
+                alert('Không thể nhận diện giọng nói. Vui lòng thử lại.');
+                searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
+            };
+
+            recognition.onend = function () {
+                searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
+            };
+        });
+    });
+</script>
+
+
 
 

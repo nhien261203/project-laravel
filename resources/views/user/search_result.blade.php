@@ -86,11 +86,22 @@
                 {{ $products->appends(request()->query())->links() }}
             </div> --}}
         @else
-            <p class="text-gray-500 mt-4">
-                Không tìm thấy sản phẩm phù hợp với từ khóa
-                <strong class="text-red-500">"{{ $keyword }}"</strong>.
-            </p>
+            <div class="text-center py-12">
+                <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
+                    alt="No result"
+                    class="w-40 h-40 mx-auto mb-6 opacity-80" />
+                
+                <p class="text-gray-500 text-lg">
+                    Không tìm thấy sản phẩm phù hợp với từ khóa
+                    <strong class="text-red-500">"{{ $keyword }}"</strong>.
+                </p>
+
+                <a href="{{ route('home') }}" class="inline-block mt-6 px-5 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                    Quay về trang chủ
+                </a>
+            </div>
         @endif
+
     </div>
 </div>
 @endsection

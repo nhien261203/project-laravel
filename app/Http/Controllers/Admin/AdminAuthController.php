@@ -81,6 +81,11 @@ class AdminAuthController extends Controller
         $oldSessionId = $request->session()->getId();
 
         Auth::login($user, $request->remember);
+        
+        if (!$user->hasAnyRole(['admin', 'staff'])) {
+            Auth::logout();
+            return back()->with('error', 'Tài khoản của bạn chưa được cấp quyền truy cập trang quản trị.')->withInput();
+        }
 
         // Sau khi login mới regenerate
         $request->session()->regenerate();
@@ -121,10 +126,10 @@ class AdminAuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Gán quyền "staff" mặc định
-        $user->assignRole('staff');
+        // Gán quyền "user" mặc định
+        $user->assignRole('user');
 
-        return redirect()->route('admin.login')->with('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
+        return redirect()->route('admin.login')->with('success', 'Đăng ký thành công! Vui lòng chờ quản trị viên cấp quyền.');
     }
 
     // Xử lý đăng xuất

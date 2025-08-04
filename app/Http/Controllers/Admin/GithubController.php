@@ -19,43 +19,52 @@ class GithubController extends Controller
     public function handleGithubCallback()
     {
         try {
-            $oldSessionId = session()->getId(); 
+            $oldSessionId = session()->getId();
             $githubUser = Socialite::driver('github')->user();
 
             // Tìm user theo github_id
             $finduser = User::where('github_id', $githubUser->id)->first();
 
-            if (!$finduser) {
-                // Nếu không tìm thấy theo github_id, tìm theo email
-                $finduser = User::where('email', $githubUser->email)->first();
+            if ($finduser) {
+                // Kiểm tra nếu tài khoản bị vô hiệu hóa
+                if (!$finduser->active) {
+                    return redirect('/admin/login')->with('error', 'Tài khoản của bạn đã bị vô hiệu hóa.');
+                }
+            } else {
+                $finduser = User::where('email', $githubUser->getEmail())->first();
 
                 if ($finduser) {
-                    // Nếu đã có tài khoản email nhưng chưa có github_id => cập nhật github_id
-                    if (!$finduser->github_id) {
-                        $finduser->update(['github_id' => $githubUser->id]);
+                    if (!$finduser->active) {
+                        return redirect('/admin/login')->with('error', 'Tài khoản của bạn đã bị vô hiệu hóa.');
+                    }
+
+                    if (empty($finduser->github_id)) {
+                        $finduser->update(['github_id' => $githubUser->getId()]);
                     }
                 } else {
                     // Nếu chưa có user nào cả => tạo mới
                     $finduser = User::create([
-                        'name'       => $githubUser->name,
-                        'email'      => $githubUser->email,
-                        'active' => true, // mặc định
-                        'github_id'  => $githubUser->id,
-                        'password'   => bcrypt('123456dummy'), // chỉ tạo dummy nếu hoàn toàn mới
+                        'name'       => $githubUser->getName() ?? $githubUser->getNickname() ?? 'No Name',
+                        'email'      => $githubUser->getEmail(),
+                        'active'     => true,
+                        'github_id'  => $githubUser->getId(),
+                        'password'   => bcrypt('123456dummy'),
                     ]);
                 }
             }
-
             // Gán quyền 'staff' nếu chưa có quyen
             if ($finduser->roles()->count() === 0) {
-                $finduser->assignRole('staff');
+                $finduser->assignRole('user');
             }
 
             // Đăng nhập
             Auth::login($finduser);
+            if (!$finduser->hasAnyRole(['admin', 'staff'])) {
+                Auth::logout();
+                return redirect('/admin/login')->with('error', 'Tài khoản của bạn chưa được cấp quyền truy cập trang quản trị.');
+            }
 
             // Gọi merge sau khi login
-        
             app(\App\Repositories\Cart\CartRepositoryInterface::class)
                 ->mergeCart(Auth::id(), $oldSessionId);
 
