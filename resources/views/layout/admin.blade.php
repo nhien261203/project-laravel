@@ -94,7 +94,11 @@
                 <i class="fa-solid fa-comments"></i> <span class="sidebar-text">Comments</span></a>
 
             <a href="{{ route('admin.contacts.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
-                 <i class="fas fa-envelope"></i><span class="sidebar-text">Contacts</span></a>
+                <i class="fas fa-envelope"></i><span class="sidebar-text">Contacts</span></a>
+
+            <a href="https://dashboard.tawk.to" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
+                <i class="fas fa-headset mr-2"></i> <span class="sidebar-text">Chat Customer</span></a>
+            </a>
 
             <a href="{{ route('admin.vouchers.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fa-solid fa-ticket"></i> <span class="sidebar-text">Vouchers</span></a>
@@ -107,6 +111,7 @@
                 </a>
             @endcan
 
+            
 
         </nav>
 

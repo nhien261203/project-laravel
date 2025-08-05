@@ -165,7 +165,7 @@
         @endif
     </div>
     <button onclick="goToComparePage('{{ request()->segment(1) }}')" 
-                                        class="fixed bottom-5 right-5 px-4 py-2 bg-blue-600 text-white rounded shadow-lg z-50">
+                                        class="fixed bottom-[120px] right-5 px-4 py-2 bg-blue-600 text-white rounded shadow-lg z-50">
                                     So sánh (<span id="compareCount">0</span>)
                                 </button>
     <div class="mt-4 flex justify-center">
