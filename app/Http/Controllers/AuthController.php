@@ -142,6 +142,8 @@ class AuthController extends Controller
         // Flash biến cho view biết cần xoá cache Tawk.to
         session()->flash('clear_tawk', true);
 
+        session()->put('clear_chatbase', true);
+
         return redirect()->route('login');
     }
 

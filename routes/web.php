@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ForgotPasswordController;
 use App\Http\Controllers\Admin\GithubController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductExportController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\UserController;
@@ -289,3 +290,8 @@ Route::get('/test-mail', function () {
 
 //     return 'Đã xoá toàn bộ dữ liệu carts và cart_items.';
 // });
+
+
+
+Route::get('/admin/export/products/txt', [ProductExportController::class, 'exportToTxt'])->name('admin.products.export.txt');
+Route::get('/admin/export/products/pdf', [ProductExportController::class, 'exportToPdf'])->name('admin.products.export.pdf');

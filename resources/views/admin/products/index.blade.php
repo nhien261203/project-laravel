@@ -5,6 +5,9 @@
     <h1 class="text-xl font-bold">📦 Danh sách Sản phẩm</h1>
     <a href="{{ route('admin.products.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">+ Thêm sản phẩm</a>
 </div>
+<a href="{{ route('admin.products.export.txt') }}" class="btn btn-sm btn-outline-secondary">📄 Xuất TXT</a>
+{{-- <a href="{{ route('admin.products.export.pdf') }}" class="btn btn-sm btn-outline-primary">📑 Xuất PDF</a> --}}
+
 
 <!-- Thông tin kết quả -->
 <div class="mb-4 text-sm text-gray-600">
