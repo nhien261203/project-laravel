@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Models\Order;
+use PDF;
+
 
 class OrderController extends Controller
 {
@@ -60,5 +62,16 @@ class OrderController extends Controller
     {
         $this->orderRepo->delete($id); // dùng repo
         return redirect()->route('admin.orders.index')->with('success', 'Xóa đơn hàng thành công');
+    }
+    public function exportPdf()
+    {
+        $orders = Order::with([
+            'user',
+            'voucherUser.voucher',         // voucher được người dùng áp dụng
+            'items.variant.product'        // sản phẩm và biến thể
+        ])->latest()->get();
+
+        $pdf = PDF::loadView('admin.orders.export_pdf', compact('orders'));
+        return $pdf->download('don_hang.pdf');
     }
 }

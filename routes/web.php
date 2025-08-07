@@ -295,3 +295,5 @@ Route::get('/test-mail', function () {
 
 Route::get('/admin/export/products/txt', [ProductExportController::class, 'exportToTxt'])->name('admin.products.export.txt');
 Route::get('/admin/export/products/pdf', [ProductExportController::class, 'exportToPdf'])->name('admin.products.export.pdf');
+
+Route::get('/admin/export/orders/pdf', [OrderController::class, 'exportPdf'])->name('admin.orders.export.pdf');

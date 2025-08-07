@@ -2,7 +2,21 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">📦 Quản lý đơn hàng</h2>
+    
+
+   <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">📦 Quản lý đơn hàng</h2>
+    <div class="flex gap-2">
+        <a href="{{ route('admin.orders.export.pdf') }}"
+            class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-100 inline-flex items-center gap-2">
+            🧾 Xuất PDF
+        </a>
+        
+    </div>
+</div>
+
+
+
 
     {{-- Bộ lọc tìm kiếm --}}
     <form method="GET" class="flex flex-col md:flex-row items-center gap-4 mb-6">
