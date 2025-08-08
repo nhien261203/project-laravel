@@ -45,6 +45,7 @@
 <table class="table-auto w-full bg-white shadow rounded mb-6">
     <thead class="bg-gray-100">
         <tr>
+            <th class="p-3">#</th>
             <th class="p-3 text-left">Tên</th>
             <th class="p-3 text-center">Logo</th>
             <th class="p-3 text-center">Quốc gia</th>
@@ -55,6 +56,7 @@
     <tbody>
         @forelse($brands as $brand)
             <tr class="border-b hover:bg-gray-50">
+                <td class="p-3 text-center">{{ $loop->iteration + ($brands->currentPage() - 1) * $brands->perPage() }}</td>
                 <td class="p-3">{{ $brand->name }}</td>
                 <td class="p-3 text-center">
                     @if($brand->logo)

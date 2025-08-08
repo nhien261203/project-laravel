@@ -56,7 +56,7 @@
             </div>
 
             {{-- Quyền (chỉ admin) --}}
-            @role('admin')
+            {{-- @role('admin')
             <div class="md:col-span-2">
                 <label class="block text-gray-700 font-medium mb-1">Quyền</label>
                 <select name="role" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
@@ -67,7 +67,7 @@
                     @endforeach
                 </select>
             </div>
-            @endrole
+            @endrole --}}
         </div>
 
         {{-- Buttons --}}

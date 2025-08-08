@@ -4,10 +4,10 @@
 <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
     <h1 class="text-xl font-bold">📦 Danh sách Sản phẩm</h1>
     <div class="flex gap-2">
-        <a href="{{ route('admin.products.export.txt') }}"
+        {{-- <a href="{{ route('admin.products.export.txt') }}"
         class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-100 inline-flex items-center gap-2">
             📄 Xuất TXT
-        </a>
+        </a> --}}
         <a href="{{ route('admin.products.export.pdf') }}"
         class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-100 inline-flex items-center gap-2">
             📑 Xuất PDF
@@ -81,6 +81,7 @@
     <table class="table-auto w-full bg-white shadow rounded mb-6 min-w-[720px]">
         <thead class="bg-gray-100 text-sm">
             <tr>
+                <th class="p-3 text-center">#</th>
                 <th class="p-3 text-left">Tên</th>
                 <th class="p-3 text-center">Slug</th>
                 <th class="p-3 text-center">Danh mục</th>
@@ -94,6 +95,7 @@
         <tbody>
             @forelse($products as $product)
                 <tr class="border-b hover:bg-gray-50 text-sm">
+                    <td class="p-3">{{ $loop->iteration + ($products->currentPage() - 1) * $products->perPage() }}</td>
                     <td class="p-3">
                         <div class="font-medium text-gray-800">{{ $product->name }}</div>
                         <div class="mt-1 inline-block px-2 py-0.5 text-xs rounded bg-blue-100 text-blue-700">

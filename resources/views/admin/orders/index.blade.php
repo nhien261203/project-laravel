@@ -58,7 +58,7 @@
             <tbody>
                 @forelse ($orders as $order)
                     <tr class="border-t">
-                        <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2">{{ $loop->iteration + ($orders->currentPage() - 1) * $orders->perPage() }}</td>
                         <td class="px-4 py-2 font-semibold text-blue-700">#{{ $order->code }}</td>
                         <td class="px-4 py-2">
                             {{ $order->customer_name }}<br>

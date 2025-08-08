@@ -49,7 +49,7 @@
         <tbody>
             @forelse($banners as $banner)
                 <tr class="text-center">
-                    <td class="p-2 border">{{ $banner->id }}</td>
+                    <td class="p-2 border">{{ $loop->iteration + ($banners->currentPage() - 1) * $banners->perPage() }}</td>
                     <td class="p-2 border">{{ $banner->title }}</td>
                     <td class="p-2 border">
                         <img src="{{ asset('storage/' . $banner->image_desk) }}"
