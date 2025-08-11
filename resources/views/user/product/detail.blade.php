@@ -133,30 +133,75 @@
                     Mua ngay
                 </button>
             </form>
-
-
-            {{-- Thông số kỹ thuật --}}
-            <div class="mt-5 bg-gray-100 p-4 rounded-lg space-y-1 text-sm md:text-base" id="variantDetails">
-                <p><strong>Màu:</strong> <span id="detailColor">{{ $defaultVariant->color }}</span></p>
-                <p><strong>Bộ nhớ:</strong> <span id="detailStorage">{{ $defaultVariant->storage }}</span></p>
-                <p><strong>Màn hình:</strong> <span id="detailScreen">{{ $defaultVariant->screen }}</span></p>
-                <p><strong>Chip:</strong> <span id="detailChip">{{ $defaultVariant->chip }}</span></p>
-                <p><strong>Pin:</strong> <span id="detailBattery">{{ $defaultVariant->battery }}</span></p>
-                <p><strong>Hệ điều hành:</strong> <span id="detailOS">{{ $defaultVariant->os }}</span></p>
-                <p><strong>Khối lượng:</strong> <span id="detailWeight">{{ $defaultVariant->weight }}</span></p>
-            </div>
         </div>
     </div>
 
-    {{-- Mô tả sản phẩm --}}
-    <div class="mt-6 md:w-1/2 w-full border border-gray-200 rounded-lg shadow-sm p-4">
-        <h3 class="w-1/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Mô tả sản phẩm</h3>
-        <div id="productDescription" class="prose max-w-none text-sm text-gray-800 overflow-hidden transition-all duration-300 line-clamp-3">
-            {!! $product->description !!}
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        {{-- Mô tả sản phẩm --}}
+        <div class="mt-6 border border-gray-200 rounded-lg shadow-sm p-4">
+            <h3 class="w-2/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Mô tả sản phẩm</h3>
+            <div id="techSpecWrapper" class="max-h-[160px] overflow-hidden transition-all duration-300">
+                <div class="prose max-w-none text-sm text-gray-800">
+                    {!! $product->description !!}
+                </div>
+            </div>
+
+            <button id="toggleSpecBtn" class=" mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
+                Đọc thêm
+            </button>
         </div>
-        <button id="toggleDescriptionBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
-            Đọc thêm
-        </button>
+        {{-- Thông số kỹ thuật --}}
+        <div class="mt-5 p-4 w-full md:w-4/5 rounded-lg border text-sm md:text-base overflow-hidden" id="variantDetails">
+            <h3 class="w-2/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Thông số kĩ thuật</h3>
+            <div id="techSpecWrapper1" class="max-h-[160px] overflow-hidden transition-all duration-300">
+                <table class="w-full border-collapse">
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700 w-1/3 ">Thương hiệu</td>
+                            <td class="py-2 text-gray-800 text-right">{{ $product->brand->name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700">Quốc gia</td>
+                            <td class="py-2 text-gray-800 text-right">{{ $product->brand->country }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700">Màu</td>
+                            <td class="py-2 text-gray-800 text-right" id="detailColor">{{ $defaultVariant->color }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700">Bộ nhớ</td>
+                            <td class="py-2 text-gray-800 text-right" id="detailStorage">{{ $defaultVariant->storage }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700">Màn hình</td>
+                            <td class="py-2 text-gray-800 text-right" id="detailScreen">{{ $defaultVariant->screen_size }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700">Chip</td>
+                            <td class="py-2 text-gray-800 text-right" id="detailChip">{{ $defaultVariant->chip }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700">Pin</td>
+                            <td class="py-2 text-gray-800 text-right" id="detailBattery">{{ $defaultVariant->battery }}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700">Hệ điều hành</td>
+                            <td class="py-2 text-gray-800 text-right" id="detailOS">{{ $defaultVariant->operating_system}}</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold text-gray-700">Khối lượng</td>
+                            <td class="py-2 text-gray-800 text-right" id="detailWeight">{{ $defaultVariant->weight }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button id="toggleSpecBtn1" class=" mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
+                Đọc thêm
+            </button>
+            
+        </div>
+
+        
     </div>
 
     {{-- Form đánh giá (chỉ hiển thị nếu user đã mua) --}}
@@ -318,7 +363,28 @@
     window.onload = () => {
         updateOptions();
         updateVariantDisplay();
-    };
+
+        const toggleBtn = document.getElementById('toggleSpecBtn');
+        const specWrapper = document.getElementById('techSpecWrapper');
+        let expanded = false;
+
+        toggleBtn?.addEventListener('click', function () {
+            expanded = !expanded;
+            specWrapper.classList.toggle('max-h-[160px]', !expanded);
+            this.innerText = expanded ? 'Thu gọn' : 'Đọc thêm';
+        });
+
+        // Nút 2
+        const toggleBtn1 = document.getElementById('toggleSpecBtn1');
+        const specWrapper1 = document.getElementById('techSpecWrapper1');
+        let expanded1 = false; 
+
+        toggleBtn1?.addEventListener('click', function () {
+            expanded1 = !expanded1; // toggle chính biến của nó
+            specWrapper1.classList.toggle('max-h-[160px]', !expanded1);
+            this.innerText = expanded1 ? 'Thu gọn' : 'Đọc thêm';
+        });
+    }; 
 
     function changeMainImage(src) {
         document.getElementById('previewImage').src = src;
@@ -419,10 +485,10 @@
 
         document.getElementById('detailColor').innerText = variant.color ?? '';
         document.getElementById('detailStorage').innerText = variant.storage ?? '';
-        document.getElementById('detailScreen').innerText = variant.screen ?? '';
+        document.getElementById('detailScreen').innerText = variant.screen_size ?? '';
         document.getElementById('detailChip').innerText = variant.chip ?? '';
         document.getElementById('detailBattery').innerText = variant.battery ?? '';
-        document.getElementById('detailOS').innerText = variant.os ?? '';
+        document.getElementById('detailOS').innerText = variant.operating_system ?? '';
         document.getElementById('detailWeight').innerText = variant.weight ?? '';
 
         const previewImage = document.getElementById('previewImage');
@@ -487,11 +553,11 @@
         form.submit();
     }
 
-    document.getElementById('toggleDescriptionBtn').addEventListener('click', function () {
-        const desc = document.getElementById('productDescription');
-        desc.classList.toggle('line-clamp-3');
-        this.innerText = desc.classList.contains('line-clamp-3') ? 'Đọc thêm' : 'Thu gọn';
-    });
+    // document.getElementById('toggleDescriptionBtn').addEventListener('click', function () {
+    //     const desc = document.getElementById('productDescription');
+    //     desc.classList.toggle('line-clamp-3');
+    //     this.innerText = desc.classList.contains('line-clamp-3') ? 'Đọc thêm' : 'Thu gọn';
+    // });
 </script>
 
 <script>

@@ -175,7 +175,8 @@ class HomeController extends Controller
         // inStock goi tu phuong thuc scope ben Model ProductVariant
         $product = Product::with([
             'variants' => fn($q) => $q->inStock()->with('images'),
-            'approvedReviews.user'
+            'approvedReviews.user',
+            'brand'
         ])->where('slug', $slug)->firstOrFail();
 
 
@@ -225,7 +226,6 @@ class HomeController extends Controller
                     })
                     ->exists();
 
-
                 $canReview = $hasPurchased;
             }
         }
@@ -239,7 +239,8 @@ class HomeController extends Controller
     {
         $product = Product::with([
             'variants' => fn($q) => $q->inStock()->with('images'),
-            'approvedReviews.user'
+            'approvedReviews.user',
+            'brand'
         ])->where('slug', $slug)->firstOrFail();
 
 

@@ -224,40 +224,38 @@ class ProductRepository implements ProductRepositoryInterface
     //     return $this->appendProductExtras($products);
     // }
 
-
     // search cho header
     public function searchProducts(string $keyword)
     {
+        // Escape ký tự đặc biệt
+        $keyword = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $keyword);
 
-        $query= Product::with([
+        $query = Product::with([
             'variants' => fn($q) => $q->inStock()->with('images'),
             'brand',
             'category'
         ])
             ->whereHas('variants', fn($q) => $q->inStock())
-
-
             ->where(function ($q) use ($keyword) {
                 $q->where('name', 'like', "%{$keyword}%")
                     ->orWhereHas('variants', function ($q2) use ($keyword) {
-                        $q2->where('color', 'like', "%{$keyword}%")
-                            ->orWhere('storage', 'like', "%{$keyword}%")
-                            ->orWhere('chip', 'like', "%{$keyword}%");
+                        $q2->inStock()->where(function ($q3) use ($keyword) {
+                            $q3->where('color', 'like', "%{$keyword}%")
+                                ->orWhere('storage', 'like', "%{$keyword}%")
+                                ->orWhere('chip', 'like', "%{$keyword}%");
+                        });
                     })
-                    ->orWhereHas('brand', function ($q2) use ($keyword) {
-                        $q2->where('name', 'like', "%{$keyword}%");
-                    })
-                    ->orWhereHas('category', function ($q2) use ($keyword) {
-                        $q2->where('name', 'like', "%{$keyword}%");
-                    });
+                    ->orWhereHas('brand', fn($q2) => $q2->where('name', 'like', "%{$keyword}%"))
+                    ->orWhereHas('category', fn($q2) => $q2->where('name', 'like', "%{$keyword}%"));
             })
             ->where('status', 1)
             ->latest();
 
-        $products = $query->get();
+        $products = $query->get(); 
 
         return $this->appendProductExtras($products);
     }
+
 
     public function getProductsByCategorySlug(string $slug)
     {
