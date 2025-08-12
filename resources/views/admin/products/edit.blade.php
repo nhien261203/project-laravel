@@ -105,12 +105,16 @@
             height: 250,
             toolbar: [
                 ['style', ['bold', 'italic', 'underline']],
-                ['font', ['fontsize', 'color']],
+                ['font', ['fontname', 'fontsize', 'color']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['insert', ['link']],
                 ['view', ['codeview']]
-            ]
+            ],
+            fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather', 'Tahoma', 'Times New Roman', 'Verdana'],
+            fontSizes: ['8', '9', '10', '11', '12', '14','16', '18', '24', '36', '48', '64'],
+            fontNamesIgnoreCheck: ['Merriweather'] // Nếu font tùy chọn không có trên hệ thống, vẫn hiển thị trong danh sách
         });
     });
 </script>
+
 @endpush

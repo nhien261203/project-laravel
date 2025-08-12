@@ -101,7 +101,12 @@
                 </a>
             </div>
         @endif
-
+        
+    </div>
+    <div class=" flex justify-center">
+        {{-- Phân trang --}}
+        {{ $products->links('pagination.custom-user') }}
     </div>
 </div>
+
 @endsection

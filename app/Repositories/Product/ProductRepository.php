@@ -225,7 +225,7 @@ class ProductRepository implements ProductRepositoryInterface
     // }
 
     // search cho header
-    public function searchProducts(string $keyword)
+    public function searchProducts(string $keyword, int $perPage = 8)
     {
         // Escape ký tự đặc biệt
         $keyword = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $keyword);
@@ -251,10 +251,13 @@ class ProductRepository implements ProductRepositoryInterface
             ->where('status', 1)
             ->latest();
 
-        $products = $query->get(); 
+        $products = $query->paginate($perPage)->withQueryString();
+    
+        $this->appendProductExtras($products->items());
 
-        return $this->appendProductExtras($products);
+        return $products;
     }
+
 
 
     public function getProductsByCategorySlug(string $slug)

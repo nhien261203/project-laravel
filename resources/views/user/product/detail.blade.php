@@ -67,7 +67,7 @@
                             $isActive = $color === $defaultVariant->color;
                         @endphp
                         <button
-                            class="color-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100 {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
+                            class="color-option px-4 py-1 border rounded-md text-sm {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
                             data-color="{{ $color }}"
                             onclick="selectColor(this, '{{ $color }}')">
                             {{ $color }}
@@ -85,7 +85,7 @@
                             $isActive = $storage === $defaultVariant->storage;
                         @endphp
                         <button
-                            class="storage-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100 {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
+                            class="storage-option px-4 py-1 border rounded-md text-sm {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
                             data-storage="{{ $storage }}"
                             onclick="selectStorage(this, '{{ $storage }}')">
                             {{ $storage }}
@@ -139,20 +139,32 @@
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         {{-- Mô tả sản phẩm --}}
         <div class="mt-6 border border-gray-200 rounded-lg shadow-sm p-4">
-            <h3 class="w-2/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Mô tả sản phẩm</h3>
+            <div class="text-center">
+                <h3 class="inline-block mt-1 px-4 py-2 rounded-lg text-black border border-gray-400 transition font-semibold text-sm">
+                    Mô tả sản phẩm
+                </h3>
+            </div>
+
             <div id="techSpecWrapper" class="max-h-[160px] overflow-hidden transition-all duration-300">
                 <div class="prose max-w-none text-sm text-gray-800">
                     {!! $product->description !!}
                 </div>
             </div>
 
-            <button id="toggleSpecBtn" class=" mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
-                Đọc thêm
-            </button>
+            <div class="text-center">
+                <button id="toggleSpecBtn" class=" mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
+                    Đọc thêm
+                </button>
+            </div>
+            
         </div>
         {{-- Thông số kỹ thuật --}}
-        <div class="mt-5 p-4 w-full md:w-4/5 rounded-lg border text-sm md:text-base overflow-hidden" id="variantDetails">
-            <h3 class="w-2/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Thông số kĩ thuật</h3>
+        <div class="mt-6 p-4 w-full md:w-4/5 rounded-lg border text-sm overflow-hidden" id="variantDetails">
+            <div class="text-center">
+                <h3 class="inline-block mt-1 px-4 py-2 rounded-lg text-black border border-gray-400 transition font-semibold text-sm">
+                    Thông số kỹ thuật
+                </h3>
+            </div>
             <div id="techSpecWrapper1" class="max-h-[160px] overflow-hidden transition-all duration-300">
                 <table class="w-full border-collapse">
                     <tbody class="divide-y divide-gray-200">
@@ -195,10 +207,12 @@
                     </tbody>
                 </table>
             </div>
-            <button id="toggleSpecBtn1" class=" mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
-                Đọc thêm
-            </button>
-            
+
+            <div class="text-center">
+                <button id="toggleSpecBtn1" class=" mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
+                    Đọc thêm
+                </button>
+            </div>
         </div>
 
         

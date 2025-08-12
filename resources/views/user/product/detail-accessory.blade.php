@@ -66,7 +66,7 @@
                             $isActive = $color === $defaultVariant->color;
                         @endphp
                         <button
-                            class="color-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100 {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
+                            class="color-option px-4 py-1 border rounded-md text-sm {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
                             data-color="{{ $color }}"
                             onclick="selectColor(this, '{{ $color }}')">
                             {{ $color }}
@@ -85,7 +85,7 @@
                                 $isActive = $storage === $defaultVariant->storage;
                             @endphp
                             <button
-                                class="storage-option px-4 py-1 border rounded-md text-sm hover:bg-gray-100 {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
+                                class="storage-option px-4 py-1 border rounded-md text-sm {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
                                 data-storage="{{ $storage }}"
                                 onclick="selectStorage(this, '{{ $storage }}')">
                                 {{ $storage }}
@@ -138,7 +138,11 @@
     {{-- Mô tả sản phẩm --}}
     @if (!empty($product->description))
         <div class="mt-6 md:w-1/2 w-full border border-gray-200 rounded-lg shadow-sm p-4">
-            <h3 class="w-1/3 bg-gray-600 text-white text-center px-6 py-2 rounded">Thông tin sản phẩm</h3>
+            <div class="text-center">
+                <h3 class="inline-block mt-1 px-4 py-2 rounded-lg text-black border border-gray-400 transition font-semibold text-sm">
+                    Mô tả sản phẩm
+                </h3>
+            </div>
 
             <div id="techSpecWrapper" class="overflow-hidden transition-all duration-300 max-h-[200px]">
                 <div class="prose max-w-none text-sm text-gray-800">
@@ -146,9 +150,12 @@
                 </div>
             </div>
 
-            <button id="toggleSpecBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
-                Đọc thêm
-            </button>
+            <div class="text-center">
+                <button id="toggleSpecBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
+                    Đọc thêm
+                </button>
+            </div>
+            
         </div>
     @endif
 

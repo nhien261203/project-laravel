@@ -59,11 +59,18 @@ class UserProductController extends Controller
     {
         $keyword = $request->input('q');
 
-        // Dùng Repository để tìm kiếm và lấy thêm all_storages, sale_percent
+        // Có thể trim keyword để tránh khoảng trắng dư thừa
+        $keyword = trim($keyword);
+
+        // Nếu muốn, có thể kiểm tra keyword rỗng và xử lý trước khi search
+        if (empty($keyword)) {
+            return redirect()->back()->with('error', 'Vui lòng nhập từ khóa tìm kiếm.');
+        }
+
+        // Gọi repo search với phân trang (mặc định 12 sản phẩm / trang)
         $products = $this->productRepo->searchProducts($keyword);
 
+        // Trả về view với $products là LengthAwarePaginator có phân trang
         return view('user.search_result', compact('products', 'keyword'));
     }
-
-
 }

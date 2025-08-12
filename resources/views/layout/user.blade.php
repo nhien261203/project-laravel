@@ -110,11 +110,7 @@
 </script>
 <!--Start of Tawk.to Script-->
 @if(auth()->check())
-<!-- Nút mở chat -->
-{{-- <div id="tawkLauncher"
-     class="fixed bottom-4 right-4 z-50 text-3xl cursor-pointer bg-green-600 hover:bg-green-700 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg">
-    💬
-</div> --}}
+
 
 <script>
     var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();

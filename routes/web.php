@@ -163,7 +163,7 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
 
 
     Route::get('/logs', [AdminLogController::class, 'index'])
-        ->middleware('can:view log')
+        ->middleware('role:admin')
         ->name('logs.index');
 
 
