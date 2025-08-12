@@ -179,7 +179,9 @@ class HomeController extends Controller
             'brand'
         ])->where('slug', $slug)->firstOrFail();
 
-
+        $totalSold = $product->variants->sum('sold'); // tổng đã bán từ tất cả variants
+        $totalReviews = $product->approvedReviews->count(); // số đánh giá đã duyệt
+        $averageRating = $totalReviews > 0 ? round($product->approvedReviews->avg('rating'), 1) : 0; // trung bình sao
 
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
@@ -232,7 +234,7 @@ class HomeController extends Controller
 
 
 
-        return view('user.product.detail', compact('product', 'colors', 'storages', 'recentlyViewed', 'canReview'));
+        return view('user.product.detail', compact('product', 'colors', 'storages', 'recentlyViewed', 'canReview','totalSold', 'totalReviews', 'averageRating'));
     }
 
     public function showAccessory($slug)
@@ -243,7 +245,9 @@ class HomeController extends Controller
             'brand'
         ])->where('slug', $slug)->firstOrFail();
 
-
+        $totalSold = $product->variants->sum('sold'); // tổng đã bán từ tất cả variants
+        $totalReviews = $product->approvedReviews->count(); // số đánh giá đã duyệt
+        $averageRating = $totalReviews > 0 ? round($product->approvedReviews->avg('rating'), 1) : 0; // trung bình sao
 
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
@@ -295,6 +299,6 @@ class HomeController extends Controller
             }
         }
 
-        return view('user.product.detail-accessory', compact('product', 'colors', 'storages', 'recentlyViewed', 'canReview'));
+        return view('user.product.detail-accessory', compact('product', 'colors', 'storages', 'recentlyViewed', 'canReview','totalSold', 'totalReviews', 'averageRating'));
     }
 }

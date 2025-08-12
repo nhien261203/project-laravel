@@ -11,6 +11,7 @@ export default {
         '60': '60',
         '70': '70',
       },
+      
 
       animation: {
         spin: 'spin 1s linear infinite',

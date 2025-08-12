@@ -31,11 +31,20 @@ class UserBlogController extends Controller
     // Chi tiết blog
     public function show($slug)
     {
+        // Lấy bài blog
         $blog = Blog::where('slug', $slug)
             ->where('status', 1)
             ->with('tags')
             ->firstOrFail();
 
-        return view('user.blogs.show', compact('blog'));
+        // Lấy bình luận đã duyệt và phân trang
+        $comments = $blog->comments()
+            ->where('approved', true) // chỉ lấy bình luận đã duyệt
+            ->with('user') // lấy tên user nếu cần
+            ->orderByDesc('created_at')
+            ->paginate(5) // số bình luận mỗi trang
+            ->withQueryString(); // giữ nguyên query khi phân trang
+
+        return view('user.blogs.show', compact('blog', 'comments'));
     }
 }

@@ -1,14 +1,14 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container pt-24 pb-10 bg-white rounded shadow">
+<div class="container pt-24 pb-10 rounded shadow">
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>
         <span class="text-gray-800 font-medium">{{ $product->name }}</span>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-[4fr_3fr] gap-6">
         {{-- Hình ảnh --}}
         <div class="bg-white rounded-lg shadow-md p-4">
             {{-- Ảnh lớn --}}
@@ -18,11 +18,11 @@
                 $fallbackImages = $product->variants->firstWhere(fn($v) => !$v->images->isEmpty())?->images;
             @endphp
 
-            <div id="mainImage" class="border rounded-lg overflow-hidden shadow-md">
+            <div id="mainImage" class=" overflow-hidden">
                 @if($defaultImages->count())
-                    <img src="{{ asset('storage/' . $defaultImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain bg-white " id="previewImage">
+                    <img src="{{ asset('storage/' . $defaultImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain " id="previewImage">
                 @elseif($fallbackImages && $fallbackImages->count())
-                    <img src="{{ asset('storage/' . $fallbackImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain bg-white" id="previewImage">
+                    <img src="{{ asset('storage/' . $fallbackImages->first()->image_path) }}" class="w-full h-80 md:h-[420px] object-contain " id="previewImage">
                 @else
                     <div class="w-full h-80 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">Không có ảnh</div>
                 @endif
@@ -37,8 +37,15 @@
         </div>
 
         {{-- Thông tin --}}
-        <div class="px-2">
-            <h1 class="text-xl md:text-2xl font-bold mb-3">{{ $product->name }}</h1>
+        <div class="px-6 py-6 bg-white rounded-lg shadow-lg">
+            <h1 class="text-2xl font-bold text-gray-800 mb-4 leading-snug">{{ $product->name }}</h1>
+            <div class="flex items-center text-sm text-gray-600 mb-4 space-x-3">
+                <span>Đã bán: <strong>{{ $totalSold }}</strong></span>
+                <span>|</span>
+                <span>Đánh giá: <strong>{{ $totalReviews }}</strong> </span>
+                <span>|</span>
+                <span>⭐ <strong>{{ $averageRating }}</strong>/5</span>
+            </div>
 
             {{-- Giá --}}
             <div class="mb-2">
@@ -119,45 +126,69 @@
                     Mua ngay
                 </button>
             </form> --}}
-            <form id="addToCartForm" class="flex gap-3 items-center" onsubmit="return addToCart(event)">
+            <form id="addToCartForm" class=" items-center" onsubmit="return addToCart(event)">
                 @csrf
                 <input type="hidden" name="variant_id" id="formVariantId" value="{{ $defaultVariant->id }}">
                 <input type="hidden" name="quantity" id="formQuantity" value="1">
 
-                <button type="submit" class="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600">
-                    Thêm vào giỏ
-                </button>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex items-center gap-2 bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600 transition">
+                        
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        Thêm vào giỏ
+                    </button>
 
-                <button type="button" onclick="buyNow()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                    Mua ngay
-                </button>
+                    {{-- Nút mua ngay --}}
+                    <button type="button" onclick="buyNow()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+                        Mua ngay
+                    </button>
+                </div>
             </form>
+            
+            
+
+            <div class="mt-9 p-3 bg-white border border-yellow-400 rounded-lg text-sm text-gray-700">
+                    <p class="mb-2">
+                        Nếu có bất kỳ thắc mắc nào, hãy liên hệ với chúng tôi qua 
+                        <strong>hai khung chat ở góc màn hình</strong>
+                    </p>
+                    <p class="text-gray-600 text-xs">Đội ngũ hỗ trợ luôn sẵn sàng 24/7.</p>
+            </div>
+
         </div>
     </div>
 
     {{-- Mô tả sản phẩm --}}
-    @if (!empty($product->description))
-        <div class="mt-6 md:w-1/2 w-full border border-gray-200 rounded-lg shadow-sm p-4">
-            <div class="text-center">
-                <h3 class="inline-block mt-1 px-4 py-2 rounded-lg text-black border border-gray-400 transition font-semibold text-sm">
-                    Mô tả sản phẩm
-                </h3>
-            </div>
+    <div class="grid w-full md:grid-cols-[4fr_3fr] gap-6">
+    {{-- Cột trái: mô tả --}}
+        <div>
+            @if (!empty($product->description))
+                <div class="mt-6 border border-gray-200 rounded-lg shadow-sm p-4 bg-white">
+                    <div class="text-center">
+                        <h3 class="inline-block mt-1 px-4 py-2 rounded-lg text-black border border-gray-400 transition font-semibold text-sm hover:bg-gray-50">
+                            Mô tả sản phẩm
+                        </h3>
+                    </div>
 
-            <div id="techSpecWrapper" class="overflow-hidden transition-all duration-300 max-h-[200px]">
-                <div class="prose max-w-none text-sm text-gray-800">
-                    {!! $product->description !!}
+                    <div id="techSpecWrapper" class="overflow-hidden transition-all duration-300 max-h-[200px]">
+                        <div class="prose max-w-none text-sm text-gray-800">
+                            {!! $product->description !!}
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="toggleSpecBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
+                            Đọc thêm
+                        </button>
+                    </div>
                 </div>
-            </div>
-
-            <div class="text-center">
-                <button id="toggleSpecBtn" class="mt-3 p-2 rounded-lg text-blue-600 bg-gray-100 hover:bg-blue-100 transition font-medium text-sm">
-                    Đọc thêm
-                </button>
-            </div>
-            
+            @endif
         </div>
-    @endif
+
+        
+        <div></div>
+    </div>
+
 
     
 
@@ -222,7 +253,8 @@
             @endif
         </div>
     @empty
-        <p class="text-gray-500 text-sm">Bạn hãy mua hàng để là người đầu tiên đánh giá sản phẩm này.</p>
+        <p class="text-gray-500 text-sm">Chưa có đánh giá nào về sản phẩm.</p>
+        <p class="text-gray-500 text-sm">Bạn hãy mua hàng để đánh giá sản phẩm này.</p>
     @endforelse
 
 @endif
