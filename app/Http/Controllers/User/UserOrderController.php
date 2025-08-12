@@ -22,16 +22,24 @@ class UserOrderController extends Controller
     /**
      * Danh sách đơn hàng của người dùng
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Auth::user()
-            ->orders()
-            ->with('items')
-            ->latest()
-            ->paginate(5);
+        $user = Auth::user();
 
-        return view('user.orders.index', compact('orders'));
+        // Lấy tất cả đơn của user để đếm trạng thái (ko phân trang)
+        $ordersAll = $user->orders()->get();
+
+        $query = $user->orders();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $orders = $query->latest()->paginate(5);
+
+        return view('user.orders.index', compact('orders', 'ordersAll'));
     }
+
 
 
     /**
@@ -96,8 +104,7 @@ class UserOrderController extends Controller
             }
 
             return redirect()->route('user.orders.show', $order->id)
-                    ->with('success', 'Đặt hàng thành công!');
-
+                ->with('success', 'Đặt hàng thành công!');
         } catch (\Illuminate\Validation\ValidationException $e) {
             if ($request->expectsJson()) {
                 return response()->json(['errors' => $e->errors()], 422);

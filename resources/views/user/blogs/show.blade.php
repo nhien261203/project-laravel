@@ -107,11 +107,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const contentError = document.getElementById('contentError');
 
     // Toggle form hiển thị
-    if (toggleBtn && form) {
-        toggleBtn.addEventListener('click', () => {
-            form.classList.toggle('hidden');
-        });
-    }
+    // if (toggleBtn && form) {
+    //     toggleBtn.addEventListener('click', () => {
+    //         form.classList.toggle('hidden');
+    //     });
+    // }
+
+    toggleBtn?.addEventListener('click', () => {
+        if (form.classList.contains('hidden')) {
+        form.classList.remove('hidden');
+        toggleBtn.textContent = '✖ Đóng lại';
+        } else {
+        form.classList.add('hidden');
+        toggleBtn.textContent = '✏ Viết đánh giá';
+        }
+    });
 
     // Submit bình luận bằng AJAX
     if (form) {

@@ -15,7 +15,7 @@ class Order extends Model
         'total_amount',
         'total_quantity',
         'payment_status',  // unpaid | paid
-        'status',          // pending | processing | completed | cancelled
+        'status',          // pending | shipping | completed | cancelled
         'payment_method',  // vnpay | cod
         'customer_name',
         'customer_phone',
@@ -61,7 +61,7 @@ class Order extends Model
     {
         return match ($this->status) {
             'pending' => 'Chờ xử lý',
-            'processing' => 'Đang xử lý',
+            'shipping' => 'Đang vận chuyển',
             'completed' => 'Hoàn thành',
             'cancelled' => 'Đã hủy',
             default => 'Không xác định',

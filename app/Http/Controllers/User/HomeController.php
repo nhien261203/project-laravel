@@ -175,14 +175,20 @@ class HomeController extends Controller
         // inStock goi tu phuong thuc scope ben Model ProductVariant
         $product = Product::with([
             'variants' => fn($q) => $q->inStock()->with('images'),
-            'approvedReviews.user',
+            // 'approvedReviews.user',
             'brand'
         ])->where('slug', $slug)->firstOrFail();
 
-        $totalSold = $product->variants->sum('sold'); // tổng đã bán từ tất cả variants
-        $totalReviews = $product->approvedReviews->count(); // số đánh giá đã duyệt
-        $averageRating = $totalReviews > 0 ? round($product->approvedReviews->avg('rating'), 1) : 0; // trung bình sao
+        $approvedReviews = $product->approvedReviews()
+        ->with('user')
+        ->orderByDesc('created_at')
+        ->paginate(5);
 
+        // Các biến khác vẫn giữ nguyên
+        $totalSold = $product->variants->sum('sold');
+        $totalReviews = $approvedReviews->total(); // lấy tổng từ phân trang
+        $averageRating = $totalReviews > 0 ? round($product->approvedReviews()->avg('rating'), 1) : 0;
+        
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
 
@@ -234,20 +240,25 @@ class HomeController extends Controller
 
 
 
-        return view('user.product.detail', compact('product', 'colors', 'storages', 'recentlyViewed', 'canReview','totalSold', 'totalReviews', 'averageRating'));
+        return view('user.product.detail', compact('product','approvedReviews', 'colors', 'storages', 'recentlyViewed', 'canReview','totalSold', 'totalReviews', 'averageRating'));
     }
 
     public function showAccessory($slug)
     {
         $product = Product::with([
             'variants' => fn($q) => $q->inStock()->with('images'),
-            'approvedReviews.user',
+            // 'approvedReviews.user',
             'brand'
         ])->where('slug', $slug)->firstOrFail();
 
-        $totalSold = $product->variants->sum('sold'); // tổng đã bán từ tất cả variants
-        $totalReviews = $product->approvedReviews->count(); // số đánh giá đã duyệt
-        $averageRating = $totalReviews > 0 ? round($product->approvedReviews->avg('rating'), 1) : 0; // trung bình sao
+        $approvedReviews = $product->approvedReviews()
+        ->with('user')
+        ->orderByDesc('created_at')
+        ->paginate(5);
+
+        $totalSold = $product->variants->sum('sold');
+        $totalReviews = $approvedReviews->total(); // lấy tổng từ phân trang
+        $averageRating = $totalReviews > 0 ? round($product->approvedReviews()->avg('rating'), 1) : 0;
 
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
@@ -299,6 +310,6 @@ class HomeController extends Controller
             }
         }
 
-        return view('user.product.detail-accessory', compact('product', 'colors', 'storages', 'recentlyViewed', 'canReview','totalSold', 'totalReviews', 'averageRating'));
+        return view('user.product.detail-accessory', compact('product','approvedReviews', 'colors', 'storages', 'recentlyViewed', 'canReview','totalSold', 'totalReviews', 'averageRating'));
     }
 }

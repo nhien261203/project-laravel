@@ -27,7 +27,7 @@
         <select name="status" class="px-4 py-2 border rounded">
             <option value="">-- Trạng thái --</option>
             <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
-            <option value="processing" {{ request('status') === 'processing' ? 'selected' : '' }}>Đang xử lý</option>
+            <option value="shipping" {{ request('status') === 'shipping' ? 'selected' : '' }}>Đang vận chuyển</option>
             <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Hoàn thành</option>
             <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Đã hủy</option>
         </select>

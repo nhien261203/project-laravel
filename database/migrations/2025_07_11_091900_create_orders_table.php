@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('total_amount', 15, 0); // tổng tiền (đã áp dụng giảm giá)
             $table->integer('total_quantity')->default(0); // tổng số lượng
             $table->string('payment_status')->default('unpaid'); // unpaid | paid
-            $table->string('status')->default('pending'); // pending | processing | completed | cancelled
+            $table->string('status')->default('pending'); // pending | shipping | completed | cancelled
 
             $table->string('customer_name');
             $table->string('customer_phone');
