@@ -25,8 +25,9 @@ class ProductExportController extends Controller
 
             $content .= "Sản phẩm: {$product->name}\n";
             $content .= "Thương hiệu: " . ($product->brand->name ?? 'Không có') . "\n";
+            $content .= "Quốc gia: " . ($product->brand->country ?? 'Không có') . "\n";
             $content .= "Danh mục: " . ($product->category->name ?? 'Không có') . "\n";
-            $content .= "Mô tả: " . strip_tags($product->description) . "\n";
+            // $content .= "Mô tả: " . strip_tags($product->description) . "\n";
 
 
 

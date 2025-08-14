@@ -73,4 +73,25 @@ class UserProductController extends Controller
         // Trả về view với $products là LengthAwarePaginator có phân trang
         return view('user.search_result', compact('products', 'keyword'));
     }
+    public function searchSuggest(Request $request)
+    {
+        $keyword = $request->q;
+
+        if (!$keyword) return response()->json([]);
+
+        $products = $this->productRepo->searchProducts($keyword, 5); // giới hạn 5 kết quả
+
+        $data = $products->map(fn($p) => [
+            'name' => $p->name,
+            'slug' => $p->slug,
+            'price' => $p->variants->first()?->price ?? 0,
+            'original_price' => $p->variants->first()?->original_price ?? 0,
+            'sale_percent' => $p->sale_percent ?? 0,
+            'image' => $p->variants->first()?->images->first()?->image_path ?? null,
+            'category_slug' => $p->category->slug ?? null, // thêm category slug
+        ]);
+
+
+        return response()->json($data);
+    }
 }

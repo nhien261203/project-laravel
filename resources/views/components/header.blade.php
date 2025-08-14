@@ -105,24 +105,28 @@
         <div id="searchOverlay" class="fixed inset-0 bg-black/70 z-50 hidden items-start justify-center pt-5">
             <div class="bg-white w-[90%] max-w-lg p-3 rounded shadow-lg" id="searchBox">
                 <form action="{{ route('product.search') }}" method="GET" id="searchForm">
-                    <div class="relative">
+                    <div class="relative w-full max-w-lg mx-auto">
                         <input
                             type="text"
                             id="search-input"
                             name="q"
                             placeholder="Bạn cần tìm sản phẩm gì ..."
                             class="w-full text-sm border border-gray-300 rounded px-3 py-2 pr-10 focus:outline-none"
-                            required
+                            autocomplete="off"
                         />
 
-                        <button
+                        <!-- Suggest box -->
+                        <div id="suggestBox" class="absolute left-0 right-0 bg-white border border-gray-300 mt-1 rounded shadow-lg hidden z-50 max-h-96 overflow-y-auto">
+                            <!-- Kết quả AJAX sẽ đẩy vào đây -->
+                        </div>
+                        {{-- <button
                             type="button"
                             id="voice-search-btn"
                             class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black"
                             title="Tìm kiếm bằng giọng nói"
                         >
                             🎤
-                        </button>
+                        </button> --}}
                     </div>
                 </form>
             </div>
@@ -272,6 +276,73 @@
             };
         });
     });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById('search-input');
+    const suggestBox = document.getElementById('suggestBox');
+    let timeout = null;
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(timeout);
+        const query = this.value.trim();
+
+        if (!query) {
+            suggestBox.classList.add('hidden');
+            suggestBox.innerHTML = '';
+            return;
+        }
+
+        timeout = setTimeout(() => {
+            fetch(`{{ route('product.searchSuggest') }}?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.length) {
+                        suggestBox.innerHTML = '<div class="p-3 text-gray-500 text-sm">Không tìm thấy sản phẩm</div>';
+                    } else {
+                        suggestBox.innerHTML = data.map(item => {
+                            const price = Number(item.price).toLocaleString('vi-VN') + '₫';
+                            const originalPrice = item.original_price > item.price 
+                                ? `<span class="line-through text-gray-400 ml-2 text-xs">${Number(item.original_price).toLocaleString('vi-VN')}₫</span>` 
+                                : '';
+                            const sale = item.sale_percent 
+                                ? `<span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-1 rounded">-${item.sale_percent}%</span>` 
+                                : '';
+                            const img = item.image 
+                                ? `<img src="/storage/${item.image}" class="w-12 h-12 object-contain flex-shrink-0 rounded">` 
+                                : `<div class="w-12 h-12 bg-gray-100 flex items-center justify-center text-gray-400 text-xs">No Image</div>`;
+
+                            const url = (item.category_slug && ['dien-thoai','laptop'].includes(item.category_slug))
+                                ? `/products/${item.slug}`
+                                : `/phu-kien/${item.slug}`;
+
+                            return `
+                                <a href="${url}" class="flex items-center gap-3 p-2 hover:bg-gray-100 border-b last:border-none transition">
+                                    ${img}
+                                    <div class="flex-1">
+                                        <div class="text-sm font-medium text-gray-700">${item.name}</div>
+                                        <div class="flex items-center text-red-500 mt-1 font-semibold text-sm">
+                                            ${price} ${originalPrice} ${sale}
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                        }).join('');
+
+                    }
+                    suggestBox.classList.remove('hidden');
+                });
+        }, 250); // delay 250ms
+    });
+
+    // Ẩn suggest khi click ra ngoài
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !suggestBox.contains(e.target)) {
+            suggestBox.classList.add('hidden');
+        }
+    });
+});
+
 </script>
 
 

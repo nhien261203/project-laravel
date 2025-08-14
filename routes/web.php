@@ -68,6 +68,7 @@ Route::get('/iphone', [HomeController::class, 'allIphone'])->name('user.iphone.a
 
 // nut tim kiem tren header 
 Route::get('/search', [UserProductController::class, 'search'])->name('product.search');
+Route::get('/search-suggest', [UserProductController::class, 'searchSuggest'])->name('product.searchSuggest');
 
 
 // blog cho user
