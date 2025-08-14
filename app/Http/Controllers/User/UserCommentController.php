@@ -25,7 +25,7 @@ class UserCommentController extends Controller
             'blog_id' => $request->blog_id,
             'user_id' => auth()->id(),
             'content' => $request->content,
-            'approved' => false,
+            'approved' => 'pending', // Mặc định là pending
         ]);
 
         return response()->json(['success' => true]);

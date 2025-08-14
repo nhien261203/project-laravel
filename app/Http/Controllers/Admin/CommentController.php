@@ -22,7 +22,7 @@ class CommentController extends Controller
             $keyword = $request->keyword;
             $query->where(function ($q) use ($keyword) {
                 $q->where('content', 'like', "%$keyword%")
-                  ->orWhereHas('user', fn($q2) => $q2->where('name', 'like', "%$keyword%"));
+                    ->orWhereHas('user', fn($q2) => $q2->where('name', 'like', "%$keyword%"));
             });
         }
 
@@ -34,10 +34,20 @@ class CommentController extends Controller
     public function approve($id)
     {
         $comment = Comment::findOrFail($id);
-        $comment->approved = true;
+        $comment->approved = 'approved'; // Cập nhật trạng thái duyệt
         $comment->save();
 
         return redirect()->back()->with('success', 'Bình luận đã được duyệt.');
+    }
+
+    // Bỏ duyệt
+    public function unapprove($id)
+    {
+        $comment = Comment::findOrFail($id);
+        $comment->approved = 'pending'; // Cập nhật trạng thái bỏ duyệt
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Bình luận đã bị bỏ duyệt.');
     }
 
     public function destroy($id)
@@ -46,5 +56,13 @@ class CommentController extends Controller
         $comment->delete();
 
         return redirect()->back()->with('success', 'Đã xóa bình luận.');
+    }
+    public function reject($id)
+    {
+        $comment = Comment::findOrFail($id);
+        $comment->approved = 'rejected'; // Enum: rejected
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Bình luận đã bị từ chối.');
     }
 }

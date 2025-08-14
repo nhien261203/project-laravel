@@ -170,6 +170,8 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
     Route::post('/comments/{id}/approve', [CommentController::class, 'approve'])->name('comments.approve');
     Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::post('/comments/{id}/unapprove', [CommentController::class, 'unapprove'])->name('comments.unapprove');
+    Route::post('comments/{id}/reject', [CommentController::class, 'reject'])->name('comments.reject'); 
 
     Route::prefix('products/{product}/variants')->name('products.variants.')->group(function () {
         Route::get('/', [ProductVariantController::class, 'index'])->name('index');
@@ -195,12 +197,17 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
 
     Route::resource('reviews', AdminReviewController::class)->only(['index', 'destroy']);
     Route::post('reviews/{review}/approve', [AdminReviewController::class, 'approve'])->name('reviews.approve');
+    Route::post('reviews/{review}/unapprove', [AdminReviewController::class, 'unapprove'])->name('reviews.unapprove');
     Route::post('reviews/{review}/reject', [AdminReviewController::class, 'reject'])->name('reviews.reject');
-    Route::post('reviews/{review}/update-status', [AdminReviewController::class, 'updateStatus'])->name('reviews.updateStatus');
+    // Route::post('reviews/{review}/update-status', [AdminReviewController::class, 'updateStatus'])->name('reviews.updateStatus');
 
     Route::get('/contacts', [AdminContactController::class, 'index'])->name('contacts.index');
     Route::get('/contacts/{contact}', [AdminContactController::class, 'show'])->name('contacts.show');
-    Route::patch('/contacts/{contact}/mark-replied', [AdminContactController::class, 'markReplied'])->name('contacts.markReplied');
+    Route::patch('/contacts/{contact}/mark-replied', [AdminContactController::class, 'markReplied'])->name('contacts.mark-replied');
+
+    Route::patch('contacts/{contact}/mark-unreplied', [AdminContactController::class, 'markUnreplied'])
+        ->name('contacts.mark-unreplied');
+
     Route::delete('/contacts/{contact}', [AdminContactController::class, 'destroy'])->name('contacts.destroy');
 
     // Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.form');

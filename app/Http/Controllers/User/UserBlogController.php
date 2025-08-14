@@ -39,7 +39,7 @@ class UserBlogController extends Controller
 
         // Lấy bình luận đã duyệt và phân trang
         $comments = $blog->comments()
-            ->where('approved', true) // chỉ lấy bình luận đã duyệt
+            ->where('approved', 'approved') // chỉ lấy bình luận đã duyệt
             ->with('user') // lấy tên user nếu cần
             ->orderByDesc('created_at')
             ->paginate(5) // số bình luận mỗi trang

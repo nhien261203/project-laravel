@@ -44,6 +44,17 @@ class AdminReviewController extends Controller
         return back()->with('success', 'Đã từ chối đánh giá.');
     }
 
+    public function unapprove(Review $review)
+    {
+        if ($review->status === 'approved') {
+            $review->update(['status' => 'pending']);
+            return back()->with('success', 'Đã bỏ duyệt đánh giá, trạng thái trở về chờ duyệt.');
+        }
+
+        return back()->with('error', 'Chỉ có thể bỏ duyệt đánh giá đang được duyệt.');
+    }
+
+
     public function destroy(Review $review)
     {
         $review->delete();

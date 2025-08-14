@@ -42,6 +42,12 @@ class AdminContactController extends Controller
         $contact->update(['is_replied' => true]);
         return back()->with('success', 'Đã đánh dấu là đã phản hồi.');
     }
+    public function markUnreplied(Contact $contact)
+    {
+        $contact->update(['is_replied' => false]);
+        return back()->with('success', 'Đã đặt lại trạng thái chưa phản hồi.');
+    }
+
 
     public function destroy(Contact $contact)
     {

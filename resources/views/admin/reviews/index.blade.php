@@ -13,10 +13,7 @@
 </style>
 
 <div class="container mx-auto py-6">
-    <div class="flex justify-between items-center mb-6">
-        <a href="{{ route('admin.comments.index') }}" class="text-2xl font-bold mb-4">Quản lý bình luận blog</a>
-        <a href="{{ route('admin.reviews.index') }}" class="text-2xl font-bold mb-4">Quản lý đánh giá sản phẩm</a>
-    </div>
+    <h1 class="text-2xl font-bold mb-4">Quản lý đánh giá sản phẩm</h1>
 
     {{-- Filter --}}
     <form method="GET" class="mb-6 flex flex-wrap gap-4 items-end">
@@ -26,15 +23,14 @@
                 <option value="">-- Tất cả --</option>
                 <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Đã duyệt</option>
                 <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Chờ duyệt</option>
-                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Từ chối</option>
             </select>
         </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700">Từ khóa</label>
             <input type="text" name="keyword" value="{{ request('keyword') }}"
-                class="border border-gray-300 rounded px-3 py-2 text-sm w-64"
-                placeholder="Nội dung hoặc tên người dùng...">
+                   class="border border-gray-300 rounded px-3 py-2 text-sm w-64"
+                   placeholder="Nội dung hoặc tên người dùng...">
         </div>
 
         <div>
@@ -45,7 +41,7 @@
         </div>
     </form>
 
-    {{-- Danh sách đánh giá --}}
+    {{-- Table --}}
     <div class="overflow-x-auto bg-white rounded shadow">
         <table class="min-w-full text-sm border">
             <thead class="bg-gray-100 text-gray-700">
@@ -71,37 +67,36 @@
                                 <span class="{{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}">★</span>
                             @endfor
                         </td>
-                        <td class="px-4 py-2 border text-gray-700">
-                            {{ Str::limit($review->comment, 100) }}
+                        <td class="px-4 py-2 border text-gray-700 relative group">
+                            <span class="cursor-pointer">{{ Str::limit($review->comment, 50) }}</span>
+                            <div class="absolute left-0 bottom-full mb-2 w-64 max-w-xs hidden group-hover:block bg-gray-800 text-white text-xs rounded p-2 shadow-lg z-10 break-words">
+                                {{ $review->comment }}
+                            </div>
                         </td>
                         <td class="px-4 py-2 border">
                             @if ($review->status === 'approved')
                                 <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">Đã duyệt</span>
-                            @elseif($review->status === 'pending')
-                                <span class="inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">Chờ duyệt</span>
                             @else
-                                <span class="inline-block bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded">Từ chối</span>
+                                <span class="inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">Chờ duyệt</span>
                             @endif
                         </td>
-                        <td class="px-4 py-2 border text-gray-500">
-                            {{ $review->created_at->diffForHumans() }}
-                        </td>
-                        <td class="px-4 py-2 border text-center space-x-1">
-                            <form method="POST" action="{{ route('admin.reviews.updateStatus', $review) }}" class="inline">
-                                @csrf
-                                <select name="status" onchange="this.form.submit()"
-                                    class="text-xs border-gray-300 rounded px-1 py-0.5 bg-white text-gray-700">
-                                    <option value="pending" {{ $review->status === 'pending' ? 'selected' : '' }}>Chờ duyệt</option>
-                                    <option value="approved" {{ $review->status === 'approved' ? 'selected' : '' }}>Đã duyệt</option>
-                                    <option value="rejected" {{ $review->status === 'rejected' ? 'selected' : '' }}>Từ chối</option>
-                                </select>
-                            </form>
+                        <td class="px-4 py-2 border text-gray-500">{{ $review->created_at->diffForHumans() }}</td>
 
-                            <form method="POST" action="{{ route('admin.reviews.destroy', $review) }}" class="inline">
+                        {{-- Action Dropdown --}}
+                        <td class="px-4 py-2 border text-center">
+                            <form method="POST" action="" id="action-form-{{ $review->id }}">
                                 @csrf
-                                @method('DELETE')
-                                <button class="text-red-600 hover:underline text-xs"
-                                    onclick="return confirm('Xoá đánh giá này?')">Xoá</button>
+                                <select onchange="handleAction(this, {{ $review->id }})"
+                                        class="border border-gray-300 rounded px-2 py-1 text-sm">
+                                    <option value="">Chọn hành động</option>
+                                    @if ($review->status === 'pending')
+                                        <option value="approve">Duyệt</option>
+                                        <option value="delete">Xóa</option>
+                                    @elseif ($review->status === 'approved')
+                                        <option value="unapprove">Bỏ duyệt</option>
+                                        <option value="delete">Xóa</option>
+                                    @endif
+                                </select>
                             </form>
                         </td>
                     </tr>
@@ -119,4 +114,43 @@
         {{ $reviews->links('pagination.custom-tailwind') }}
     </div>
 </div>
+
+{{-- JS xử lý dropdown action --}}
+<script>
+function handleAction(select, reviewId) {
+    const action = select.value;
+    if (!action) return;
+
+    let url = '';
+    let confirmMessage = '';
+
+    switch(action) {
+        case 'approve':
+            url = `/admin/reviews/${reviewId}/approve`;
+            confirmMessage = 'Duyệt đánh giá này?';
+            break;
+        case 'unapprove':
+            url = `/admin/reviews/${reviewId}/unapprove`;
+            confirmMessage = 'Bỏ duyệt đánh giá này?';
+            break;
+        case 'delete':
+            url = `/admin/reviews/${reviewId}`;
+            confirmMessage = 'Xóa đánh giá này?';
+            break;
+    }
+
+    if (confirm(confirmMessage)) {
+        const form = document.getElementById(`action-form-${reviewId}`);
+        form.action = url;
+
+        if (action === 'delete') {
+            form.innerHTML += '@method("DELETE")';
+        }
+
+        form.submit();
+    } else {
+        select.value = '';
+    }
+}
+</script>
 @endsection

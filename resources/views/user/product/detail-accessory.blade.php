@@ -103,12 +103,32 @@
             @endif
 
             {{-- Số lượng --}}
-            <div class="mb-4">
-                <label class="block text-sm font-semibold mb-1">Số lượng:</label>
-                <div class="flex items-center gap-3">
-                    <button type="button" onclick="adjustQty(-1)" class="px-3 py-1 bg-gray-200 rounded">−</button>
-                    <input type="number" name="quantity" id="quantity" value="1" min="1" class="w-16 text-center border rounded">
-                    <button type="button" onclick="adjustQty(1)" class="px-3 py-1 bg-gray-200 rounded">+</button>
+            <div class="mb-4 w-max">
+                <label for="quantity" class="block text-sm font-semibold mb-1">Số lượng:</label>
+                <div class="relative w-32">
+                    <input
+                    type="number"
+                    name="quantity"
+                    id="quantity"
+                    value="1"
+                    min="1"
+                    class="w-full rounded-full border border-gray-300 text-center px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                    <!-- Nút giảm -->
+                    <button
+                    type="button"
+                    onclick="adjustQty(-1)"
+                    class="absolute left-1 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-lg font-bold rounded-full w-8 h-8 flex items-center justify-center select-none"
+                    aria-label="Giảm số lượng"
+                    >−</button>
+
+                    <!-- Nút tăng -->
+                    <button
+                    type="button"
+                    onclick="adjustQty(1)"
+                    class="absolute right-1 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-lg font-bold rounded-full w-8 h-8 flex items-center justify-center select-none"
+                    aria-label="Tăng số lượng"
+                    >+</button>
                 </div>
             </div>
 
