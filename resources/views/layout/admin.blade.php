@@ -66,6 +66,11 @@
             data-route="{{ route('admin.products.index') }}">
                 <i class="fas fa-box"></i> <span class="sidebar-text">Products</span>
             </a>
+            <a href="{{ route('admin.stock-all') }}" 
+            class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
+            data-route="{{ route('admin.stock-all') }}">
+                <i class="fas fa-warehouse"></i> <span class="sidebar-text">Stocks</span>
+            </a>
             <a href="{{ route('admin.categories.index') }}" 
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
             data-route="{{ route('admin.categories.index') }}"
@@ -89,7 +94,7 @@
             </a>
 
             
-            </a>
+
             <a href="{{ route('admin.orders.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-receipt"></i> <span class="sidebar-text">Orders</span>
             </a>

@@ -23,6 +23,7 @@
                 <option value="">-- Tất cả --</option>
                 <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Đã duyệt</option>
                 <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Chờ duyệt</option>
+                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Bị từ chối</option>
             </select>
         </div>
 
@@ -59,7 +60,10 @@
             <tbody>
                 @forelse ($reviews as $review)
                     <tr class="border-b hover:bg-gray-50">
-                        <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+                        <td class="px-4 py-2 border">
+                            {{ ($reviews->currentPage()-1)*$reviews->perPage() + $loop->iteration }}
+                        </td>
+
                         <td class="px-4 py-2 border font-semibold text-gray-800">{{ $review->user->name ?? 'Ẩn danh' }}</td>
                         <td class="px-4 py-2 border">{{ $review->product->name ?? '-' }}</td>
                         <td class="px-4 py-2 border text-yellow-500">
@@ -76,8 +80,10 @@
                         <td class="px-4 py-2 border">
                             @if ($review->status === 'approved')
                                 <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">Đã duyệt</span>
-                            @else
+                            @elseif ($review->status === 'pending')
                                 <span class="inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">Chờ duyệt</span>
+                            @else
+                                <span class="inline-block bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded">Đã từ chối</span>
                             @endif
                         </td>
                         <td class="px-4 py-2 border text-gray-500">{{ $review->created_at->diffForHumans() }}</td>
@@ -90,10 +96,15 @@
                                         class="border border-gray-300 rounded px-2 py-1 text-sm">
                                     <option value="">Chọn hành động</option>
                                     @if ($review->status === 'pending')
-                                        <option value="approve">Duyệt</option>
-                                        <option value="delete">Xóa</option>
+                                        <option value="approve"> Duyệt</option>
+                                        <option value="reject">Từ chối</option>
+                                        <option value="delete"> Xóa</option>
                                     @elseif ($review->status === 'approved')
-                                        <option value="unapprove">Bỏ duyệt</option>
+                                        <option value="unapprove">Chuyển về chờ duyệt</option>
+                                        <option value="reject">Từ chối</option>
+                                        <option value="delete">Xóa</option>
+                                    @elseif ($review->status === 'rejected')
+                                        <option value="approve">Duyệt lại</option>
                                         <option value="delete">Xóa</option>
                                     @endif
                                 </select>
@@ -132,6 +143,10 @@ function handleAction(select, reviewId) {
         case 'unapprove':
             url = `/admin/reviews/${reviewId}/unapprove`;
             confirmMessage = 'Bỏ duyệt đánh giá này?';
+            break;
+        case 'reject':
+            url = `/admin/reviews/${reviewId}/reject`;
+            confirmMessage = 'Từ chối đánh giá này?';
             break;
         case 'delete':
             url = `/admin/reviews/${reviewId}`;

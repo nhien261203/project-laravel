@@ -32,6 +32,7 @@ class AdminReviewController extends Controller
         return view('admin.reviews.index', compact('reviews'));
     }
 
+    
     public function approve(Review $review)
     {
         $review->update(['status' => 'approved']);

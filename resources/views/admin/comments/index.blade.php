@@ -29,7 +29,9 @@
                 <option value="" {{ !request()->filled('approved') ? 'selected' : '' }}>-- Tất cả --</option>
                 <option value="approved" {{ request('approved') === 'approved' ? 'selected' : '' }}>Đã duyệt</option>
                 <option value="pending" {{ request('approved') === 'pending' ? 'selected' : '' }}>Chờ duyệt</option>
+                <option value="rejected" {{ request('approved') === 'rejected' ? 'selected' : '' }}>Đã từ chối</option>
             </select>
+
         </div>
 
         {{-- Từ khóa --}}
@@ -97,10 +99,13 @@
                         <td class="px-4 py-2 border">
                             @if ($comment->approved === 'approved')
                                 <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">Đã duyệt</span>
-                            @else
+                            @elseif ($comment->approved === 'pending')
                                 <span class="inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">Chờ duyệt</span>
+                            @elseif ($comment->approved === 'rejected')
+                                <span class="inline-block bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded">Đã từ chối</span>
                             @endif
                         </td>
+
 
                         <td class="px-4 py-2 border text-gray-500">
                             {{ $comment->created_at->diffForHumans() }}
@@ -116,12 +121,19 @@
 
                                     @if ($comment->approved === 'pending')
                                         <option value="approve">Duyệt</option>
+                                        <option value="reject">Từ chối</option>
                                         <option value="delete">Xóa</option>
                                     @elseif ($comment->approved === 'approved')
-                                        <option value="unapprove">Bỏ duyệt</option>
+                                        <option value="unapprove">Chuyển về chờ duyệt</option>
+                                        <option value="reject">Từ chối</option>
+                                        <option value="delete">Xóa</option>
+                                    @elseif ($comment->approved === 'rejected')
+                                        <option value="approve">Duyệt lại</option>
+                                        {{-- <option value="unapprove">Bỏ duyệt</option> --}}
                                         <option value="delete">Xóa</option>
                                     @endif
                                 </select>
+
                             </form>
                         </td>
 
@@ -161,11 +173,16 @@ function handleAction(select, commentId) {
             url = `/admin/comments/${commentId}/unapprove`;
             confirmMessage = 'Bỏ duyệt bình luận này?';
             break;
+        case 'reject':
+            url = `/admin/comments/${commentId}/reject`;
+            confirmMessage = 'Từ chối bình luận này?';
+            break;
         case 'delete':
             url = `/admin/comments/${commentId}`;
             confirmMessage = 'Xóa bình luận này?';
             break;
     }
+
 
     if (confirm(confirmMessage)) {
         const form = document.getElementById(`action-form-${commentId}`);

@@ -163,10 +163,12 @@
             </div>
 
         </div>
-        {{-- Biểu đồ top sản phẩm bán chạy --}}
+        
 
     </div>
-        <div class="bg-gray-50 p-4 rounded shadow w-full md:w-1/2 mx-auto mt-3">
+    
+        {{-- Biểu đồ sản phẩm bán chạy --}}
+        <div class="bg-gray-50 p-4 md:w-1/2 w-full rounded shadow mx-auto mt-3">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-lg font-semibold">Top sản phẩm bán chạy</h2>
                 {{-- <button id="toggleTopProductMode" class="bg-gray-700 text-white px-3 py-1 rounded text-sm">
@@ -185,7 +187,7 @@
                             <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                         @endforeach
                     </select>
-                    <input type="number" id="top_limit" min="1" max="15" value="5" class="border rounded px-2 py-1 w-full md:w-auto" placeholder="Số lượng">
+                    <input type="number" id="top_limit" min="1" max="10" value="5" class="border rounded px-2 py-1 w-full md:w-auto" placeholder="Số lượng">
                     <button onclick="loadTopProductsChart()" class="bg-red-600 text-white px-4 py-1 rounded">Lọc</button>
                     <button onclick="resetTopProductsChart()" class="bg-gray-300 text-black px-4 py-1 rounded">Reset</button>
                 </div>
@@ -193,6 +195,60 @@
             </div>
 
         </div>
+        {{-- <div class="bg-red-50 p-4 rounded shadow mt-6">
+            <div class="container mt-4">
+                <h4>Sản phẩm tồn kho thấp</h4>
+
+                <!-- Bộ lọc -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label>Danh mục</label>
+                        <select id="filter-category" class="form-control">
+                            <option value="">-- Tất cả --</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>  
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Ngưỡng tồn kho</label>
+                        <input type="number" id="filter-threshold" class="form-control" value="5" min="1">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button id="btn-filter" class="btn btn-primary mr-2">Lọc</button>
+                        <button id="btn-reset" class="btn btn-secondary">Reset</button>
+                    </div>
+                </div>
+
+                <!-- Bảng dữ liệu -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Ảnh</th>
+                            <th>Sản phẩm</th>
+                            <th>Màu</th>
+                            <th>Dung lượng</th>
+                            <th>Số lượng nhập</th>
+                            <th>Đã bán</th>
+                            <th>Ngưỡng tồn kho</th>
+                            <th>Danh mục</th>
+                            <th>Thương hiệu</th>
+                        </tr>
+                    </thead>
+                    <tbody id="low-stock-products">
+                        <tr><td colspan="10" class="text-center">Đang tải...</td></tr>
+                    </tbody>
+                </table>
+
+                <!-- Phân trang -->
+                <nav>
+                    <ul class="pagination" id="pagination"></ul>
+                </nav>
+            </div>
+
+        </div> --}}
+
 
 </div>
 
@@ -499,7 +555,6 @@
     // let hasLoadedRevenueMonthly = false;
     // let hasLoadedUserMonthly = false;
     let hasLoadedMonthlySummary = false;
-
 
     // Toggle doanh thu ngày/tháng
     document.getElementById('toggleRevenueMode').addEventListener('click', function () {
@@ -847,4 +902,106 @@ function setLast7Days(startId, endId) {
 }
 
 </script>
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const tbody = document.getElementById('low-stock-products');
+    const pagination = document.getElementById('pagination');
+    const categoryFilter = document.getElementById('filter-category');
+    const thresholdFilter = document.getElementById('filter-threshold');
+    const btnFilter = document.getElementById('btn-filter');
+    const btnReset = document.getElementById('btn-reset');
+
+    let currentPage = 1;
+
+    // Hàm load dữ liệu
+    function loadLowStockProducts(page = 1) {
+        currentPage = page;
+        const categoryId = categoryFilter.value;
+        const threshold = thresholdFilter.value;
+
+        tbody.innerHTML = `<tr><td colspan="10" class="text-center">Đang tải...</td></tr>`;
+
+        const url = new URL('/admin/dashboard/stock-alert', window.location.origin);
+        url.searchParams.set('per_page', 10);
+        url.searchParams.set('page', page);
+        if (categoryId) url.searchParams.set('category_id', categoryId);
+        if (threshold) url.searchParams.set('threshold', threshold);
+
+        fetch(url)
+            .then(res => res.json())
+            .then(result => {
+                const products = result.data.data;
+
+                if (!products || products.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="10" class="text-center">Không có sản phẩm tồn kho thấp</td></tr>`;
+                    pagination.innerHTML = '';
+                    return;
+                }
+
+                // build string 1 lần
+                let rows = '';
+                products.forEach((item, index) => {
+                    rows += `
+                        <tr>
+                            <td>${(page - 1) * 10 + index + 1}</td>
+                            <td>
+                                <img src="${item.image || '/images/no-image.png'}" alt="" 
+                                    style="width:50px;height:50px;object-fit:cover;border-radius:4px;">
+                            </td>
+                            <td>${item.product_name || ''}</td>
+                            <td>${item.color || ''}</td>
+                            <td>${item.storage || ''}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.sold}</td>
+                            <td>${item.stock}</td>
+                            <td>${item.category || ''}</td>
+                            <td>${item.brand || ''}</td>
+                        </tr>
+                    `;
+                });
+
+                // chỉ gán vào DOM một lần
+                tbody.innerHTML = rows;
+
+                renderPagination(result.data);
+            })
+            .catch(err => {
+                console.error('Lỗi khi load dữ liệu tồn kho thấp:', err);
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center text-danger">Không thể tải dữ liệu</td></tr>`;
+            });
+    }
+
+    // Hàm render phân trang
+    function renderPagination(paginateData) {
+        pagination.innerHTML = '';
+        const totalPages = paginateData.last_page;
+
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+            li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+            li.addEventListener('click', (e) => {
+                e.preventDefault();
+                loadLowStockProducts(i);
+            });
+            pagination.appendChild(li);
+        }
+    }
+
+    // Sự kiện lọc
+    btnFilter.addEventListener('click', () => loadLowStockProducts(1));
+
+    // Sự kiện reset
+    btnReset.addEventListener('click', () => {
+        categoryFilter.value = '';
+        thresholdFilter.value = 5;
+        loadLowStockProducts(1);
+    });
+
+    // Load ban đầu
+    loadLowStockProducts();
+});
+
+
+</script> --}}
 @endsection

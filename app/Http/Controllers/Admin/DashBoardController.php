@@ -27,7 +27,7 @@ class DashBoardController extends Controller
         $brands = Brand::whereHas('products')->get();
         $statuses = $this->dashboard->getAvailableStatuses();
 
-        
+
         // Lấy đầy đủ danh mục cha + con có đơn hàng
         $categoryIdsWithOrders = Category::whereHas('products.variants.orderItems')
             ->pluck('id')
@@ -180,7 +180,7 @@ class DashBoardController extends Controller
             'labels' => $products->pluck('name'),
             'values' => $products->pluck('total_sold'),
             'label' => "Top {$limit} sản phẩm bán chạy",
-            'categories' => $products->pluck('category_name'), 
+            'categories' => $products->pluck('category_name'),
             'start_date' => $start?->toDateString(),
             'end_date' => $end?->toDateString(),
         ]);
@@ -214,5 +214,50 @@ class DashBoardController extends Controller
         $data = $this->dashboard->getMonthlyTopProducts($year, $limit, $categoryId);
 
         return response()->json($data);
+    }
+
+    // public function stockAlert(Request $request)
+    // {
+        
+    //     $lowStockThreshold = $request->input('threshold', 5);
+    //     $categoryId = $request->input('category_id'); // lọc danh mục
+    //     $perPage = $request->input('per_page', 10);
+    //     $sortOrder = $request->input('sort', 'asc');
+
+    //     $lowStockProducts = $this->dashboard->getLowStockProducts($lowStockThreshold, $categoryId, $perPage,$sortOrder);
+
+    //     return response()->json([
+    //         'status'    => 'success',
+    //         'threshold' => $lowStockThreshold,
+    //         'data'      => $lowStockProducts
+    //     ]);
+    // }
+
+    public function stockAll(Request $request)
+    {
+        
+        $threshold  = $request->input('threshold', 5);
+        $categoryId = $request->input('category_id');
+        $perPage    = $request->input('per_page', 10);
+        $sortOrder  = $request->input('sort', 'asc');
+
+        $products   = $this->dashboard->getLowStockProducts(
+            $threshold,
+            $categoryId,
+            $perPage,
+            $sortOrder
+        );
+
+        $categories = Category::all();
+
+        return view('admin.stock', compact(
+            'products',
+            'categories',
+            'threshold',
+            'categoryId',
+            'sortOrder',
+            'categories'
+        ));
+    
     }
 }

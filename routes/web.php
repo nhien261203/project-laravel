@@ -145,6 +145,12 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
 
     Route::get('/dashboard/monthly-top-products', [DashboardController::class, 'monthlyTopProducts']);
 
+    
+    // Route::get('/dashboard/stock-alert', [DashBoardController::class, 'stockAlert'])
+    //     ->name('dashboard.stock-alert');
+
+    Route::get('/stock-all', [DashBoardController::class, 'stockAll'])
+        ->name('stock-all');
 
     Route::resource('brands', BrandController::class);
     Route::resource('categories', CategoryController::class);

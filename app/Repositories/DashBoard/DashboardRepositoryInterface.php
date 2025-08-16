@@ -15,4 +15,10 @@ interface DashboardRepositoryInterface
     public function getMonthlyTopProducts($year = null, $limit = 5, $categoryId = null);
 
     public function getMonthlyOrders($year, $status = null);
+    public function getLowStockProducts(
+        int $threshold = 5,
+        ?int $categoryId = null,
+        int $perPage = 10,
+        string $sortOrder = 'asc'
+    );
 }

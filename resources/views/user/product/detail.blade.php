@@ -132,21 +132,6 @@
                 </div>
             </div>
 
-            {{-- Nút hành động --}}
-            {{-- <form method="POST" action="{{ route('cart.add') }}" class="flex gap-3 items-center">
-                @csrf
-                <input type="hidden" name="variant_id" id="formVariantId" value="{{ $defaultVariant->id }}">
-                <input type="hidden" name="quantity" id="formQuantity" value="1">
-                <input type="hidden" name="redirect_to_cart" id="redirectToCart" value="0">
-
-                <button type="submit" class="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600">
-                    Thêm vào giỏ
-                </button>
-
-                <button type="button" onclick="buyNow()" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                    Mua ngay
-                </button>
-            </form> --}}
             <form id="addToCartForm" class="flex gap-3 items-center" onsubmit="return addToCart(event)">
                 @csrf
                 <input type="hidden" name="variant_id" id="formVariantId" value="{{ $defaultVariant->id }}">
@@ -438,6 +423,15 @@
     let selectedStorage = '{{ session('selected_storage', $defaultVariant->storage) }}';
 
     window.onload = () => {
+        variants.forEach(v => {
+            if (v.images && v.images.length > 0) {
+                v.images.forEach(img => {
+                    const image = new Image();
+                    image.src = '/storage/' + img.image_path;
+                });
+            }
+        });
+        
         updateOptions();
         updateVariantDisplay();
 
@@ -630,11 +624,6 @@
         form.submit();
     }
 
-    // document.getElementById('toggleDescriptionBtn').addEventListener('click', function () {
-    //     const desc = document.getElementById('productDescription');
-    //     desc.classList.toggle('line-clamp-3');
-    //     this.innerText = desc.classList.contains('line-clamp-3') ? 'Đọc thêm' : 'Thu gọn';
-    // });
 </script>
 
 <script>

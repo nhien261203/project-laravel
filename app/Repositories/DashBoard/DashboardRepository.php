@@ -5,9 +5,11 @@ namespace App\Repositories\Dashboard;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductVariant;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardRepository implements DashboardRepositoryInterface
 {
@@ -226,5 +228,55 @@ class DashboardRepository implements DashboardRepositoryInterface
     {
         $colors = ['#F87171', '#60A5FA', '#34D399', '#FBBF24', '#A78BFA', '#F472B6', '#2DD4BF', '#FCD34D', '#818CF8', '#4ADE80'];
         return $colors[array_rand($colors)];
+    }
+
+    public function getLowStockProducts(
+        int $threshold = 5,
+        ?int $categoryId = null,
+        int $perPage = 10,
+        string $sortOrder = 'asc' // thêm tham số sắp xếp: asc | desc
+    ) {
+        $query = ProductVariant::whereRaw('(quantity - sold) < ?', [$threshold]) // dùng < thay vì <=
+            ->with([
+                'product:id,name,category_id,brand_id',
+                'product.category:id,name',
+                'product.brand:id,name'
+            ]);
+
+        // Lọc theo category nếu có
+        if ($categoryId) {
+            // Lấy tất cả ID của cha và con 
+            $categoryIds = Category::where('id', $categoryId)
+                ->orWhere('parent_id', $categoryId)
+                ->pluck('id')
+                ->toArray();
+
+            $query->whereHas('product', function ($q) use ($categoryIds) {
+                $q->whereIn('category_id', $categoryIds);
+            });
+        }
+
+        // Sắp xếp theo tồn kho (stock)
+        $query->orderByRaw('(quantity - sold) ' . ($sortOrder === 'desc' ? 'DESC' : 'ASC'));
+
+        // Phân trang
+        return $query->paginate($perPage)->through(function ($variant) {
+            $product = $variant->product;
+
+            return [
+                'id'           => $variant->id,
+                'product_name' => $product->name ?? null,
+                'color'        => $variant->color,
+                'storage'      => $variant->storage,
+                'quantity'     => $variant->quantity,
+                'sold'         => $variant->sold,
+                'stock'        => $variant->quantity - $variant->sold,
+                'category'     => $product?->category?->name,
+                'brand'        => $product?->brand?->name,
+                'image' => $variant->images->first()
+                    ? Storage::url($variant->images->first()->image_path)
+                    : null,
+            ];
+        });
     }
 }

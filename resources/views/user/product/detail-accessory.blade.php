@@ -216,7 +216,17 @@
 {{-- Form đánh giá (chỉ hiển thị nếu user đã mua) --}}
     <div class="mt-6 grid grid-cols-1 md:grid-cols-[4fr_3fr] gap-6 items-start">
         <div class="bg-white rounded-lg shadow p-6 mt-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Đánh giá sản phẩm</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">
+                Đánh giá về sản phẩm <span class="font-semibold">{{ $product->name }}</span>
+            </h3>
+            <div class="flex items-center gap-4 mb-4 text-sm text-gray-600">
+                <div>
+                    ⭐: <span class="font-semibold">{{ $averageRating }}</span> / 5
+                </div>
+                <div>
+                    <span class="font-semibold">{{ $totalReviews }}</span> đánh giá
+                </div>
+            </div>
 
             @if ($canReview)
                 <button id="toggleReviewForm" 
@@ -380,6 +390,14 @@
     let selectedStorage = '{{ $defaultVariant->storage }}';
 
     window.onload = () => {
+        variants.forEach(v => {
+            if (v.images && v.images.length > 0) {
+                v.images.forEach(img => {
+                    const image = new Image();
+                    image.src = '/storage/' + img.image_path;
+                });
+            }
+        });
         updateOptions();
         updateVariantDisplay();
 
