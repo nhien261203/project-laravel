@@ -12,8 +12,8 @@
     <!-- Bộ lọc -->
     <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <input type="text" name="search" value="{{ request('search') }}"
-               class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-100"
-               placeholder="🔍 Tìm theo tiêu đề...">
+                class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-100"
+                placeholder="🔍 Tìm theo tiêu đề...">
 
         <select name="status"
                 class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-100">

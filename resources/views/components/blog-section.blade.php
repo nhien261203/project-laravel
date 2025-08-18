@@ -11,7 +11,7 @@
     </div>
 
     {{-- Desktop grid --}}
-    <div class="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="hidden xl:grid grid-cols-2 xl:grid-cols-4 gap-6">
         @foreach($blogs as $blog)
             <a href="{{ route('blogs.show', $blog->slug) }}" class="group block bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden">
                 @if($blog->thumbnail)
@@ -36,7 +36,7 @@
     </div>
 
     {{-- Mobile swiper --}}
-    <div class="block sm:hidden">
+    <div class="block xl:hidden">
         <div class="swiper blog-swiper">
             <div class="swiper-wrapper">
                 @foreach($blogs as $blog)
@@ -81,8 +81,9 @@
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
-            breakpoints: {
-                480: { slidesPerView: 2 },
+             breakpoints: {
+                // 480: { slidesPerView: 2 },
+                768: { slidesPerView: 2.5 },
             }
         });
     });

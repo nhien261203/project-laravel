@@ -108,7 +108,7 @@
 
 
                         <td class="px-4 py-2 border text-gray-500">
-                            {{ $comment->created_at->diffForHumans() }}
+                            {{ $comment->created_at->format('d/m/Y H:i:s') }}
                         </td>
 
                         {{-- Hành động Dropdown --}}

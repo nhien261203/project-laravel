@@ -86,7 +86,9 @@
                                 <span class="inline-block bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded">Đã từ chối</span>
                             @endif
                         </td>
-                        <td class="px-4 py-2 border text-gray-500">{{ $review->created_at->diffForHumans() }}</td>
+                        <td class="px-4 py-2 border text-gray-500">
+                            {{ $review->created_at->format('d/m/Y H:i:s') }}
+                        </td>
 
                         {{-- Action Dropdown --}}
                         <td class="px-4 py-2 border text-center">

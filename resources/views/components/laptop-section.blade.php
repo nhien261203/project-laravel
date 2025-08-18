@@ -13,16 +13,16 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
         {{-- Cột trái: Banner ảnh --}}
         <div class="md:col-span-1">
-            <img src="https://images.pexels.com/photos/5698417/pexels-photo-5698417.jpeg"
+            <img src="{{ asset('storage/banners/lap-banner.webp') }}"
                 alt="Laptop Banner"
                 class="w-full h-[320px] object-cover rounded-lg shadow" >
                 {{-- data-aos="fade-up" --}}
         </div>
 
         {{-- Cột phải: Swiper hiển thị sản phẩm --}}
-        <div class="md:col-span-2 relative">
+        <div class="md:col-span-2 relative ">
             <div class="swiper laptop-swiper">
-                <div class="swiper-wrapper">
+                <div class="swiper-wrapper md:mt-6 lg:mt-8 xl:mt-0">
                     @foreach($laptopProducts as $product)
                         @php
                             $variant = $product->variants->first();

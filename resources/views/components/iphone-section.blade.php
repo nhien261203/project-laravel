@@ -11,7 +11,7 @@
     </div>
 
     {{-- Mobile: Slide --}}
-    <div class="sm:hidden relative">
+    <div class="lg:hidden relative">
         {{-- Swiper --}}
         <div class="swiper iphone-swiper-mobile">
             <div class="swiper-wrapper">
@@ -78,7 +78,7 @@
     </div>
 
     {{-- Desktop: Grid --}}
-    <div class="hidden sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+    <div class="hidden lg:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         @foreach($iphoneProducts as $product)
             @php
                 $variant = $product->variants->first();
@@ -144,6 +144,11 @@
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
+            breakpoints: {
+                768: { // iPad mini / Air
+                    slidesPerView: 3,
+                }
+            }
         });
     });
 </script>
