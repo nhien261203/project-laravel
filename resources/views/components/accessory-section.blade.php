@@ -27,13 +27,13 @@
                         <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition">
                             <a href="{{ route('product.detailAccessory', $product->slug) }}">
                                 @if($image)
-                                    <div class="aspect-[3/4] bg-white">
+                                    <div class="aspect-square bg-white">
                                         <img src="{{ asset('storage/' . $image) }}"
                                              alt="{{ $product->name }}"
                                              class="w-full h-full object-contain rounded-t-xl" loading="lazy">
                                     </div>
                                 @else
-                                    <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center text-gray-400">
+                                    <div class="aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
                                         Không có ảnh
                                     </div>
                                 @endif
@@ -89,13 +89,13 @@
             <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition">
                 <a href="{{ route('product.detailAccessory', $product->slug) }}">
                     @if($image)
-                        <div class="aspect-[3/4] bg-white">
+                        <div class="aspect-square bg-white">
                             <img src="{{ asset('storage/' . $image) }}"
                                  alt="{{ $product->name }}"
                                  class="w-full h-full object-contain rounded-t-xl" loading="lazy">
                         </div>
                     @else
-                        <div class="aspect-[3/4] bg-gray-100 flex items-center justify-center text-gray-400">
+                        <div class="aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
                             Không có ảnh
                         </div>
                     @endif
@@ -145,7 +145,7 @@
             breakpoints: {
                 768: { // iPad mini / Air
                     slidesPerView: 3,
-                }
+                },
             }
         });
     });

@@ -12,17 +12,20 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
         {{-- Cột trái: Banner ảnh --}}
-        <div class="md:col-span-1">
-            <img src="{{ asset('storage/banners/lap-banner.webp') }}"
+        <div class="md:col-span-1 cursor-pointer">
+            <a href="{{ route('product.laptop') }}">
+                <img src="{{ asset('storage/banners/lap-banner-cut3.jpg') }}"
                 alt="Laptop Banner"
-                class="w-full h-[320px] object-cover rounded-lg shadow" >
+                class="w-full h-[400px] md:h-[330px] object-cover rounded-lg shadow" >
                 {{-- data-aos="fade-up" --}}
+            </a>
+            
         </div>
 
         {{-- Cột phải: Swiper hiển thị sản phẩm --}}
         <div class="md:col-span-2 relative ">
             <div class="swiper laptop-swiper">
-                <div class="swiper-wrapper md:mt-6 lg:mt-8 xl:mt-0">
+                <div class="swiper-wrapper ">
                     @foreach($laptopProducts as $product)
                         @php
                             $variant = $product->variants->first();
@@ -38,7 +41,7 @@
                             <a href="{{ route('product.detail', $product->slug) }}"
                             class="block bg-white border rounded-lg shadow hover:shadow-lg transition overflow-hidden hover:text-blue-600">
                                 {{-- Ảnh sản phẩm --}}
-                                <div class="relative bg-white aspect-[4/5] flex items-center justify-center">
+                                <div class="relative bg-white aspect-[5/6] flex items-center justify-center">
                                     @if($image)
                                         <img src="{{ asset('storage/' . $image) }}"
                                             alt="{{ $product->name }}"
@@ -107,9 +110,10 @@
             },
             breakpoints: {
                 0: { slidesPerView: 2 },       // mobile: 2 sp
-                640: { slidesPerView: 2.5 },
-                768: { slidesPerView: 3 },
-                1024: { slidesPerView: 4 },
+                // 640: { slidesPerView: 2.5 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+                1280: { slidesPerView: 4 }
             }
         });
     });

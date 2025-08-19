@@ -12,7 +12,7 @@
     <div class="bg-white p-6 rounded-xl shadow space-y-6 mb-8">
         <form method="GET" id="filterForm"></form>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 items-start">
             {{-- Thương hiệu --}}
             @if ($brands->count())
                 <div>

@@ -145,7 +145,7 @@
                     
                 </div>
                 {{-- <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/laptop_ic_cate_47e7264bc7.png" alt="Màn hình" class="w-16 h-16 object-contain mb-2">
+                    <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/laptop_ic_cate_47e7264bc7.png" alt="Màn hình" class="w-17 h-17 object-contain mb-2">
                     <p class="text-sm font-medium">Màn hình</p>
                 </div> --}}
                 <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">

@@ -246,7 +246,11 @@ class ProductRepository implements ProductRepositoryInterface
                         });
                     })
                     ->orWhereHas('brand', fn($q2) => $q2->where('name', 'like', "%{$keyword}%"))
-                    ->orWhereHas('category', fn($q2) => $q2->where('name', 'like', "%{$keyword}%"));
+                    ->orWhereHas('category', function ($q2) use ($keyword) {
+                        $q2->where('name', 'like', "%{$keyword}%")
+                        ->orWhereHas('parent', fn($q3) => $q3->where('name', 'like', "%{$keyword}%"));
+                    });
+
             })
             ->where('status', 1)
             ->latest();
