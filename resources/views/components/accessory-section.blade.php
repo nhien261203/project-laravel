@@ -86,13 +86,13 @@
                 $storages = $product->variants->pluck('storage')->unique()->filter()->implode(' / ');
             @endphp
 
-            <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition">
+            <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition group">
                 <a href="{{ route('product.detailAccessory', $product->slug) }}">
                     @if($image)
                         <div class="aspect-square bg-white">
                             <img src="{{ asset('storage/' . $image) }}"
                                  alt="{{ $product->name }}"
-                                 class="w-full h-full object-contain rounded-t-xl" loading="lazy">
+                                 class="w-full h-full object-contain rounded-t-xl transition-transform duration-300 group-hover:-translate-y-2" loading="lazy">
                         </div>
                     @else
                         <div class="aspect-square bg-gray-100 flex items-center justify-center text-gray-400">

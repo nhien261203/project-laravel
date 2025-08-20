@@ -216,7 +216,7 @@
         const searchForm = document.getElementById('searchForm');
         const searchOverlay = document.getElementById('searchOverlay');
         const btnOpenSearch = document.getElementById('btnOpenSearch');
-        const btnVoice = document.getElementById('voice-search-btn');
+        // const btnVoice = document.getElementById('voice-search-btn');
 
         // Mở khung tìm kiếm khi click kính lúp
         btnOpenSearch.addEventListener('click', function () {
@@ -235,46 +235,46 @@
         });
 
         // Voice Search
-        btnVoice.addEventListener('click', function () {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        // btnVoice.addEventListener('click', function () {
+        //     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-            if (!SpeechRecognition) {
-                alert('Trình duyệt của bạn không hỗ trợ tìm kiếm bằng giọng nói.');
-                return;
-            }
+        //     if (!SpeechRecognition) {
+        //         alert('Trình duyệt của bạn không hỗ trợ tìm kiếm bằng giọng nói.');
+        //         return;
+        //     }
 
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'vi-VN';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
+        //     const recognition = new SpeechRecognition();
+        //     recognition.lang = 'vi-VN';
+        //     recognition.interimResults = false;
+        //     recognition.maxAlternatives = 1;
 
-            recognition.start();
+        //     recognition.start();
 
-            recognition.onstart = function () {
-                searchInput.placeholder = "🎙️ Đang nghe...";
-            };
+        //     recognition.onstart = function () {
+        //         searchInput.placeholder = "🎙️ Đang nghe...";
+        //     };
 
-            recognition.onresult = function (event) {
-                const transcript = event.results[0][0].transcript;
-                searchInput.value = transcript;
-                searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
+        //     recognition.onresult = function (event) {
+        //         const transcript = event.results[0][0].transcript;
+        //         searchInput.value = transcript;
+        //         searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
 
-                // Delay 1000ms để người dùng có thể chỉnh sửa thêm nếu muốn
-                setTimeout(() => {
-                    searchForm.submit();
-                }, 1000);
-            };
+        //         // Delay 1000ms để người dùng có thể chỉnh sửa thêm nếu muốn
+        //         setTimeout(() => {
+        //             searchForm.submit();
+        //         }, 1000);
+        //     };
 
-            recognition.onerror = function (event) {
-                console.error('Lỗi nhận diện:', event.error);
-                alert('Không thể nhận diện giọng nói. Vui lòng thử lại.');
-                searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
-            };
+        //     recognition.onerror = function (event) {
+        //         console.error('Lỗi nhận diện:', event.error);
+        //         alert('Không thể nhận diện giọng nói. Vui lòng thử lại.');
+        //         searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
+        //     };
 
-            recognition.onend = function () {
-                searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
-            };
-        });
+        //     recognition.onend = function () {
+        //         searchInput.placeholder = "Bạn cần tìm sản phẩm gì ...";
+        //     };
+        // });
     });
 </script>
 <script>
