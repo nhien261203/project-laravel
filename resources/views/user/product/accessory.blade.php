@@ -70,78 +70,76 @@
             </div> --}}
         </div>
     </div>
-    <div class="bg-white p-6 rounded-xl shadow">
-        {{-- Tiêu đề --}}
-        {{-- <h2 class="text-2xl font-bold text-gray-800 mb-6">📱 Danh sách phụ kiện</h2> --}}
+     <div class="bg-white p-6 rounded-xl shadow space-y-6 overflow-hidden"> {{-- fix trượt ngang --}}
+    @if($products->count())
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
+            @foreach($products as $product)
+                @php
+                    $firstVariant = $product->variants->first();
+                    $image = optional($firstVariant?->images->first())->image_path;
+                    $price = $firstVariant?->price;
+                    $originalPrice = $firstVariant?->original_price;
+                @endphp
 
-
-        {{-- Danh sách sản phẩm --}}
-        @if($products->count())
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
-                @foreach($products as $product)
-                    @php
-                        $firstVariant = $product->variants->first();
-                        $image = optional($firstVariant?->images->first())->image_path;
-                        $price = $firstVariant?->price;
-                        $originalPrice = $firstVariant?->original_price;
-                    @endphp
-
-                    <a href="{{ route('product.detailAccessory', $product->slug) }}"
-                       class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:border-blue-400">
-                        {{-- Ảnh --}}
+                <a href="{{ route('product.detailAccessory', $product->slug) }}"
+                   class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:border-blue-400 relative">
+                    
+                    {{-- Ảnh + badge sale --}}
+                    <div class="relative w-full h-40 md:h-44 bg-white flex items-center justify-center">
                         @if($image)
-                            <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}"
-                                 class="w-full h-40 md:h-44 object-contain bg-white p-2">
+                            <img src="{{ asset('storage/' . $image) }}" 
+                                 alt="{{ $product->name }}"
+                                 class="max-h-full max-w-full object-contain p-2 mt-5">
                         @else
-                            <div class="w-full h-44 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
                                 Không có ảnh
                             </div>
                         @endif
 
-                        {{-- Nội dung --}}
-                        <div class="p-4 relative">
-                            <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
-                                {{ $product->name }}
-                            </h3>
-                            {{-- <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $product->all_storages ?? 'N/A' }}</p> --}}
+                        @if($product->sale_percent > 0)
+                            <span class="absolute top-1 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded shadow">
+                                -{{ $product->sale_percent }}%
+                            </span>
+                        @endif
+                    </div>
 
-                            {{-- Giá --}}
-                            @if($price)
-                                <div class="mt-2 min-h-[3rem]">
-                                    <span class="text-red-500 font-bold">
-                                        {{ number_format($price, 0, ',', '.') }}₫
+                    {{-- Nội dung --}}
+                    <div class="p-4">
+                        <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
+                            {{ $product->name }}
+                        </h3>
+                        {{-- <p class="text-xs text-gray-500 mt-1 ">{{ $product->all_storages ?? 'N/A' }}</p> --}}
+
+                        @if($price)
+                            <div class="mt-2 min-h-[3rem] md:min-h-[2rem]">
+                                <span class="text-red-500 font-bold">
+                                    {{ number_format($price, 0, ',', '.') }}₫
+                                </span>
+                                @if($originalPrice && $originalPrice > $price)
+                                    <span class="text-xs text-gray-400 line-through ml-2">
+                                        {{ number_format($originalPrice, 0, ',', '.') }}₫
                                     </span>
-                                    @if($originalPrice && $originalPrice > $price)
-                                        <span class="text-sm text-gray-400 line-through ml-2">
-                                            {{ number_format($originalPrice, 0, ',', '.') }}₫
-                                        </span>
-                                    @endif
-                                    @if($product->sale_percent > 0)
-                                        <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded">
-                                            -{{ $product->sale_percent }}%
-                                        </span>
-                                    @endif
-                                </div>
-                            @else
-                                <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
-                            @endif
+                                @endif
+                            </div>
+                        @else
+                            <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
+                        @endif
+                    </div>
 
-                            {{-- <div class="absolute bottom-2 right-2 text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                                Đã bán: {{ $product->variants->sum('sold') }}
-                            </div> --}}
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-
-            {{-- Phân trang --}}
-            {{-- <div class="mt-8">
-                {{ $products->links('pagination::tailwind') }}
-            </div> --}}
-        @else
-            <p class="text-gray-500">Không tìm thấy sản phẩm nào.</p>
-        @endif
-    </div>
+                    {{-- Nút so sánh góc phải dưới --}}
+                    {{-- <div class="text-xs text-gray-500 flex items-center gap-1">
+               
+                        <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
+                    </div> --}}
+                    
+                    
+                </a>
+            @endforeach
+        </div>
+    @else
+        <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
+    @endif
+</div>
     <div class="mt-4 flex justify-center">
         {{-- Phân trang --}}
         {{ $products->appends(request()->except('page'))->links('pagination.custom-user') }}

@@ -350,38 +350,53 @@
                                 : 'https://via.placeholder.com/300x300?text=No+Image';
                         @endphp
                         <div class="swiper-slide">
-                            
-                            <a href="{{ $item->is_accessory ? route('product.detailAccessory', $item->slug) : route('product.detail', $item->slug) }}" class="block bg-white border rounded hover:shadow transition overflow-hidden">
-                                <img src="{{ $image }}" class="w-full h-36 md:h-40 object-contain ">
+                            <a href="{{ $item->is_accessory ? route('product.detailAccessory', $item->slug) : route('product.detail', $item->slug) }}"
+                                class="block bg-white border rounded-lg hover:shadow-lg transition overflow-hidden group">
+
+                                <!-- Ảnh sản phẩm -->
+                                <div class="relative h-48 md:h-56 flex items-center justify-center bg-white">
+                                    <img src="{{ $image }}"
+                                        alt="{{ $item->name }}"
+                                        class="object-contain h-full w-auto p-2 transition-transform duration-300 group-hover:-translate-y-1" />
+
+                                    <!-- Badge giảm giá -->
+                                    @if($variant && $variant->sale_percent > 0)
+                                        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded shadow">
+                                            -{{ $variant->sale_percent }}%
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <!-- Nội dung -->
                                 <div class="p-2">
-                                    <h4 class="text-sm font-semibold text-gray-800 hover:text-blue-600 truncate">{{ $item->name }}</h4>
+                                    <h4 class="text-sm font-semibold text-gray-800 hover:text-blue-600 line-clamp-1">
+                                        {{ $item->name }}
+                                    </h4>
+
+                                    {{-- Bộ nhớ --}}
+                                    <p class="text-xs text-gray-500 mt-1 min-h-[1rem]">
+                                        @if($variant && $variant->storage)
+                                            Bộ nhớ: {{ $variant->storage }}
+                                        @endif
+                                    </p>
+
+                                    {{-- Giá --}}
                                     @if($variant)
-                                        {{-- Bộ nhớ --}}
-                                        <p class="text-xs text-gray-500 mt-1 min-h-[1rem]">
-                                            @if($variant && $variant->storage)
-                                                Bộ nhớ: {{ $variant->storage }}
-                                            @endif
-                                        </p>
-
-                                        {{-- Giá và giảm giá --}}
-                                        <p class="text-xs mt-1">
-                                            <span class="text-red-600 font-semibold">{{ number_format($variant->price, 0, ',', '.') }}₫</span>
-
+                                        <div class="mt-1 min-h-[3rem] md:min-h-[1rem]">
+                                            <span class="text-red-600 font-bold text-sm">
+                                                {{ number_format($variant->price, 0, ',', '.') }}₫
+                                            </span>
                                             @if($variant->original_price > $variant->price)
                                                 <span class="text-gray-400 line-through ml-1 text-xs">
                                                     {{ number_format($variant->original_price, 0, ',', '.') }}₫
                                                 </span>
-                                                @if($variant->sale_percent)
-                                                    <span class="ml-1 text-green-600 text-xs bg-green-100 px-1.5 py-0.5 rounded">
-                                                        -{{ $variant->sale_percent }}%
-                                                    </span>
-                                                @endif
                                             @endif
-                                        </p>
+                                        </div>
                                     @endif
                                 </div>
                             </a>
                         </div>
+
                     @endforeach
                 </div>
 
@@ -661,9 +676,10 @@
             prevEl: '.swiper-button-prev',
         },
         breakpoints: {
-            640: { slidesPerView: 3 },
-            768: { slidesPerView: 4 },
-            1024: { slidesPerView: 5 },
+            // 640: { slidesPerView: 3 },
+            768: { slidesPerView: 3 },
+            1024: { slidesPerView: 4 },
+            1280: { slidesPerView: 5 },
         },
     });
 </script>

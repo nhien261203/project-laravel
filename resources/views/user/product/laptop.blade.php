@@ -68,100 +68,86 @@
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow">
-        
+    <div class="bg-white p-6 rounded-xl shadow space-y-6 overflow-hidden"> {{-- fix trượt ngang --}}
+    @if($products->count())
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
+            @foreach($products as $product)
+                @php
+                    $firstVariant = $product->variants->first();
+                    $image = optional($firstVariant?->images->first())->image_path;
+                    $price = $firstVariant?->price;
+                    $originalPrice = $firstVariant?->original_price;
+                @endphp
 
-            
-
-        {{-- Danh sách sản phẩm --}}
-        @if($products->count())
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
-                @foreach($products as $product)
-                    @php
-                        $firstVariant = $product->variants->first();
-                        $image = optional($firstVariant?->images->first())->image_path;
-                        $price = $firstVariant?->price;
-                        $originalPrice = $firstVariant?->original_price;
-                    @endphp
-
-                    <a href="{{ route('product.detail', $product->slug) }}"
-                       class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:border-blue-400">
-                        {{-- Ảnh --}}
+                <a href="{{ route('product.detail', $product->slug) }}"
+                   class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:border-blue-400 relative">
+                    
+                    {{-- Ảnh + badge sale --}}
+                    <div class="relative w-full h-40 md:h-44 bg-white flex items-center justify-center">
                         @if($image)
-                            <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}"
-                                 class="w-full h-40 md:h-44 object-contain bg-white p-2">
+                            <img src="{{ asset('storage/' . $image) }}" 
+                                 alt="{{ $product->name }}"
+                                 class="max-h-full max-w-full object-contain p-2 mt-5">
                         @else
-                            <div class="w-full h-44 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
                                 Không có ảnh
                             </div>
                         @endif
 
-                        {{-- Nội dung --}}
-                        <div class="p-4 relative">
-                            <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
-                                {{ $product->name }}
-                            </h3>
-                            <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $product->all_storages ?? 'N/A' }}</p>
+                        @if($product->sale_percent > 0)
+                            <span class="absolute top-1 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded shadow">
+                                -{{ $product->sale_percent }}%
+                            </span>
+                        @endif
+                    </div>
 
-                            {{-- Giá --}}
-                            @if($price)
-                                <div class="mt-2 min-h-[3rem]">
-                                    <span class="text-red-500 font-bold">
-                                        {{ number_format($price, 0, ',', '.') }}₫
+                    {{-- Nội dung --}}
+                    <div class="p-4">
+                        <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
+                            {{ $product->name }}
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-1 ">{{ $product->all_storages ?? 'N/A' }}</p>
+
+                        @if($price)
+                            <div class="mt-2 min-h-[3rem]">
+                                <span class="text-red-500 font-bold">
+                                    {{ number_format($price, 0, ',', '.') }}₫
+                                </span>
+                                @if($originalPrice && $originalPrice > $price)
+                                    <span class="text-xs text-gray-400 line-through ml-2">
+                                        {{ number_format($originalPrice, 0, ',', '.') }}₫
                                     </span>
-                                    @if($originalPrice && $originalPrice > $price)
-                                        <span class="text-sm text-gray-400 line-through ml-2">
-                                            {{ number_format($originalPrice, 0, ',', '.') }}₫
-                                        </span>
-                                    @endif
-                                    @if($product->sale_percent > 0)
-                                        <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded">
-                                            -{{ $product->sale_percent }}%
-                                        </span>
-                                    @endif
-                                </div>
-                            @else
-                                <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
-                            @endif
-                            <div class="flex justify-between items-center mt-4">
-                                <button
-                                    type="button"
-                                    onclick="event.stopPropagation(); event.preventDefault(); addToCompare({{ $product->id }}, '{{ request()->segment(1) }}')"
-                                    class="w-8 h-8 flex items-center justify-center rounded-full border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition"
-                                    title="Thêm vào so sánh"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                </button>
-
-                                {{-- <div class="text-xs text-gray-500 flex items-center gap-1">
-                                    
-                                    <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
-                                </div> --}}
+                                @endif
                             </div>
-                                
-                        </div>
-                        {{-- <button
-                            type="button"
-                            onclick="event.stopPropagation(); event.preventDefault(); addToCompare({{ $product->id }}, '{{ request()->segment(1) }}')"
-                            class="mt-3 inline-flex items-center justify-center gap-1 px-3 py-1.5 text-xs border rounded-full text-blue-600 border-blue-500 hover:bg-blue-500 hover:text-white transition"
-                        >
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M4 6h16M4 12h8m-8 6h16" />
-                            </svg>
-                                So sánh
-                        </button> --}}
-                    </a>
-                @endforeach
-            </div>
-        @else
-            <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
-        @endif
-    </div>
+                        @else
+                            <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
+                        @endif
+                    </div>
+
+                    {{-- Nút so sánh góc phải dưới --}}
+                    {{-- <div class="text-xs text-gray-500 flex items-center gap-1">
+               
+                        <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
+                    </div> --}}
+                    <button
+                        type="button"
+                        onclick="event.stopPropagation(); event.preventDefault(); addToCompare({{ $product->id }}, '{{ request()->segment(1) }}')"
+                        class="absolute bottom-2 right-2 w-6 h-6 flex items-center justify-center rounded-full border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition"
+                        title="Thêm vào so sánh"
+                    > 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </button>
+                    
+                </a>
+            @endforeach
+        </div>
+    @else
+        <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
+    @endif
+</div>
     <button onclick="goToComparePage('{{ request()->segment(1) }}')" 
                                         class="fixed bottom-[120px] right-5 px-4 py-2 bg-blue-600 text-white rounded shadow-lg z-50">
                                     So sánh (<span id="compareCount">0</span>)

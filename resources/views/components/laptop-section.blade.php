@@ -42,7 +42,7 @@
                             <a href="{{ route('product.detail', $product->slug) }}"
                             class="block bg-white border rounded-lg shadow hover:shadow-lg transition overflow-hidden hover:text-blue-600 ">
                                 {{-- Ảnh sản phẩm --}}
-                                <div class="relative bg-white aspect-[5/6] flex items-center justify-center">
+                                <div class="relative bg-white h-52 flex items-center justify-center">
                                     @if($image)
                                         <img src="{{ asset('storage/' . $image) }}"
                                             alt="{{ $product->name }}"
@@ -60,9 +60,12 @@
 
                                 {{-- Thông tin --}}
                                 <div class="p-3">
-                                    <h3 class="text-sm font-semibold text-gray-800 line-clamp-2 min-h-[3rem]">
+                                    <h3 class="text-sm font-semibold text-gray-800 line-clamp-1">
                                         {{ $product->name }}
                                     </h3>
+                                    <p class="text-xs text-gray-500 mt-1 line-clamp-1">
+                                        Bộ nhớ: {{ $product->variants->pluck('storage')->unique()->implode(' / ') ?: 'N/A' }}
+                                    </p>
                                     <div class="mt-1">
                                         @if($price)
                                             <span class="text-red-500 font-bold text-base">

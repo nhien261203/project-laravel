@@ -27,7 +27,7 @@
                     <div class="swiper-slide px-1">
                         <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition">
                             <a href="{{ route('product.detail', $product->slug) }}">
-                                <div class="relative bg-white aspect-[5/6] flex items-center justify-center">
+                                <div class="relative bg-white h-48 flex items-center justify-center">
                                     @if($image)
                                         
                                         <img src="{{ asset('storage/' . $image) }}"
@@ -94,7 +94,7 @@
 
             <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition group">
                 <a href="{{ route('product.detail', $product->slug) }}">
-                    <div class="relative bg-white aspect-[5/6] flex items-center justify-center">
+                    <div class="relative bg-white h-56 flex items-center justify-center">
                         @if($image)
                             
                                 <img src="{{ asset('storage/' . $image) }}"
