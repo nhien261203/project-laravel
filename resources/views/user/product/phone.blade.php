@@ -100,17 +100,17 @@
                             <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $product->all_storages ?? 'N/A' }}</p>
 
                             @if($price)
-                                <div class="mt-2 ">
+                                <div class="mt-2 min-h-[3rem]">
                                     <span class="text-red-500 font-bold">
                                         {{ number_format($price, 0, ',', '.') }}₫
                                     </span>
                                     @if($originalPrice && $originalPrice > $price)
-                                        <span class="text-sm text-gray-400 line-through ml-2">
+                                        <span class="text-xs text-gray-400 line-through ml-2">
                                             {{ number_format($originalPrice, 0, ',', '.') }}₫
                                         </span>
                                     @endif
                                     @if($product->sale_percent > 0)
-                                        <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded">
+                                        <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded ">
                                             -{{ $product->sale_percent }}%
                                         </span>
                                     @endif
@@ -144,12 +144,10 @@
                                     </svg>
                                 </button>
 
-                                <div class="text-xs text-gray-500 flex items-center gap-1">
-                                    {{-- <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h18M9 3v18m6-18v18" />
-                                    </svg> --}}
+                                {{-- <div class="text-xs text-gray-500 flex items-center gap-1">
+                                    
                                     <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
-                                </div>
+                                </div> --}}
                             </div>
 
                         </div>

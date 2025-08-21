@@ -107,7 +107,7 @@
 
                             {{-- Giá --}}
                             @if($price)
-                                <div class="mt-2">
+                                <div class="mt-2 min-h-[3rem]">
                                     <span class="text-red-500 font-bold">
                                         {{ number_format($price, 0, ',', '.') }}₫
                                     </span>
@@ -126,9 +126,9 @@
                                 <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
                             @endif
 
-                            <div class="absolute bottom-2 right-2 text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                            {{-- <div class="absolute bottom-2 right-2 text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
                                 Đã bán: {{ $product->variants->sum('sold') }}
-                            </div>
+                            </div> --}}
                         </div>
                     </a>
                 @endforeach

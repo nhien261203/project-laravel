@@ -326,9 +326,11 @@
                                     <h4 class="text-sm font-semibold text-gray-800hover:text-blue-600 truncate">{{ $item->name }}</h4>
                                     @if($variant)
                                         {{-- Bộ nhớ --}}
-                                        {{-- @if($variant->storage)
-                                            <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $variant->storage }}</p>
-                                        @endif --}}
+                                        <p class="text-xs text-gray-500 mt-1 min-h-[1rem]">
+                                            @if($variant && $variant->storage)
+                                                Bộ nhớ: {{ $variant->storage }}
+                                            @endif
+                                        </p>
 
                                         {{-- Giá và giảm giá --}}
                                         <p class="text-xs mt-1">

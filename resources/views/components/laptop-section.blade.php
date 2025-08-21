@@ -32,9 +32,10 @@
                             $image = optional($variant?->images->first())->image_path;
                             $price = $variant?->price;
                             $original = $variant?->original_price;
-                            $salePercent = $variant && $variant->original_price && $variant->price
-                                ? round(100 - ($variant->price / $variant->original_price * 100))
-                                : 0;
+                            $salePercent = $product->sale_percent > 0 
+                            ? floor($product->sale_percent) 
+                            : null;
+
                         @endphp
 
                         <div class="swiper-slide group">
@@ -59,7 +60,7 @@
 
                                 {{-- Thông tin --}}
                                 <div class="p-3">
-                                    <h3 class="text-sm font-semibold text-gray-800 truncate">
+                                    <h3 class="text-sm font-semibold text-gray-800 line-clamp-2 min-h-[3rem]">
                                         {{ $product->name }}
                                     </h3>
                                     <div class="mt-1">

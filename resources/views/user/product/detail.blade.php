@@ -352,14 +352,16 @@
                         <div class="swiper-slide">
                             
                             <a href="{{ $item->is_accessory ? route('product.detailAccessory', $item->slug) : route('product.detail', $item->slug) }}" class="block bg-white border rounded hover:shadow transition overflow-hidden">
-                                <img src="{{ $image }}" class="w-full h-36 md:h-40 object-contain bg-gray-50">
+                                <img src="{{ $image }}" class="w-full h-36 md:h-40 object-contain ">
                                 <div class="p-2">
                                     <h4 class="text-sm font-semibold text-gray-800 hover:text-blue-600 truncate">{{ $item->name }}</h4>
                                     @if($variant)
                                         {{-- Bộ nhớ --}}
-                                        @if($variant->storage)
-                                            <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $variant->storage }}</p>
-                                        @endif
+                                        <p class="text-xs text-gray-500 mt-1 min-h-[1rem]">
+                                            @if($variant && $variant->storage)
+                                                Bộ nhớ: {{ $variant->storage }}
+                                            @endif
+                                        </p>
 
                                         {{-- Giá và giảm giá --}}
                                         <p class="text-xs mt-1">

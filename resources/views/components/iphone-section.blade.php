@@ -11,7 +11,7 @@
     </div>
 
     {{-- Mobile: Slide --}}
-    <div class="lg:hidden relative">
+    <div class="xl:hidden relative">
         {{-- Swiper --}}
         <div class="swiper iphone-swiper-mobile">
             <div class="swiper-wrapper">
@@ -27,17 +27,25 @@
                     <div class="swiper-slide px-1">
                         <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition">
                             <a href="{{ route('product.detail', $product->slug) }}">
-                                @if($image)
-                                    <div class="aspect-square bg-white">
+                                <div class="relative bg-white aspect-[5/6] flex items-center justify-center">
+                                    @if($image)
+                                        
                                         <img src="{{ asset('storage/' . $image) }}"
-                                             alt="{{ $product->name }}"
-                                             class="w-full h-full object-contain rounded-t-xl" loading="lazy">
-                                    </div>
-                                @else
-                                    <div class="aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
-                                        Không có ảnh
-                                    </div>
-                                @endif
+                                                alt="{{ $product->name }}"
+                                                class="object-contain max-h-full max-w-full p-2 transition-transform duration-300 group-hover:-translate-y-2" loading="lazy">
+                                        
+                                    @else
+                                        <div class="aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
+                                            Không có ảnh
+                                        </div>
+                                    @endif
+                                    @if($product->sale_percent  > 0)
+                                        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded shadow">
+                                            -{{ $product->sale_percent }}%
+                                        </span>
+                                    @endif
+                                </div>
+                                
 
                                 <div class="p-3">
                                     <h3 class="text-sm font-semibold text-gray-800 hover:text-blue-600 transition">
@@ -46,7 +54,7 @@
                                     <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $storages ?: 'N/A' }}</p>
 
                                     @if($price)
-                                        <div class="mt-2">
+                                        <div class="mt-2 min-h-[3rem]">
                                             <span class="text-red-500 font-bold text-base">
                                                 {{ number_format($price, 0, ',', '.') }}₫
                                             </span>
@@ -55,11 +63,7 @@
                                                     {{ number_format($original, 0, ',', '.') }}₫
                                                 </span>
                                             @endif
-                                            @if($product->sale_percent)
-                                                <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded">
-                                                    -{{ $product->sale_percent }}%
-                                                </span>
-                                            @endif
+                                            
                                         </div>
                                     @else
                                         <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
@@ -78,7 +82,7 @@
     </div>
 
     {{-- Desktop: Grid --}}
-    <div class="hidden lg:grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+    <div class="hidden xl:grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6">
         @foreach($iphoneProducts as $product)
             @php
                 $variant = $product->variants->first();
@@ -90,17 +94,26 @@
 
             <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition group">
                 <a href="{{ route('product.detail', $product->slug) }}">
-                    @if($image)
-                        <div class="aspect-square bg-white">
-                            <img src="{{ asset('storage/' . $image) }}"
-                                 alt="{{ $product->name }}"
-                                 class="w-full h-full object-contain rounded-t-xl transition-transform duration-300 group-hover:-translate-y-2" loading="lazy">
-                        </div>
-                    @else
-                        <div class="aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
-                            Không có ảnh
-                        </div>
-                    @endif
+                    <div class="relative bg-white aspect-[5/6] flex items-center justify-center">
+                        @if($image)
+                            
+                                <img src="{{ asset('storage/' . $image) }}"
+                                    alt="{{ $product->name }}"
+                                    class="object-contain max-h-full max-w-full p-2 transition-transform duration-300 group-hover:-translate-y-2" loading="lazy">
+                            
+                        @else
+                            <div class="aspect-square bg-gray-100 flex items-center justify-center text-gray-400">
+                                Không có ảnh
+                            </div>
+                        @endif
+                        @if($product->sale_percent > 0)
+                                    <span class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded shadow">
+                                        {{-- {{ $product->sale_percent > 0 ? floor($product->sale_percent) : 0 }}% --}}
+                                        -{{ $product->sale_percent }}%
+                                    </span>
+                        @endif
+                    </div>
+                    
 
                     <div class="p-4">
                         <h3 class="text-sm font-semibold text-gray-800 hover:text-blue-600 transition">
@@ -118,11 +131,7 @@
                                         {{ number_format($original, 0, ',', '.') }}₫
                                     </span>
                                 @endif
-                                @if($product->sale_percent)
-                                    <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded">
-                                        -{{ $product->sale_percent }}%
-                                    </span>
-                                @endif
+                                
                             </div>
                         @else
                             <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
@@ -147,6 +156,9 @@
             breakpoints: {
                 768: { // iPad mini / Air
                     slidesPerView: 3,
+                },
+                1024: { // iPad Pro
+                    slidesPerView: 4,
                 },
                 
             }

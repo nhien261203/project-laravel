@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductExportController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 
@@ -157,6 +158,8 @@ Route::middleware(['auth', 'role:admin|staff'])->prefix('admin')->name('admin.')
     Route::resource('products', ProductController::class);
 
     Route::resource('banners', BannerController::class);
+
+    Route::resource('tags', TagController::class);
 
     Route::resource('blogs', BlogController::class);
 
