@@ -11,7 +11,7 @@ export default {
         '60': '60',
         '70': '70',
       },
-      
+
 
       animation: {
         spin: 'spin 1s linear infinite',
@@ -47,6 +47,33 @@ export default {
     },
   },
   plugins: [
-    
+    function ({ addComponents }) {
+      addComponents({
+        '.container-wide': {
+          maxWidth: '100%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          paddingLeft: '1rem',
+          paddingRight: '1rem',
+          '@screen sm': {
+            paddingLeft: '1rem',
+            paddingRight: '1rem',
+          },
+          '@screen lg': {
+            paddingLeft: '6rem',
+            paddingRight: '6rem',
+          },
+          '@screen xl': {
+            paddingLeft: '8rem',
+            paddingRight: '8rem',
+          },
+          '@screen 2xl': {
+            paddingLeft: '12rem',
+            paddingRight: '12rem',
+          },
+        },
+      })
+    },
   ],
+
 }

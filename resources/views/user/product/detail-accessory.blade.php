@@ -1,7 +1,7 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container pt-24 pb-10 rounded shadow">
+<div class="container-wide pt-24 pb-10 rounded shadow">
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>
@@ -29,9 +29,9 @@
             </div>
 
             {{-- Ảnh nhỏ --}}
-            <div class="flex mt-4 gap-3 overflow-x-auto pb-2" id="thumbnailWrapper">
+            <div class="flex justify-center mt-4 gap-3 overflow-x-auto pb-2" id="thumbnailWrapper">
                 @foreach(($defaultImages->count() ? $defaultImages : $fallbackImages ?? []) as $img)
-                    <img src="{{ asset('storage/' . $img->image_path) }}" class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition " onclick="changeMainImage('{{ asset('storage/' . $img->image_path) }}')">
+                    <img src="{{ asset('storage/' . $img->image_path) }}" class="w-20 h-20 object-contain rounded-lg border cursor-pointer hover:scale-105 transition " onclick="changeMainImage('{{ asset('storage/' . $img->image_path) }}')">
                 @endforeach
             </div>
         </div>
@@ -529,7 +529,7 @@
         if (variant.images.length > 0) {
             previewImage.src = '/storage/' + variant.images[0].image_path;
             const thumbs = variant.images.map(img => {
-                return `<img src="/storage/${img.image_path}" class="w-20 h-20 object-cover rounded-lg border cursor-pointer hover:scale-105 transition" onclick="changeMainImage('/storage/${img.image_path}')">`;
+                return `<img src="/storage/${img.image_path}" class="w-20 h-20 object-contain rounded-lg border cursor-pointer hover:scale-105 transition" onclick="changeMainImage('/storage/${img.image_path}')">`;
             });
             thumbnailWrapper.innerHTML = thumbs.join('');
         }
