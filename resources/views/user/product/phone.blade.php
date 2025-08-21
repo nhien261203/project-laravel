@@ -1,7 +1,7 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container mx-auto pt-20 pb-10">
+<div class="container mx-auto pt-20 pb-10 overflow-x-hidden">
     {{-- Breadcrumb --}}
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>

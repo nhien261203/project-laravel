@@ -155,13 +155,15 @@
 
                 {{-- Phụ kiện có submenu --}}
                 <li>
+                    
                     <button class="w-full flex items-center justify-between text-white py-2 border-b border-white/10 toggle-submenu">
-                        <span>Phụ kiện</span>
+                        <a href="{{ route('product.accessory') }}"><span>Phụ kiện</span></a>
+                        
                         <i class="fas fa-caret-down caret-icon"></i>
                     </button>
                     <ul class="pl-4 mt-2 hidden submenu">
-                        <li><a href="#" class="block text-white/80 py-1 text-sm">Phụ kiện di động</a></li>
-                        <li><a href="#" class="block text-white/80 py-1 text-sm">Thiết bị âm thanh</a></li>
+                        <li><a href="{{ route('product.accessory.mobile') }}" class="block text-white/80 py-1 text-sm">Phụ kiện di động</a></li>
+                        <li><a href="{{ route('product.accessory.audio') }}" class="block text-white/80 py-1 text-sm">Thiết bị âm thanh</a></li>
                     </ul>
                 </li>
 

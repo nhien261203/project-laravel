@@ -21,6 +21,16 @@
 @keyframes marquee-linear { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
 table td, table th { border-collapse: collapse; }
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+    #compare-table-wrapper table {
+        display: none;
+    }
+    #compare-table-wrapper .compare-cards {
+        display: block;
+    }
+}
 </style>
 
 <div class="container mx-auto py-10 pt-20" id="compare-container">
@@ -68,49 +78,70 @@ function renderCompareTable() {
     const products = allProducts.filter(p => compareIds.includes(p.id));
     const rows = [
         {label:'Giá', cb: p => p.variants.map(v=>v.price).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).map(v=>v.toLocaleString()+'₫').join(' / ') || 'N/A'},
-        {label:'Bộ nhớ', cb: p => p.variants.map(v=>v.storage).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / ') || 'N/A'},
-        {label:'RAM', cb: p => p.variants.map(v=>v.ram).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / ') || 'N/A'},
-        {label:'Màu sắc', cb: p => p.variants.map(v=>v.color).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / ') || 'N/A'},
-        {label:'Màn hình', cb: p => p.variants.map(v=>v.screen_size).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / ') || 'N/A'},
-        {label:'Trọng lượng', cb: p => p.variants.map(v=>v.weight).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / ') || 'N/A'},
-        {label:'Pin', cb: p => p.variants.map(v=>v.battery).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / ') || 'N/A'},
-        {label:'Chip', cb: p => p.variants.map(v=>v.chip).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / ') || 'N/A'},
-        {label:'Hệ điều hành', cb: p => p.variants.map(v=>v.operating_system).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' / ') || 'N/A'},
+        {label:'Bộ nhớ', cb: p => p.variants.map(v=>v.storage).filter(Boolean).join(' / ') || 'N/A'},
+        {label:'RAM', cb: p => p.variants.map(v=>v.ram).filter(Boolean).join(' / ') || 'N/A'},
+        {label:'Màu sắc', cb: p => p.variants.map(v=>v.color).filter(Boolean).join(' / ') || 'N/A'},
+        {label:'Màn hình', cb: p => p.variants.map(v=>v.screen_size).filter(Boolean).join(' / ') || 'N/A'},
+        {label:'Trọng lượng', cb: p => p.variants.map(v=>v.weight).filter(Boolean).join(' / ') || 'N/A'},
+        {label:'Pin', cb: p => p.variants.map(v=>v.battery).filter(Boolean).join(' / ') || 'N/A'},
+        {label:'Chip', cb: p => p.variants.map(v=>v.chip).filter(Boolean).join(' / ') || 'N/A'},
+        {label:'Hệ điều hành', cb: p => p.variants.map(v=>v.operating_system).filter(Boolean).join(' / ') || 'N/A'},
         {label:'Đã bán', cb: p => p.variants.reduce((sum,v)=>sum+(v.sold||0),0)},
     ];
 
+    // bảng ngang desktop
     let html = `<div class="overflow-auto bg-white rounded-xl shadow-xl ring-1 ring-gray-200">
     <table class="table-auto min-w-[900px] w-full text-sm text-gray-800 border-separate border-spacing-0">
         <thead class="sticky top-0 z-10 bg-blue-50 text-xs uppercase text-gray-600">
             <tr>
                 <th class="p-4 border-r sticky-col font-bold text-left bg-blue-100">Thuộc tính</th>`;
-
     products.forEach(p => {
         const img = p.variants[0]?.images?.[0]?.image_path;
         html += `<th class="p-4 text-center relative group align-top min-w-[220px] bg-white" data-id="${p.id}">
             <div class="flex flex-col items-center">
                 ${img ? `<img src="/storage/${img}" alt="${p.name}" class="h-28 object-contain rounded-xl shadow mb-2">` 
-                        : `<div class="w-full h-28 flex items-center justify-center text-gray-400 text-sm italic bg-gray-50 rounded mb-2">Không có ảnh</div>`}
+                      : `<div class="w-full h-28 flex items-center justify-center text-gray-400 bg-gray-50 rounded mb-2">Không có ảnh</div>`}
                 <div class="text-base font-semibold text-gray-800 mb-1 text-center truncate max-w-[180px]">${p.name}</div>
             </div>
             <button onclick="removeFromCompare(${p.id})"
-                class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-red-500 text-white text-sm rounded-full hover:bg-red-600 transition-all transform hover:scale-110 shadow-md"
-                title="Xoá sản phẩm">&times;</button>
+                class="absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-red-500 text-white text-sm rounded-full hover:bg-red-600">&times;</button>
         </th>`;
     });
-
-    html += `</tr></thead><tbody class="text-sm">`;
-
+    html += `</tr></thead><tbody>`;
     rows.forEach(r => {
         html += `<tr class="border-t hover:bg-gray-50 transition">
             <td class="p-4 font-medium text-gray-700 sticky-col border-r">${r.label}</td>`;
-        products.forEach(p => html += `<td class="p-4 text-center align-middle" data-id="${p.id}">${r.cb(p)}</td>`);
+        products.forEach(p => html += `<td class="p-4 text-center">${r.cb(p)}</td>`);
         html += `</tr>`;
     });
-
     html += `</tbody></table></div>`;
 
-    compareContainer.innerHTML = html;
+    // card dọc mobile
+    let cards = `<div class="compare-cards hidden space-y-4">`;
+    products.forEach(p => {
+        const img = p.variants[0]?.images?.[0]?.image_path;
+        cards += `<div class="bg-white rounded-xl shadow p-4">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-3">
+                    ${img ? `<img src="/storage/${img}" class="h-16 w-16 object-contain rounded">` 
+                          : `<div class="h-16 w-16 flex items-center justify-center bg-gray-50 text-gray-400">N/A</div>`}
+                    <div>
+                        <div class="font-semibold text-gray-800">${p.name}</div>
+                    </div>
+                </div>
+                <button onclick="removeFromCompare(${p.id})" class="w-6 h-6 flex items-center justify-center bg-red-500 text-white text-sm rounded-full">&times;</button>
+            </div>`;
+        rows.forEach(r => {
+            cards += `<div class="flex justify-between border-t py-2 text-sm">
+                <span class="font-medium text-gray-600">${r.label}</span>
+                <span class="text-gray-800 text-right">${r.cb(p)}</span>
+            </div>`;
+        });
+        cards += `</div>`;
+    });
+    cards += `</div>`;
+
+    compareContainer.innerHTML = html + cards;
 }
 
 function removeFromCompare(productId) {
