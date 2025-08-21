@@ -1,7 +1,7 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container mx-auto pt-20 pb-10">
+<div class="container mx-auto pt-20 pb-10 overflow-x-hidden">
     {{-- Breadcrumb --}}
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
@@ -9,7 +9,7 @@
         <span class="text-gray-800 font-medium">iPhone</span>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow space-y-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow mb-8">
         <form method="GET" id="filterForm"></form>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
@@ -20,7 +20,7 @@
             <div>
                 <h3 class="text-base font-semibold text-gray-800 mb-3">Lọc theo giá</h3>
                 <div class="flex flex-wrap gap-2 text-sm">
-                    @foreach(['under_10' => 'Dưới 10 triệu', 'from_10_to_20' => '10 – 20 triệu', 'over_20' => 'Trên 20 triệu'] as $key => $label)
+                    @foreach([ 'from_10_to_20' => '10 – 20 triệu', 'over_20' => 'Trên 20 triệu'] as $key => $label)
                         <button type="button"
                             class="btn-filter px-3 py-2 rounded-full border transition
                                 {{ in_array($key, request('price_ranges', [])) ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
@@ -35,7 +35,7 @@
     </div>
 
     {{-- Danh sách sản phẩm iPhone --}}
-    <div class="bg-white p-6 rounded-xl shadow space-y-6">
+    <div class="bg-white p-6 rounded-xl shadow space-y-6 overflow-hidden"> {{-- fix trượt ngang --}}
         @if($iphoneProducts->count())
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
                 @foreach($iphoneProducts as $product)
@@ -47,35 +47,42 @@
                     @endphp
 
                     <a href="{{ route('product.detail', $product->slug) }}"
-                       class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:border-blue-400">
-                        @if($image)
-                            <img src="{{ asset('storage/' . $image) }}" alt="{{ $product->name }}"
-                                 class="w-full h-40 md:h-44 object-contain bg-white p-2">
-                        @else
-                            <div class="w-full h-44 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-                                Không có ảnh
-                            </div>
-                        @endif
+                    class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:border-blue-400 relative">
+                        
+                        {{-- Ảnh + badge sale --}}
+                        <div class="relative w-full h-40 md:h-44 bg-white flex items-center justify-center">
+                            @if($image)
+                                <img src="{{ asset('storage/' . $image) }}" 
+                                    alt="{{ $product->name }}"
+                                    class="max-h-full max-w-full object-contain p-2 mt-5">
+                            @else
+                                <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+                                    Không có ảnh
+                                </div>
+                            @endif
 
-                        <div class="p-4 relative">
+                            @if($product->sale_percent > 0)
+                                <span class="absolute top-1 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded shadow">
+                                    -{{ $product->sale_percent }}%
+                                </span>
+                            @endif
+                        </div>
+
+                        {{-- Nội dung --}}
+                        <div class="p-4">
                             <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
                                 {{ $product->name }}
                             </h3>
-                            <p class="text-xs text-gray-500 mt-1">Bộ nhớ: {{ $product->all_storages ?? 'N/A' }}</p>
+                            <p class="text-xs text-gray-500 mt-1 ">{{ $product->all_storages ?? 'N/A' }}</p>
 
                             @if($price)
-                                <div class="mt-2">
+                                <div class="mt-2 min-h-[3rem]">
                                     <span class="text-red-500 font-bold">
                                         {{ number_format($price, 0, ',', '.') }}₫
                                     </span>
                                     @if($originalPrice && $originalPrice > $price)
-                                        <span class="text-sm text-gray-400 line-through ml-2">
+                                        <span class="text-xs text-gray-400 line-through ml-2">
                                             {{ number_format($originalPrice, 0, ',', '.') }}₫
-                                        </span>
-                                    @endif
-                                    @if($product->sale_percent > 0)
-                                        <span class="ml-2 text-xs text-green-600 font-semibold bg-green-100 px-2 py-0.5 rounded">
-                                            -{{ $product->sale_percent }}%
                                         </span>
                                     @endif
                                 </div>
@@ -83,48 +90,151 @@
                                 <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
                             @endif
                         </div>
+
+                        {{-- Nút so sánh góc phải dưới --}}
+                        {{-- <div class="text-xs text-gray-500 flex items-center gap-1">
+                
+                            <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
+                        </div> --}}
+                        <button
+                            type="button"
+                            onclick="event.stopPropagation(); event.preventDefault(); addToCompare({{ $product->id }}, '{{ request()->segment(1) }}')"
+                            class="absolute bottom-2 right-2 w-6 h-6 flex items-center justify-center rounded-full border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition"
+                            title="Thêm vào so sánh"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </button>
                     </a>
                 @endforeach
             </div>
         @else
-            <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm iPhone nào phù hợp với bộ lọc.</p>
+            <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
         @endif
     </div>
+    <button onclick="goToComparePage('{{ request()->segment(1) }}')" 
+            class="fixed bottom-[120px] right-5 px-4 py-2 bg-blue-600 text-white rounded shadow-lg z-50 hidden">
+        So sánh (<span id="compareCount">0</span>)
+    </button>
 </div>
 @endsection
 
 @push('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const currentParams = new URLSearchParams(window.location.search);
-    const pathname = window.location.pathname;
+    function updateCompareCount() {
+        const category = "{{ request()->segment(1) }}";
+        const compareList = JSON.parse(localStorage.getItem('compare_products')) || {};
+        const selected = compareList[category] || [];
+        const countEl = document.getElementById('compareCount');
+        const btnCompare = document.querySelector('[onclick^="goToComparePage"]');
 
-    document.querySelectorAll('.btn-filter').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const name = btn.getAttribute('data-name');
-            const value = btn.getAttribute('data-value');
+        if (countEl) countEl.textContent = selected.length;
 
-            if (name.endsWith('[]')) {
-                const allValues = currentParams.getAll(name);
-                if (allValues.includes(value)) {
-                    const newValues = allValues.filter(v => v !== value);
-                    currentParams.delete(name);
-                    newValues.forEach(v => currentParams.append(name, v));
+        // Ẩn hoặc hiện nút "So sánh"
+        if (btnCompare) {
+            btnCompare.style.display = selected.length > 0 ? 'block' : 'none';
+        }
+    }
+
+    function addToCompare(productId, categorySlug) {
+        const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
+        compare[categorySlug] = compare[categorySlug] || [];
+
+        if (compare[categorySlug].includes(productId)) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Đã có trong danh sách so sánh',
+                toast: true,
+                position: 'top-end',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            return;
+        }
+
+        if (compare[categorySlug].length >= 4) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Chỉ được so sánh tối đa 4 sản phẩm',
+                toast: true,
+                position: 'top-end',
+                timer: 3000,
+                showConfirmButton: false
+            });
+            return;
+        }
+
+        compare[categorySlug].push(productId);
+        localStorage.setItem("compare_products", JSON.stringify(compare));
+        updateCompareCount();
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Đã thêm vào danh sách so sánh!',
+            toast: true,
+            position: 'top-end',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+
+    function goToComparePage(categorySlug) {
+        const compare = JSON.parse(localStorage.getItem("compare_products")) || {};
+        const ids = compare[categorySlug] || [];
+
+        if (ids.length < 2) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Bạn cần chọn ít nhất 2 sản phẩm để so sánh.',
+                toast: true,
+                position: 'top-end',
+                timer: 2500,
+                showConfirmButton: false
+            });
+            return;
+        }
+
+        const query = ids.map(id => `ids[]=${id}`).join('&');
+        window.location.href = `/so-sanh/${categorySlug}?${query}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateCompareCount();
+
+        const currentParams = new URLSearchParams(window.location.search);
+        const pathname = window.location.pathname;
+
+        document.querySelectorAll('.btn-filter').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const name = btn.getAttribute('data-name');
+                const value = btn.getAttribute('data-value');
+
+                if (name.endsWith('[]')) {
+                    const allValues = currentParams.getAll(name);
+                    if (allValues.includes(value)) {
+                        const newValues = allValues.filter(v => v !== value);
+                        currentParams.delete(name);
+                        newValues.forEach(v => currentParams.append(name, v));
+                    } else {
+                        currentParams.append(name, value);
+                    }
                 } else {
-                    currentParams.append(name, value);
+                    if (currentParams.get(name) === value) {
+                        currentParams.delete(name);
+                    } else {
+                        currentParams.set(name, value);
+                    }
                 }
-            } else {
-                if (currentParams.get(name) === value) {
-                    currentParams.delete(name);
-                } else {
-                    currentParams.set(name, value);
-                }
-            }
 
-            const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
-            window.location.href = newUrl;
+                currentParams.delete('page');
+                const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
+                window.location.href = newUrl;
+            });
         });
     });
-});
 </script>
 @endpush

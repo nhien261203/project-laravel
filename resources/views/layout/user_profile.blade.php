@@ -11,7 +11,12 @@
                 <li><a  href="{{ route('user.orders.index') }}" class="flex items-center gap-2 {{ request()->routeIs('user.orders.index') ? 'text-blue-600 font-bold' : 'hover:text-blue-600' }}"><i class="fa-solid fa-eye"></i> Đơn hàng của bạn</a></li>
 
                 <li><a href="{{ route('password.form') }}" class="flex items-center gap-2 {{ request()->routeIs('password.form') ? 'text-blue-600 font-bold' : 'hover:text-blue-600' }}"><i class="fa-solid fa-lock"></i> Đổi mật khẩu</a></li>
-                <li><a  class="flex items-center gap-2 text-red-600 hover:underline"><i class="fa-solid fa-right-from-bracket"></i> Thoát</a></li>
+                <li><div class="flex items-center gap-2 text-red-600 hover:underline"><i class="fa-solid fa-right-from-bracket"></i> 
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" >Thoát</button>
+                    </form>
+                </div></li>
             </ul>
         </div>
     </div>

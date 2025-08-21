@@ -10,7 +10,7 @@ class PaymentController extends Controller
     public function vnpayPayment(Request $request)
     {
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = route('user.orders.index'); // ✅ URL hợp lệ
+        $vnp_Returnurl = route('user.orders.index'); // URL hợp lệ
         $vnp_TmnCode = "YQVA6LHM"; // Mã website tại VNPAY
         $vnp_HashSecret = "NEHGRPOYU0ZMF3HCNH8QXCFUJIQ6IXUN"; // Chuỗi bí mật
 

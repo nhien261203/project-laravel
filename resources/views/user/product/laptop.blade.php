@@ -1,14 +1,14 @@
 @extends('layout.user')
 
 @section('content') 
-<div class="container mx-auto pt-20 pb-10">
+<div class="container mx-auto pt-20 pb-10 overflow-x-hidden">
     {{-- Breadcrumb --}}
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>
         <span class="text-gray-800 font-medium">Laptop</span>
     </div>
-    <div class="bg-white p-6 rounded-xl shadow space-y-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow mb-8">
         <form method="GET" id="filterForm"></form>
 
         <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 items-start">

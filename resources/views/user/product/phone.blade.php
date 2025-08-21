@@ -9,7 +9,7 @@
         <span class="text-gray-800 font-medium">Điện thoại</span>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow space-y-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow mb-8">
         <form method="GET" id="filterForm"></form>
 
         <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 items-start">

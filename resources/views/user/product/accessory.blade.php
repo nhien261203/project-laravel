@@ -1,7 +1,7 @@
 @extends('layout.user')
 
 @section('content')
-<div class="container mx-auto pt-20 pb-10">
+<div class="container mx-auto pt-20 pb-10 overflow-x-hidden">
     <div class="flex items-center text-sm text-gray-600 space-x-2 p-1">
         <a href="{{ route('home') }}" class="flex items-center hover:text-blue-600">
             Trang chủ
@@ -10,7 +10,7 @@
         <span class="text-gray-800 font-medium">Phụ kiện</span>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow space-y-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow mb-8">
         <form method="GET" id="filterForm"></form>
 
         <div class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6 items-start">
@@ -70,7 +70,7 @@
             </div> --}}
         </div>
     </div>
-     <div class="bg-white p-6 rounded-xl shadow space-y-6 overflow-hidden"> {{-- fix trượt ngang --}}
+    <div class="bg-white p-6 rounded-xl shadow space-y-6 overflow-hidden"> {{-- fix trượt ngang --}}
     @if($products->count())
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
             @foreach($products as $product)
