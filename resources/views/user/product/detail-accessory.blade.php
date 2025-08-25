@@ -5,8 +5,37 @@
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>
+
+        @php
+            $category = $product->category;
+            $parent = $category ? $category->parent : null;
+
+            // Hàm chuyển slug category -> route
+            function categoryRoute($category) {
+                switch ($category->slug) {
+                    case 'dien-thoai': return route('product.phone');
+                    case 'laptop': return route('product.laptop');
+                    case 'phu-kien': return route('product.accessory');
+                    case 'phu-kien-di-dong': return route('product.accessory.mobile');
+                    case 'thiet-bi-am-thanh': return route('product.accessory.audio');
+                    default: return '#';
+                }
+            }
+        @endphp
+
+        @if($parent)
+            <a href="{{ categoryRoute($parent) }}" class="hover:text-blue-600">{{ $parent->name }}</a>
+            <span class="text-gray-400">›</span>
+        @endif
+
+        @if($category)
+            <a href="{{ categoryRoute($category) }}" class="hover:text-blue-600">{{ $category->name }}</a>
+            <span class="text-gray-400">›</span>
+        @endif
+
         <span class="text-gray-800 font-medium">{{ $product->name }}</span>
     </div>
+
     
     <div class="grid grid-cols-1 md:grid-cols-[4fr_3fr] gap-6">
         {{-- Hình ảnh --}}

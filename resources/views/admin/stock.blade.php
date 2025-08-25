@@ -84,7 +84,7 @@
                             <td class="px-4 py-3">{{ $products->firstItem() + $index }}</td>
                             <td class="px-4 py-3">
                                 <img src="{{ $item['image'] ?? '/images/no-image.png' }}" 
-                                     class="w-12 h-12 rounded-lg object-cover">
+                                    class="w-12 h-12 rounded-lg object-contain">
                             </td>
                             <td class="px-4 py-3 font-semibold">{{ $item['product_name'] }}</td>
                             <td class="px-4 py-3">{{ $item['color'] }}</td>

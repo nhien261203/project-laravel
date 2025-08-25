@@ -63,7 +63,7 @@
                     <th class="px-4 py-2 border">Nội dung</th>
                     <th class="px-4 py-2 border">Trạng thái</th>
                     <th class="px-4 py-2 border">Thời gian</th>
-                    <th class="px-4 py-2 border text-center">Hành động</th>
+                    <th class="px-4 py-2 border">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,7 +112,7 @@
                         </td>
 
                         {{-- Hành động Dropdown --}}
-                        <td class="px-4 py-2 border text-center">
+                        <td class="px-4 py-2 border text-center ">
                             <form method="POST" action="" id="action-form-{{ $comment->id }}">
                                 @csrf
                                 <select onchange="handleAction(this, {{ $comment->id }})"
@@ -125,7 +125,7 @@
                                         <option value="delete">Xóa</option>
                                     @elseif ($comment->approved === 'approved')
                                         <option value="unapprove">Chuyển về chờ duyệt</option>
-                                        <option value="reject">Từ chối</option>
+                                        {{-- <option value="reject">Từ chối</option> --}}
                                         <option value="delete">Xóa</option>
                                     @elseif ($comment->approved === 'rejected')
                                         <option value="approve">Duyệt lại</option>
