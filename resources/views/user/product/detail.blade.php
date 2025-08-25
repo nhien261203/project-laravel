@@ -238,6 +238,10 @@
                             <td class="py-2 text-gray-800 text-right" id="detailStorage">{{ $defaultVariant->storage }}</td>
                         </tr>
                         <tr>
+                            <td class="py-2 font-semibold text-gray-700">Ram</td>
+                            <td class="py-2 text-gray-800 text-right" id="detailRam">{{ $defaultVariant->ram }}</td>
+                        </tr>
+                        <tr>
                             <td class="py-2 font-semibold text-gray-700">Màn hình</td>
                             <td class="py-2 text-gray-800 text-right" id="detailScreen">{{ $defaultVariant->screen_size }}</td>
                         </tr>
@@ -599,6 +603,7 @@
 
         document.getElementById('detailColor').innerText = variant.color ?? '';
         document.getElementById('detailStorage').innerText = variant.storage ?? '';
+        document.getElementById('detailRam').innerText = variant.ram ?? '';
         document.getElementById('detailScreen').innerText = variant.screen_size ?? '';
         document.getElementById('detailChip').innerText = variant.chip ?? '';
         document.getElementById('detailBattery').innerText = variant.battery ?? '';
