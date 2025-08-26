@@ -20,10 +20,13 @@ class FavoriteController extends Controller
     {
         $favorites = $this->favoriteRepo->getUserFavorites(
             $request->user()?->id,
-            $request->session()->getId()
+            $request->session()->getId(),
+            8
         );
-        return response()->json($favorites);
+
+        return view('user.favorites.index', compact('favorites'));
     }
+
 
     public function store(Request $request)
     {

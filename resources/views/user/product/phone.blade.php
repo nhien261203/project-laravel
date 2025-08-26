@@ -144,7 +144,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                         </svg>
                     </button>
-                    <button
+                    {{-- <button
                         type="button"
                         onclick="event.stopPropagation(); event.preventDefault(); toggleFavorite({{ $product->id }})"
                         class="absolute top-2 left-2 w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 bg-white text-gray-400 opacity-0 group-hover:opacity-100 hover:text-red-500 hover:border-red-500 transition favorite-btn"
@@ -157,7 +157,7 @@
                             3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 
                             3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
-                    </button>
+                    </button> --}}
                 </a>
             @endforeach
         </div>

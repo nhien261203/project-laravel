@@ -6,16 +6,20 @@ use App\Models\Favorite;
 
 class FavoriteRepository implements FavoriteRepositoryInterface
 {
-    public function getUserFavorites($userId = null, $sessionId = null)
+    public function getUserFavorites($userId = null, $sessionId = null, $perPage = 8)
     {
-        $query = Favorite::with(['product', 'variant']);
+        $query = Favorite::with(['product.variants', 'variant']);
+
         if ($userId) {
             $query->where('user_id', $userId);
         } else {
             $query->where('session_id', $sessionId);
         }
-        return $query->get();
+
+        // Sắp xếp mới nhất trước, rồi phân trang
+        return $query->latest()->paginate($perPage);
     }
+
 
     public function addToFavorite($userId = null, $sessionId = null, $productId, $variantId = null)
     {

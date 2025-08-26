@@ -86,7 +86,7 @@ Route::post('/contact', [UserContactController::class, 'submit'])->name('contact
 
 Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
 
-Route::get('/favorites', [FavoriteController::class, 'index']);
+Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
 Route::post('/favorites', [FavoriteController::class, 'store']);
 // Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy']);
 Route::delete('/favorites/by-product/{productId}', [FavoriteController::class, 'destroyByProduct']);
