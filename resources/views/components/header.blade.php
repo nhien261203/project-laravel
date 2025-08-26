@@ -75,7 +75,12 @@
                     @endif
                 </a>
 
-
+                <a href="" class="relative py-3">
+                    <i class="fas fa-heart text-white text-xl hover:text-slate-300"></i>
+                    <div id="favoriteQtyHeader" class="hidden w-4 h-4 bg-red-500 text-white rounded-full absolute top-0 left-[9px] flex items-center justify-center text-xs">
+                        0
+                    </div>
+                </a>
                 {{-- User Dropdown --}}
                 <div class="relative group py-5 cursor-pointer">
                     <i class="far fa-user text-white text-xl hover:text-slate-300"></i>
@@ -212,6 +217,7 @@
         }
 
     </script>
+
     <script>
     document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.getElementById('search-input');
@@ -345,6 +351,110 @@
     });
 });
 
+</script>
+
+<script>
+    async function updateFavoriteQty() {
+        try {
+            const res = await fetch('/favorites/count');
+            if (res.ok) {
+                const data = await res.json();
+                const qtyEl = document.getElementById('favoriteQtyHeader');
+                if (qtyEl) {
+                    qtyEl.innerText = data.count;
+                    qtyEl.classList.toggle('hidden', data.count === 0);
+                }
+            }
+        } catch (e) {
+            console.error('Lỗi khi load số lượng yêu thích:', e);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateFavoriteQty(); // Cập nhật khi load trang
+        setInterval(updateFavoriteQty, 3000); // Cập nhật mỗi 10s (hoặc 5s nếu muốn)
+    });
+</script>
+
+<script>
+async function toggleFavorite(productId) {
+    try {
+        const btn = document.querySelector(`.favorite-btn[data-product-id="${productId}"]`);
+        const isFavorited = btn.classList.contains('text-red-500');
+
+        if (isFavorited) {
+            // Xóa khỏi yêu thích
+            const response = await fetch(`/favorites/by-product/${productId}`, {
+                method: 'DELETE',
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+            });
+            if (response.ok) {
+                btn.classList.remove('text-red-500', 'border-red-500');
+                btn.classList.add('text-gray-400', 'border-gray-300');
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Đã xóa khỏi yêu thích!',
+                    toast: true,
+                    position: 'top-end',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                updateFavoriteQty(); // Cập nhật số lượng yêu thích
+            }
+        } else {
+            // Thêm vào yêu thích
+            const response = await fetch(`/favorites`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ product_id: productId })
+            });
+            if (response.ok) {
+                btn.classList.add('text-red-500', 'border-red-500');
+                btn.classList.remove('text-gray-400', 'border-gray-300');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đã thêm vào yêu thích!',
+                    toast: true,
+                    position: 'top-end',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                updateFavoriteQty(); // Cập nhật số lượng yêu thích
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Có lỗi xảy ra, vui lòng thử lại!',
+            toast: true,
+            position: 'top-end',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    }
+}
+
+// Khi load trang, nếu user login, load danh sách yêu thích và tô đỏ sẵn
+document.addEventListener('DOMContentLoaded', async function() {
+    @if(auth()->check())
+        const res = await fetch(`/favorites`);
+        if (res.ok) {
+            const favorites = await res.json();
+            favorites.forEach(fav => {
+                const btn = document.querySelector(`.favorite-btn[data-product-id="${fav.product_id}"]`);
+                if (btn) {
+                    btn.classList.add('text-red-500','border-red-500');
+                    btn.classList.remove('text-gray-400','border-gray-300');
+                }
+            });
+        }
+    @endif
+});
 </script>
 
 

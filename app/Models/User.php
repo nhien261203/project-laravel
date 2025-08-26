@@ -48,8 +48,10 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-
-    // app/Models/User.php
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 
     public function recentProducts()
     {

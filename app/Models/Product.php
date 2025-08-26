@@ -44,4 +44,9 @@ class Product extends Model
     {
         return $this->hasMany(Review::class)->where('status', 'approved');
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }

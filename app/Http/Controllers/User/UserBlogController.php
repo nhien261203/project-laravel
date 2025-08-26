@@ -11,7 +11,7 @@ class UserBlogController extends Controller
 {
     public function index(Request $request)
     {
-        $tags = Tag::all();
+        $tags = Tag::whereHas('blogs')->get();
         $tagIds = $request->input('tags', []);
 
         $blogs = Blog::with('tags')

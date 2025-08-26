@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\User\CompareController;
+use App\Http\Controllers\User\FavoriteController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\PaymentController;
 use App\Http\Controllers\User\ReviewController;
@@ -84,6 +85,13 @@ Route::get('/contact', [UserContactController::class, 'show'])->name('contact.sh
 Route::post('/contact', [UserContactController::class, 'submit'])->name('contact.submit');
 
 Route::middleware('auth')->post('/comments', [UserCommentController::class, 'store'])->name('comments.store');
+
+Route::get('/favorites', [FavoriteController::class, 'index']);
+Route::post('/favorites', [FavoriteController::class, 'store']);
+// Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy']);
+Route::delete('/favorites/by-product/{productId}', [FavoriteController::class, 'destroyByProduct']);
+Route::get('/favorites/count', [FavoriteController::class, 'count'])->name('favorites.count');
+// Route::post('/favorites/toggle/{productId}', [FavoriteController::class, 'toggle']);
 
 Route::post('/viewed-products/{product}', [UserRecentProductController::class, 'store'])->name('recently.viewed.store');
 // web.php

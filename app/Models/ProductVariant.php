@@ -28,8 +28,6 @@ class ProductVariant extends Model
         'import_price',
     ];
 
-
-
     // xu li tru so luong khi don hang hoan thanh
     public function deductStock(int $quantity)
     {
@@ -46,6 +44,11 @@ class ProductVariant extends Model
     public function scopeInStock($query)
     {
         return $query->whereRaw('quantity - sold > 0');
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class, 'product_variant_id');
     }
 
     // Sản phẩm cha

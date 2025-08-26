@@ -97,6 +97,10 @@ class AdminAuthController extends Controller
         app(\App\Repositories\UserRecentProduct\UserRecentProductRepositoryInterface::class)
             ->mergeRecentViewed(Auth::id(), $oldSessionId);
 
+        app(\App\Repositories\Favorite\FavoriteRepositoryInterface::class)
+            ->mergeFavorite(Auth::id(), $oldSessionId);
+
+
         session(['cart_merged' => true]);
 
         return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công! Đây là tổng quan quản trị !');
