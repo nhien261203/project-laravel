@@ -63,3 +63,20 @@
         </div>
     </nav>
 @endif
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const overlay = document.getElementById('loadingOverlay');
+    
+    
+    document.querySelectorAll('.pagination a, nav[aria-label="Pagination Navigation"] a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            
+            if (this.hostname === window.location.hostname) {
+                overlay.classList.remove('pointer-events-none', 'opacity-0');
+                overlay.classList.add('opacity-100');
+            }
+        });
+    });
+});
+
+</script> --}}

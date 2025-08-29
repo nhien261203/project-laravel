@@ -1,12 +1,23 @@
 @extends('layout.user')
 
 @section('content')
+
 <div class="container mx-auto pt-20 pb-10 overflow-x-hidden">
     {{-- Breadcrumb --}}
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>
         <span class="text-gray-800 font-medium">Điện thoại</span>
+    </div>
+    <div id="loadingOverlay"
+        class="fixed inset-0 bg-black/30 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white p-4 rounded shadow flex items-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            {{-- <span>Đang tải...</span> --}}
+        </div>
     </div>
 
     <div class="bg-white p-6 rounded-xl shadow mb-8">
@@ -162,7 +173,18 @@
             @endforeach
         </div>
     @else
-        <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
+        <div class="text-center py-12">
+                <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
+                    alt="No result"
+                    class="w-40 h-40 mx-auto mb-6 opacity-80" />
+                
+                <p class="text-gray-500 text-lg">
+                    Không tìm thấy sản phẩm phù hợp với bộ lọc
+                    
+                </p>
+
+                
+        </div>
     @endif
 </div>
 
@@ -260,39 +282,53 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        updateCompareCount();
+    updateCompareCount();
 
-        const currentParams = new URLSearchParams(window.location.search);
-        const pathname = window.location.pathname;
+    const currentParams = new URLSearchParams(window.location.search);
+    const pathname = window.location.pathname;
+    //const overlay = document.getElementById('loadingOverlay');
 
-        document.querySelectorAll('.btn-filter').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const name = btn.getAttribute('data-name');
-                const value = btn.getAttribute('data-value');
+    document.querySelectorAll('.btn-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const name = btn.getAttribute('data-name');
+            const value = btn.getAttribute('data-value');
 
-                if (name.endsWith('[]')) {
-                    const allValues = currentParams.getAll(name);
-                    if (allValues.includes(value)) {
-                        const newValues = allValues.filter(v => v !== value);
-                        currentParams.delete(name);
-                        newValues.forEach(v => currentParams.append(name, v));
-                    } else {
-                        currentParams.append(name, value);
-                    }
+            if (name.endsWith('[]')) {
+                const allValues = currentParams.getAll(name);
+                if (allValues.includes(value)) {
+                    const newValues = allValues.filter(v => v !== value);
+                    currentParams.delete(name);
+                    newValues.forEach(v => currentParams.append(name, v));
                 } else {
-                    if (currentParams.get(name) === value) {
-                        currentParams.delete(name);
-                    } else {
-                        currentParams.set(name, value);
-                    }
+                    currentParams.append(name, value);
                 }
+            } else {
+                if (currentParams.get(name) === value) {
+                    currentParams.delete(name);
+                } else {
+                    currentParams.set(name, value);
+                }
+            }
 
-                currentParams.delete('page');
-                const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
-                window.location.href = newUrl;
-            });
+            currentParams.delete('page');
+            const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
+            
+
+            // Hiển thị overlay trước khi reload
+            // overlay.classList.remove('pointer-events-none', 'opacity-0');
+            // overlay.classList.add('opacity-100');
+
+            // Delay để overlay render
+            // setTimeout(() => {
+            //     window.location.href = newUrl;
+            // }, 200);
+            window.location.href = newUrl;
         });
     });
+    
+
+});
+
 </script>
 
 @endpush

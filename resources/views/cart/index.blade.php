@@ -40,9 +40,7 @@
 }
 </style>
 
-
 <div class="container pt-20 pb-5 overflow-hidden">
-
 
     @if ($cart->items->isEmpty())
         <div class="bg-white flex-grow shadow-md rounded-lg p-6 text-center space-y-5 max-w-md mx-auto">
@@ -59,7 +57,6 @@
         </div>
     @else
 
-    
 
     <div class="max-w-5xl mx-auto">
         <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
@@ -72,13 +69,18 @@
         {{-- Cột trái: Danh sách sản phẩm --}}
         <div class="md:col-span-1 space-y-6 ">
             @foreach ($cart->items as $item)
+                @php
+                    $detailRoute = $item->snapshot_category_slug === 'phu-kien' 
+                        ? route('product.detailAccessory', $item->snapshot_product_slug) 
+                        : route('product.detail', $item->snapshot_product_slug);
+                @endphp
                 <div class="flex flex-col md:flex-row bg-white shadow rounded p-4 gap-4">
                     <div class="w-full md:w-28 h-28 flex-shrink-0 border rounded overflow-hidden">
-                        <img src="{{ asset('storage/' . $item->snapshot_image) }}" alt="Ảnh sản phẩm" class="w-full h-full object-contain">
+                        <a href="{{  $detailRoute }}"><img src="{{ asset('storage/' . $item->snapshot_image) }}" alt="Ảnh sản phẩm" class="w-full h-full object-contain"></a>
                     </div>
 
                     <div class="flex-1 space-y-1">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ $item->snapshot_product_name }}</h3>
+                        <a href="{{  $detailRoute }}"><h3 class="text-lg font-semibold text-gray-800">{{ $item->snapshot_product_name }}</h3></a>
                         <p class="text-sm text-gray-600">
                             @if($item->snapshot_color)
                                 Màu: <strong>{{ $item->snapshot_color }}</strong>
@@ -106,16 +108,34 @@
                                 @endif
                             </div>
                             <div class="flex items-center gap-3 mt-2 sm:mt-0">
-                                <form method="POST" action="{{ route('cart.update', $item->product_variant_id) }}" class="flex items-center gap-2">
-                                    @csrf @method('PUT')
-                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1"
-                                        class="w-16 border rounded px-2 py-1 text-center text-sm">
-                                    <button type="submit" class="text-sm text-blue-600 hover:underline">Cập nhật</button>
+                                <form method="POST" action="{{ route('cart.update', $item->product_variant_id) }}" 
+                                    class="flex items-center border rounded-lg border-gray-300 mt-2 qty-form ">
+                                    @csrf 
+                                    @method('PUT')
+
+                                    <!-- Nút trừ -->
+                                    <button type="button" 
+                                            class="qty-btn-minus text-sm text-gray-700 px-3 py-1 border-r border-gray-500">
+                                        -
+                                    </button>
+
+                                    <!-- Ô số -->
+                                    <input type="text" 
+                                        name="quantity" 
+                                        value="{{ $item->quantity }}" 
+                                        class="w-8 text-center border-none qty-input focus:outline-none focus:ring-0" 
+                                        readonly>
+
+                                    <!-- Nút cộng -->
+                                    <button type="button" 
+                                            class="qty-btn-plus text-sm text-gray-700 px-3 py-1 border-l border-gray-500">
+                                        +
+                                    </button>
                                 </form>
 
                                 <form method="POST" action="{{ route('cart.remove', $item->product_variant_id) }}">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:underline text-sm">Xoá</button>
+                                    <button type="button" class="text-red-500 cursor-pointer text-xl btn-delete mt-3">&times;</button>
                                 </form>
                             </div>
                         </div>
@@ -642,3 +662,80 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const forms = document.querySelectorAll('.qty-form');
+
+    forms.forEach(form => {
+        const input = form.querySelector('.qty-input');
+        const btnMinus = form.querySelector('.qty-btn-minus');
+        const btnPlus = form.querySelector('.qty-btn-plus');
+
+        // Hàm cập nhật trạng thái nút trừ
+        function updateMinusButton() {
+            btnMinus.disabled = (parseInt(input.value) <= 1);
+            btnMinus.classList.toggle('opacity-50', parseInt(input.value) <= 1); // làm mờ khi disabled
+        }
+
+        // Khởi tạo lần đầu
+        updateMinusButton();
+
+        btnMinus.addEventListener('click', () => {
+            let qty = parseInt(input.value) || 1;
+            if (qty > 1) {
+                qty--;
+                input.value = qty;
+                form.submit();
+                updateMinusButton();
+            }
+        });
+
+        btnPlus.addEventListener('click', () => {
+            let qty = parseInt(input.value) || 1;
+            qty++;
+            input.value = qty;
+            form.submit();
+            updateMinusButton();
+        });
+    });
+});
+
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const qtyInputs = document.querySelectorAll('.auto-update-qty');
+
+    qtyInputs.forEach(input => {
+        input.addEventListener('change', function () {
+            const form = this.closest('form');
+            if(form) form.submit();
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: 'Xác nhận xoá',
+                    text: "Bạn có chắc muốn xoá sản phẩm này khỏi giỏ hàng?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: ' Xoá',
+                    cancelButtonText: 'Huỷ'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.requestSubmit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+

@@ -1,6 +1,18 @@
 @extends('layout.user')
 
 @section('content')
+<style>
+    /* Ẩn nút tăng/giảm mặc định của input number */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield; /* Firefox */
+    }
+
+</style>
 <div class="container-wide max-w-9/10 pt-24 pb-10 rounded shadow">
 
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
@@ -92,6 +104,23 @@
                 @endif
             </div>
 
+            {{-- Bộ nhớ --}}
+            <div class="mb-4">
+                <label class="block text-sm font-semibold mb-1">Bộ nhớ:</label>
+                <div class="flex flex-wrap gap-2" id="storageOptions">
+                    @foreach($storages as $storage)
+                        @php
+                            $isActive = $storage === $defaultVariant->storage;
+                        @endphp
+                        <button
+                            class="storage-option px-4 py-1 border rounded-md text-sm {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
+                            data-storage="{{ $storage }}"
+                            onclick="selectStorage(this, '{{ $storage }}')">
+                            {{ $storage }}
+                        </button>
+                    @endforeach
+                </div>
+            </div>
             {{-- Màu sắc --}}
             <div class="mb-4">
                 <label class="block text-sm font-semibold mb-1">Màu sắc:</label>
@@ -110,53 +139,38 @@
                 </div>
             </div>
 
-            {{-- Bộ nhớ --}}
-            <div class="mb-4">
-                <label class="block text-sm font-semibold mb-1">Bộ nhớ:</label>
-                <div class="flex flex-wrap gap-2" id="storageOptions">
-                    @foreach($storages as $storage)
-                        @php
-                            $isActive = $storage === $defaultVariant->storage;
-                        @endphp
-                        <button
-                            class="storage-option px-4 py-1 border rounded-md text-sm {{ $isActive ? 'bg-gray-800 text-white ring ring-gray-400' : '' }}"
-                            data-storage="{{ $storage }}"
-                            onclick="selectStorage(this, '{{ $storage }}')">
-                            {{ $storage }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-
 
             {{-- Số lượng --}}
             <div class="mb-4 w-max">
                 <label for="quantity" class="block text-sm font-semibold mb-1">Số lượng:</label>
-                <div class="relative w-32">
-                    <input
-                    type="number"
-                    name="quantity"
-                    id="quantity"
-                    value="1"
-                    min="1"
-                    class="w-full rounded-full border border-gray-300 text-center px-6 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
+                <div class="flex items-center w-28 border rounded overflow-hidden">
                     <!-- Nút giảm -->
-                    <button
-                    type="button"
-                    onclick="adjustQty(-1)"
-                    class="absolute left-1 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-lg font-bold rounded-full w-8 h-8 flex items-center justify-center select-none"
-                    aria-label="Giảm số lượng"
+                    <button 
+                        type="button" 
+                        onclick="adjustQty(-1)" 
+                        class="w-1/3 py-1 text-lg font-bold flex items-center justify-center select-none"
+                        aria-label="Giảm số lượng"
                     >−</button>
 
+                    <!-- Ô hiển thị số lượng -->
+                    <input 
+                        type="number" 
+                        name="quantity" 
+                        id="quantity" 
+                        value="1" 
+                        min="1" 
+                        class="w-1/3 text-center border-x focus:outline-none focus:ring-0" readonly
+                    />
+
                     <!-- Nút tăng -->
-                    <button
-                    type="button"
-                    onclick="adjustQty(1)"
-                    class="absolute right-1 top-1/2 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-lg font-bold rounded-full w-8 h-8 flex items-center justify-center select-none"
-                    aria-label="Tăng số lượng"
+                    <button 
+                        type="button" 
+                        onclick="adjustQty(1)" 
+                        class="w-1/3 py-1 text-lg font-bold flex items-center justify-center select-none"
+                        aria-label="Tăng số lượng"
                     >+</button>
                 </div>
+
             </div>
 
             <form id="addToCartForm" class="flex gap-3 items-center" onsubmit="return addToCart(event)">

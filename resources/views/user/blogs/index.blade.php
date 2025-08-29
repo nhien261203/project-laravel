@@ -9,6 +9,16 @@
         <span class="text-gray-800 font-medium">Tin tức</span>
     </div>
 
+    <div id="loadingOverlay"
+        class="fixed inset-0 bg-black/30 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white p-4 rounded shadow flex items-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+        </div>
+    </div>
+
     {{-- Bộ lọc theo tag --}}
     @if ($tags->count())
         <div class="flex flex-wrap gap-3 items-center mb-8 px-1">
@@ -100,4 +110,23 @@
         <p class="text-gray-500 text-center mt-10">Không tìm thấy bài viết nào.</p>
     @endif
 </div>
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.getElementById('loadingOverlay');
+        
+        const filterLinks = document.querySelectorAll('a[href*="blogs"]');
+
+        filterLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                
+                if (link.hostname === window.location.hostname) {
+                    overlay.classList.remove('pointer-events-none');
+                    overlay.classList.remove('opacity-0');
+                    overlay.classList.add('opacity-100');
+                }
+            });
+        });
+    });
+</script> --}}
+
 @endsection

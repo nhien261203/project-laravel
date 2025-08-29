@@ -9,6 +9,17 @@
         <span class="text-gray-800 font-medium">iPhone</span>
     </div>
 
+    <div id="loadingOverlay"
+        class="fixed inset-0 bg-black/30 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white p-4 rounded shadow flex items-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            {{-- <span>Đang tải...</span> --}}
+        </div>
+    </div>
+
     <div class="bg-white p-6 rounded-xl shadow mb-8">
         <form method="GET" id="filterForm"></form>
 
@@ -207,6 +218,7 @@
 
         const currentParams = new URLSearchParams(window.location.search);
         const pathname = window.location.pathname;
+        const overlay = document.getElementById('loadingOverlay');
 
         document.querySelectorAll('.btn-filter').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -232,7 +244,14 @@
 
                 currentParams.delete('page');
                 const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
-                window.location.href = newUrl;
+                // Hiển thị overlay trước khi reload
+                overlay.classList.remove('pointer-events-none', 'opacity-0');
+                overlay.classList.add('opacity-100');
+
+                // Delay để overlay render
+                setTimeout(() => {
+                    window.location.href = newUrl;
+                }, 150);
             });
         });
     });
