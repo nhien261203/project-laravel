@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\VoucherController;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ChatBotController;
 use App\Http\Controllers\User\CompareController;
 use App\Http\Controllers\User\FavoriteController;
 use App\Http\Controllers\User\HomeController;
@@ -321,3 +322,11 @@ Route::get('/admin/export/products/txt', [ProductExportController::class, 'expor
 Route::get('/admin/export/products/pdf', [ProductExportController::class, 'exportToPdf'])->name('admin.products.export.pdf');
 
 Route::get('/admin/export/orders/pdf', [OrderController::class, 'exportPdf'])->name('admin.orders.export.pdf');
+
+Route::post('/chatbot/ask', [ChatBotController::class, 'ask']);
+Route::get('/chatbot/history', [ChatBotController::class, 'history']);
+Route::get('/chat', function () {
+    return view('chat');
+});
+
+

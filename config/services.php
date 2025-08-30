@@ -36,6 +36,7 @@ return [
         'redirect' => env('GOOGLE_CLIENT_REDIRECT'),
     ],
 
+
     // 'google_admin' => [
     //     'client_id' => env('GOOGLE_CLIENT_ID_ADMIN'),
     //     'client_secret' => env('GOOGLE_CLIENT_SECRET_ADMIN'),
@@ -48,5 +49,11 @@ return [
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
         'redirect' => env('GITHUB_CLIENT_REDIRECT'),
     ],
+
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+        'url' => env('GEMINI_API_URL'),
+    ],
+
 
 ];
