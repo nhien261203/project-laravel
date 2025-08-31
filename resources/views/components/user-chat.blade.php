@@ -16,7 +16,7 @@
 
     {{-- Chat box --}}
     <div id="chatBoxPopup" class="flex-1 overflow-y-auto p-3 bg-gray-50 space-y-2">
-        {{-- Tin nhắn sẽ load ở đây --}}
+        {{-- Tin nhắn --}}
     </div>
 
     {{-- Input --}}
@@ -34,11 +34,11 @@
 
 <script src="/js/data.js"></script>
 <script>
-    // 🔹 CSRF
+    //CSRF
     const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
     const csrfToken = csrfTokenMeta ? csrfTokenMeta.content : '';
 
-    // 🔹 DOM
+    //DOM
     const chatBubble = document.getElementById("chatBubble");
     const chatPopup = document.getElementById("chatPopup");
     const closeChat = document.getElementById("closeChat");
@@ -46,19 +46,19 @@
     const input = document.getElementById("chatInputPopup");
     const sendBtn = document.getElementById("sendBtnPopup");
 
-    // 🔹 XSS escape
+    // XSS escape
     function escapeHtml(text) {
         const div = document.createElement("div");
         div.innerText = text;
         return div.innerHTML;
     }
 
-    // 🔹 Scroll
+    //Scroll
     function scrollToBottom() {
         chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
     }
 
-    // 🔹 Thêm tin nhắn
+    //Thêm tin nhắn
     function appendMessage(message, from = "user") {
         const align = from === "user" ? "justify-end" : "justify-start";
         const bg = from === "user" ? "bg-green-100" : "bg-gray-200";
@@ -73,7 +73,7 @@
         scrollToBottom();
     }
 
-    // 🔹 Hiển thị "Đang suy nghĩ"
+    //Hiển thị "Đang suy nghĩ"
     function showThinking() {
         const id = "thinking-" + Date.now();
         chatBox.insertAdjacentHTML("beforeend", `
@@ -87,7 +87,7 @@
         return id;
     }
 
-    // 🔹 Load lịch sử từ DB
+    //Load lịch sử từ DB
     async function loadHistory() {
         try {
             const res = await fetch("/chatbot/history");
@@ -99,7 +99,7 @@
         }
     }
 
-    // 🔹 Gửi tin nhắn
+    //Gửi tin nhắn
     async function sendMessage() {
         const userMessage = input.value.trim();
         if (!userMessage) return;
@@ -130,11 +130,11 @@
 
         } catch (err) {
             document.getElementById(thinkingId)?.remove();
-            appendMessage("⚠️ Lỗi: " + err.message, "bot");
+            appendMessage("Lỗi: " + err.message, "bot");
         }
     }
 
-    // 🔹 Event
+    //Event
     chatBubble.addEventListener("click", () => {
         chatPopup.classList.remove("hidden");
         chatBubble.classList.add("hidden");
@@ -159,20 +159,20 @@
 
 <style>
 .typing span {
-  display:inline-block;
-  width:6px;
-  height:6px;
-  margin:0 1px;
-  background:#666;
-  border-radius:50%;
-  animation: blink 1.4s infinite both;
+    display:inline-block;
+    width:6px;
+    height:6px;
+    margin:0 1px;
+    background:#666;
+    border-radius:50%;
+    animation: blink 1.4s infinite both;
 }
 .typing span:nth-child(2) { animation-delay: 0.2s; }
 .typing span:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes blink {
-  0% { opacity: .2; }
-  20% { opacity: 1; }
-  100% { opacity: .2; }
+    0% { opacity: .2; }
+    20% { opacity: 1; }
+    100% { opacity: .2; }
 }
 </style>

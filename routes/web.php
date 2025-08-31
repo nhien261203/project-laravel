@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatBotController;
+use App\Http\Controllers\PusherController;
 use App\Http\Controllers\User\CompareController;
 use App\Http\Controllers\User\FavoriteController;
 use App\Http\Controllers\User\HomeController;
@@ -328,5 +329,9 @@ Route::get('/chatbot/history', [ChatBotController::class, 'history']);
 Route::get('/chat', function () {
     return view('chat');
 });
+
+Route::get('/chat/pusher', [PusherController::class, 'index']);
+Route::post('/chat/broadcast', [PusherController::class, 'broadcast']);
+Route::post('/chat/receive', [PusherController::class, 'receive']);
 
 

@@ -87,7 +87,7 @@
                     <div class="absolute right-0 mt-3 w-[200px] bg-white rounded-md shadow-md z-50 hidden group-hover:block">
                         <ul class="py-2 text-sm text-gray-700">
                             @guest
-                                <li><a  class="block px-4 py-2 hover:bg-gray-100 text-blue-600 font-semibold">Tạo tài khoản</a></li>
+                                <li><a href="{{ route('register') }}" class="block px-4 py-2 hover:bg-gray-100 text-blue-600 font-semibold">Tạo tài khoản</a></li>
                                 <li><a href="{{ route('login') }}"  class="block px-4 py-2 hover:bg-gray-100">Đăng nhập</a></li>
                             @else
                                 {{-- <li><a href="{{ route('password.form') }}" class="block px-4 py-2 hover:bg-gray-100">Đổi mật khẩu</a></li> --}}
