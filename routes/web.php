@@ -330,8 +330,31 @@ Route::get('/chat', function () {
     return view('chat');
 });
 
-Route::get('/chat/pusher', [PusherController::class, 'index']);
-Route::post('/chat/broadcast', [PusherController::class, 'broadcast']);
-Route::post('/chat/receive', [PusherController::class, 'receive']);
+Route::get('/chat/pusher', [PusherController::class, 'index'])
+    ->middleware('auth');
+
+// User gửi tin nhắn
+Route::post('/send-message', [PusherController::class, 'sendMessage'])->name('send.message')
+    ->middleware('auth');
+
+// Lấy lịch sử tin nhắn conversation hiện tại
+Route::get('/messages/last', [PusherController::class, 'getLastMessage'])->name('chat.last')
+    ->middleware('auth');
+
+// Lấy tất cả tin nhắn của conversation
+Route::get('/messages/{conversation_id}', [PusherController::class, 'getMessages'])
+    ->middleware('auth');
+
+// Admin lấy danh sách conversation
+Route::get('/admin/conversations', [PusherController::class, 'getConversations'])
+    ->middleware('auth');
+
+// Admin/staff gửi tin nhắn trả lời
+Route::post('/admin/send-reply', [PusherController::class, 'sendReply'])
+    ->middleware('auth');
+
+Route::middleware(['auth', 'role:admin|staff'])->group(function () {
+    Route::get('/admin/chat', [PusherController::class, 'adminIndex'])->name('chat.admin.index');
+});
 
 

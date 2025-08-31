@@ -38,8 +38,9 @@
     @include('components.footer')
     
     @include('components.user-chat')
-    
+    @include('pusher')
 
+    {{-- Alpine.js --}}
 
     {{-- Swiper JS --}}
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
@@ -115,8 +116,8 @@
         });
     @endif
 </script>
-<!--Start of Tawk.to Script-->
-@if(auth()->check())
+
+{{-- @if(auth()->check())
 
 
 <script>
@@ -133,9 +134,9 @@
     });
 </script>
 @endif
-@if(session('clear_tawk'))
-<script>
-    // Xóa session cũ của Tawk.to sau khi logout
+@if(session('clear_tawk')) --}}
+{{-- <script>
+    
     localStorage.removeItem('tawkUUID');
 </script>
 @endif
@@ -143,13 +144,13 @@
 <script>
     localStorage.removeItem('chatbase_session');
 </script>
-@endif
+@endif --}}
 
 
 <!-- Tawk.to Script -->
 
 <!--Start of Tawk.to Script-->
-<script type="text/javascript">
+{{-- <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     @auth
     Tawk_API.onLoad = function () {
@@ -174,11 +175,11 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<!--End of Tawk.to Script-->
+
 <script>
     window.chatbase = window.chatbase || function () { };
     window.chatbase("setUserId", "user_" + Date.now()); // mỗi phiên là 1 user mới
-</script>
+</script> --}}
 
 {{-- <script>
 (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="t3gJXoq0Dro0ewsEZQw-D";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();

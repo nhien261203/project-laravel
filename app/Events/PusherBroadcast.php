@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\MessageRealtime;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,15 +15,16 @@ class PusherBroadcast implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public string $message;
+    public MessageRealtime $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(string $message)
+    public function __construct(MessageRealtime $message)
     {
         $this->message = $message;
     }
+
 
 
     /**
@@ -33,9 +35,10 @@ class PusherBroadcast implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('public')
+            new Channel('chat.' . $this->message->conversation_id)
         ];
     }
+
 
 
     public function broadcastAs(): string

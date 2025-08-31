@@ -124,7 +124,7 @@
     input.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
     sendBtn.addEventListener("click", sendMessage);
 
-    // 🔥 Gọi khi load trang
+    // Gọi khi load trang
     loadHistory();
 </script>
 

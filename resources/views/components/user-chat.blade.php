@@ -5,7 +5,7 @@
 </div>
 
 {{-- Khung chat popup --}}
-<div id="chatPopup" class="fixed bottom-24 right-5 w-96 h-[500px] bg-white rounded-xl shadow-lg flex flex-col z-50 hidden">
+<div id="chatPopup" class="fixed bottom-24 right-5 w-96 h-[500px] bg-white rounded-xl shadow-lg flex flex-col z-60 hidden">
     {{-- Header --}}
     <div class="flex justify-between items-center p-3 border-b border-gray-200">
         <h3 class="font-semibold text-gray-800">Chat với AI</h3>

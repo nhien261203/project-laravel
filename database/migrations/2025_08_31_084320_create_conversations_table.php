@@ -24,7 +24,7 @@ return new class extends Migration
 
         // Thêm conversation_id vào message_realtime
         Schema::table('message_realtime', function (Blueprint $table) {
-            $table->unsignedBigInteger('conversation_id')->after('id')->nullable();
+            $table->unsignedBigInteger('conversation_id')->after('id');
 
             $table->foreign('conversation_id')
                 ->references('id')

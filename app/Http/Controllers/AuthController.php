@@ -143,9 +143,9 @@ class AuthController extends Controller
         session()->forget('cart_merged');
 
         // Flash biến cho view biết cần xoá cache Tawk.to
-        session()->flash('clear_tawk', true);
+        // session()->flash('clear_tawk', true);
 
-        session()->put('clear_chatbase', true);
+        // session()->put('clear_chatbase', true);
 
         return redirect()->route('login');
     }

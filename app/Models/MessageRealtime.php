@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class MessageRealtime extends Model
 {
     use HasFactory;
+    protected $table = 'message_realtime';
     protected $fillable = [
         'user_id',
+        'conversation_id',
         'sender',
-        'message'
+        'message',
+        'client_id',
+        'read_at',
     ];
 
     public function user()
