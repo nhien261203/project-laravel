@@ -72,82 +72,124 @@ $(document).ready(function () {
         chatBox[0].scrollTop = chatBox[0].scrollHeight;
     }
 
-    function appendMessage(message, sender = 'server', isError = false, clientId = null) {
+// Thêm biến global để lưu thời gian của tin nhắn cuối cùng được hiển thị
+let lastMessageTime = null;
+
+function appendMessage(message, sender = 'server', isError = false, clientId = null, timestamp = null) {
     // Xóa placeholder nếu còn
-        const placeholder = $("#userChatBox .placeholder-message");
-        if (placeholder.length) placeholder.remove();
+    const placeholder = $("#userChatBox .placeholder-message");
+    if (placeholder.length) placeholder.remove();
 
-        if (clientId && renderedClientIds.has(clientId)) return;
-        if (clientId) renderedClientIds.add(clientId);
+    if (clientId && renderedClientIds.has(clientId)) return;
+    if (clientId) renderedClientIds.add(clientId);
 
-        const isSelf = sender === 'user' || sender === 'self';
-        let msgClass = isSelf 
-            ? 'bg-blue-500 text-white rounded-bl-xl rounded-tr-xl' 
-            : 'bg-gray-200 text-gray-800 rounded-br-xl rounded-tl-xl';
-        if (isError) msgClass = 'bg-red-500 text-white rounded-bl-xl rounded-tr-xl';
+    const isSelf = sender === 'user' || sender === 'self';
+    const align = isSelf ? 'justify-end' : 'justify-start';
 
-        const align = isSelf ? 'justify-end' : 'justify-start';
+    // Lấy thời gian hiện tại hoặc thời gian từ timestamp nếu có
+    const currentMessageTime = timestamp ? new Date(timestamp) : new Date();
 
-        $("#userChatBox").append(`
-            <div class="flex ${align}">
-                <p class="inline-block px-4 py-2 ${msgClass} shadow-md max-w-[75%] break-words">
-                    ${message}
-                </p>
-            </div>
-        `);
+    // Định dạng giờ phút (ví dụ: 14:30)
+    const formattedTime = currentMessageTime.toLocaleTimeString('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    // So sánh với thời gian của tin nhắn cuối cùng để quyết định có hiển thị thời gian hay không
+    const timeDifference = lastMessageTime ? (currentMessageTime - lastMessageTime) / 1000 : Infinity;
 
-        const box = document.getElementById('userChatBox');
-        box.scrollTop = box.scrollHeight;
-    }
+    // Lấy ngày hiện tại
+    const today = new Date();
+    const isSameDay = today.getDate() === currentMessageTime.getDate() &&
+                      today.getMonth() === currentMessageTime.getMonth() &&
+                      today.getFullYear() === currentMessageTime.getFullYear();
 
+    // Chuỗi HTML cho tin nhắn
+    let messageHtml = '';
 
-    function loadConversation() {
-        $.get("{{ route('chat.last') }}", function(res) {
-            if (!res.conversation || res.messages.length === 0) {
-                $("#userChatBox").html(`
-                    <div class="text-center text-gray-400 italic placeholder-message">
-                        Chào bạn! Nhấn vào đây để bắt đầu trò chuyện với Nexus Admin.
-                    </div>
-                `);
-                return;
-            }
-
-
-            conversationId = res.conversation.id;
-
-            if (channel) pusher.unsubscribe(channel.name);
-            channel = pusher.subscribe('chat.' + conversationId);
-            channel.bind('chat', function(data) {
-                appendMessage(data.message.message, data.message.sender, false, data.message.client_id);
-            });
-
-            res.messages.forEach(msg => appendMessage(msg.message, msg.sender, false, msg.client_id));
+    // Logic hiển thị ngày và giờ
+    // Hiển thị ngày và giờ nếu:
+    // 1. Đây là tin nhắn đầu tiên của cuộc trò chuyện (lastMessageTime === null)
+    // 2. Tin nhắn được gửi sang một ngày khác (không cùng ngày với tin nhắn trước đó)
+    // 3. Tin nhắn được gửi cách tin nhắn trước đó hơn 5 phút (300 giây)
+    if (lastMessageTime === null || (timeDifference > 300) || (lastMessageTime.getDate() !== currentMessageTime.getDate())) {
+        const formattedDate = currentMessageTime.toLocaleDateString('vi-VN', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long'
         });
+        messageHtml += `<div class="text-center text-gray-400 text-xs my-2">${formattedDate} ${formattedTime}</div>`;
     }
+
+    // Tạo phần tử tin nhắn
+    const msgClass = isSelf 
+        ? 'bg-blue-500 text-white rounded-bl-xl rounded-tr-xl' 
+        : 'bg-gray-200 text-gray-800 rounded-br-xl rounded-tl-xl';
+    
+    messageHtml += `
+        <div class="flex ${align}">
+            <p class="inline-block px-4 py-2 ${msgClass} shadow-md max-w-[75%] break-words">
+                ${message}
+            </p>
+        </div>
+    `;
+
+    $("#userChatBox").append(messageHtml);
+    
+    // Cập nhật thời gian của tin nhắn cuối cùng đã được hiển thị
+    lastMessageTime = currentMessageTime;
+
+    scrollToBottom();
+}
+    function loadConversation() {
+    $.get("{{ route('chat.last') }}", function(res) {
+        if (!res.conversation || res.messages.length === 0) {
+            $("#userChatBox").html(`
+                <div class="text-center text-gray-400 italic placeholder-message">
+                    Chào bạn! Nhấn vào đây để bắt đầu trò chuyện với Nexus Admin.
+                </div>
+            `);
+            return;
+        }
+
+        conversationId = res.conversation.id;
+
+        if (channel) pusher.unsubscribe(channel.name);
+        channel = pusher.subscribe('chat.' + conversationId);
+        channel.bind('chat', function(data) {
+            appendMessage(data.message.message, data.message.sender, false, data.message.client_id, data.message.created_at);
+        });
+
+        // Đặt lại lastMessageTime trước khi load lịch sử
+        lastMessageTime = null;
+        res.messages.forEach(msg => appendMessage(msg.message, msg.sender, false, msg.client_id, msg.created_at));
+    });
+}
 
     loadConversation();
 
     function sendMessage() {
-        const message = input.val().trim();
-        if (!message) return;
+    const message = input.val().trim();
+    if (!message) return;
 
-        const clientId = Date.now().toString();
-        appendMessage(message, 'self', false, clientId);
-        input.val('');
+    const clientId = Date.now().toString();
+    const timestamp = new Date().toISOString(); // Lấy timestamp hiện tại
+    appendMessage(message, 'self', false, clientId, timestamp);
+    input.val('');
 
-        $.ajax({
-            url: "{{ route('send.message') }}",
-            method: "POST",
-            data: {
-                _token: csrfToken,
-                message: message,
-                client_id: clientId
-            },
-            error: function() {
-                appendMessage("Không gửi được tin nhắn!", 'self', true, clientId);
-            }
-        });
-    }
+    $.ajax({
+        url: "{{ route('send.message') }}",
+        method: "POST",
+        data: {
+            _token: csrfToken,
+            message: message,
+            client_id: clientId
+        },
+        error: function() {
+            appendMessage("Không gửi được tin nhắn!", 'self', true, clientId);
+        }
+    });
+}
 
     input.on("keypress", e => { if(e.key === "Enter") sendMessage(); });
     sendBtn.on("click", sendMessage);

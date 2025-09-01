@@ -109,7 +109,7 @@
             <a href="{{ route('admin.contacts.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-envelope"></i><span class="sidebar-text">Contacts</span></a>
 
-            <a href="https://dashboard.tawk.to" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
+            <a href="{{ route('chat.admin.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-headset mr-2"></i> <span class="sidebar-text">Chat Customer</span></a>
             </a>
 

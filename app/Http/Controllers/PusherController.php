@@ -94,85 +94,98 @@ class PusherController extends Controller
     }
 
     public function sendReply(Request $request)
-{
-    $request->validate([
-        'conversation_id' => 'required|exists:conversations,id',
-        'message' => 'required|string',
-        'client_id' => 'required', // thêm client_id
-    ]);
+    {
+        $request->validate([
+            'conversation_id' => 'required|exists:conversations,id',
+            'message' => 'required|string',
+            'client_id' => 'required',
+        ]);
 
-    $admin = Auth::user();
+        $admin = Auth::user();
 
-    // Check quyền bằng Spatie
-    if (!$admin->hasAnyRole(['admin','staff'])) {
-        return response()->json(['error' => 'Permission denied'], 403);
-    }
-
-    $conversation = Conversation::findOrFail($request->conversation_id);
-
-    // Nếu chưa có ai phụ trách thì gán staff/admin hiện tại
-    if (!$conversation->assigned_admin_id) {
-        $conversation->assigned_admin_id = $admin->id;
-        $conversation->save();
-    } else {
-        // Nếu đã có admin/staff phụ trách
-        if ($conversation->assigned_admin_id !== $admin->id && !$admin->hasRole('admin')) {
-            return response()->json(['error' => 'This conversation is already assigned to another staff'], 403);
+        // Check quyền bằng Spatie
+        if (!$admin->hasAnyRole(['admin', 'staff'])) {
+            return response()->json(['error' => 'Permission denied'], 403);
         }
+
+        $conversation = Conversation::findOrFail($request->conversation_id);
+
+        // Nếu chưa có ai phụ trách thì gán staff/admin hiện tại
+        if (!$conversation->assigned_admin_id) {
+            $conversation->assigned_admin_id = $admin->id;
+            $conversation->save();
+        } else {
+            // Nếu đã có admin/staff phụ trách
+            if ($conversation->assigned_admin_id !== $admin->id && !$admin->hasRole('admin')) {
+                return response()->json(['error' => 'This conversation is already assigned to another staff'], 403);
+            }
+        }
+
+        // THÊM LOGIC NÀY VÀO ĐÂY
+        // Đánh dấu tất cả tin nhắn từ 'user' là đã đọc khi admin trả lời
+        MessageRealtime::where('conversation_id', $request->conversation_id)
+            ->where('sender', 'user')
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+        // KẾT THÚC LOGIC MỚI
+
+        $sender = $admin->hasRole('staff') ? 'staff' : 'admin';
+
+        // Tạo message kèm client_id
+        $message = MessageRealtime::create([
+            'conversation_id' => $conversation->id,
+            'user_id' => $admin->id,
+            'sender' => $sender,
+            'message' => $request->message,
+            'read_at' => now(), // Cập nhật read_at cho tin nhắn của admin
+            'client_id' => $request->client_id, // lưu client_id
+        ]);
+
+        // Broadcast cho các client khác
+        broadcast(new PusherBroadcast($message))->toOthers();
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+        ]);
     }
-
-    $sender = $admin->hasRole('staff') ? 'staff' : 'admin';
-
-    // Tạo message kèm client_id
-    $message = MessageRealtime::create([
-        'conversation_id' => $conversation->id,
-        'user_id' => $admin->id,
-        'sender' => $sender,
-        'message' => $request->message,
-        'read_at' => null,
-        'client_id' => $request->client_id, // lưu client_id
-    ]);
-
-    // Broadcast cho các client khác
-    broadcast(new PusherBroadcast($message))->toOthers();
-
-    return response()->json([
-        'success' => true,
-        'message' => $message,
-    ]);
-}
-
-
 
     // Admin xem toàn bộ conversation + messages
     public function getConversations(Request $request)
-{
-    $admin = Auth::user();
+    {
+        $admin = Auth::user();
 
-    if (!$admin->hasAnyRole(['admin','staff'])) {
-        return response()->json(['error' => 'Permission denied'], 403);
+        if (!$admin->hasAnyRole(['admin', 'staff'])) {
+            return response()->json(['error' => 'Permission denied'], 403);
+        }
+
+        $query = Conversation::with(['user', 'admin'])
+            ->whereHas('messages')
+            ->orderBy('updated_at', 'desc');
+
+        if ($admin->hasRole('staff')) {
+            $query->where('assigned_admin_id', $admin->id);
+        }
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $conversations = $query->get();
+
+        // Đếm số tin nhắn chưa đọc cho mỗi conversation
+        $conversations->each(function ($conversation) {
+            $unreadCount = $conversation->messages()
+                ->where('sender', 'user')
+                ->whereNull('read_at')
+                ->count();
+            $conversation->unread_count = $unreadCount;
+        });
+
+        return response()->json($conversations);
     }
-
-    $query = Conversation::with(['user','admin'])
-        ->orderBy('updated_at', 'desc');
-
-    // Nếu là staff thì chỉ xem conversation do mình phụ trách
-    if ($admin->hasRole('staff')) {
-        $query->where('assigned_admin_id', $admin->id);
+    public function adminIndex()
+    {
+        return view('admin.chat'); // Blade riêng cho admin quản lý chat
     }
-
-    if ($request->has('status')) {
-        $query->where('status', $request->status);
-    }
-
-    $conversations = $query->get();
-
-    return response()->json($conversations);
-}
-
-public function adminIndex()
-{
-    return view('admin.chat'); // Blade riêng cho admin quản lý chat
-}
-
 }

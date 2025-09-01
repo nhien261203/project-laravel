@@ -10,6 +10,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
 
 class PusherBroadcast implements ShouldBroadcast
 {
@@ -39,7 +40,16 @@ class PusherBroadcast implements ShouldBroadcast
         ];
     }
 
-
+    public function broadcastWith(): array
+    {
+        return [
+            'message' => $this->message->toArray(),
+            'user' => [
+                'id' => Auth::id(),
+                'name' => Auth::user()->name,
+            ],
+        ];
+    }
 
     public function broadcastAs(): string
     {
