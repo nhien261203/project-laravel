@@ -1,6 +1,4 @@
-{{-- resources/views/components/user-chat.blade.php --}}
 
-{{-- Floating chat bubble --}}
 <div id="userChatBubble" class="fixed bottom-24 right-5 w-16 h-16 bg-blue-500 rounded-full shadow-lg flex items-center justify-center cursor-pointer z-50 hover:scale-110 transition-transform">
     <i class="fas fa-comment-dots text-white text-xl"></i>
 </div>
@@ -18,6 +16,8 @@
     </div>
 
     {{-- Chat box --}}
+    @if(Auth::check())
+    {{-- Nếu người dùng đã đăng nhập, hiển thị giao diện chat --}}
     <div id="userChatBox" class="flex-1 overflow-y-auto p-3 bg-gray-50 space-y-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {{-- Tin nhắn append tại đây --}}
     </div>
@@ -31,6 +31,17 @@
             Gửi
         </button>
     </div>
+    @else
+    {{-- Nếu người dùng chưa đăng nhập, hiển thị thông báo --}}
+    <div class="flex-1 flex flex-col items-center justify-center p-4 text-center">
+        <p class="text-gray-600 mb-4">
+            Vui lòng đăng nhập để bắt đầu trò chuyện với chúng tôi.
+        </p>
+        <a href="{{ route('login') }}" class="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">
+            Đăng nhập ngay
+        </a>
+    </div>
+    @endif
 </div>
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -184,6 +195,17 @@ function appendMessage(message, sender = 'server', isError = false, clientId = n
             _token: csrfToken,
             message: message,
             client_id: clientId
+        },
+        success: function(res) {
+                // Sửa lỗi ở đây
+                if (res.success && !conversationId) {
+                    conversationId = res.message.conversation_id;
+                    if (channel) pusher.unsubscribe(channel.name);
+                    channel = pusher.subscribe('chat.' + conversationId);
+                    channel.bind('chat', function(data) {
+                        appendMessage(data.message.message, data.message.sender, false, data.message.client_id, data.message.created_at);
+                    });
+                }
         },
         error: function() {
             appendMessage("Không gửi được tin nhắn!", 'self', true, clientId);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewConversationCreated;
 use App\Events\PusherBroadcast;
 use App\Models\Conversation;
 use App\Models\MessageRealtime;
@@ -13,7 +14,7 @@ class PusherController extends Controller
 {
     public function index()
     {
-        return view('pusher'); // Blade chat bạn đã tạo
+        return view('pusher'); 
     }
 
     // User gửi tin nhắn
@@ -33,9 +34,12 @@ class PusherController extends Controller
 
         if (!$conversation) {
             $conversation = Conversation::create([
+                
                 'user_id' => $user->id,
                 'status' => 'open',
             ]);
+            
+            event(new NewConversationCreated($conversation));
         }
 
         // Tạo message với conversation_id chắc chắn

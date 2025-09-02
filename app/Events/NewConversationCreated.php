@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\MessageRealtime;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,23 +9,22 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
 
-class PusherBroadcast implements ShouldBroadcast
+class NewConversationCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public MessageRealtime $message;
-
+    public $conversation;
+    
     /**
      * Create a new event instance.
+     *
+     * @return void
      */
-    public function __construct(MessageRealtime $message)
+    public function __construct($conversation)
     {
-        $this->message = $message;
+        $this->conversation = $conversation;
     }
-
-
 
     /**
      * Get the channels the event should broadcast on.
@@ -36,23 +34,11 @@ class PusherBroadcast implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat.' . $this->message->conversation_id)
+            new Channel('admin-channel')
         ];
     }
-
-    // public function broadcastWith(): array
-    // {
-    //     return [
-    //         'message' => $this->message->toArray(),
-    //         'user' => [
-    //             'id' => Auth::id(),
-    //             'name' => Auth::user()->name,
-    //         ],
-    //     ];
-    // }
-
-    public function broadcastAs(): string
+    public function broadcastAs()
     {
-        return 'chat';
+        return 'new.conversation.created';
     }
 }

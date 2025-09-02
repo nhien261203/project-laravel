@@ -244,7 +244,14 @@
         });
 
         loadConversations();
+        
+        // --- THÊM PHẦN NÀY ĐỂ LẮNG NGHE SỰ KIỆN TỪ PUSHER ---
+        // Lắng nghe kênh chung cho admin để cập nhật danh sách cuộc trò chuyện
+        const adminChannel = pusher.subscribe('admin-channel');
+        adminChannel.bind('new.conversation.created', function(data) {
+            // Khi nhận được sự kiện, tải lại danh sách cuộc trò chuyện
+            console.log('Có một cuộc trò chuyện mới được tạo:', data);
+            loadConversations();
+        });
     </script>
     @endpush
-
-
