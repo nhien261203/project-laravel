@@ -33,7 +33,7 @@
 
         <div class="flex gap-2">
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Lọc</button>
-            <a href="{{ route('admin.vouchers.index') }}" class="text-gray-600 underline px-3 py-2">Reset</a>
+            <a href="{{ route('admin.vouchers.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Reset</a>
         </div>
     </form>
 

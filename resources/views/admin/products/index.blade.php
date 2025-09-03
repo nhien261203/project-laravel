@@ -14,7 +14,7 @@
         </a>
 
         <a href="{{ route('admin.products.create') }}"
-           class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
             + Thêm sản phẩm
         </a>
     </div>
@@ -72,8 +72,8 @@
         <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Ẩn</option>
     </select>
 
-    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">🔍 Tìm</button>
-    <a href="{{ route('admin.products.index') }}" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">🔄 Reset</a>
+    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Lọc</button>
+    <a href="{{ route('admin.products.index') }}" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Reset</a>
 </form>
 
 <!-- Table Responsive - giữ nguyên tất cả cột, cuộn ngang trên mobile -->

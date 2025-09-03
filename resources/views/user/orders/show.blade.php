@@ -95,9 +95,8 @@
             @if ($order->status === 'pending' && $order->payment_status === 'unpaid')
                 <form method="POST" action="{{ route('user.orders.cancel', $order->id) }}" class="mt-4 text-right">
                     @csrf
-                    <button type="submit"
-                        onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')"
-                        class="inline-block px-4 py-2 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition">
+                    <button type="button"
+                        class="btn-cancel inline-block px-4 py-2 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition">
                         Hủy đơn hàng
                     </button>
                 </form>
@@ -131,5 +130,30 @@
         });
     });
 </script>
+
 @endif
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-cancel').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: 'Xác nhận hủy đơn hàng',
+                    text: "Bạn có chắc muốn hủy đơn hàng này?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: ' Xác nhận',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.requestSubmit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 

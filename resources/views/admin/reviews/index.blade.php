@@ -36,9 +36,9 @@
 
         <div>
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
-                🔍 Tìm kiếm
+                Lọc
             </button>
-            <a href="{{ route('admin.reviews.index') }}" class="ml-2 text-sm text-blue-600 underline">Reset</a>
+            <a href="{{ route('admin.reviews.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Reset</a>
         </div>
     </form>
 

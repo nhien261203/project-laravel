@@ -218,7 +218,7 @@
 
         const currentParams = new URLSearchParams(window.location.search);
         const pathname = window.location.pathname;
-        const overlay = document.getElementById('loadingOverlay');
+        // const overlay = document.getElementById('loadingOverlay');
 
         document.querySelectorAll('.btn-filter').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -245,13 +245,15 @@
                 currentParams.delete('page');
                 const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
                 // Hiển thị overlay trước khi reload
-                overlay.classList.remove('pointer-events-none', 'opacity-0');
-                overlay.classList.add('opacity-100');
+                // overlay.classList.remove('pointer-events-none', 'opacity-0');
+                // overlay.classList.add('opacity-100');
 
                 // Delay để overlay render
-                setTimeout(() => {
-                    window.location.href = newUrl;
-                }, 150);
+                // setTimeout(() => {
+                //     window.location.href = newUrl;
+                // }, 150);
+
+                window.location.href = newUrl;
             });
         });
     });

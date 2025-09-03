@@ -193,3 +193,5 @@ class PusherController extends Controller
         return view('admin.chat'); // Blade riêng cho admin quản lý chat
     }
 }
+// luu y: phải đổi queue thành sync trong .env để chạy realtime ngay lập tức
+// QUEUE_CONNECTION=sync

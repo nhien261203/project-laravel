@@ -15,9 +15,6 @@
     </div>
 </div>
 
-
-
-
     {{-- Bộ lọc tìm kiếm --}}
     <form method="GET" class="flex flex-col md:flex-row items-center gap-4 mb-6">
         <input type="text" name="q" value="{{ request('q') }}"
@@ -33,9 +30,9 @@
         </select>
 
         <div class="flex gap-2">
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">🔍 Lọc</button>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Lọc</button>
             <a href="{{ route('admin.orders.index') }}"
-            class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">🔄 Reset</a>
+            class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Reset</a>
         </div>
     </form>
 

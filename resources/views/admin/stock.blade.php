@@ -13,10 +13,12 @@
     </div>
 
     {{-- Bộ lọc --}}
-    <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-white p-4 rounded-xl shadow">
-        <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">Danh mục</label>
-            <select name="category_id" class="w-full border-gray-300 rounded-lg">
+    <form method="GET" class="mb-6 flex flex-wrap gap-3 items-center">
+
+        <div class="pb-3">
+            <label for="category_id" class="block text-sm font-medium text-gray-600 mb-1">Danh mục</label>
+            <select name="category_id"
+                class="px-3 py-2 rounded border border-gray-300 shadow-sm focus:ring focus:ring-blue-100 focus:outline-none w-full sm:w-auto">
                 <option value="">-- Tất cả --</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}" {{ $categoryId == $category->id ? 'selected' : '' }}>
@@ -25,27 +27,29 @@
                 @endforeach
             </select>
         </div>
+        
+        <div class="pb-3">
+            <label for="threshold" class="block text-sm font-medium text-gray-600 mb-1">Ngưỡng tồn kho dưới</label>
+            <input type="number" name="threshold" value="{{ $threshold }}" min="1" placeholder="Ngưỡng tồn kho dưới ..."
+                class="px-3 py-2 rounded border border-gray-300 shadow-sm focus:ring focus:ring-blue-100 focus:outline-none w-full sm:w-auto" />
 
-        <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">Ngưỡng tồn kho</label>
-            <input type="number" name="threshold" value="{{ $threshold }}" min="1"
-                   class="w-full border-gray-300 rounded-lg">
         </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">Sắp xếp</label>
-            <select name="sort" class="w-full border-gray-300 rounded-lg">
+        <div class="pb-3">
+            <label for="sort" class="block text-sm font-medium text-gray-600 mb-1">Sắp xếp</label>
+            <select name="sort"
+                class="px-3 py-2 rounded border border-gray-300 shadow-sm focus:ring focus:ring-blue-100 focus:outline-none w-full sm:w-auto">
                 <option value="asc" {{ $sortOrder == 'asc' ? 'selected' : '' }}>Tồn kho thấp → cao</option>
                 <option value="desc" {{ $sortOrder == 'desc' ? 'selected' : '' }}>Tồn kho cao → thấp</option>
             </select>
         </div>
-
+        
         <div class="flex items-end gap-2">
-            <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
-                <i class="fas fa-filter"></i> Lọc
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Lọc
             </button>
-            <a href="{{ route('admin.stock-all') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg shadow hover:bg-gray-300">
-                <i class="fas fa-undo"></i> Reset
+            <a href="{{ route('admin.stock-all') }}" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                Reset
             </a>
         </div>
     </form>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendOrderConfirmationEmail;
 use App\Models\Order;
 use App\Repositories\Order\OrderRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
@@ -87,6 +88,13 @@ class UserOrderController extends Controller
             $data = $request->validate($rules);
 
             $order = $this->orderRepo->createOrderFromCart(Auth::id(), $data);
+
+            // Gửi email xác nhận đơn hàng
+            //su dung job de gui mail
+
+            // $order->load('items');
+            // SendOrderConfirmationEmail::dispatch($order, Auth::user());
+            //queue connection=database trong .env de chay queue
 
             if ($request->expectsJson()) {
                 return response()->json([

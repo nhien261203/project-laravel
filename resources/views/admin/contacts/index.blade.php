@@ -16,8 +16,8 @@
             <option value="0" {{ request('is_replied') == '0' ? 'selected' : '' }}>Chưa phản hồi</option>
         </select>
 
-        <button type="submit" class="bg-blue-500 text-white px-4 py-1 rounded">Lọc</button>
-        <a href="{{ route('admin.contacts.index') }}" class="text-gray-600 underline px-2">Reset</a>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Lọc</button>
+        <a href="{{ route('admin.contacts.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Reset</a>
     </form>
 
     {{-- Flash message --}}

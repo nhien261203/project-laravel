@@ -23,11 +23,11 @@
         </select>
 
         <div class="flex gap-2">
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow">
-                🔍 Tìm
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">
+                Lọc
             </button>
             <a href="{{ route('admin.blogs.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded shadow">
-                ♻️ Reset
+                Reset
             </a>
         </div>
     </form>
