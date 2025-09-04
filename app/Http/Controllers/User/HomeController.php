@@ -27,6 +27,8 @@ class HomeController extends Controller
         $this->productRepo = $productRepo;
     }
 
+
+
     public function index()
     {
         //Lấy danh mục cho header (bao gồm cả children)
@@ -119,11 +121,20 @@ class HomeController extends Controller
 
     public function allIphone()
     {
+        // Lấy tất cả iPhone products (đã có hàm repo)
+        $iphoneProducts = $this->productRepo->getAllIphoneProducts();
 
-        $iphoneProducts = $this->productRepo->getAllIphoneProducts(); // không phân trang
+        // Lấy tất cả RAM và Storage từ repo (tự động gom từ variants iPhone)
+        $rams     = $this->productRepo->getAllIphoneRams();
+        $storages = $this->productRepo->getAllIphoneStorages();
 
-        return view('user.product.all-iphone', compact('iphoneProducts'));
+        return view('user.product.all-iphone', compact(
+            'iphoneProducts',
+            'rams',
+            'storages'
+        ));
     }
+
 
 
 
@@ -174,21 +185,22 @@ class HomeController extends Controller
     {
         // inStock goi tu phuong thuc scope ben Model ProductVariant
         $product = Product::with([
-            'variants' => fn($q) => $q->inStock()->with('images'),
+            'variants' => fn($q) => $q->inStock()->where('status', 1)->with('images'),
             // 'approvedReviews.user',
-            'brand'
+            'brand',
+            'category.parent' // thêm parent
         ])->where('slug', $slug)->firstOrFail();
 
         $approvedReviews = $product->approvedReviews()
-        ->with('user')
-        ->orderByDesc('created_at')
-        ->paginate(5);
+            ->with('user')
+            ->orderByDesc('created_at')
+            ->paginate(5);
 
         // Các biến khác vẫn giữ nguyên
         $totalSold = $product->variants->sum('sold');
         $totalReviews = $approvedReviews->total(); // lấy tổng từ phân trang
         $averageRating = $totalReviews > 0 ? round($product->approvedReviews()->avg('rating'), 1) : 0;
-        
+
         $colors = $product->variants->pluck('color')->unique()->filter();
         $storages = $product->variants->pluck('storage')->unique()->filter();
 
@@ -238,23 +250,26 @@ class HomeController extends Controller
             }
         }
 
+        // Lấy category & parent
+        $category = $product->category;
+        $parent = $category?->parent;
 
-
-        return view('user.product.detail', compact('product','approvedReviews', 'colors', 'storages', 'recentlyViewed', 'canReview','totalSold', 'totalReviews', 'averageRating'));
+        return view('user.product.detail', compact('product', 'approvedReviews', 'colors', 'storages', 'recentlyViewed', 'canReview', 'totalSold', 'totalReviews', 'averageRating', 'parent', 'category'));
     }
 
     public function showAccessory($slug)
     {
         $product = Product::with([
-            'variants' => fn($q) => $q->inStock()->with('images'),
+            'variants' => fn($q) => $q->inStock()->where('status', 1)->with('images'),
             // 'approvedReviews.user',
-            'brand'
+            'brand',
+            'category.parent'
         ])->where('slug', $slug)->firstOrFail();
 
         $approvedReviews = $product->approvedReviews()
-        ->with('user')
-        ->orderByDesc('created_at')
-        ->paginate(5);
+            ->with('user')
+            ->orderByDesc('created_at')
+            ->paginate(5);
 
         $totalSold = $product->variants->sum('sold');
         $totalReviews = $approvedReviews->total(); // lấy tổng từ phân trang
@@ -309,7 +324,9 @@ class HomeController extends Controller
                 $canReview = $hasPurchased;
             }
         }
+        $category = $product->category;
+        $parent = $category?->parent;
 
-        return view('user.product.detail-accessory', compact('product','approvedReviews', 'colors', 'storages', 'recentlyViewed', 'canReview','totalSold', 'totalReviews', 'averageRating'));
+        return view('user.product.detail-accessory', compact('product', 'approvedReviews', 'colors', 'storages', 'recentlyViewed', 'canReview', 'totalSold', 'totalReviews', 'averageRating', 'category', 'parent'));
     }
 }

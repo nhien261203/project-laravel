@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Brand\BrandRepositoryInterface;
@@ -23,11 +24,43 @@ class UserProductController extends Controller
 
     protected function renderCategoryPage(string $slug, string $viewName)
     {
+        $category = Category::where('slug', $slug)
+            ->where('status', 1)
+            ->with(['children' => function ($query) {
+                $query->where('status', 1);
+            }])
+            ->firstOrFail();
+
+         // Lấy tất cả ID của danh mục hiện tại và danh mục con
+        $categoryIds = Category::where('id', $category->id)
+            ->orWhere('parent_id', $category->id)
+            ->pluck('id');
+        
         $products = $this->productRepo->getProductsByCategorySlug($slug);
         $brands = $this->brandRepo->getBrandsByCategorySlug($slug);
 
-        return view($viewName, compact('products', 'brands'));
+        $rams     = $this->productRepo->getRamsByCategoryIds($categoryIds);
+        $storages = $this->productRepo->getStoragesByCategoryIds($categoryIds);
+
+        // Lấy danh mục cha (nếu có) để tạo breadcrumbs
+        $parentCategory = $category->parent;
+
+        return view($viewName, compact('products', 'brands', 'category', 'parentCategory', 'rams','storages'));
     }
+
+    public function showCategory(string $slug)
+    {
+
+
+        // This method will use the same view for all main categories.
+        return $this->renderCategoryPage($slug, 'user.product.phone');
+    }
+
+    public function showAccessoryCategory(string $slug)
+    {
+        return $this->renderCategoryPage($slug, 'user.product.accessory');
+    }
+
 
     public function phoneCategory()
     {

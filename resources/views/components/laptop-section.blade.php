@@ -5,7 +5,7 @@
 <div class="bg-white my-8 p-4 rounded-lg shadow">
     <div class="mb-4 flex items-center justify-between">
         <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Laptop ưu đãi đặc biệt</h2>
-        <a href="{{ route('product.laptop') }}" class="text-sm text-blue-500 hover:text-blue-600 font-medium">
+        <a href="{{ route('product.category', 'laptop') }}" class="text-sm text-blue-500 hover:text-blue-600 font-medium">
             Xem tất cả 
         </a>
     </div>
@@ -13,7 +13,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
         {{-- Cột trái: Banner ảnh --}}
         <div class="md:col-span-1 cursor-pointer">
-            <a href="{{ route('product.laptop') }}">
+            <a href="{{ route('product.category', 'laptop') }}">
                 <img src="{{ asset('storage/banners/lap-banner-cut3.jpg') }}"
                 alt="Laptop Banner"
                 class="w-full h-[400px] md:h-[330px] object-cover rounded-lg shadow" >

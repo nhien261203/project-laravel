@@ -9,6 +9,12 @@ interface ProductRepositoryInterface
     public function update($id, array $data);
     public function delete($id);
 
+    public function getRamsByCategoryIds($categoryIds);
+    public function getStoragesByCategoryIds($categoryIds);
+
+    public function getAllIphoneStorages();
+    public function getAllIphoneRams();
+
     // lay 5 sp iphone cho section iphone ( user )
     public function getIphoneProducts(int $limit = 5);
 

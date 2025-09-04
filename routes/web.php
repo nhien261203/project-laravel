@@ -53,18 +53,20 @@ use Illuminate\Support\Facades\DB;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/dien-thoai', [UserProductController::class, 'phoneCategory'])->name('product.phone');
-Route::get('/laptop', [UserProductController::class, 'laptopCategory'])->name('product.laptop');
+// Route::get('/dien-thoai', [UserProductController::class, 'phoneCategory'])->name('product.phone');
+// Route::get('/laptop', [UserProductController::class, 'laptopCategory'])->name('product.laptop');
 
 Route::get('/phu-kien', [UserProductController::class, 'accessoryCategory'])->name('product.accessory');
 
-Route::get('/phu-kien/phu-kien-di-dong', [UserProductController::class, 'mobileAccessory'])->name('product.accessory.mobile');
-Route::get('/phu-kien/thiet-bi-am-thanh', [UserProductController::class, 'audioAccessory'])->name('product.accessory.audio');
+// Route::get('/phu-kien/phu-kien-di-dong', [UserProductController::class, 'mobileAccessory'])->name('product.accessory.mobile');
+// Route::get('/phu-kien/thiet-bi-am-thanh', [UserProductController::class, 'audioAccessory'])->name('product.accessory.audio');
 
+Route::get('/phu-kien/danh-muc/{slug}', [UserProductController::class, 'showAccessoryCategory'])->name('product.category.accessory');
 
 Route::get('/products/{slug}', [HomeController::class, 'show'])->name('product.detail');
 
 Route::get('/phu-kien/{slug}', [HomeController::class, 'showAccessory'])->name('product.detailAccessory');
+
 
 // xem tất cả sản phẩm iPhone
 Route::get('/iphone', [HomeController::class, 'allIphone'])->name('user.iphone.all');
@@ -356,5 +358,8 @@ Route::post('/admin/send-reply', [PusherController::class, 'sendReply'])
 Route::middleware(['auth', 'role:admin|staff'])->group(function () {
     Route::get('/admin/chat', [PusherController::class, 'adminIndex'])->name('chat.admin.index');
 });
+
+// de cuoi tranh loi de cac route khac
+Route::get('/{slug}', [UserProductController::class, 'showCategory'])->name('product.category');
 
 

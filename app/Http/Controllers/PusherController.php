@@ -167,9 +167,9 @@ class PusherController extends Controller
             ->whereHas('messages')
             ->orderBy('updated_at', 'desc');
 
-        if ($admin->hasRole('staff')) {
-            $query->where('assigned_admin_id', $admin->id);
-        }
+        // if ($admin->hasRole('staff')) {
+        //     $query->where('assigned_admin_id', $admin->id);
+        // }
 
         if ($request->has('status')) {
             $query->where('status', $request->status);

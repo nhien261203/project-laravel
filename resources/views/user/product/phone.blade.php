@@ -5,9 +5,20 @@
 <div class="container mx-auto pt-20 pb-10 overflow-x-hidden">
     {{-- Breadcrumb --}}
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
+        {{-- Breadcrumb Trang chủ --}}
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>
-        <span class="text-gray-800 font-medium">Điện thoại</span>
+        
+        {{-- Breadcrumb cho danh mục cha nếu có --}}
+        @if ($parentCategory)
+            <a href="{{ route('product.category', $parentCategory->slug) }}" class="hover:text-blue-600">
+                {{ $parentCategory->name }}
+            </a>
+            <span class="text-gray-400">›</span>
+        @endif
+        
+        {{-- Breadcrumb cho danh mục hiện tại --}}
+        <span class="text-gray-800 font-medium">{{ $category->name }}</span>
     </div>
     <div id="loadingOverlay"
         class="fixed inset-0 bg-black/30 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-300">
@@ -47,11 +58,46 @@
                 </div>
             @endif
 
+            @if ($rams->count())
+                <div>
+                    <h3 class="text-base font-semibold text-gray-800 mb-3">RAM</h3>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        @foreach($rams as $ram)
+                            <button type="button"
+                                class="btn-filter px-3 py-2 rounded-full border transition
+                                    {{ in_array($ram, request('rams', [])) ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
+                                data-name="rams[]"
+                                data-value="{{ $ram }}">
+                                {{ $ram }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Bộ nhớ (Storage) --}}
+            @if ($storages->count())
+                <div>
+                    <h3 class="text-base font-semibold text-gray-800 mb-3">Bộ nhớ</h3>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        @foreach($storages as $storage)
+                            <button type="button"
+                                class="btn-filter px-3 py-2 rounded-full border transition
+                                    {{ in_array($storage, request('storages', [])) ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
+                                data-name="storages[]"
+                                data-value="{{ $storage }}">
+                                {{ $storage }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             {{-- Lọc theo giá --}}
             <div>
                 <h3 class="text-base font-semibold text-gray-800 mb-3">Lọc theo giá</h3>
                 <div class="flex flex-wrap gap-2 text-sm">
-                    @foreach(['under_10' => 'Dưới 10 triệu', 'from_10_to_20' => '10 – 20 triệu', 'over_20' => 'Trên 20 triệu'] as $key => $label)
+                    @foreach(['under_10' => 'Dưới 10 triệu', 'from_10_to_20' => '10 - 20 triệu', 'from_20_to_30' => '20 - 30 triệu', 'over_30' => 'Trên 30 triệu'] as $key => $label)
                         <button type="button"
                             class="btn-filter px-3 py-2 rounded-full border transition
                                 {{ in_array($key, request('price_ranges', [])) ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
@@ -62,6 +108,7 @@
                     @endforeach
                 </div>
             </div>
+            
 
             {{-- Sắp xếp --}}
             {{-- <div>

@@ -14,33 +14,71 @@
                 {{-- Menu desktop --}}
                 <ul class="hidden lg:flex items-center gap-4">
                     {{-- Điện thoại --}}
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('product.phone') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400" data-route>Điện thoại</a>
-                    </li>
+                    </li> --}}
 
                     {{-- Laptop --}}
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('product.laptop') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400" data-route>Laptop</a>
-                    </li>
+                    </li> --}}
 
                     {{-- Đồng hồ --}}
                     {{-- <li>
                         <a href="#" class="inline-block py-4 px-4 text-white hover:bg-gray-400">Đồng hồ</a>
                     </li> --}}
 
+                    @foreach($categories as $category)
+                        {{-- Kiểm tra nếu có danh mục con thì thêm dropdown --}}
+                        @if($category->children->isNotEmpty())
+                            <li class="relative group cursor-pointer">
+                                <a href="{{ route('product.category', $category->slug) }}" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400" data-route>
+                                    {{ $category->name }}
+                                    <i class="fas fa-caret-down group-hover:rotate-180 transition-transform"></i>
+                                </a>
+                                <div class="absolute hidden group-hover:block w-[200px] bg-white rounded-md shadow-md z-50">
+                                    <ul class="px-2 py-2 space-y-2">
+                                        @foreach($category->children as $child)
+                                            <li><a href="{{ route('product.category', $child->slug) }}" class="block p-2 text-gray-600 hover:bg-gray-100" data-route>{{ $child->name }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </li>
+                        @else
+                            {{-- Nếu không có danh mục con thì hiển thị bình thường --}}
+                            <li>
+                                <a href="{{ route('product.category', $category->slug) }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400" data-route>
+                                    {{ $category->name }}
+                                </a>
+                            </li>
+                        @endif
+                    @endforeach
+
                     {{-- Phụ kiện có dropdown --}}
-                    <li class="relative group cursor-pointer">
-                        <a href="{{ route('product.accessory') }}" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400" data-route>
-                            Phụ kiện
-                            <i class="fas fa-caret-down group-hover:rotate-180 transition-transform"></i>
+                    {{-- Thay thế khối cứng Phụ kiện bằng logic động --}}
+                    {{-- Phụ kiện có dropdown --}}
+{{-- Thay thế khối cứng Phụ kiện bằng logic động --}}
+@if(isset($accessory) && $accessory->children->isNotEmpty())
+    <li class="relative group cursor-pointer">
+        {{-- Sử dụng route "product.accessory" cho danh mục cha "Phụ kiện" --}}
+        <a href="{{ route('product.accessory') }}" class="flex items-center gap-1 text-white py-4 px-4 hover:bg-gray-400" data-route>
+            {{ $accessory->name }}
+            <i class="fas fa-caret-down group-hover:rotate-180 transition-transform"></i>
+        </a>
+        <div class="absolute hidden group-hover:block w-[200px] bg-white rounded-md shadow-md z-50">
+            <ul class="px-2 py-2 space-y-2">
+                @foreach($accessory->children as $child)
+                    <li>
+                        {{-- Sử dụng route "product.category.accessory" cho các danh mục con --}}
+                        <a href="{{ route('product.category.accessory', $child->slug) }}" class="block p-2 text-gray-600 hover:bg-gray-100" data-route>
+                            {{ $child->name }}
                         </a>
-                        <div class="absolute hidden group-hover:block w-[200px] bg-white rounded-md shadow-md z-50">
-                            <ul class="px-2 py-2 space-y-2">
-                                <li><a href="{{ route('product.accessory.mobile') }}" class="block p-2 text-gray-600 hover:bg-gray-100" data-route>Phụ kiện di động</a></li>
-                                <li><a href="{{ route('product.accessory.audio') }}" class="block p-2 text-gray-600 hover:bg-gray-100" data-route>Thiết bị âm thanh</a></li>
-                            </ul>
-                        </div>
                     </li>
+                @endforeach
+            </ul>
+        </div>
+    </li>
+@endif
 
                     <li>
                         <a href="{{ route('blogs.index') }}" class="inline-block py-4 px-4 text-white hover:bg-gray-400" data-route>Chuyện công nghệ</a>
@@ -150,27 +188,46 @@
 
             <ul class="flex flex-col gap-2 p-4">
                 {{-- Điện thoại --}}
-                <li><a href="{{ route('product.phone') }}" class="block text-white py-2 border-b border-white/10" >Điện thoại</a></li>
+                {{-- <li><a href="{{ route('product.phone') }}" class="block text-white py-2 border-b border-white/10" >Điện thoại</a></li> --}}
 
                 {{-- Laptop --}}
-                <li><a href="{{ route('product.laptop') }}" class="block text-white py-2 border-b border-white/10" >Laptop</a></li>
+                {{-- <li><a href="{{ route('product.laptop') }}" class="block text-white py-2 border-b border-white/10" >Laptop</a></li> --}}
 
                 {{-- Đồng hồ --}}
                 {{-- <li><a href="#" class="block text-white py-2 border-b border-white/10">Đồng hồ</a></li> --}}
 
+                @foreach($categories as $category)
+                    @if($category->children->isNotEmpty())
+                        <li>
+                            <button class="w-full flex items-center justify-between text-white py-2 border-b border-white/10 toggle-submenu">
+                                <a href="{{ route('product.category', $category->slug) }}"><span>{{ $category->name }}</span></a>
+                                <i class="fas fa-caret-down caret-icon"></i>
+                            </button>
+                            <ul class="pl-4 mt-2 hidden submenu">
+                                @foreach($category->children as $child)
+                                    <li><a href="{{ route('product.category', $child->slug) }}" class="block text-white/80 py-1 text-sm">{{ $child->name }}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @else
+                        <li><a href="{{ route('product.category', $category->slug) }}" class="block text-white py-2 border-b border-white/10">{{ $category->name }}</a></li>
+                    @endif
+                @endforeach
+
                 {{-- Phụ kiện có submenu --}}
-                <li>
-                    
-                    <button class="w-full flex items-center justify-between text-white py-2 border-b border-white/10 toggle-submenu">
-                        <a href="{{ route('product.accessory') }}"><span>Phụ kiện</span></a>
-                        
-                        <i class="fas fa-caret-down caret-icon"></i>
-                    </button>
-                    <ul class="pl-4 mt-2 hidden submenu">
-                        <li><a href="{{ route('product.accessory.mobile') }}" class="block text-white/80 py-1 text-sm">Phụ kiện di động</a></li>
-                        <li><a href="{{ route('product.accessory.audio') }}" class="block text-white/80 py-1 text-sm">Thiết bị âm thanh</a></li>
-                    </ul>
-                </li>
+                @if(isset($accessory) && $accessory->children->isNotEmpty())
+                    <li>
+                        <button class="w-full flex items-center justify-between text-white py-2 border-b border-white/10 toggle-submenu">
+                            <a href="{{ route('product.accessory') }}"><span>{{ $accessory->name }}</span></a>
+                            <i class="fas fa-caret-down caret-icon"></i>
+                        </button>
+                        <ul class="pl-4 mt-2 hidden submenu">
+                            @foreach($accessory->children as $child)
+                                <li><a href="{{ route('product.category.accessory', $child->slug) }}" class="block text-white/80 py-1 text-sm">{{ $child->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endif
 
                 <li><a href="{{ route('blogs.index') }}" class="block text-white py-2 border-b border-white/10">Chuyện công nghệ</a></li>
                 <li><a href="{{ route('about') }}" class="block text-white py-2 border-b border-white/10">Về chúng tôi</a></li>

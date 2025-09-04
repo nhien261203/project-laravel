@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use App\Repositories\Brand\BrandRepository;
 use App\Repositories\Brand\BrandRepositoryInterface;
 use App\Repositories\Cart\CartRepository;
@@ -62,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    
+
 
     public function boot(): void
     {
@@ -75,6 +76,41 @@ class AppServiceProvider extends ServiceProvider
             $totalQty = $cart ? $cart->items->sum('quantity') : 0;
 
             $view->with('cartQty', $totalQty);
+        });
+
+
+        // lấy ra các danh mục để hiển thị ở header
+        View::composer('components.header', function ($view) {
+            // Lấy danh mục phụ kiện để loại trừ
+            $accessory = Category::where('slug', 'phu-kien')->first();
+
+            // Lấy các danh mục chính (cấp cha) và chỉ tải các danh mục con có status = 1
+            $categories = Category::where('status', 1)
+                ->whereNull('parent_id') // Chỉ lấy danh mục cha
+                ->when($accessory, function ($q) use ($accessory) {
+                    // Loại bỏ danh mục "phụ kiện" ra khỏi danh sách chính
+                    $q->where('id', '!=', $accessory->id);
+                })
+                // Thêm một closure vào with() để chỉ tải các danh mục con có status = 1
+                ->with(['children' => function ($query) {
+                    $query->where('status', 1);
+                }])
+                ->get();
+
+            // Lấy danh mục phụ kiện và các con của nó riêng biệt, chỉ lấy các con có status = 1
+            $accessoryWithChildren = null;
+            if ($accessory) {
+                $accessoryWithChildren = Category::where('status', 1)
+                    ->with(['children' => function ($query) {
+                        $query->where('status', 1);
+                    }])
+                    ->find($accessory->id);
+            }
+
+            $view->with([
+                'categories' => $categories,
+                'accessory' => $accessoryWithChildren,
+            ]);
         });
     }
 }

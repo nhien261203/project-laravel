@@ -4,7 +4,7 @@
             Phụ kiện chất lượng giá tốt
         </h2>
 
-        <a href="{{ route('product.accessory') }}"
+        <a href="{{ route('product.category.accessory','phu-kien') }}"
            class="text-sm sm:text-base text-blue-500 font-medium hover:text-blue-600 transition">
             Xem tất cả
         </a>

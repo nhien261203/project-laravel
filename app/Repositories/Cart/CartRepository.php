@@ -23,7 +23,7 @@ class CartRepository implements CartRepositoryInterface
         }
 
 
-        return Cart::with('items')->firstOrCreate([
+        return Cart::with('items.variant.product.category.parent')->firstOrCreate([
             'user_id' => $userId,
             'session_id' => $sessionId,
         ]);

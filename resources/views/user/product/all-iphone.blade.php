@@ -25,7 +25,40 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             
-            
+            @if ($rams->count())
+                <div>
+                    <h3 class="text-base font-semibold text-gray-800 mb-3">RAM</h3>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        @foreach($rams as $ram)
+                            <button type="button"
+                                class="btn-filter px-3 py-2 rounded-full border transition
+                                    {{ in_array($ram, request('rams', [])) ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
+                                data-name="rams[]"
+                                data-value="{{ $ram }}">
+                                {{ $ram }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            {{-- Bộ nhớ (Storage) --}}
+            @if ($storages->count())
+                <div>
+                    <h3 class="text-base font-semibold text-gray-800 mb-3">Bộ nhớ</h3>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        @foreach($storages as $storage)
+                            <button type="button"
+                                class="btn-filter px-3 py-2 rounded-full border transition
+                                    {{ in_array($storage, request('storages', [])) ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-100' }}"
+                                data-name="storages[]"
+                                data-value="{{ $storage }}">
+                                {{ $storage }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             {{-- Lọc theo giá --}}
             <div>

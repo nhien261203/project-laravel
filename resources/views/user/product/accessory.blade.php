@@ -3,11 +3,19 @@
 @section('content')
 <div class="container mx-auto pt-20 pb-10 overflow-x-hidden">
     <div class="flex items-center text-sm text-gray-600 space-x-2 p-1">
-        <a href="{{ route('home') }}" class="flex items-center hover:text-blue-600">
-            Trang chủ
-        </a>
+        <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>
-        <span class="text-gray-800 font-medium">Phụ kiện</span>
+        
+        {{-- Breadcrumb cho danh mục cha nếu có --}}
+        @if ($parentCategory)
+            <a href="{{ route('product.category', $parentCategory->slug) }}" class="hover:text-blue-600">
+                {{ $parentCategory->name }}
+            </a>
+            <span class="text-gray-400">›</span>
+        @endif
+        
+        {{-- Breadcrumb cho danh mục hiện tại --}}
+        <span class="text-gray-800 font-medium">{{ $category->name }}</span>
     </div>
 
     <div id="loadingOverlay"

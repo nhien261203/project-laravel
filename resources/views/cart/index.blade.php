@@ -51,7 +51,7 @@
                 <p class="text-sm text-gray-500">Bạn chưa thêm sản phẩm nào. Khám phá ngay để lựa chọn món đồ yêu thích!</p>
             </div>
 
-            <a href="{{ route('product.phone') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
                 🛍️ <span>Tiếp tục mua sắm</span>
             </a>
         </div>
@@ -70,10 +70,14 @@
         <div class="md:col-span-1 space-y-6 ">
             @foreach ($cart->items as $item)
                 @php
-                    $detailRoute = $item->snapshot_category_slug === 'phu-kien' 
-                        ? route('product.detailAccessory', $item->snapshot_product_slug) 
-                        : route('product.detail', $item->snapshot_product_slug);
+                    $product = $item->variant?->product;
+
+                    // Xác định đường dẫn chi tiết dựa trên loại sản phẩm ( is_accessory trong model product)
+                    $detailRoute = $product?->is_accessory
+                        ? route('product.detailAccessory', ['slug' => $item->snapshot_product_slug])
+                        : route('product.detail', ['slug' => $item->snapshot_product_slug]);
                 @endphp
+
                 <div class="flex flex-col md:flex-row bg-white shadow rounded p-4 gap-4">
                     <div class="w-full md:w-28 h-28 flex-shrink-0 border rounded overflow-hidden">
                         <a href="{{  $detailRoute }}"><img src="{{ asset('storage/' . $item->snapshot_image) }}" alt="Ảnh sản phẩm" class="w-full h-full object-contain"></a>
@@ -389,7 +393,7 @@
                     </form>
                     
 
-                    <a href="{{ route('product.phone') }}"
+                    <a href="{{ route('home') }}"
                         class="block w-full text-center border border-gray-300 text-gray-700 py-3 rounded hover:bg-gray-100 transition">
                         Tiếp tục mua sắm
                     </a>

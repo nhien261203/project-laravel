@@ -4,6 +4,7 @@ namespace App\Repositories\Product;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -53,6 +54,66 @@ class ProductRepository implements ProductRepositoryInterface
         return $product->delete();
     }
 
+
+    public function getRamsByCategoryIds($categoryIds)
+    {
+        return ProductVariant::whereHas('product', function ($q) use ($categoryIds) {
+            $q->whereIn('category_id', $categoryIds)->where('status', 1);
+        })
+            ->inStock()
+            ->whereNotNull('ram')
+            ->distinct()
+            ->pluck('ram');
+    }
+
+    public function getStoragesByCategoryIds($categoryIds)
+    {
+        return ProductVariant::whereHas('product', function ($q) use ($categoryIds) {
+            $q->whereIn('category_id', $categoryIds)->where('status', 1);
+        })
+            ->inStock()
+            ->whereNotNull('storage')
+            ->distinct()
+            ->pluck('storage');
+    }
+    public function getAllIphoneRams()
+    {
+        return ProductVariant::whereHas('product', function ($q) {
+            $q->where('status', 1)
+                ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
+                ->whereHas(
+                    'brand',
+                    fn($q) =>
+                    $q->where('name', 'like', '%Apple%')
+                        ->orWhere('name', 'like', '%iPhone%')
+                );
+        })
+            ->whereNotNull('ram')
+            ->pluck('ram')
+            ->unique()
+            ->sort()
+            ->values();
+    }
+
+    public function getAllIphoneStorages()
+    {
+        return ProductVariant::whereHas('product', function ($q) {
+            $q->where('status', 1)
+                ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
+                ->whereHas(
+                    'brand',
+                    fn($q) =>
+                    $q->where('name', 'like', '%Apple%')
+                        ->orWhere('name', 'like', '%iPhone%')
+                );
+        })
+            ->whereNotNull('storage')
+            ->pluck('storage')
+            ->unique()
+            ->sort()
+            ->values();
+    }
+
     // lay 5 sản phẩm iPhone cho home page
     public function getIphoneProducts(int $limit = 5)
     {
@@ -100,7 +161,17 @@ class ProductRepository implements ProductRepositoryInterface
             ->where('status', 1)
             ->whereHas('category', fn($q) => $q->where('name', 'like', '%Điện thoại%'))
             ->whereHas('brand', fn($q) =>
-            $q->where('name', 'like', '%Apple%')->orWhere('name', 'like', '%iPhone%'));
+            $q->where('name', 'like', '%Apple%')->orWhere('name', 'like', '%iPhone%'))
+            ->when(request('rams'), function ($q) {
+                $q->whereHas('variants', function ($q2) {
+                    $q2->whereIn('ram', request('rams'));
+                });
+            })
+            ->when(request('storages'), function ($q) {
+                $q->whereHas('variants', function ($q2) {
+                    $q2->whereIn('storage', request('storages'));
+                });
+            });;
 
         $query = $this->applyProductFilters($query);
 
@@ -248,15 +319,14 @@ class ProductRepository implements ProductRepositoryInterface
                     ->orWhereHas('brand', fn($q2) => $q2->where('name', 'like', "%{$keyword}%"))
                     ->orWhereHas('category', function ($q2) use ($keyword) {
                         $q2->where('name', 'like', "%{$keyword}%")
-                        ->orWhereHas('parent', fn($q3) => $q3->where('name', 'like', "%{$keyword}%"));
+                            ->orWhereHas('parent', fn($q3) => $q3->where('name', 'like', "%{$keyword}%"));
                     });
-
             })
             ->where('status', 1)
             ->latest();
 
         $products = $query->paginate($perPage)->withQueryString();
-    
+
         $this->appendProductExtras($products->items());
 
         return $products;
@@ -279,6 +349,16 @@ class ProductRepository implements ProductRepositoryInterface
             ->whereHas('variants', fn($q) => $q->inStock())
             ->when(request('brand_ids'), function ($q) {
                 $q->whereIn('brand_id', request('brand_ids'));
+            })
+            ->when(request('rams'), function ($q) {
+                $q->whereHas('variants', function ($q2) {
+                    $q2->whereIn('ram', request('rams'));
+                });
+            })
+            ->when(request('storages'), function ($q) {
+                $q->whereHas('variants', function ($q2) {
+                    $q2->whereIn('storage', request('storages'));
+                });
             });
 
         $query = $this->applyProductFilters($query);
@@ -322,6 +402,8 @@ class ProductRepository implements ProductRepositoryInterface
                                 $sub->where('price', '<', 15000000);
                             } elseif ($range === 'from_15_to_30') {
                                 $sub->whereBetween('price', [15000000, 30000000]);
+                            } elseif ($range === 'from_20_to_30') {
+                                $sub->whereBetween('price', [20000000, 30000000]);
                             } elseif ($range === 'over_30') {
                                 $sub->where('price', '>', 30000000);
                             }

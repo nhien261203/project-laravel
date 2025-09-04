@@ -45,8 +45,16 @@ class Product extends Model
         return $this->hasMany(Review::class)->where('status', 'approved');
     }
 
-    public function favorites()
+    // public function favorites()
+    // {
+    //     return $this->hasMany(Favorite::class);
+    // }
+
+    // phan biet phu kien cho cart 
+    public function getIsAccessoryAttribute()
     {
-        return $this->hasMany(Favorite::class);
+        $category = $this->category;
+        return $category?->slug === 'phu-kien'
+            || $category?->parent?->slug === 'phu-kien';
     }
 }
