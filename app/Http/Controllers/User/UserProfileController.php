@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,6 +25,14 @@ class UserProfileController extends Controller
     {
         $user = Auth::user();
 
+        if($request->phone) {
+        $exists = User::where('phone', $request->phone)
+                    ->where('id', '!=', $user->id)
+                    ->exists();
+        if($exists) {
+            return back()->with('error', 'Số điện thoại này đã được sử dụng.');
+        }
+    }
         $data = $request->validate([
             'name'    => 'required|string|max:255',
             'phone'   => 'nullable|string|max:20',

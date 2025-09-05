@@ -20,9 +20,8 @@
     </div>
 
     {{-- Bộ lọc theo tag --}}
-    @if ($tags->count())
+    {{-- @if ($tags->count())
         <div class="flex flex-wrap gap-3 items-center mb-8 px-1">
-            {{-- <span class="text-sm font-medium text-gray-600">📌 Lọc theo thẻ:</span> --}}
 
             @foreach ($tags as $tag)
                 @php
@@ -37,17 +36,13 @@
 
                 <a href="{{ route('blogs.index', $query) }}"
                    class="px-3 py-1 rounded-full text-sm border transition font-medium 
-                          {{ $isSelected ? 'bg-blue-100 text-blue-700 border-blue-400 shadow-sm' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50' }}">
+                        {{ $isSelected ? 'bg-blue-100 text-blue-700 border-blue-400 shadow-sm' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50' }}">
                     #{{ $tag->name }}
                 </a>
             @endforeach
 
-            {{-- @if (request()->has('tags'))
-                <a href="{{ route('blogs.index') }}"
-                   class="text-sm text-red-500 underline ml-3">✖ Bỏ lọc</a>
-            @endif --}}
         </div>
-    @endif
+    @endif --}}
 
     {{-- Danh sách bài viết --}}
     @if ($blogs->count())

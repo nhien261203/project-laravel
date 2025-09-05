@@ -8,7 +8,7 @@
 
     {{-- Header --}}
     <div class="flex justify-between items-center p-3 border-b border-gray-200">
-        <h3 class="font-semibold text-gray-800">Chat trực tuyến</h3>
+        <h3 class="font-semibold text-gray-800">Chat trực tuyến với NexusPhone</h3>
         
         <button id="userCloseChat" class="text-gray-500 hover:text-gray-800">
             <i class="fas fa-times"></i>

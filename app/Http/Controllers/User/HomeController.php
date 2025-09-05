@@ -13,6 +13,7 @@ use App\Models\ProductVariantImage;
 use App\Models\UserRecentProduct;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -119,23 +120,38 @@ class HomeController extends Controller
         ));
     }
 
-    public function allIphone()
+    public function allIphone(Request $request)
     {
-        // Lấy tất cả iPhone products (đã có hàm repo)
+        // Lấy tất cả iPhone products (không phân trang)
         $iphoneProducts = $this->productRepo->getAllIphoneProducts();
 
-        // Lấy tất cả RAM và Storage từ repo (tự động gom từ variants iPhone)
+        // Thêm các field extras: all_storages và sale_percent
+        foreach ($iphoneProducts as $product) {
+            $firstVariant = $product->variants->first();
+            $storages = $product->variants
+                ->pluck('storage')
+                ->unique()
+                ->filter()
+                ->values()
+                ->map(fn($s) => strtoupper($s))
+                ->implode(' / ');
+
+            $product->all_storages = $storages;
+            $product->sale_percent = $firstVariant?->sale_percent ?? 0;
+        }
+
+        // Lấy tất cả RAM và Storage cho filter
         $rams     = $this->productRepo->getAllIphoneRams();
         $storages = $this->productRepo->getAllIphoneStorages();
 
-        return view('user.product.all-iphone', compact(
-            'iphoneProducts',
-            'rams',
-            'storages'
-        ));
+        // Nếu là AJAX request, trả về HTML component
+        if ($request->ajax()) {
+            return view('components.Iphone_list', ['products' => $iphoneProducts])->render();
+        }
+
+        // Nếu không phải AJAX, trả về view đầy đủ
+        return view('user.product.all-iphone', compact('iphoneProducts', 'rams', 'storages'));
     }
-
-
 
 
     /**

@@ -73,7 +73,7 @@ class GithubController extends Controller
 
             session(['cart_merged' => true]);
 
-            return redirect()->route('admin.dashboard')->with('success', 'Đăng nhập Github (admin) thành công!');
+            return redirect('/admin/products')->with('success', 'Đăng nhập Github (admin) thành công!');
         } catch (Exception $e) {
             return redirect('/admin/login')->with('error', 'Đăng nhập Github thất bại: ' . $e->getMessage());
         }

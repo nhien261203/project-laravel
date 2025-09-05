@@ -49,12 +49,14 @@
         </div>
 
         <nav class="flex-1 p-4 space-y-2 text-white">
+            @role('admin')
             <a href="{{ route('admin.dashboard') }}" 
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
-            data-route="{{ route('admin.dashboard') }}"
-            >
+            data-route="{{ route('admin.dashboard') }}">
                 <i class="fas fa-tachometer-alt"></i> <span class="sidebar-text">Dashboard</span>
             </a>
+            @endrole
+
             <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-user"></i> <span class="sidebar-text">Users</span>
             </a>
@@ -66,11 +68,13 @@
             data-route="{{ route('admin.products.index') }}">
                 <i class="fas fa-box"></i> <span class="sidebar-text">Products</span>
             </a>
+            @role('admin')
             <a href="{{ route('admin.stock-all') }}" 
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
             data-route="{{ route('admin.stock-all') }}">
                 <i class="fas fa-warehouse"></i> <span class="sidebar-text">Stocks</span>
             </a>
+            @endrole
             <a href="{{ route('admin.categories.index') }}" 
             class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500"
             data-route="{{ route('admin.categories.index') }}"

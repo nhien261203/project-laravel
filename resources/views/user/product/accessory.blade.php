@@ -89,155 +89,87 @@
             </div> --}}
         </div>
     </div>
-    <div class="bg-white p-6 rounded-xl shadow space-y-6 overflow-hidden"> {{-- fix trượt ngang --}}
-    @if($products->count())
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
-            @foreach($products as $product)
-                @php
-                    $firstVariant = $product->variants->first();
-                    $image = optional($firstVariant?->images->first())->image_path;
-                    $price = $firstVariant?->price;
-                    $originalPrice = $firstVariant?->original_price;
-                @endphp
-
-                <a href="{{ route('product.detailAccessory', $product->slug) }}"
-                   class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:border-blue-400 relative">
-                    
-                    {{-- Ảnh + badge sale --}}
-                    <div class="relative w-full h-40 md:h-44 bg-white flex items-center justify-center">
-                        @if($image)
-                            <img src="{{ asset('storage/' . $image) }}" 
-                                 alt="{{ $product->name }}"
-                                 class="max-h-full max-w-full object-contain p-2 mt-5">
-                        @else
-                            <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-                                Không có ảnh
-                            </div>
-                        @endif
-
-                        @if($product->sale_percent > 0)
-                            <span class="absolute top-1 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded shadow">
-                                -{{ $product->sale_percent }}%
-                            </span>
-                        @endif
-                    </div>
-
-                    {{-- Nội dung --}}
-                    <div class="p-4">
-                        <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
-                            {{ $product->name }}
-                        </h3>
-                        {{-- <p class="text-xs text-gray-500 mt-1 ">{{ $product->all_storages ?? 'N/A' }}</p> --}}
-
-                        @if($price)
-                            <div class="mt-2 min-h-[3rem] md:min-h-[2rem]">
-                                <span class="text-red-500 font-bold">
-                                    {{ number_format($price, 0, ',', '.') }}₫
-                                </span>
-                                @if($originalPrice && $originalPrice > $price)
-                                    <span class="text-xs text-gray-400 line-through ml-2">
-                                        {{ number_format($originalPrice, 0, ',', '.') }}₫
-                                    </span>
-                                @endif
-                            </div>
-                        @else
-                            <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
-                        @endif
-                    </div>
-
-                    {{-- Nút so sánh góc phải dưới --}}
-                    {{-- <div class="text-xs text-gray-500 flex items-center gap-1">
-               
-                        <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
-                    </div> --}}
-                    {{-- <button
-                        type="button"
-                        onclick="event.stopPropagation(); event.preventDefault(); toggleFavorite({{ $product->id }})"
-                        class="absolute top-2 left-2 w-7 h-7 flex items-center justify-center rounded-full border border-gray-300 bg-white text-gray-400 opacity-0 group-hover:opacity-100 hover:text-red-500 hover:border-red-500 transition favorite-btn"
-                        data-product-id="{{ $product->id }}"
-                        title="Yêu thích"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 
-                            2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 
-                            3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 
-                            3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                    </button> --}}
-                    
-                </a>
-            @endforeach
-        </div>
-    @else
-        <div class="text-center py-12">
-                <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
-                    alt="No result"
-                    class="w-40 h-40 mx-auto mb-6 opacity-80" />
-                
-                <p class="text-gray-500 text-lg">
-                    Không tìm thấy sản phẩm phù hợp với bộ lọc
-                    
-                </p>
-
-                
-        </div>
-    @endif
-</div>
-    <div class="mt-4 flex justify-center">
-        {{-- Phân trang --}}
-        {{ $products->appends(request()->except('page'))->links('pagination.custom-user') }}
+    <div id="accessory-list" >
+        @include('components.accessory_list', ['accessories' => $accessories])
     </div>
+    <div class="mt-4 flex justify-center">
+        {{ $accessories->appends(request()->except('page'))->links('pagination.custom-user') }}
+    </div>
+
+
+    
 </div>
 @endsection
 @push('scripts')
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const currentParams = new URLSearchParams(window.location.search);
-    const pathname = window.location.pathname;
-    //const overlay = document.getElementById('loadingOverlay');
+    const accessoryList = document.getElementById('accessory-list');
 
-    document.querySelectorAll('.btn-filter').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const name = btn.getAttribute('data-name');
-            const value = btn.getAttribute('data-value');
+    async function loadAccessories(url) {
+        try {
+            const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            const html = await res.text();
+            accessoryList.innerHTML = html;
+            window.history.pushState({}, '', url);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
-            // Nếu là mảng (checkbox price_ranges[])
-            if (name.endsWith('[]')) {
-                const allValues = currentParams.getAll(name);
-                if (allValues.includes(value)) {
-                    // Bỏ chọn
-                    const newValues = allValues.filter(v => v !== value);
-                    currentParams.delete(name);
-                    newValues.forEach(v => currentParams.append(name, v));
-                } else {
-                    // Thêm chọn
-                    currentParams.append(name, value);
-                }
+    // Filter click
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-filter');
+        if (!btn) return;
+
+        const params = new URLSearchParams(window.location.search);
+        const name = btn.dataset.name;
+        const value = btn.dataset.value;
+
+        if (name.endsWith('[]')) {
+            const values = params.getAll(name);
+            params.delete(name);
+
+            if (values.includes(value)) {
+                values.filter(v => v !== value).forEach(v => params.append(name, v));
+                btn.classList.remove('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+                btn.classList.add('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
             } else {
-                // Nếu đã chọn rồi → bỏ đi
-                if (currentParams.get(name) === value) {
-                    currentParams.delete(name);
-                } else {
-                    currentParams.set(name, value);
-                }
+                values.push(value);
+                values.forEach(v => params.append(name, v));
+                btn.classList.remove('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+                btn.classList.add('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
             }
+        } else {
+            if (params.get(name) === value) {
+                params.delete(name);
+                btn.classList.remove('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+                btn.classList.add('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+            } else {
+                document.querySelectorAll(`.btn-filter[data-name="${name}"]`).forEach(b => {
+                    b.classList.remove('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+                    b.classList.add('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+                });
+                params.set(name, value);
+                btn.classList.remove('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+                btn.classList.add('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+            }
+        }
 
-            // Xoá tham số page khi thay đổi bộ lọc
-            currentParams.delete('page');
+        params.delete('page'); // reset page
+        const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        loadAccessories(newUrl);
+    });
 
-            // Redirect với query mới
-            const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
-            // overlay.classList.remove('pointer-events-none', 'opacity-0');
-            // overlay.classList.add('opacity-100');
-
-            // Delay để overlay render
-            // setTimeout(() => {
-            //     window.location.href = newUrl;
-            // }, 150);
-
-            window.location.href = newUrl;
-        });
+    // Pagination click
+    document.addEventListener('click', function (e) {
+        const link = e.target.closest('#accessory-list .pagination a');
+        if (!link) return;
+        e.preventDefault();
+        loadAccessories(link.href);
     });
 });
+
 </script>
 @endpush
+

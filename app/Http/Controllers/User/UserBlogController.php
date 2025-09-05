@@ -45,6 +45,16 @@ class UserBlogController extends Controller
             ->paginate(5) // số bình luận mỗi trang
             ->withQueryString(); // giữ nguyên query khi phân trang
 
-        return view('user.blogs.show', compact('blog', 'comments'));
+        // Lấy bài viết liên quan (cùng tag)
+        $relatedBlogs = Blog::where('status', 1)
+            ->where('id', '!=', $blog->id) // loại bài hiện tại
+            ->whereHas('tags', function ($q) use ($blog) {
+                $q->whereIn('tags.id', $blog->tags->pluck('id'));
+            })
+            ->with('tags')
+            ->latest()
+            ->take(5)
+            ->get();
+        return view('user.blogs.show', compact('blog', 'comments', 'relatedBlogs'));
     }
 }

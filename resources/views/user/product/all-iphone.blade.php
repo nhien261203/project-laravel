@@ -79,95 +79,18 @@
     </div>
 
     {{-- Danh sách sản phẩm iPhone --}}
-    <div class="bg-white p-6 rounded-xl shadow space-y-6 overflow-hidden"> {{-- fix trượt ngang --}}
-        @if($iphoneProducts->count())
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
-                @foreach($iphoneProducts as $product)
-                    @php
-                        $firstVariant = $product->variants->first();
-                        $image = optional($firstVariant?->images->first())->image_path;
-                        $price = $firstVariant?->price;
-                        $originalPrice = $firstVariant?->original_price;
-                    @endphp
-
-                    <a href="{{ route('product.detail', $product->slug) }}"
-                    class="group bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition hover:border-blue-400 relative">
-                        
-                        {{-- Ảnh + badge sale --}}
-                        <div class="relative w-full h-40 md:h-44 bg-white flex items-center justify-center">
-                            @if($image)
-                                <img src="{{ asset('storage/' . $image) }}" 
-                                    alt="{{ $product->name }}"
-                                    class="max-h-full max-w-full object-contain p-2 mt-5">
-                            @else
-                                <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
-                                    Không có ảnh
-                                </div>
-                            @endif
-
-                            @if($product->sale_percent > 0)
-                                <span class="absolute top-1 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded shadow">
-                                    -{{ $product->sale_percent }}%
-                                </span>
-                            @endif
-                        </div>
-
-                        {{-- Nội dung --}}
-                        <div class="p-4">
-                            <h3 class="text-sm font-semibold text-gray-800 group-hover:text-blue-600 truncate">
-                                {{ $product->name }}
-                            </h3>
-                            <p class="text-xs text-gray-500 mt-1 ">{{ $product->all_storages ?? 'N/A' }}</p>
-
-                            @if($price)
-                                <div class="mt-2 min-h-[3rem]">
-                                    <span class="text-red-500 font-bold">
-                                        {{ number_format($price, 0, ',', '.') }}₫
-                                    </span>
-                                    @if($originalPrice && $originalPrice > $price)
-                                        <span class="text-xs text-gray-400 line-through ml-2">
-                                            {{ number_format($originalPrice, 0, ',', '.') }}₫
-                                        </span>
-                                    @endif
-                                </div>
-                            @else
-                                <div class="text-sm text-gray-400 mt-2">Chưa có giá</div>
-                            @endif
-                        </div>
-
-                        {{-- Nút so sánh góc phải dưới --}}
-                        {{-- <div class="text-xs text-gray-500 flex items-center gap-1">
-                
-                            <span>Đã bán: {{ $product->variants->sum('sold') }}</span>
-                        </div> --}}
-                        <button
-                            type="button"
-                            onclick="event.stopPropagation(); event.preventDefault(); addToCompare({{ $product->id }}, '{{ request()->segment(1) }}')"
-                            class="absolute bottom-2 right-2 w-6 h-6 flex items-center justify-center rounded-full border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition"
-                            title="Thêm vào so sánh"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                            </svg>
-                        </button>
-                    </a>
-                @endforeach
-            </div>
-        @else
-            <p class="text-gray-500 mt-4">Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
-        @endif
+    <div id="productListContainer" class="bg-white p-6 rounded-xl shadow space-y-6 overflow-hidden">
+        @include('components.Iphone_list', ['products' => $iphoneProducts])
     </div>
+
     <button onclick="goToComparePage('{{ request()->segment(1) }}')" 
-            class="fixed bottom-[120px] right-5 px-4 py-2 bg-blue-600 text-white rounded shadow-lg z-50 hidden">
+            class="fixed bottom-[165px] right-5 px-4 py-2 bg-blue-600 text-white rounded shadow-lg z-50 hidden">
         So sánh (<span id="compareCount">0</span>)
     </button>
 </div>
 @endsection
 
 @push('scripts')
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function updateCompareCount() {
         const category = "{{ request()->segment(1) }}";
@@ -246,49 +169,100 @@
         window.location.href = `/so-sanh/${categorySlug}?${query}`;
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        updateCompareCount();
 
-        const currentParams = new URLSearchParams(window.location.search);
-        const pathname = window.location.pathname;
-        // const overlay = document.getElementById('loadingOverlay');
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    updateCompareCount();
+    const productContainer = document.getElementById('productListContainer');
 
-        document.querySelectorAll('.btn-filter').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const name = btn.getAttribute('data-name');
-                const value = btn.getAttribute('data-value');
-
-                if (name.endsWith('[]')) {
-                    const allValues = currentParams.getAll(name);
-                    if (allValues.includes(value)) {
-                        const newValues = allValues.filter(v => v !== value);
-                        currentParams.delete(name);
-                        newValues.forEach(v => currentParams.append(name, v));
-                    } else {
-                        currentParams.append(name, value);
-                    }
-                } else {
-                    if (currentParams.get(name) === value) {
-                        currentParams.delete(name);
-                    } else {
-                        currentParams.set(name, value);
-                    }
-                }
-
-                currentParams.delete('page');
-                const newUrl = pathname + (currentParams.toString() ? '?' + currentParams.toString() : '');
-                // Hiển thị overlay trước khi reload
-                // overlay.classList.remove('pointer-events-none', 'opacity-0');
-                // overlay.classList.add('opacity-100');
-
-                // Delay để overlay render
-                // setTimeout(() => {
-                //     window.location.href = newUrl;
-                // }, 150);
-
-                window.location.href = newUrl;
+    // Hàm fetch sản phẩm theo URL
+    async function fetchProducts(url) {
+        try {
+            const response = await fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             });
-        });
+            const html = await response.text();
+            productContainer.innerHTML = html;
+
+            // Cập nhật URL mà không reload
+            window.history.pushState({}, "", url);
+
+
+        } catch (error) {
+            console.error('Lỗi khi load sản phẩm:', error);
+        }
+    }
+
+    // Event delegation cho filter buttons
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-filter');
+        if (!btn) return;
+
+        e.preventDefault();
+
+        const params = new URLSearchParams(window.location.search);
+        const name = btn.dataset.name;
+        const value = btn.dataset.value;
+
+        if (name.endsWith('[]')) {
+            // Multi-select
+            let values = params.getAll(name);
+            params.delete(name);
+
+            if (values.includes(value)) {
+                // bỏ chọn
+                values = values.filter(v => v !== value);
+                values.forEach(v => params.append(name, v));
+                btn.classList.remove('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+                btn.classList.add('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+            } else {
+                // chọn
+                values.push(value);
+                values.forEach(v => params.append(name, v));
+                btn.classList.remove('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+                btn.classList.add('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+            }
+        } else {
+            // Single-select
+            if (params.get(name) === value) {
+                params.delete(name);
+                btn.classList.remove('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+                btn.classList.add('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+            } else {
+                // Reset tất cả nút cùng name
+                document.querySelectorAll(`.btn-filter[data-name="${name}"]`).forEach(b => {
+                    b.classList.remove('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+                    b.classList.add('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+                });
+                params.set(name, value);
+                btn.classList.remove('bg-white','border-gray-300','text-gray-700','hover:bg-gray-100');
+                btn.classList.add('bg-blue-500','text-white','border-blue-500','hover:bg-blue-600');
+            }
+        }
+
+        // Reset page về 1 khi filter
+        params.delete('page');
+
+        const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        fetchProducts(newUrl);
     });
+
+    // Event delegation cho pagination
+    document.addEventListener('click', function (e) {
+        const link = e.target.closest('#productListContainer .pagination a');
+        if (!link) return;
+
+        e.preventDefault();
+        fetchProducts(link.href);
+    });
+
+    // Handle back/forward browser button
+    window.addEventListener('popstate', function () {
+        fetchProducts(window.location.href);
+    });
+});
 </script>
 @endpush
+
+

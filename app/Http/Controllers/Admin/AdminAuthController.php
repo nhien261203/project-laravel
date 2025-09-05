@@ -103,7 +103,7 @@ class AdminAuthController extends Controller
 
         session(['cart_merged' => true]);
 
-        return redirect('/admin/dashboard')->with('success', 'Đăng nhập thành công! Đây là tổng quan quản trị !');
+        return redirect('/admin/products')->with('success', 'Đăng nhập thành công! Đây là tổng quan quản trị !');
     }
 
     // Hiển thị form đăng ký

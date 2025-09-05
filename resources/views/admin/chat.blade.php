@@ -68,6 +68,13 @@
 
                     li.appendChild(nameSpan);
 
+                    if(conv.user && conv.user.email){
+                        const emailSpan = document.createElement('span');
+                        emailSpan.innerText = conv.user.email;
+                        emailSpan.className = "text-xs text-gray-400 truncate"; // truncate nếu email dài
+                        li.appendChild(emailSpan);
+                    }
+
                     li.onclick = () => {
                         loadConversation(conv.id, conv.user ? conv.user.name : 'Guest');
                     };

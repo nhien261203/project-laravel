@@ -10,6 +10,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class DashBoardController extends Controller
 {
@@ -23,6 +24,9 @@ class DashBoardController extends Controller
     // Trang dashboard
     public function index()
     {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền truy cập dashboard');
+        }
         $categories = Category::all();
         $brands = Brand::whereHas('products')->get();
         $statuses = $this->dashboard->getAvailableStatuses();
@@ -235,7 +239,9 @@ class DashBoardController extends Controller
 
     public function stockAll(Request $request)
     {
-        
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền truy cập dashboard');
+        }
         $threshold  = $request->input('threshold', 5);
         $categoryId = $request->input('category_id');
         $perPage    = $request->input('per_page', 10);

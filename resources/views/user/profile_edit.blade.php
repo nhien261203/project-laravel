@@ -39,3 +39,25 @@
     </div>
 </form>
 @endsection
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if(session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Lỗi!',
+        text: '{{ session('error') }}'
+    });
+</script>
+@endif
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: '{{ session('success') }}'
+    });
+</script>
+@endif
+

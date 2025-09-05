@@ -97,7 +97,7 @@
             const data = await res.json();
             document.getElementById(thinkingId)?.remove();
 
-            // ✅ Controller đã trả về answer
+            //  Controller đã trả về answer
             appendMessage(data.answer, "bot");
 
         } catch (err) {
@@ -130,13 +130,13 @@
 
 <style>
 .typing span {
-  display:inline-block;
-  width:6px;
-  height:6px;
-  margin:0 1px;
-  background:#666;
-  border-radius:50%;
-  animation: blink 1.4s infinite both;
+   display:inline-block;
+   width:6px;
+   height:6px;
+   margin:0 1px;
+   background:#666;
+   border-radius:50%;
+   animation: blink 1.4s infinite both;
 }
 .typing span:nth-child(2) { animation-delay: 0.2s; }
 .typing span:nth-child(3) { animation-delay: 0.4s; }

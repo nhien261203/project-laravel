@@ -26,6 +26,24 @@
             {!! $blog->content !!}
         </div>
     </article>
+    {{-- Bài viết liên quan --}}
+    @if($relatedBlogs->count())
+        <div class="mt-12">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Bài viết liên quan</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach($relatedBlogs as $related)
+                    <a href="{{ route('blogs.show', $related->slug) }}" class="block bg-white p-4 rounded shadow hover:shadow-lg transition">
+                        @if($related->thumbnail)
+                            <img src="{{ asset('storage/' . $related->thumbnail) }}" alt="{{ $related->title }}" class="w-full h-40 object-cover rounded mb-3">
+                        @endif
+                        <h3 class="text-gray-800 font-semibold mb-1">{{ $related->title }}</h3>
+                        <p class="text-gray-500 text-sm line-clamp-2">{{ Str::limit(strip_tags($related->content), 100) }}</p>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
 
     {{-- BÌNH LUẬN --}}
     <div class="mt-10 bg-white p-6 rounded shadow-sm">

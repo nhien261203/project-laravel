@@ -22,7 +22,7 @@ class UserProductController extends Controller
         $this->brandRepo = $brandRepo;
     }
 
-    protected function renderCategoryPage(string $slug, string $viewName)
+    protected function renderCategoryPage(Request $request, string $slug, string $viewName)
     {
         $category = Category::where('slug', $slug)
             ->where('status', 1)
@@ -31,11 +31,11 @@ class UserProductController extends Controller
             }])
             ->firstOrFail();
 
-         // Lấy tất cả ID của danh mục hiện tại và danh mục con
+        // Lấy tất cả ID của danh mục hiện tại và danh mục con
         $categoryIds = Category::where('id', $category->id)
             ->orWhere('parent_id', $category->id)
             ->pluck('id');
-        
+
         $products = $this->productRepo->getProductsByCategorySlug($slug);
         $brands = $this->brandRepo->getBrandsByCategorySlug($slug);
 
@@ -45,47 +45,94 @@ class UserProductController extends Controller
         // Lấy danh mục cha (nếu có) để tạo breadcrumbs
         $parentCategory = $category->parent;
 
-        return view($viewName, compact('products', 'brands', 'category', 'parentCategory', 'rams','storages'));
+        if ($request->ajax()) {
+            return view('components.product_list', compact('products'))->render();
+        }
+
+
+        return view($viewName, compact('products', 'brands', 'category', 'parentCategory', 'rams', 'storages'));
     }
 
-    public function showCategory(string $slug)
+    public function renderAccessoryPage(Request $request, string $slug)
+    {
+        $category = Category::where('slug', $slug)
+            ->where('status', 1)
+            ->with(['children' => fn($q) => $q->where('status', 1)])
+            ->firstOrFail();
+
+        $categoryIds = Category::where('id', $category->id)
+            ->orWhere('parent_id', $category->id)
+            ->pluck('id');
+
+        // Lấy sản phẩm theo category, phân trang 8 / page
+        $accessories = $this->productRepo->getProductsByCategorySlug($slug); // ->paginate() ở repo
+
+        $brands = $this->brandRepo->getBrandsByCategorySlug($slug);
+
+        $rams     = $this->productRepo->getRamsByCategoryIds($categoryIds);
+        $storages = $this->productRepo->getStoragesByCategoryIds($categoryIds);
+
+        $parentCategory = $category->parent;
+
+        if ($request->ajax()) {
+            return view('components.accessory_list', compact('accessories'))->render();
+        }
+
+        return view('user.product.accessory', compact(
+            'accessories',
+            'brands',
+            'category',
+            'parentCategory',
+            'rams',
+            'storages'
+        ));
+    }
+
+    /**
+     * Route cho danh mục phụ kiện cố định
+     */
+    public function accessoryCategory(Request $request)
+    {
+        return $this->renderAccessoryPage($request, 'phu-kien');
+    }
+
+    public function showCategory(Request $request, string $slug)
     {
 
-
-        // This method will use the same view for all main categories.
-        return $this->renderCategoryPage($slug, 'user.product.phone');
+        return $this->renderCategoryPage($request, $slug, 'user.product.phone');
     }
 
-    public function showAccessoryCategory(string $slug)
+    public function showAccessoryCategory(Request $request, string $slug)
     {
-        return $this->renderCategoryPage($slug, 'user.product.accessory');
+        return $this->renderAccessoryPage($request, $slug);
     }
 
 
-    public function phoneCategory()
-    {
-        return $this->renderCategoryPage('dien-thoai', 'user.product.phone');
-    }
 
-    public function laptopCategory()
-    {
-        return $this->renderCategoryPage('laptop', 'user.product.laptop');
-    }
+    // public function phoneCategory(Request $request)
+    // {
+    //     return $this->renderCategoryPage($request, 'dien-thoai', 'user.product.phone');
+    // }
 
-    public function accessoryCategory()
-    {
-        return $this->renderCategoryPage('phu-kien', 'user.product.accessory');
-    }
+    // public function laptopCategory()
+    // {
+    //     return $this->renderCategoryPage('laptop', 'user.product.laptop');
+    // }
 
-    public function mobileAccessory()
-    {
-        return $this->renderCategoryPage('phu-kien-di-dong', 'user.product.accessory_mobile');
-    }
+    // public function accessoryCategory(Request $request)
+    // {
+    //     return $this->renderCategoryPage($request, 'phu-kien', 'user.product.accessory');
+    // }
 
-    public function audioAccessory()
-    {
-        return $this->renderCategoryPage('thiet-bi-am-thanh', 'user.product.accessory_audio');
-    }
+    // public function mobileAccessory()
+    // {
+    //     return $this->renderCategoryPage('phu-kien-di-dong', 'user.product.accessory_mobile');
+    // }
+
+    // public function audioAccessory()
+    // {
+    //     return $this->renderCategoryPage('thiet-bi-am-thanh', 'user.product.accessory_audio');
+    // }
 
     // tim kiem tren header
     public function search(Request $request)

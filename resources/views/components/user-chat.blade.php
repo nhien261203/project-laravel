@@ -8,7 +8,10 @@
 <div id="chatPopup" class="fixed bottom-24 right-5 w-96 h-[500px] bg-white rounded-xl shadow-lg flex flex-col z-60 hidden">
     {{-- Header --}}
     <div class="flex justify-between items-center p-3 border-b border-gray-200">
-        <h3 class="font-semibold text-gray-800">Chat với AI</h3>
+        <div class="flex items-center gap-2">
+            <img src="/images/ai-avatar.jpg" alt="NexusAI" class="w-8 h-8 rounded-full">
+            <h3 class="font-semibold text-gray-800">Chat với trợ lý NexusAI</h3>
+        </div>
         <button id="closeChat" class="text-gray-500 hover:text-gray-800">
             <i class="fas fa-times"></i>
         </button>
@@ -46,6 +49,9 @@
     const input = document.getElementById("chatInputPopup");
     const sendBtn = document.getElementById("sendBtnPopup");
 
+    const AI_AVATAR = '/images/ai-avatar.jpg'; // đường dẫn avatar AI
+
+
     // XSS escape
     function escapeHtml(text) {
         const div = document.createElement("div");
@@ -60,24 +66,40 @@
 
     //Thêm tin nhắn
     function appendMessage(message, from = "user") {
-        const align = from === "user" ? "justify-end" : "justify-start";
-        const bg = from === "user" ? "bg-green-100" : "bg-gray-200";
+        let align, bg, avatarHtml = '';
+
+        if (from === "user") {
+            align = "justify-end";
+            bg = "bg-green-100";
+        } else {
+            align = "justify-start";
+            bg = "bg-gray-200";
+
+            // Thêm avatar AI
+            avatarHtml = `
+                <img src="${AI_AVATAR}" alt="AI" class="w-8 h-8 rounded-full mr-2 flex-shrink-0">
+            `;
+        }
 
         chatBox.insertAdjacentHTML("beforeend", `
-            <div class="flex ${align}">
+            <div class="flex ${align} items-end mb-1">
+                ${avatarHtml}
                 <span class="${bg} px-3 py-2 rounded-2xl inline-block max-w-[80%] break-words">
                     ${escapeHtml(message)}
                 </span>
             </div>
         `);
+
         scrollToBottom();
     }
+
 
     //Hiển thị "Đang suy nghĩ"
     function showThinking() {
         const id = "thinking-" + Date.now();
         chatBox.insertAdjacentHTML("beforeend", `
-            <div id="${id}" class="flex justify-start">
+            <div id="${id}" class="flex justify-start items-end mb-1">
+                <img src="${AI_AVATAR}" alt="AI" class="w-8 h-8 rounded-full mr-2 flex-shrink-0">
                 <div class="typing bg-gray-200 px-3 py-2 rounded-2xl">
                     Đang suy nghĩ <span></span><span></span><span></span>
                 </div>
@@ -86,6 +108,7 @@
         scrollToBottom();
         return id;
     }
+
 
     //Load lịch sử từ DB
     async function loadHistory() {
