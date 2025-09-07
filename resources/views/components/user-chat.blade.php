@@ -116,7 +116,17 @@
             const res = await fetch("/chatbot/history");
             const history = await res.json();
             chatBox.innerHTML = "";
-            history.forEach(msg => appendMessage(msg.message, msg.sender));
+            if (history.length === 0) {
+                // Nếu chưa có tin nhắn thì hiển thị placeholder
+                chatBox.insertAdjacentHTML("beforeend", `
+                    <div class="text-center text-gray-400 italic placeholder-message">
+                        Chào bạn! Tôi là <b>Nexus AI</b>. 
+                        Tôi có thể hỗ trợ bạn tìm sản phẩm, giải đáp thắc mắc hoặc tư vấn phù hợp
+                    </div>
+                `);
+            } else {
+                history.forEach(msg => appendMessage(msg.message, msg.sender));
+            }
         } catch (err) {
             console.error("Không load được lịch sử:", err);
         }

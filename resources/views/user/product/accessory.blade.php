@@ -92,9 +92,7 @@
     <div id="accessory-list" >
         @include('components.accessory_list', ['accessories' => $accessories])
     </div>
-    <div class="mt-4 flex justify-center">
-        {{ $accessories->appends(request()->except('page'))->links('pagination.custom-user') }}
-    </div>
+    
 
 
     
@@ -112,6 +110,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const html = await res.text();
             accessoryList.innerHTML = html;
             window.history.pushState({}, '', url);
+            // window.scrollTo({
+            //     top: 0,
+            //     behavior: 'smooth'
+            // });
         } catch (err) {
             console.error(err);
         }
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Pagination click
     document.addEventListener('click', function (e) {
-        const link = e.target.closest('#accessory-list .pagination a');
+        const link = e.target.closest('.pagination a');
         if (!link) return;
         e.preventDefault();
         loadAccessories(link.href);

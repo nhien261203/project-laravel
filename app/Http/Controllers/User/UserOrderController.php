@@ -93,7 +93,7 @@ class UserOrderController extends Controller
             //su dung job de gui mail
 
             // $order->load('items');
-            // SendOrderConfirmationEmail::dispatch($order, Auth::user());
+            SendOrderConfirmationEmail::dispatch($order, Auth::user());
             //queue connection=database trong .env de chay queue
 
             if ($request->expectsJson()) {

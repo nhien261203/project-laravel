@@ -247,6 +247,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Cập nhật URL trên thanh địa chỉ mà không reload
             window.history.pushState({}, "", url);
+            // window.scrollTo({
+            //     top: 0,
+            //     behavior: 'smooth'
+            // });
 
             
         } catch (error) {
@@ -306,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event delegation cho pagination
     document.addEventListener("click", function (e) {
-        const link = e.target.closest("#product-list .pagination a");
+        const link = e.target.closest(".pagination a");
         if (!link) return;
 
         e.preventDefault();

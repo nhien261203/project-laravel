@@ -23,6 +23,10 @@ class UserBlogController extends Controller
             ->latest()
             ->paginate(6)
             ->appends(['tags' => $tagIds]); // giữ lại query string khi phân trang
+        
+        if ($request->ajax()) {
+            return view('components.blog-list', compact('blogs','tags', 'tagIds'))->render();
+        }
 
         return view('user.blogs.index', compact('blogs', 'tags', 'tagIds'));
     }

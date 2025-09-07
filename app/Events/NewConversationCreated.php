@@ -15,6 +15,7 @@ class NewConversationCreated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $conversation;
+    public $connection = 'sync';
     
     /**
      * Create a new event instance.

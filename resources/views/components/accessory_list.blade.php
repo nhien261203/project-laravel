@@ -66,4 +66,7 @@
     @endif
     
 </div>
+<div class="mt-4 flex justify-center">
+    {{ $accessories->appends(request()->except('page'))->links('pagination.custom-user') }}
+</div>
 

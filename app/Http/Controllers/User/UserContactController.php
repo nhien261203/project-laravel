@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendContactConfirmationEmail;
 use App\Mail\ContactUserConfirmMail;
 use App\Models\Contact;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class UserContactController extends Controller
         ]);
 
         // Gửi mail xác nhận cho người dùng
-        Mail::to($contact->email)->send(new ContactUserConfirmMail($contact));
+        SendContactConfirmationEmail::dispatch($contact);
 
         return back()->with('success', 'Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm.');
     }

@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between mt-6">
+    <nav role="navigation" aria-label="Pagination Navigation" class="pagination flex items-center justify-between mt-6">
         
 
         {{-- Nút phân trang --}}
