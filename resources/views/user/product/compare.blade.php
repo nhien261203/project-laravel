@@ -77,7 +77,7 @@ function renderCompareTable() {
 
     const products = allProducts.filter(p => compareIds.includes(p.id));
     const rows = [
-        {label:'Giá', cb: p => p.variants.map(v=>v.price).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).map(v=>v.toLocaleString()+'₫').join(' / ') || 'N/A'},
+        {label:'Giá', cb: p => p.variants.map(v=>parseInt(v.price)).filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).map(v=>v.toLocaleString('vi-VN')+'₫').join(' / ') || 'N/A'},
         {label:'Bộ nhớ', cb: p => p.variants.map(v=>v.storage).filter(Boolean).join(' / ') || 'N/A'},
         {label:'RAM', cb: p => p.variants.map(v=>v.ram).filter(Boolean).join(' / ') || 'N/A'},
         {label:'Màu sắc', cb: p => p.variants.map(v=>v.color).filter(Boolean).join(' / ') || 'N/A'},

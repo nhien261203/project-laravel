@@ -9,6 +9,7 @@
         <div>
             <p><span class="font-semibold">Tên:</span> {{ $user->name }}</p>
             <p><span class="font-semibold">Email:</span> {{ $user->email }}</p>
+            <p><span class="font-semibold">SĐT:</span> {{ $user->phone ?? 'chưa có' }}</p>
             <p><span class="font-semibold">Quyền:</span> {{ $user->roles->pluck('name')->implode(', ') }}</p>
         </div>
         <div>

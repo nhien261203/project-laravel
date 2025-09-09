@@ -104,11 +104,35 @@ class ProductController extends Controller
 
         $data['slug'] = $data['slug'] ?: Str::slug($data['name']);
 
+        $changes = [];
+
+        foreach ($data as $field => $newValue) {
+            $oldValue = $product->$field;
+
+            if ($oldValue != $newValue) {
+                if ($field === 'category_id') {
+                    $oldName = \App\Models\Category::find($oldValue)?->name ?? 'Không xác định';
+                    $newName = \App\Models\Category::find($newValue)?->name ?? 'Không xác định';
+                    $changes[] = "Danh mục thay đổi từ '{$oldName}' sang '{$newName}'";
+                } elseif ($field === 'brand_id') {
+                    $oldName = \App\Models\Brand::find($oldValue)?->name ?? 'Không xác định';
+                    $newName = \App\Models\Brand::find($newValue)?->name ?? 'Không xác định';
+                    $changes[] = "Thương hiệu thay đổi từ '{$oldName}' sang '{$newName}'";
+                } else {
+                    $changes[] = ucfirst($field) . " thay đổi từ '{$oldValue}' sang '{$newValue}'";
+                }
+            }
+        }
+
         $this->productRepo->update($id, $data);
 
-        //ghi log
-        AdminLogHelper::log('update_product', "Cập nhật sản phẩm: {$product->name}");
-
+        // Ghi log chi tiết
+        if (!empty($changes)) {
+            $desc = "Cập nhật sản phẩm {$product->name}: " . implode('; ', $changes);
+            AdminLogHelper::log('update_product', $desc);
+        } else {
+            AdminLogHelper::log('update_product', "Cập nhật sản phẩm {$product->name} nhưng không thay đổi dữ liệu");
+        }
         return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công!');
     }
 

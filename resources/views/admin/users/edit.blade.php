@@ -10,12 +10,17 @@
 
         <div class="mb-4">
             <label class="block mb-1 font-medium">Tên</label>
-            <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full border p-2 rounded">
+            <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full border p-2 rounded bg-gray-100" readonly>
         </div>
 
         <div class="mb-4">
             <label class="block mb-1 font-medium">Email</label>
-            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full border p-2 rounded">
+            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full border p-2 rounded bg-gray-100" readonly>
+        </div>
+
+        <div class="mb-4">
+            <label class="block mb-1 font-medium">SĐT</label>
+            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full border p-2 rounded bg-gray-100" readonly>
         </div>
 
         <div class="mb-4">

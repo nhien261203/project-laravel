@@ -2,7 +2,14 @@
 
 @section('content')
 <div class="p-4">
-    <h2 class="text-xl font-semibold mb-6">Danh sách người dùng</h2>
+    <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold">Danh sách người dùng</h2>
+        @role('admin')
+        <a href="{{ route('admin.users.create') }}" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
+            Thêm người dùng mới
+        </a>
+        @endrole
+    </div>
 
     {{-- Form lọc --}}
     <form method="GET" class="mb-6">

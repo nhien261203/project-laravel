@@ -57,9 +57,11 @@
             </a>
             @endrole
 
+            @role('admin')
             <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500" data-route>
                 <i class="fas fa-user"></i> <span class="sidebar-text">Users</span>
             </a>
+            @endrole
             {{-- <a href="#" class="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-500">
                 <i class="fas fa-chart-bar"></i> <span class="sidebar-text">Reports</span>
             </a> --}}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\AdminLogHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -50,7 +51,9 @@ class ProductVariantController extends Controller
             $data['sku'] = 'SKU-P' . $productId . '-' . strtoupper(uniqid());
         }
 
-        $this->variantRepo->create($productId, $data);
+        $variant=$this->variantRepo->create($productId, $data);
+
+        AdminLogHelper::log('create_variant', "Thêm biến thể [{$variant->sku}] cho sản phẩm ID {$productId}");
 
         return redirect()->route('admin.products.variants.index', $productId)
             ->with('success', 'Tạo biến thể thành công');
@@ -78,7 +81,12 @@ class ProductVariantController extends Controller
         // Tính giá bán lại nếu có thay đổi
         $data['price'] = round($data['original_price'] * (1 - ($data['sale_percent'] / 100)), 2);
 
+        $variant = $this->variantRepo->find($variantId);
+
+        
         $this->variantRepo->update($variantId, $data);
+
+        AdminLogHelper::log('update_variant', "Cập nhật biến thể [{$variant->sku}] của sản phẩm ID {$productId}");
 
         return redirect()->route('admin.products.variants.index', $productId)
             ->with('success', 'Cập nhật biến thể thành công');
@@ -86,7 +94,10 @@ class ProductVariantController extends Controller
 
     public function destroy($productId, $variantId)
     {
+        $variant = $this->variantRepo->find($variantId);
         $this->variantRepo->delete($variantId);
+
+        AdminLogHelper::log('delete_variant', "Xoá biến thể [{$variant->sku}] của sản phẩm ID {$productId}");
 
         return redirect()->route('admin.products.variants.index', $productId)
             ->with('success', 'Xoá biến thể thành công');

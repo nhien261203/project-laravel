@@ -3,15 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNewUserAccountEmail;
+use App\Mail\NewUserAccountMail;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
+        
         $query = User::with('roles');
 
         if ($request->filled('search')) {
@@ -32,6 +41,48 @@ class UserController extends Controller
         $roles = \Spatie\Permission\Models\Role::all(); // lấy danh sách quyền
 
         return view('admin.users.index', compact('users', 'roles'));
+    }
+
+
+    public function create()
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền truy cập.');
+        }
+
+        $roles = Role::all();
+        return view('admin.users.create', compact('roles'));
+    }
+
+    public function store(Request $request)
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'role' => 'required|array',
+            'role.*' => 'exists:roles,name',
+        ]);
+
+        $randomPassword = Str::random(8); // Tạo mật khẩu ngẫu nhiên 8 ký tự
+        $hashedPassword = Hash::make($randomPassword);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $hashedPassword,
+            'active' => true,
+        ]);
+
+        $user->assignRole($request->role);
+
+        // Gửi email thông báo cho người dùng
+        dispatch(new SendNewUserAccountEmail($user, $randomPassword));
+
+        return redirect()->route('admin.users.index')->with('success', 'Tạo tài khoản thành công và đã gửi mật khẩu đến email.');
     }
 
 
