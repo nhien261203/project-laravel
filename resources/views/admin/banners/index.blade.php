@@ -65,7 +65,7 @@
                         @endif
                     </td>
                     <td class="p-2 border">
-                        <a href="{{ route('admin.banners.edit', $banner) }}" class="text-blue-600 hover:underline">✏️</a> 
+                        <a href="{{ route('admin.banners.edit', $banner) }}" class="text-blue-600 hover:underline">sửa</a> 
                         {{-- <form action="{{ route('admin.banners.destroy', $banner) }}" method="POST" class="inline" onsubmit="return confirm('Xoá banner này?')">
                             @csrf @method('DELETE')
                             <button type="submit" class="text-red-600 hover:underline">Xoá</button>
@@ -73,7 +73,7 @@
                         @include('partials.delete-confirm', [
                             'action' => route('admin.banners.destroy', $banner->id)
                         ])
-                        <a href="{{ route('admin.banners.show', $banner) }}" class="text-gray-600 hover:underline">👁️</a>
+                        <a href="{{ route('admin.banners.show', $banner) }}" class="text-green-600 hover:underline">xem</a>
 
                     </td>
                 </tr>

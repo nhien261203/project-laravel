@@ -58,15 +58,15 @@
                         <td class="p-3 text-center text-gray-600">{{ $blog->created_at->format('d/m/Y') }}</td>
                         <td class="p-3 text-right space-x-2 whitespace-nowrap">
                             <a href="{{ route('admin.blogs.show', $blog->id) }}"
-                               class="inline-block text-blue-600 hover:underline text-sm">👁️</a>
+                               class="inline-block text-blue-600 hover:underline text-sm">xem</a>
                             <a href="{{ route('admin.blogs.edit', $blog->id) }}"
-                               class="inline-block text-yellow-600 hover:underline text-sm">✏️</a>
+                               class="inline-block text-yellow-600 hover:underline text-sm">sửa</a>
                             <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST"
                                   onsubmit="return confirm('Bạn có chắc muốn xoá bài viết này?')"
                                   class="inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline text-sm">🗑️</button>
+                                <button type="submit" class="text-red-600 hover:underline text-sm">xóa</button>
                             </form>
                         </td>
                     </tr>

@@ -115,8 +115,8 @@
                         </span>
                     </td>
                     <td class="p-3 text-center whitespace-nowrap space-x-1">
-                        <a href="{{ route('admin.products.show', $product->id) }}" class="text-green-600 hover:underline text-sm">👁️</a>
-                        <a href="{{ route('admin.products.edit', $product->id) }}" class="text-blue-600 hover:underline text-sm">✏️</a>
+                        <a href="{{ route('admin.products.show', $product->id) }}" class="text-green-600 hover:underline text-sm">xem</a>
+                        <a href="{{ route('admin.products.edit', $product->id) }}" class="text-blue-600 hover:underline text-sm">sửa</a>
                         @include('partials.delete-confirm', [
                             'action' => route('admin.products.destroy', $product->id)
                         ])

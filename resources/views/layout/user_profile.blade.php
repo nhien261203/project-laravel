@@ -22,7 +22,7 @@
     </div>
 
     {{-- Nội dung phải --}}
-    <div class="w-full md:w-3/4 bg-white shadow rounded p-6">
+    <div class="w-full md:w-3/4 bg-white shadow rounded p-6 ">
         @yield('user_profile_content')
     </div>
 </div>

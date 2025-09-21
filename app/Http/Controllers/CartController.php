@@ -19,9 +19,47 @@ class CartController extends Controller
         $this->repo = $repo;
     }
 
+    // public function index(Request $request)
+    // {
+    //     $cart = $this->repo->getUserCart(Auth::id(), $request->session()->getId());
+
+    //     // Lấy voucher còn hạn và đang active
+    //     $vouchers = Voucher::where('is_active', true)
+    //         ->where(function ($q) {
+    //             $q->whereNull('start_date')->orWhere('start_date', '<=', now());
+    //         })
+    //         ->where(function ($q) {
+    //             $q->whereNull('end_date')->orWhere('end_date', '>=', now());
+    //         })
+    //         ->latest()->take(5)->get(); // lấy tối đa 5 mã
+
+    //     return view('cart.index', compact('cart', 'vouchers'));
+    // }
+
     public function index(Request $request)
     {
         $cart = $this->repo->getUserCart(Auth::id(), $request->session()->getId());
+
+        $total = 0;
+        $discount = 0;
+        $totalAfterDiscount = 0;
+
+        // Tính toán tổng tiền và chiết khấu
+        if ($cart && $cart->items->count() > 0) {
+            $total = $cart->items->sum(fn($item) => $item->snapshot_price * $item->quantity);
+            $voucher = session('applied_voucher');
+
+            if ($voucher) {
+                $discount = $voucher['type'] === 'percent'
+                    ? floor($total * $voucher['value'] / 100)
+                    : $voucher['value'];
+
+                if (!empty($voucher['max_discount']) && $discount > $voucher['max_discount']) {
+                    $discount = $voucher['max_discount'];
+                }
+            }
+            $totalAfterDiscount = $total - $discount;
+        }
 
         // Lấy voucher còn hạn và đang active
         $vouchers = Voucher::where('is_active', true)
@@ -33,7 +71,7 @@ class CartController extends Controller
             })
             ->latest()->take(5)->get(); // lấy tối đa 5 mã
 
-        return view('cart.index', compact('cart', 'vouchers'));
+        return view('cart.index', compact('cart', 'vouchers', 'total', 'discount', 'totalAfterDiscount'));
     }
 
     // public function add(Request $request)
@@ -219,7 +257,7 @@ class CartController extends Controller
 
         // Kiểm tra chỉ dành cho người mới
         if ($voucher->only_for_new_user && $user->orders()->exists()) {
-            return back()->with(['error' => ' Mã chỉ áp dụng cho khách hàng mới.']);
+            return back()->with(['error' => ' Mã chỉ áp dụng cho khách hàng mua lần đầu.']);
         }
 
         // Lưu vào session

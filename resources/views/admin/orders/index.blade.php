@@ -63,7 +63,7 @@
                         </td>
                         <td class="px-4 py-2 text-red-600 font-bold">{{ number_format($order->total_amount, 0, ',', '.') }}₫</td>
                         <td class="px-4 py-2 capitalize {{ $order->status === 'completed' ? 'text-green-600' : ($order->status === 'cancelled' ? 'text-red-500' : 'text-yellow-600') }}">
-                            {{ $order->status }}
+                            {{ $order->statuslabel() }}
                         </td>
                         <td class="px-4 py-2">
                             {{ $order->payment_status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}

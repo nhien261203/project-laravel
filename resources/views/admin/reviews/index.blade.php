@@ -12,7 +12,7 @@
     }
 </style>
 
-<div class="container mx-auto py-6">
+<div class="max-w-6xl mx-auto py-6">
     <h1 class="text-2xl font-bold mb-4">Quản lý đánh giá sản phẩm</h1>
 
     {{-- Filter --}}
@@ -49,6 +49,8 @@
                 <tr class="text-left">
                     <th class="px-4 py-2 border">#</th>
                     <th class="px-4 py-2 border">Người đánh giá</th>
+                    <th class="px-4 py-2 border">Email</th>
+                    <th class="px-4 py-2 border">Số điện thoại</th>
                     <th class="px-4 py-2 border">Sản phẩm</th>
                     <th class="px-4 py-2 border">Số sao</th>
                     <th class="px-4 py-2 border">Nội dung</th>
@@ -65,6 +67,8 @@
                         </td>
 
                         <td class="px-4 py-2 border font-semibold text-gray-800">{{ $review->user->name ?? 'Ẩn danh' }}</td>
+                        <td class="px-4 py-2 border">{{ $review->user->email ?? '-' }}</td>
+                        <td class="px-4 py-2 border">{{ $review->user->phone ?? '-' }}</td>
                         <td class="px-4 py-2 border">{{ $review->product->name ?? '-' }}</td>
                         <td class="px-4 py-2 border text-yellow-500">
                             @for ($i = 1; $i <= 5; $i++)

@@ -86,7 +86,7 @@
             <p>Chúng tôi xin xác nhận bạn đã đặt hàng thành công tại cửa hàng. Dưới đây là thông tin chi tiết về đơn hàng của bạn:</p>
 
             <div class="order-summary">
-                <h3>Chi tiết đơn hàng #{{ $order->id }}</h3>
+                <h3>Chi tiết đơn hàng của bạn</h3>
                 <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
                 {{-- Dựa vào phương thức helper statusLabel() đã có --}}
                 <p><strong>Trạng thái đơn hàng:</strong> {{ $order->statusLabel() }}</p> 

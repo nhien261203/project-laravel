@@ -71,12 +71,12 @@
                     </span>
                 </td>
                 <td class="p-3 space-x-2 text-center">
-                    <a href="{{ route('admin.brands.edit', $brand->id) }}" class="text-blue-600 hover:underline">✏️</a>
+                    <a href="{{ route('admin.brands.edit', $brand->id) }}" class="text-blue-600 hover:underline">sửa</a>
                     @include('partials.delete-confirm', [
                         'action' => route('admin.brands.destroy', $brand->id)
                     ])
 
-                    <a href="{{ route('admin.brands.show', $brand->id) }}" class="text-green-600 hover:underline">👁️</a>
+                    <a href="{{ route('admin.brands.show', $brand->id) }}" class="text-green-600 hover:underline">xem</a>
                 </td>
             </tr>
         @empty

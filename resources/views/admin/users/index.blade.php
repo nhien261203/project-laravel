@@ -87,18 +87,18 @@
                     <td class="border p-2">{{ $user->name }}</td>
                     <td class="border p-2">{{ $user->email }}</td>
                     <td class="border p-2">{{ $user->roles->pluck('name')->implode(', ') }}</td>
-                    <td class="border p-2">
+                    <td class="border p-2 ">
                         @if ($user->active)
                             <span class="text-green-600 font-medium">Hoạt động</span>
                         @else
                             <span class="text-red-600 font-medium">Vô hiệu hóa</span>
                         @endif
                     </td>
-                    <td class="border p-2 space-x-2">
-                        <a href="{{ route('admin.users.show', $user->id) }}" class="text-blue-500 hover:underline">👁️</a>
+                    <td class="border p-2 space-x-2 ">
+                        <a href="{{ route('admin.users.show', $user->id) }}" class="text-blue-500 hover:underline">xem</a>
 
                         @if (auth()->user()->hasRole('admin'))
-                            <a href="{{ route('admin.users.edit', $user->id) }}" class="text-green-500 hover:underline">✏️</a>
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="text-green-500 hover:underline">sửa</a>
 
                             {{-- <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('Xác nhận xóa?')">
                                 @csrf @method('DELETE')

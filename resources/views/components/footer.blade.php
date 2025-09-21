@@ -10,7 +10,7 @@
             </div>
 
             {{-- Các cột liên kết --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 w-2/3">
                 {{-- Thông tin --}}
                 <div>
                     <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Thông tin</h3>
@@ -24,7 +24,7 @@
                 </div>
 
                 {{-- Chính sách --}}
-                <div>
+                {{-- <div>
                     <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Chính sách</h3>
                     <ul class="mt-4 space-y-2">
                         <li><a href="#" class="text-gray-400 hover:text-white">Chính sách giao hàng</a></li>
@@ -32,16 +32,16 @@
                         <li><a href="#" class="text-gray-400 hover:text-white">Đổi trả</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white">Hướng dẫn thanh toán qua VNPay</a></li>
                     </ul>
-                </div>
+                </div> --}}
 
                 {{-- Thông tin khác --}}
                 <div>
                     <h3 class="text-sm font-semibold text-white uppercase tracking-wider">Thông tin khác</h3>
                     <ul class="mt-4 space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Voucher - Khuyễn mãi</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Nội quy cửa hàng</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Câu hỏi thường gặp</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Lịch sử mua hàng</a></li>
+                        {{-- <li><a href="#" class="text-gray-400 hover:text-white">Voucher - Khuyễn mãi</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Nội quy cửa hàng</a></li> --}}
+                        <li><a href="#" class="text-gray-400 hover:text-white">Hướng dẫn thanh toán qua VNPay</a></li>
+                        <li><a href="{{ route('user.orders.index') }}" class="text-gray-400 hover:text-white">Lịch sử mua hàng</a></li>
                     </ul>
                 </div>
             </div>

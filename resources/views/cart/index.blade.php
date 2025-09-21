@@ -43,7 +43,7 @@
 <div class="container pt-20 pb-5 overflow-hidden">
 
     @if ($cart->items->isEmpty())
-        <div class="bg-white flex-grow shadow-md rounded-lg p-6 text-center space-y-5 max-w-md mx-auto">
+        <div class="bg-white flex-grow shadow-md rounded-lg p-6 text-center space-y-5 max-w-md mx-auto mt-4">
             <img src="https://happyphone.vn/template/assets/images/crt-empty.png" alt="Giỏ hàng trống" class="w-60 mx-auto opacity-80">
             
             <div>
@@ -180,8 +180,17 @@
                                         @if($voucher->min_order_amount)
                                             – Đơn từ {{ number_format($voucher->min_order_amount, 0, ',', '.') }}₫
                                         @endif
+                                    </p>   
+                                    <p class="text-xs text-gray-600">
+                                        @if(!$voucher->only_for_new_user)
+                                            @if($voucher->max_discount)
+                                                Giảm tối đa: {{ number_format($voucher->max_discount, 0, ',', '.') }}₫
+                                            @else
+                                                Giảm tối đa: Không giới hạn
+                                            @endif
+                                        @endif
                                         @if($voucher->only_for_new_user)
-                                            – <span class="text-green-600 font-medium">Khách mới</span>
+                                            <span class="text-green-600 font-medium">Khách mới</span>
                                         @endif
                                     </p>
                                     @if($voucher->end_date)
@@ -199,7 +208,7 @@
             @endif
 
 
-            @php
+            {{-- @php
                 $total = $cart->items->sum(fn($item) => $item->snapshot_price * $item->quantity);
                 $voucher = session('applied_voucher');
                 $discount = 0;
@@ -215,10 +224,10 @@
 
                     $totalAfterDiscount = $total - $discount;
                 }
-            @endphp
+            @endphp --}}
 
             <div class="bg-gray-50 p-4 rounded border border-gray-200 space-y-2 text-sm mt-3">
-                @if($voucher)
+                @if($discount > 0)
                     <div class="flex justify-between">
                         <span class="text-gray-700 font-medium">Tạm tính:</span>
                         <span class="text-gray-900 font-bold">{{ number_format($total, 0, ',', '.') }}₫</span>

@@ -23,7 +23,7 @@
             <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full border p-2 rounded bg-gray-100" readonly>
         </div>
 
-        <div class="mb-4">
+        {{-- <div class="mb-4">
             <label class="block mb-1 font-medium">Quyền</label>
             <select name="role[]" class="w-full border p-2 rounded" multiple>
                 @foreach ($roles as $role)
@@ -32,6 +32,25 @@
                     </option>
                 @endforeach
             </select>
+        </div> --}}
+
+        <div class="mb-4">
+            <label class="block mb-1 font-medium">Quyền</label>
+            <div class="flex flex-wrap gap-4">
+                @foreach ($roles as $role)
+                    <div class="flex items-center">
+                        <input type="checkbox" 
+                            class="form-checkbox h-5 w-5 text-blue-600 rounded-md" 
+                            id="{{ $role }}" 
+                            name="role[]" 
+                            value="{{ $role }}" 
+                            {{ $user->hasRole($role) ? 'checked' : '' }}>
+                        <label class="ml-2 text-gray-700" for="{{ $role }}">
+                            {{ ucfirst($role) }}
+                        </label>
+                    </div>
+                @endforeach
+            </div>
         </div>
 
         {{-- Chỉ cho phép cập nhật trạng thái nếu không phải admin --}}

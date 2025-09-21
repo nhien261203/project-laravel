@@ -39,7 +39,7 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
-    // Quan hệ: trỏ về biến thể gốc (nếu cần)
+    // Quan hệ: trỏ về biến thể gốc
     public function variant()
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');

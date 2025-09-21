@@ -93,7 +93,9 @@ class UserOrderController extends Controller
             //su dung job de gui mail
 
             // $order->load('items');
-            SendOrderConfirmationEmail::dispatch($order, Auth::user());
+            if ($data['payment_method'] === 'cod') {
+                SendOrderConfirmationEmail::dispatch($order, Auth::user());
+            }
             //queue connection=database trong .env de chay queue
 
             if ($request->expectsJson()) {
@@ -251,6 +253,8 @@ class UserOrderController extends Controller
         if ($vnp_ResponseCode === '00' && $vnp_TransactionStatus === '00') {
             $order->payment_status = 'paid';
             $order->save();
+
+            SendOrderConfirmationEmail::dispatch($order, Auth::user());
 
             return redirect()->route('user.orders.show', $order->id)
                 ->with('success', 'Thanh toán thành công đơn hàng ');
