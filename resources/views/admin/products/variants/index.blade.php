@@ -63,13 +63,13 @@
                             </span>
                         </td>
                         <td class="px-4 py-2 space-x-2">
-                            <a href="{{ route('admin.products.variants.edit', [$product->id, $variant->id]) }}" class="text-yellow-500 hover:underline">✏️</a>
+                            <a href="{{ route('admin.products.variants.edit', [$product->id, $variant->id]) }}" class="text-yellow-500 hover:underline">sửa</a>
 
                             @include('partials.delete-confirm', [
                                 'action' => route('admin.products.variants.destroy', [$product->id, $variant->id])
                             ])
 
-                            <a href="{{ route('admin.products.variants.show', [$product->id, $variant->id]) }}" class="text-blue-600 hover:underline">👁️</a>
+                            <a href="{{ route('admin.products.variants.show', [$product->id, $variant->id]) }}" class="text-blue-600 hover:underline">xem</a>
                         </td>
                     </tr>
                 @endforeach

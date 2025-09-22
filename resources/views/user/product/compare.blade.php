@@ -33,7 +33,7 @@ table td, table th { border-collapse: collapse; }
 }
 </style>
 
-<div class="container mx-auto py-10 pt-20" id="compare-container">
+<div class="container mx-auto py-10 pt-[98px]" id="compare-container">
     <div class="flex items-center text-sm text-gray-600 space-x-2 mb-4">
         <a href="{{ route('home') }}" class="hover:text-blue-600">Trang chủ</a>
         <span class="text-gray-400">›</span>

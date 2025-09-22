@@ -108,7 +108,7 @@ class PusherController extends Controller
         $admin = Auth::user();
 
         // Check quyền bằng Spatie
-        if (!$admin->hasAnyRole(['admin', 'staff'])) {
+        if (!$admin->hasAnyRole('admin')) {
             return response()->json(['error' => 'Permission denied'], 403);
         }
 

@@ -61,9 +61,9 @@
                     </span>
                 </td>
                 <td class="p-3 space-x-2 text-center">
-                    <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-blue-600 hover:underline">✏️</a>
+                    <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-blue-600 hover:underline">Sửa</a>
                     @include('partials.delete-confirm', ['action' => route('admin.categories.destroy', $category->id)])
-                    <a href="{{ route('admin.categories.show', $category->id) }}" class="text-green-600 hover:underline">👁️</a>
+                    <a href="{{ route('admin.categories.show', $category->id) }}" class="text-green-600 hover:underline">Xem</a>
                 </td>
             </tr>
         @empty
