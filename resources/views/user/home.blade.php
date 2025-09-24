@@ -49,141 +49,119 @@
 
             </div>
         </div> --}}
-        <div class="my-10 bg-white rounded-2xl shadow-md p-6">
+        {{-- <div class="my-10 bg-white rounded-2xl shadow-md p-6">
             <h2 class="text-xl font-semibold mb-4">Danh mục nổi bật</h2>
 
-    {{-- Desktop: Flex tự giãn --}}
-    <div class="hidden md:flex flex-wrap justify-center gap-10">
-    <!-- Item -->
-    <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
-        <a href="{{ route('product.category', 'dien-thoai') }}" class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
-            <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/dien_thoai_ic_cate_6dbc1f8296.png" 
-                alt="Điện thoại" 
-            class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
-            <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">Điện thoại</p>
-        </a>
-        
-    </div>
-
-    <!-- Item -->
-    {{-- <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
-        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/may_tinh_bang_ic_cate_dccb57ff5c.png" 
-             alt="Máy tính bảng" 
-             class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3">
-        <p class="text-sm font-medium">Máy tính bảng</p>
-    </div> --}}
-
-    <!-- Item -->
-    <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
-        <a href="{{ route('product.category', 'laptop') }}" 
-        class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
-        
-            <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/laptop_ic_cate_47e7264bc7.png" 
-                alt="Laptop" 
-                class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
-
-            <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">
-                Laptop
-            </p>
-        </a>
-    </div>
-    <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
-        <a href="{{ route('product.category.accessory','phu-kien') }}"
-        class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
-            <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/phu_kien_ic_cate_ecae8ddd38.png" 
-                alt="Phụ kiện" 
-                class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
-            <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">Phụ kiện</p>
-        </a>
-        
-    </div>
-
-    <!-- Item -->
-    <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
-        <a href="{{ route('product.category.accessory', 'phu-kien-di-dong') }}" class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
-            <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/2023_3_29_638157050273684176_HASP-PIN-SAC-DU-PHONG-MAGSAFE-INNOSTYLE-POWERMAG-SWITCH-2IN1-20W-DEN-AVT.jpg" 
-                alt="Phụ kiện di động" 
-                class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
-            <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">Phụ kiện di động</p>
-        </a>
-        
-    </div>
-
-    <!-- Item -->
-    <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
-        <a href="{{ route('product.category.accessory','thiet-bi-am-thanh') }}" class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
-            <img src="https://cdn2.fptshop.com.vn/unsafe/750x0/filters:format(webp):quality(75)/tai_nghe_bluetooth_nhet_tai_jbl_tune_beam_2_den_10_c53899f5d2.png" 
-            alt="Thiết bị âm thanh" 
-            class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
-            <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">Thiết bị âm thanh</p>
-        </a>
-        
-    </div>
-</div>
-
-
-    {{-- Mobile: Swiper --}}
-    <div class="md:hidden">
-        <div class="swiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <a href="{{ route('product.category', 'phone') }}">
-                        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/dien_thoai_ic_cate_6dbc1f8296.png" alt="Điện thoại" class="w-17 h-17 object-contain mb-2">
-                        <p class="text-sm font-medium">Điện thoại</p>
+            <div class="hidden md:flex flex-wrap justify-center gap-10">
+            
+                <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
+                    <a href="{{ route('product.category', 'dien-thoai') }}" class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/dien_thoai_ic_cate_6dbc1f8296.png" 
+                            alt="Điện thoại" 
+                        class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
+                        <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">Điện thoại</p>
                     </a>
                     
                 </div>
-                {{-- <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/may_tinh_bang_ic_cate_dccb57ff5c.png" alt="Máy tính bảng" class="w-16 h-16 object-contain mb-2">
-                    <p class="text-sm font-medium">Máy tính bảng</p>
-                </div> --}}
-                <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <a href="route('product.category', 'laptop')">
-                        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/laptop_ic_cate_47e7264bc7.png" alt="Laptop" class="w-17 h-17 object-contain mb-2">
-                        <p class="text-sm font-medium">Laptop</p>
-                    </a>
-                    
-                </div>
-                {{-- <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/laptop_ic_cate_47e7264bc7.png" alt="Màn hình" class="w-17 h-17 object-contain mb-2">
-                    <p class="text-sm font-medium">Màn hình</p>
-                </div> --}}
-                <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <a href="{{ route('product.category.accessory','phu-kien') }}">
-                        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/phu_kien_ic_cate_ecae8ddd38.png" alt="Phụ kiện" class="w-17 h-17 object-contain mb-2">
-                        <p class="text-sm font-medium">Phụ kiện</p>
-                    </a>
-                    
-                </div>
-                <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <a href="{{ route('product.category.accessory', 'phu-kien-di-dong') }}">
-                        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/2023_3_29_638157050273684176_HASP-PIN-SAC-DU-PHONG-MAGSAFE-INNOSTYLE-POWERMAG-SWITCH-2IN1-20W-DEN-AVT.jpg" alt="Phụ kiện di động" class="w-17 h-17 object-contain mb-2">
-                        <p class="text-sm font-medium">Phụ kiện di động</p>
-                    </a>
-                    
-                </div>
-                <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <a href="{{ route('product.category.accessory', 'thiet-bi-am-thanh') }}">
-                        <img src="https://cdn2.fptshop.com.vn/unsafe/750x0/filters:format(webp):quality(75)/tai_nghe_bluetooth_nhet_tai_jbl_tune_beam_2_den_10_c53899f5d2.png" alt="Thiết bị âm thanh" class="w-17 h-17 object-contain mb-2">
-                        <p class="text-sm font-medium">Thiết bị âm thanh</p>
-                    </a>
-                    
-                </div>
-                {{-- <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <div class="w-17 h-17 flex items-center justify-center mb-2">
-                        <img src="https://cdn2.fptshop.com.vn/unsafe/750x0/filters:format(webp):quality(75)/tai_nghe_bluetooth_nhet_tai_jbl_tune_beam_2_den_10_c53899f5d2.png" alt="Thiết bị âm thanh" class="max-w-full max-h-full object-contain">
-                    </div>
-                    <p class="text-sm font-medium">Thiết bị âm thanh</p>
-                </div> --}}
 
-                {{-- <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
-                    <img src="/images/old-phone.png" alt="Máy cũ giá rẻ" class="w-16 h-16 object-contain mb-2">
-                    <p class="text-sm font-medium">Máy cũ giá rẻ</p>
-                </div> --}}
+                
+                <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
+                    <a href="{{ route('product.category', 'laptop') }}" 
+                    class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    
+                        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/laptop_ic_cate_47e7264bc7.png" 
+                            alt="Laptop" 
+                            class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
+
+                        <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">
+                            Laptop
+                        </p>
+                    </a>
+                </div>
+                <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
+                    <a href="{{ route('product.category.accessory','phu-kien') }}"
+                    class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/phu_kien_ic_cate_ecae8ddd38.png" 
+                            alt="Phụ kiện" 
+                            class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
+                        <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">Phụ kiện</p>
+                    </a>
+                    
+                </div>
+
+                
+                <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
+                    <a href="{{ route('product.category.accessory', 'phu-kien-di-dong') }}" class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/2023_3_29_638157050273684176_HASP-PIN-SAC-DU-PHONG-MAGSAFE-INNOSTYLE-POWERMAG-SWITCH-2IN1-20W-DEN-AVT.jpg" 
+                            alt="Phụ kiện di động" 
+                            class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
+                        <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">Phụ kiện di động</p>
+                    </a>
+                    
+                </div>
+
+                
+                <div class="flex-1 flex flex-col items-center justify-center text-center cursor-pointer">
+                    <a href="{{ route('product.category.accessory','thiet-bi-am-thanh') }}" class="group block p-4 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <img src="https://cdn2.fptshop.com.vn/unsafe/750x0/filters:format(webp):quality(75)/tai_nghe_bluetooth_nhet_tai_jbl_tune_beam_2_den_10_c53899f5d2.png" 
+                        alt="Thiết bị âm thanh" 
+                        class="w-20 h-20 md:w-28 md:h-28 object-contain mb-3 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110">
+                        <p class="text-sm font-medium transition-colors duration-300 group-hover:text-blue-600">Thiết bị âm thanh</p>
+                    </a>
+                    
+                </div>
             </div>
-        </div>
-    </div>
-        </div>
+
+
+            
+            <div class="md:hidden">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
+                            <a href="{{ route('product.category', 'phone') }}">
+                                <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/dien_thoai_ic_cate_6dbc1f8296.png" alt="Điện thoại" class="w-17 h-17 object-contain mb-2">
+                                <p class="text-sm font-medium">Điện thoại</p>
+                            </a>
+                            
+                        </div>
+                    
+                        <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
+                            <a href="route('product.category', 'laptop')">
+                                <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/laptop_ic_cate_47e7264bc7.png" alt="Laptop" class="w-17 h-17 object-contain mb-2">
+                                <p class="text-sm font-medium">Laptop</p>
+                            </a>
+                            
+                        </div>
+                        
+                        <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
+                            <a href="{{ route('product.category.accessory','phu-kien') }}">
+                                <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/phu_kien_ic_cate_ecae8ddd38.png" alt="Phụ kiện" class="w-17 h-17 object-contain mb-2">
+                                <p class="text-sm font-medium">Phụ kiện</p>
+                            </a>
+                            
+                        </div>
+                        <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
+                            <a href="{{ route('product.category.accessory', 'phu-kien-di-dong') }}">
+                                <img src="https://cdn2.fptshop.com.vn/unsafe/360x0/filters:format(webp):quality(75)/2023_3_29_638157050273684176_HASP-PIN-SAC-DU-PHONG-MAGSAFE-INNOSTYLE-POWERMAG-SWITCH-2IN1-20W-DEN-AVT.jpg" alt="Phụ kiện di động" class="w-17 h-17 object-contain mb-2">
+                                <p class="text-sm font-medium">Phụ kiện di động</p>
+                            </a>
+                            
+                        </div>
+                        <div class="swiper-slide flex flex-col items-center text-center cursor-pointer">
+                            <a href="{{ route('product.category.accessory', 'thiet-bi-am-thanh') }}">
+                                <img src="https://cdn2.fptshop.com.vn/unsafe/750x0/filters:format(webp):quality(75)/tai_nghe_bluetooth_nhet_tai_jbl_tune_beam_2_den_10_c53899f5d2.png" alt="Thiết bị âm thanh" class="w-17 h-17 object-contain mb-2">
+                                <p class="text-sm font-medium">Thiết bị âm thanh</p>
+                            </a>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+        @include('components.featured-categories')
+
 
         {{-- section iphone card --}}
         @isset($iphoneProducts)

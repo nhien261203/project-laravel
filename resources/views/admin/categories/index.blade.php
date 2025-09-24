@@ -40,7 +40,9 @@
 <table class="table-auto w-full bg-white shadow rounded mb-6">
     <thead class="bg-gray-100">
         <tr>
-            <th class="p-3 text-left">Tên</th>
+            <th class="p-3">#</th>
+            <th class="p-3 text-center">Tên</th>
+            <th class="p-3 text-center">Ảnh</th>
             <th class="p-3 text-center">Slug</th>
             <th class="p-3 text-center">Danh mục cha</th>
             <th class="p-3 text-center">Trạng thái</th>
@@ -50,7 +52,14 @@
     <tbody>
         @forelse($categories as $category)
             <tr class="border-b hover:bg-gray-50">
+                <td class="p-3 text-center">{{ $loop->iteration + ($categories->currentPage() - 1) * $categories->perPage() }}</td>
                 <td class="p-3">{{ $category->name }}</td>
+                <td class="p-3 text-center">
+                    @if($category->logo)
+                        <img src="{{ asset('storage/' . $category->logo) }}" alt="Logo"
+                            class="w-16 h-16 mx-auto object-contain rounded border" />
+                    @endif
+                </td>
                 <td class="p-3 text-center">{{ $category->slug }}</td>
                 <td class="p-3 text-center">
                     {{ $category->parent?->name ?? 'Gốc' }}

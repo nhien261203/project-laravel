@@ -34,7 +34,10 @@ class CategoryController extends Controller
         $this->validateRequest($request);
 
         try {
-            $this->repo->create($request->all());
+            $this->repo->create($request->all() + [
+                'logo' => $request->file('logo'),
+            ]);
+
 
             return redirect()->route('admin.categories.index')->with('success', 'Thêm danh mục thành công');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -64,7 +67,9 @@ class CategoryController extends Controller
         $this->validateRequest($request, $id);
 
         try {
-            $this->repo->update($id, $request->all());
+            $this->repo->update($id, $request->all() + [
+                'logo' => $request->file('logo'),
+            ]);
 
             return redirect()->route('admin.categories.index')->with('success', 'Cập nhật danh mục thành công');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -94,6 +99,7 @@ class CategoryController extends Controller
             'slug' => ['nullable', 'string', 'max:255', 'unique:categories,slug' . ($id ? ',' . $id : '')],
             'status' => ['required', 'in:0,1'],
             'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'],
         ];
 
         // Nếu đang update và người dùng chọn chính mình làm parent
@@ -112,7 +118,4 @@ class CategoryController extends Controller
         $category = $this->repo->find($id);
         return view('admin.categories.show', compact('category'));
     }
-
-
-    
 }

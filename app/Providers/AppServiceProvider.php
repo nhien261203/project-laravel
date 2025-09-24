@@ -80,7 +80,7 @@ class AppServiceProvider extends ServiceProvider
 
 
         // lấy ra các danh mục để hiển thị ở header
-        View::composer('components.header', function ($view) {
+        View::composer(['components.header', 'components.featured-categories'], function ($view) {
             // Lấy danh mục phụ kiện để loại trừ
             $accessory = Category::where('slug', 'phu-kien')->first();
 
@@ -94,6 +94,9 @@ class AppServiceProvider extends ServiceProvider
                 // Thêm một closure vào with() để chỉ tải các danh mục con có status = 1
                 ->with(['children' => function ($query) {
                     $query->where('status', 1);
+                    //     ->whereHas('products', function ($q) {
+                    //     $q->where('status', 1);
+                    // });
                 }])
                 ->get();
 
@@ -103,6 +106,9 @@ class AppServiceProvider extends ServiceProvider
                 $accessoryWithChildren = Category::where('status', 1)
                     ->with(['children' => function ($query) {
                         $query->where('status', 1);
+                        //         ->whereHas('products', function ($q) {
+                        //     $q->where('status', 1);
+                        // });
                     }])
                     ->find($accessory->id);
             }
@@ -112,5 +118,7 @@ class AppServiceProvider extends ServiceProvider
                 'accessory' => $accessoryWithChildren,
             ]);
         });
+
+        
     }
 }

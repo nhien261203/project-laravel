@@ -3,6 +3,7 @@
 namespace App\Repositories\Category;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoryRepository implements CategoryRepositoryInterface
@@ -33,6 +34,10 @@ class CategoryRepository implements CategoryRepositoryInterface
         $data['name'] = trim($data['name']);
         $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
         $data['parent_id'] = $data['parent_id'] ?? null;
+        if (isset($data['logo']) && $data['logo']->isValid()) {
+            $path = $data['logo']->store('categories', 'public');
+            $data['logo'] = $path;
+        }
 
         return Category::create($data);
     }
@@ -51,12 +56,30 @@ class CategoryRepository implements CategoryRepositoryInterface
             $data['parent_id'] = $data['parent_id'] ?? null;
         }
 
+        if (isset($data['logo']) && $data['logo']->isValid()) {
+            // Xoá logo cũ nếu có
+            if ($category->logo && Storage::disk('public')->exists($category->logo)) {
+                Storage::disk('public')->delete($category->logo);
+            }
+
+            $path = $data['logo']->store('categories', 'public');
+            $data['logo'] = $path;
+        } else {
+            unset($data['logo']); // không update nếu không gửi logo
+        }
+
         $category->update($data);
         return $category;
     }
 
     public function delete($id)
     {
+        $category = $this->find($id);
+
+        
+        if ($category->logo && Storage::disk('public')->exists($category->logo)) {
+            Storage::disk('public')->delete($category->logo);
+        }
         return Category::destroy($id);
     }
 
@@ -81,5 +104,5 @@ class CategoryRepository implements CategoryRepositoryInterface
     //         ->get();
     // }
 
-    
+
 }

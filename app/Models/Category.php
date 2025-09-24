@@ -13,6 +13,7 @@ class Category extends Model
         'slug',
         'parent_id',
         'status',
+        'logo' 
     ];
 
     // Danh mục cha
