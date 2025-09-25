@@ -19,7 +19,14 @@
             @foreach($logs as $log)
                 <tr class="border-t">
                     <td class="p-3">{{ $loop->iteration + ($logs->currentPage() - 1) * $logs->perPage() }}</td>
-                    <td class="p-3">{{ $log->admin->name ?? '---' }}</td>
+                    <td class="p-3">
+                        {{ $log->causer->name ?? '---' }}
+                        @if($log->causer)
+                            <div class="text-xs text-gray-500">
+                                {{ $log->causer->getRoleNames()->implode(', ') ?: '---' }}
+                            </div>
+                        @endif
+                    </td>
                     <td class="p-3 font-semibold">{{ $log->action }}</td>
                     <td class="p-3">{{ $log->description }}</td>
                     <td class="p-3">{{ $log->ip_address }}</td>

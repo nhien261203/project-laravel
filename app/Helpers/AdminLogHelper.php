@@ -12,8 +12,12 @@ class AdminLogHelper
     public static function log($action, $description = null)
     {
         if (Auth::check() && Auth::user()) {
+            $user = Auth::user();
+
             AdminLog::create([
                 'admin_id'   => Auth::id(),
+                'causer_id'   => $user->id,
+                'causer_type' => get_class($user),
                 'action'     => $action,
                 'description'=> $description,
                 'ip_address' => Request::ip(),
