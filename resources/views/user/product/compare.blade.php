@@ -110,7 +110,7 @@ function renderCompareTable() {
     <table class="table-auto min-w-[900px] w-full text-sm text-gray-800 border-separate border-spacing-0">
         <thead class="sticky top-0 z-10 bg-blue-50 text-xs uppercase text-gray-600">
             <tr>
-                <th class="p-4 border-r sticky-col font-bold text-left bg-blue-100">Thuộc tính</th>`;
+                <th class="p-4 border-r sticky-col font-bold text-left bg-blue-100">Ảnh</th>`;
     products.forEach(p => {
         html += `<th class="p-4 text-center relative group align-top min-w-[220px] bg-white" data-id="${p.id}">
             <div class="flex flex-col items-center">

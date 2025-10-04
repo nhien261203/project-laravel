@@ -59,6 +59,7 @@
                 <tr class="text-left">
                     <th class="px-4 py-2 border">#</th>
                     <th class="px-4 py-2 border">Người bình luận</th>
+                    <th class="px-4 py-2 border">Email</th>
                     <th class="px-4 py-2 border">Bài viết</th>
                     <th class="px-4 py-2 border">Nội dung</th>
                     <th class="px-4 py-2 border">Trạng thái</th>
@@ -73,6 +74,9 @@
 
                         <td class="px-4 py-2 border font-semibold text-gray-800">
                             {{ $comment->user->name ?? 'Ẩn danh' }}
+                        </td>
+                        <td class="px-4 py-2 border text-gray-600">
+                            {{ $comment->user->email ?? 'N/A' }}
                         </td>
 
                         <td class="px-4 py-2 border relative group">

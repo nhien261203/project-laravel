@@ -1,6 +1,15 @@
 
-<div id="userChatBubble" class="fixed bottom-24 right-5 w-16 h-16 bg-blue-500 rounded-full shadow-lg flex items-center justify-center cursor-pointer z-50 hover:scale-110 transition-transform">
-    <i class="fas fa-comment-dots text-white text-xl"></i>
+<div class="fixed bottom-24 right-5 flex items-center gap-2 z-50 group">
+    <!-- Text khi hover -->
+    <div class="bg-white px-3 py-2 rounded-lg shadow-md text-gray-800 text-sm flex items-center gap-2 
+                opacity-0 invisible translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-0">
+        Chat với chúng tôi
+    </div>
+
+    <!-- Bong bóng chat -->
+    <div id="userChatBubble" class="w-16 h-16 bg-blue-500 rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
+        <i class="fas fa-comment-dots text-white text-xl"></i>
+    </div>
 </div>
 
 {{-- Chat popup --}}

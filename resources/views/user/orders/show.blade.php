@@ -10,7 +10,20 @@
             <div>
                 <p><strong>Mã đơn hàng:</strong> <span class="text-blue-600 font-medium">#{{ $order->code }}</span></p>
                 <p><strong>Ngày đặt:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
-                <p><strong>Trạng thái:</strong> <span class="font-semibold text-blue-600">{{ ucfirst($order->status) }}</span></p>
+                <p>
+                    <strong>Trạng thái:</strong>
+                    <span class="font-semibold 
+                        @switch($order->status)
+                            @case('pending') text-yellow-600 @break
+                            @case('shipping') text-blue-600 @break
+                            @case('completed') text-green-600 @break
+                            @case('cancelled') text-red-600 @break
+                            @default text-gray-600
+                        @endswitch">
+                        {{ $order->statusLabel() }}
+                    </span>
+                </p>
+
                 <p><strong>Phương thức thanh toán:</strong> <span>{{ $order->payment_method }}</span> </p>
             </div>
             <div>

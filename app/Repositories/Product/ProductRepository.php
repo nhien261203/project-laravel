@@ -8,7 +8,7 @@ use App\Models\ProductVariant;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function getAll(array $filters = [], int $perPage = 8)
+    public function getAll(array $filters = [], int $perPage = 10)
     {
         $query = Product::with(['category', 'brand']);
 
@@ -363,7 +363,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         $query = $this->applyProductFilters($query);
 
-        return $this->appendProductExtras($query->latest('id')->paginate(8)->withQueryString());
+        return $this->appendProductExtras($query->latest('id')->paginate(10)->withQueryString());
     }
 
 

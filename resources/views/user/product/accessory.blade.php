@@ -170,6 +170,16 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         loadAccessories(link.href);
     });
+    window.addEventListener("popstate", function (event) {
+        loadAccessories(window.location.href);
+
+        if (!window.location.search) {
+            document.querySelectorAll(".btn-filter").forEach(btn => {
+                btn.classList.remove("bg-blue-500","text-white","border-blue-500","hover:bg-blue-600");
+                btn.classList.add("bg-white","border-gray-300","text-gray-700","hover:bg-gray-100");
+            });
+        }
+    });
 });
 
 </script>

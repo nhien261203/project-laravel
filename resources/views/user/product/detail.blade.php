@@ -444,6 +444,8 @@
 
 {{-- style mui ten --}}
 <style>
+    /* #colorOptions button { display: none; }  */
+
     .custom-swiper-btn {
         @apply absolute top-1/2 -translate-y-1/2 z-10 bg-gray-200/80 text-gray-800 w-10 h-10 rounded-full shadow-md flex items-center justify-center transition hover:bg-gray-300;
     }
@@ -460,6 +462,50 @@
     .custom-swiper-btn::after {
         font-size: 18px;
         font-weight: bold;
+    }
+    /* Tooltip container */
+    #colorOptions button.tooltip {
+        position: relative;
+    }
+
+    /* Tooltip text */
+    #colorOptions button.tooltip::after {
+        content: attr(data-tooltip); /* Lấy text từ data-tooltip */
+        position: absolute;
+        bottom: 125%; /* lên trên nút */
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0,0,0,0.8);
+        color: #fff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 10;
+    }
+
+    /* Mũi tên nhỏ */
+    #colorOptions button.tooltip::before {
+        content: "";
+        position: absolute;
+        bottom: 115%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px;
+        border-style: solid;
+        border-color: rgba(0,0,0,0.8) transparent transparent transparent;
+        opacity: 0;
+        transition: opacity 0.2s;
+        z-index: 10;
+    }
+
+    /* Hiển thị tooltip khi hover */
+    #colorOptions button.tooltip:hover::after,
+    #colorOptions button.tooltip:hover::before {
+        opacity: 1;
     }
 </style>
 
@@ -478,30 +524,41 @@
                 });
             }
         });
+
         
-        updateOptions();
+        updateOptions();      // cập nhật màu dựa trên bộ nhớ
         updateVariantDisplay();
+        // document.getElementById('colorOptions').style.opacity = 1;
+        // updateVariantDisplay();
 
         const toggleBtn = document.getElementById('toggleSpecBtn');
         const specWrapper = document.getElementById('techSpecWrapper');
         let expanded = false;
 
-        toggleBtn?.addEventListener('click', function () {
-            expanded = !expanded;
-            specWrapper.classList.toggle('max-h-[160px]', !expanded);
-            this.innerText = expanded ? 'Thu gọn' : 'Đọc thêm';
-        });
+        if (specWrapper.scrollHeight <= 160) {
+            toggleBtn.style.display = 'none';
+        } else {
+            toggleBtn?.addEventListener('click', function () {
+                expanded = !expanded;
+                specWrapper.classList.toggle('max-h-[160px]', !expanded);
+                this.innerText = expanded ? 'Thu gọn' : 'Đọc thêm';
+            });
+        }
 
         // Nút 2
         const toggleBtn1 = document.getElementById('toggleSpecBtn1');
         const specWrapper1 = document.getElementById('techSpecWrapper1');
         let expanded1 = false; 
 
-        toggleBtn1?.addEventListener('click', function () {
-            expanded1 = !expanded1; // toggle chính biến của nó
-            specWrapper1.classList.toggle('max-h-[160px]', !expanded1);
-            this.innerText = expanded1 ? 'Thu gọn' : 'Đọc thêm';
-        });
+        if (specWrapper1.scrollHeight <= 160) {
+            toggleBtn1.style.display = 'none';
+        } else {
+            toggleBtn1?.addEventListener('click', function () {
+                expanded1 = !expanded1;
+                specWrapper1.classList.toggle('max-h-[160px]', !expanded1);
+                this.innerText = expanded1 ? 'Thu gọn' : 'Đọc thêm';
+            });
+        }
     }; 
 
     function changeMainImage(src) {
@@ -511,16 +568,17 @@
     function selectColor(btn, color) {
         selectedColor = color;
         setActiveButton('#colorOptions', color);
-        updateOptions();
+        updateOptions(); // chỉ lọc khi user chọn
         updateVariantDisplay();
     }
 
     function selectStorage(btn, storage) {
         selectedStorage = storage;
         setActiveButton('#storageOptions', storage);
-        updateOptions();
+        updateOptions(); // chỉ lọc khi user chọn
         updateVariantDisplay();
     }
+
 
     function setActiveButton(containerSelector, value) {
         const buttons = document.querySelectorAll(containerSelector + ' button');
@@ -534,23 +592,36 @@
     }
 
     function updateOptions() {
-        const availableStorages = variants.filter(v => v.color === selectedColor).map(v => v.storage);
-        document.querySelectorAll('#storageOptions button').forEach(btn => {
-            btn.classList.toggle('hidden', !availableStorages.includes(btn.dataset.storage));
+        const availableColors = variants
+            .filter(v => v.storage === selectedStorage)
+            .map(v => v.color);
+
+        const colorButtons = document.querySelectorAll('#colorOptions button');
+
+        colorButtons.forEach(btn => {
+            const color = btn.dataset.color;
+            btn.classList.remove('tooltip'); // reset
+
+            if (availableColors.includes(color)) {
+                btn.classList.remove('opacity-50', 'cursor-not-allowed', 'tooltip');
+                btn.removeAttribute('data-tooltip');
+                btn.onclick = () => selectColor(btn, color);
+            } else {
+                btn.classList.add('opacity-50', 'cursor-not-allowed', 'tooltip');
+                btn.setAttribute('data-tooltip', 'Màu này không có sẵn cho bộ nhớ đã chọn');
+                btn.onclick = (e) => e.preventDefault();
+            }
         });
 
-        if (!availableStorages.includes(selectedStorage)) selectedStorage = availableStorages[0];
+        // Nếu màu đã chọn không hợp lệ, chọn màu đầu tiên hợp lệ
+        if (!availableColors.includes(selectedColor)) {
+            selectedColor = availableColors[0] || '';
+        }
 
-        const availableColors = variants.filter(v => v.storage === selectedStorage).map(v => v.color);
-        document.querySelectorAll('#colorOptions button').forEach(btn => {
-            btn.classList.toggle('hidden', !availableColors.includes(btn.dataset.color));
-        });
-
-        if (!availableColors.includes(selectedColor)) selectedColor = availableColors[0];
-
-        setActiveButton('#colorOptions', selectedColor);
         setActiveButton('#storageOptions', selectedStorage);
+        setActiveButton('#colorOptions', selectedColor);
     }
+
 
     function updateVariantDisplay() {
         const variant = variants.find(v => v.color === selectedColor && v.storage === selectedStorage);
@@ -634,42 +705,54 @@
         document.getElementById('formQuantity').value = this.value;
     });
 
-    function buyNow() {
+    async function buyNow() {
         const variantId = document.getElementById('formVariantId').value;
         const quantity = document.getElementById('formQuantity').value;
 
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '{{ route("cart.add") }}';
+        try {
+            const response = await fetch('{{ route("cart.add") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    variant_id: variantId,
+                    quantity: quantity,
+                    redirect_to_cart: 1
+                })
+            });
 
-        const csrf = document.createElement('input');
-        csrf.type = 'hidden';
-        csrf.name = '_token';
-        csrf.value = '{{ csrf_token() }}';
+            const data = await response.json();
 
-        const inputVariant = document.createElement('input');
-        inputVariant.type = 'hidden';
-        inputVariant.name = 'variant_id';
-        inputVariant.value = variantId;
-
-        const inputQty = document.createElement('input');
-        inputQty.type = 'hidden';
-        inputQty.name = 'quantity';
-        inputQty.value = quantity;
-
-
-        const redirectInput = document.createElement('input');
-        redirectInput.type = 'hidden';
-        redirectInput.name = 'redirect_to_cart';
-        redirectInput.value = '1'; //chuyển trang
-
-        form.appendChild(csrf);
-        form.appendChild(inputVariant);
-        form.appendChild(inputQty);
-        form.appendChild(redirectInput);
-
-        document.body.appendChild(form);
-        form.submit();
+            if (response.ok) {
+                
+                window.location.href = '{{ route("cart.index") }}';
+            } else {
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: data.error || 'Có lỗi xảy ra, vui lòng thử lại!',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+        } catch (error) {
+            console.error('Lỗi:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi kết nối',
+                text: 'Không thể kết nối tới máy chủ.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
     }
 
 </script>

@@ -242,6 +242,7 @@ class HomeController extends Controller
 
         $recentlyViewed = Product::with(['variants.images', 'category.parent']) // thêm parent
             ->whereIn('id', $recentIds)
+            ->where('status', 1)
             ->get()
             ->map(function ($p) use ($recentIds) {
                 $p->is_accessory = $p->category?->slug === 'phu-kien' || $p->category?->parent?->slug === 'phu-kien';
@@ -316,6 +317,7 @@ class HomeController extends Controller
 
         $recentlyViewed = Product::with(['variants.images', 'category.parent']) // thêm parent
             ->whereIn('id', $recentIds)
+            ->where('status', 1)
             ->get()
             ->map(function ($p) use ($recentIds) {
                 $p->is_accessory = $p->category?->slug === 'phu-kien' || $p->category?->parent?->slug === 'phu-kien';

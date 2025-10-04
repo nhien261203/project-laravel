@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         fetchBlogs(link.href);
     });
+    // Xử lý nút back/forward của trình duyệt
+    window.addEventListener("popstate", function (event) {
+        fetchBlogs(window.location.href);
+    });
 });
 </script>
 @endpush

@@ -451,11 +451,16 @@
         const specWrapper = document.getElementById('techSpecWrapper');
         let expanded = false;
 
-        toggleBtn?.addEventListener('click', function () {
-            expanded = !expanded;
-            specWrapper.classList.toggle('max-h-[200px]', !expanded);
-            this.innerText = expanded ? 'Thu gọn' : 'Đọc thêm';
-        });
+        if (specWrapper.scrollHeight <= 200) {
+            
+            toggleBtn.style.display = 'none';
+        } else {
+            toggleBtn.addEventListener('click', function () {
+                expanded = !expanded;
+                specWrapper.classList.toggle('max-h-[200px]', !expanded);
+                this.innerText = expanded ? 'Thu gọn' : 'Đọc thêm';
+            });
+        }
     };
 
     function changeMainImage(src) {
@@ -575,42 +580,54 @@
         document.getElementById('formQuantity').value = this.value;
     });
 
-    function buyNow() {
+    async function buyNow() {
         const variantId = document.getElementById('formVariantId').value;
         const quantity = document.getElementById('formQuantity').value;
 
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '{{ route("cart.add") }}';
+        try {
+            const response = await fetch('{{ route("cart.add") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    variant_id: variantId,
+                    quantity: quantity,
+                    redirect_to_cart: 1
+                })
+            });
 
-        const csrf = document.createElement('input');
-        csrf.type = 'hidden';
-        csrf.name = '_token';
-        csrf.value = '{{ csrf_token() }}';
+            const data = await response.json();
 
-        const inputVariant = document.createElement('input');
-        inputVariant.type = 'hidden';
-        inputVariant.name = 'variant_id';
-        inputVariant.value = variantId;
-
-        const inputQty = document.createElement('input');
-        inputQty.type = 'hidden';
-        inputQty.name = 'quantity';
-        inputQty.value = quantity;
-
-
-        const redirectInput = document.createElement('input');
-        redirectInput.type = 'hidden';
-        redirectInput.name = 'redirect_to_cart';
-        redirectInput.value = '1'; //chuyển trang
-
-        form.appendChild(csrf);
-        form.appendChild(inputVariant);
-        form.appendChild(inputQty);
-        form.appendChild(redirectInput);
-
-        document.body.appendChild(form);
-        form.submit();
+            if (response.ok) {
+                
+                window.location.href = '{{ route("cart.index") }}';
+            } else {
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: data.error || 'Có lỗi xảy ra, vui lòng thử lại!',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+        } catch (error) {
+            console.error('Lỗi:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi kết nối',
+                text: 'Không thể kết nối tới máy chủ.',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
     }
 
 </script>
@@ -738,10 +755,8 @@
         });
     });
 
-
     return false;
 }
-
 
 </script>
 

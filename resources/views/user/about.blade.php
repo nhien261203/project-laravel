@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <!-- Hero banner -->
-<div class="container">
+<div class="container mx-auto overflow-x-hidden">
     <section class="relative bg-fixed bg-center bg-cover text-white h-[75vh] md:h-[90vh] flex items-center justify-center" style="background-image: url('https://plus.unsplash.com/premium_photo-1661521404574-f9ec566e546c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
         <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
         <div class="relative z-10 text-center max-w-2xl px-4" data-aos="fade-down">

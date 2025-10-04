@@ -1,8 +1,24 @@
+<div class="fixed bottom-5 right-5 flex items-end gap-2 z-50 group">
+    <!-- Text mở rộng -->
+    <div 
+        class="bg-white px-3 py-2 rounded-lg shadow-md text-gray-800 text-sm flex items-center gap-2 
+               opacity-0 invisible translate-x-3 
+               group-hover:opacity-100 group-hover:visible group-hover:translate-x-0 
+               transition-all duration-300 ease-out">
+        <span>Chat với Nexus AI</span>
+        <!-- Nút X (tuỳ chọn) -->
+        {{-- <button id="closeChatFull" class="text-gray-400 hover:text-gray-600 text-xs">
+            <i class="fas fa-times"></i>
+        </button> --}}
+    </div>
 
-{{-- Bong bóng chat nhỏ --}}
-<div id="chatBubble" class="fixed bottom-5 right-5 w-16 h-16 bg-green-500 rounded-full shadow-lg flex items-center justify-center cursor-pointer z-50 hover:scale-110 transition-transform">
-    <i class="fas fa-comment text-white text-xl"></i>
+    <!-- Bong bóng chat -->
+    <div id="chatBubble" 
+        class="w-16 h-16 bg-green-500 rounded-full shadow-lg flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
+        <i class="fas fa-comment text-white text-xl"></i>
+    </div>
 </div>
+
 
 {{-- Khung chat popup --}}
 <div id="chatPopup" class="fixed bottom-24 right-5 w-96 h-[500px] bg-white rounded-xl shadow-lg flex flex-col z-60 hidden">
