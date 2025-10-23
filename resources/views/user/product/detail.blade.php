@@ -672,14 +672,14 @@
         }
 
 
-        document.getElementById('detailColor').innerText = variant.color ?? '';
-        document.getElementById('detailStorage').innerText = variant.storage ?? '';
-        document.getElementById('detailRam').innerText = variant.ram ?? '';
-        document.getElementById('detailScreen').innerText = variant.screen_size ?? '';
-        document.getElementById('detailChip').innerText = variant.chip ?? '';
-        document.getElementById('detailBattery').innerText = variant.battery ?? '';
-        document.getElementById('detailOS').innerText = variant.operating_system ?? '';
-        document.getElementById('detailWeight').innerText = variant.weight ?? '';
+        document.getElementById('detailColor').innerText = variant.color ?? 'Đang cập nhật';
+        document.getElementById('detailStorage').innerText = variant.storage ?? 'Đang cập nhật';
+        document.getElementById('detailRam').innerText = variant.ram ?? 'Đang cập nhật';
+        document.getElementById('detailScreen').innerText = variant.screen_size ?? 'Đang cập nhật';
+        document.getElementById('detailChip').innerText = variant.chip ?? 'Đang cập nhật';
+        document.getElementById('detailBattery').innerText = variant.battery ?? 'Đang cập nhật';
+        document.getElementById('detailOS').innerText = variant.operating_system ?? 'Đang cập nhật';
+        document.getElementById('detailWeight').innerText = variant.weight ?? 'Đang cập nhật';
 
         const previewImage = document.getElementById('previewImage');
         const thumbnailWrapper = document.getElementById('thumbnailWrapper');

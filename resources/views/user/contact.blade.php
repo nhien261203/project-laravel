@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="container pt-10 pb-20">
-    <section class="py-16 bg-gray-50 rounded-xl shadow-inner">
+    <section class="py-16 bg-gray-50 rounded-xl hover:shadow-2xl" data-aos="fade-up">
         <div class="container mx-auto px-4 grid md:grid-cols-2 gap-10 animate-fadeIn">
             
             {{-- Contact Info --}}
@@ -13,11 +13,7 @@
                     Chúng tôi luôn sẵn sàng hỗ trợ bạn nhanh chóng và tận tâm.
                 </p>
 
-                <ul class="space-y-3 text-gray-700 text-base">
-                    
-                    <li><strong>📞 Hotline:</strong> 0968 239 407</li>
-                    <li><strong>✉ Email:</strong>dovannhien12345@gmail.com</li>
-                </ul>
+                
             </div>
 
             {{-- Contact Form --}}
@@ -64,6 +60,85 @@
             </div>
         </div>
     </section>
+    <!-- Liên hệ + Bản đồ -->
+<section class="py-16 bg-white rounded-xl hover:shadow-2xl mt-10">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-10" data-aos="fade-up">
+            <h2 class="text-3xl font-semibold mb-4">Liên hệ & Vị trí cửa hàng</h2>
+            <p class="text-gray-700">Tìm đến chúng tôi dễ dàng qua bản đồ dưới đây hoặc liên hệ trực tiếp.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+            <!-- Thông tin liên hệ -->
+            <div class="space-y-4" data-aos="fade-right">
+                <div class="flex items-start gap-4">
+                    <i class="fas fa-map-marker-alt text-yellow-500 text-2xl mt-1"></i>
+                    <div>
+                        <h3 class="font-bold text-lg">Địa chỉ</h3>
+                        <p>Số 53 Triều Khúc, Thanh Xuân, Hà Nội</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <i class="fas fa-phone-alt text-blue-500 text-2xl mt-1"></i>
+                    <div>
+                        <h3 class="font-bold text-lg">Hotline</h3>
+                        <p>+84 912 345 678</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <i class="fas fa-envelope text-green-500 text-2xl mt-1"></i>
+                    <div>
+                        <h3 class="font-bold text-lg">Email</h3>
+                        <p>support@nexusphone.vn</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <i class="fas fa-clock text-red-500 text-2xl mt-1"></i>
+                    <div>
+                        <h3 class="font-bold text-lg">Giờ mở cửa</h3>
+                        <p>Thứ 2 - Thứ 7: 8:00 - 20:00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bản đồ -->
+            <div data-aos="fade-left">
+                <div id="map" class="w-full h-96 rounded-xl shadow-lg overflow-hidden"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
 </div>
+<style>
+   
+#map {
+    position: relative;
+    z-index: 1;
+}
+
+</style>
 
 @endsection
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // Khởi tạo bản đồ với tọa độ chính xác
+    const map = L.map('map').setView([20.9930, 105.8105], 17);
+
+    // Thêm layer OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Thêm marker
+    L.marker([20.9930, 105.8105]).addTo(map)
+        .bindPopup('<b>NexusPhone</b><br>Số 53 Triều Khúc, Thanh Xuân, Hà Nội.')
+        .openPopup();
+});
+</script>

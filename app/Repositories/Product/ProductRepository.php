@@ -298,6 +298,13 @@ class ProductRepository implements ProductRepositoryInterface
     // search cho header
     public function searchProducts(string $keyword, int $perPage = 8)
     {
+        $keyword = trim($keyword);
+
+        // Nếu keyword < 2 ký tự thì trả về collection rỗng
+        if (mb_strlen($keyword) < 2) {
+            return Product::whereRaw('1 = 0')->paginate($perPage); 
+            
+        }
         // Escape ký tự đặc biệt
         $keyword = str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $keyword);
 

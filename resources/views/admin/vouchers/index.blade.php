@@ -72,13 +72,18 @@
                         <td class="p-2">{{ optional($voucher->start_date)->format('d/m/Y') }}</td>
                         <td class="p-2">{{ optional($voucher->end_date)->format('d/m/Y') }}</td>
                         <td class="p-2 text-right space-x-2">
+                            <a href="{{ route('admin.vouchers.show', $voucher->id) }}"
+                            class="text-gray-700 hover:text-gray-900">Xem</a>
                             <a href="{{ route('admin.vouchers.edit', $voucher->id) }}"
                                class="text-blue-600 hover:underline">Sửa</a>
-                            <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST"
+                            {{-- <form action="{{ route('admin.vouchers.destroy', $voucher->id) }}" method="POST"
                                   class="inline-block" onsubmit="return confirm('Xóa mã này?')">
                                 @csrf @method('DELETE')
                                 <button class="text-red-600 hover:underline">Xóa</button>
-                            </form>
+                            </form> --}}
+                            @include('partials.delete-confirm', [
+                                'action' => route('admin.vouchers.destroy', $voucher->id),
+                            ])
                         </td>
                     </tr>
                 @empty

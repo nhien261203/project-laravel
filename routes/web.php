@@ -328,6 +328,8 @@ Route::get('/admin/export/orders/pdf', [OrderController::class, 'exportPdf'])->n
 
 Route::post('/chatbot/ask', [ChatBotController::class, 'ask']);
 Route::get('/chatbot/history', [ChatBotController::class, 'history']);
+Route::get('/chatbot/data', [ChatbotController::class, 'getDataForChatbotJson']);
+
 Route::get('/chat', function () {
     return view('chat');
 });

@@ -10,7 +10,7 @@
         </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
         {{-- Cột trái: Banner ảnh --}}
         <div class="md:col-span-1 cursor-pointer">
             <a href="{{ route('product.category', 'laptop') }}">
@@ -66,7 +66,8 @@
                                     <p class="text-xs text-gray-500 mt-1 line-clamp-1">
                                         Bộ nhớ: {{ $product->variants->pluck('storage')->unique()->implode(' / ') ?: 'N/A' }}
                                     </p>
-                                    <div class="mt-1">
+                                    <div class="mt-1 max-h-10 flex items-center">
+                                        {{-- Giá bán --}}
                                         @if($price)
                                             <span class="text-red-500 font-bold text-base">
                                                 {{ number_format($price, 0, ',', '.') }}₫

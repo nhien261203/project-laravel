@@ -51,11 +51,32 @@
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<script src="/js/data.js"></script>
+{{-- <script src="/js/data.js"></script> --}}
 <script>
+    // --- CSRF Token --- //
+    // const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
     //CSRF
     const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
     const csrfToken = csrfTokenMeta ? csrfTokenMeta.content : '';
+
+    
+    async function loadProductData() {
+        try {
+            const res = await fetch("/chatbot/data");
+            if (!res.ok) throw new Error("Không thể tải dữ liệu sản phẩm");
+            const data = await res.json();
+            window.PRODUCT_DATA = data.products || [];
+            console.log(" Dữ liệu chatbot đã load:", window.PRODUCT_DATA);
+        } catch (err) {
+            console.error(" Lỗi khi tải dữ liệu chatbot:", err);
+            window.PRODUCT_DATA = [];
+        }
+    }
+    loadProductData();
+
+</script>
+<script>
+    
 
     //DOM
     const chatBubble = document.getElementById("chatBubble");

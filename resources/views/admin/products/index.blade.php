@@ -4,13 +4,13 @@
 <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
     <h1 class="text-xl font-bold">📦 Danh sách Sản phẩm</h1>
     <div class="flex gap-2">
-        {{-- <a href="{{ route('admin.products.export.txt') }}"
+        <a href="{{ route('admin.products.export.txt') }}"
         class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-100 inline-flex items-center gap-2">
-            📄 Xuất TXT
-        </a> --}}
+            Xuất TXT
+        </a> 
         <a href="{{ route('admin.products.export.pdf') }}"
         class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-100 inline-flex items-center gap-2">
-            📑 Xuất PDF
+            Xuất PDF
         </a>
 
         <a href="{{ route('admin.products.create') }}"

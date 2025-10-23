@@ -15,33 +15,50 @@ class ProductExportController extends Controller
 {
     public function exportToTxt()
     {
-        $products = Product::with(['brand', 'category', 'variants'])->get();
+        // Chỉ lấy sản phẩm có status = 1
+        $products = Product::with([
+            'brand',
+            'category',
+            'variants' => function ($q) {
+                $q->where('status', 1); // chỉ lấy các biến thể trạng thái = 1
+            }
+        ])
+            ->where('status', 1) // chỉ lấy sản phẩm trạng thái = 1
+            ->get();
+
         $content = '';
 
         foreach ($products as $product) {
-            $totalQuantity = $product->variants->sum('quantity');
-            $totalSold = $product->variants->sum('sold');
-            $totalRemaining = $totalQuantity - $totalSold;
-
             $content .= "Sản phẩm: {$product->name}\n";
             $content .= "Thương hiệu: " . ($product->brand->name ?? 'Không có') . "\n";
             $content .= "Quốc gia: " . ($product->brand->country ?? 'Không có') . "\n";
             $content .= "Danh mục: " . ($product->category->name ?? 'Không có') . "\n";
-            // $content .= "Mô tả: " . strip_tags($product->description) . "\n";
-
-
-
-            // Tổng kết sản phẩm
-            // $content .= "Tổng số lượng nhập: {$totalQuantity}\n";
-            $content .= "Tổng đã bán: {$totalSold}\n";
-            $content .= "Cửa hàng hiện có: {$totalRemaining}\n";
 
             $content .= "Biến thể:\n";
 
             foreach ($product->variants as $variant) {
-                $remaining = $variant->quantity - $variant->sold;
-                $content .= "- Màu: {$variant->color}, Bộ nhớ: {$variant->storage}, RAM: {$variant->ram}, Chip: {$variant->chip}, "
-                    . "Giá bán: " . number_format($variant->price) . " VND, Đã bán: {$variant->sold}, Cửa hàng còn: {$remaining}\n";
+                $originalPrice = $variant->original_price ?? null;
+
+                $salePrice = null;
+                if ($originalPrice !== null && !empty($variant->sale_percent) && $variant->sale_percent > 0) {
+                    $salePrice = $originalPrice - ($originalPrice * $variant->sale_percent / 100);
+                }
+
+                $line = "- Màu: {$variant->color}, Bộ nhớ: {$variant->storage}, RAM: {$variant->ram}, Chip: {$variant->chip}, ";
+
+                if ($originalPrice !== null) {
+                    $line .= "Giá chưa giảm: " . number_format($originalPrice) . " VND";
+                } else {
+                    $line .= "Giá chưa giảm: Không có";
+                }
+
+                $line .= ", Giảm: " . (isset($variant->sale_percent) ? $variant->sale_percent . "%" : "Không có");
+
+                if ($salePrice !== null) {
+                    $line .= ", Giá khuyến mãi: " . number_format($salePrice) . " VND";
+                }
+
+                $content .= $line . "\n";
             }
 
             $content .= "\n------------------------\n\n";
@@ -53,6 +70,8 @@ class ProductExportController extends Controller
         return response()->download(public_path($filename))->deleteFileAfterSend();
     }
 
+
+
     public function exportToPdf()
     {
         $products = Product::with(['brand', 'category', 'variants'])->get();
@@ -60,5 +79,4 @@ class ProductExportController extends Controller
         $pdf = PDF::loadView('admin.exports.products', compact('products'));
         return $pdf->download('products_export.pdf');
     }
-    
 }

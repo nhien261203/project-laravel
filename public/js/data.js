@@ -1,13 +1,11 @@
 window.PRODUCT_DATA = `
 Sản phẩm: Iphone 15
-Thương hiệu: Apple-iphone
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Điện Thoại
-Tổng đã bán: 0
-Cửa hàng hiện có: 10
 Biến thể:
-- Màu: Đen, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A16 Bionic, Giá bán: 18,610,500 VND, Đã bán: 0, Cửa hàng còn: 5
-- Màu: Hồng, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A16 Bionic, Giá bán: 18,610,500 VND, Đã bán: 0, Cửa hàng còn: 5
+- Màu: Đen, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A16 Bionic, Giá chưa giảm: 19,590,000 VND, Giảm: 5%, Giá khuyến mãi: 18,610,500 VND
+- Màu: Hồng, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A16 Bionic, Giá chưa giảm: 19,590,000 VND, Giảm: 5%, Giá khuyến mãi: 18,610,500 VND
 
 ------------------------
 
@@ -15,38 +13,33 @@ Sản phẩm: Sam Sung Galaxy S25
 Thương hiệu: Sam sung
 Quốc gia: Hàn quốc
 Danh mục: Điện Thoại
-Tổng đã bán: 7
-Cửa hàng hiện có: 10
 Biến thể:
-- Màu: Xanh Navy, Bộ nhớ: 512GB, RAM: 12GB, Chip: Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân, Giá bán: 28,405,000 VND, Đã bán: 0, Cửa hàng còn: 5
-- Màu: Xám, Bộ nhớ: 512GB, RAM: 12GB, Chip: Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân, Giá bán: 28,405,000 VND, Đã bán: 6, Cửa hàng còn: 0
-- Màu: Xanh Navy, Bộ nhớ: 256GB, RAM: 12GB, Chip: Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân, Giá bán: 24,700,000 VND, Đã bán: 1, Cửa hàng còn: 5
+- Màu: Xanh Navy, Bộ nhớ: 512GB, RAM: 12GB, Chip: Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân, Giá chưa giảm: 29,900,000 VND, Giảm: 5%, Giá khuyến mãi: 28,405,000 VND
+- Màu: Xám, Bộ nhớ: 512GB, RAM: 12GB, Chip: Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân, Giá chưa giảm: 29,900,000 VND, Giảm: 5%, Giá khuyến mãi: 28,405,000 VND
+- Màu: Xanh Navy, Bộ nhớ: 256GB, RAM: 12GB, Chip: Qualcomm Snapdragon 8 Elite For Galaxy 8 nhân, Giá chưa giảm: 26,000,000 VND, Giảm: 5%, Giá khuyến mãi: 24,700,000 VND
 
 ------------------------
 
 Sản phẩm: iPhone 16 Pro Max
-Thương hiệu: Apple-iphone
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Điện Thoại
-Tổng đã bán: 6
-Cửa hàng hiện có: 8
 Biến thể:
-- Màu: Titan Tự Nhiên, Bộ nhớ: 256GB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá bán: 32,430,000 VND, Đã bán: 2, Cửa hàng còn: 3
-- Màu: Titan Sa Mạc, Bộ nhớ: 256GB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá bán: 32,430,000 VND, Đã bán: 2, Cửa hàng còn: 3
-- Màu: Titan Sa Mạc, Bộ nhớ: 1TB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá bán: 43,428,000 VND, Đã bán: 2, Cửa hàng còn: 2
+- Màu: Titan Tự Nhiên, Bộ nhớ: 256GB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá chưa giảm: 34,500,000 VND, Giảm: 6%, Giá khuyến mãi: 32,430,000 VND
+- Màu: Titan Sa Mạc, Bộ nhớ: 256GB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá chưa giảm: 34,500,000 VND, Giảm: 6%, Giá khuyến mãi: 32,430,000 VND
+- Màu: Titan Tự Nhiên, Bộ nhớ: 1TB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá chưa giảm: 46,200,000 VND, Giảm: 6%, Giá khuyến mãi: 43,428,000 VND
+- Màu: Titan Sa Mạc, Bộ nhớ: 1TB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá chưa giảm: 46,200,000 VND, Giảm: 6%, Giá khuyến mãi: 43,428,000 VND
 
 ------------------------
 
 Sản phẩm: iphone 13
-Thương hiệu: Apple-iphone
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Điện Thoại
-Tổng đã bán: 0
-Cửa hàng hiện có: 15
 Biến thể:
-- Màu: Đen, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A15 Bionic, Giá bán: 14,100,000 VND, Đã bán: 0, Cửa hàng còn: 5
-- Màu: Đen, Bộ nhớ: 512GB, RAM: 84GB, Chip: Apple A15 Bionic, Giá bán: 18,330,000 VND, Đã bán: 0, Cửa hàng còn: 5
-- Màu: Trắng, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A15 Bionic, Giá bán: 14,100,000 VND, Đã bán: 0, Cửa hàng còn: 5
+- Màu: Đen, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A15 Bionic, Giá chưa giảm: 15,000,000 VND, Giảm: 6%, Giá khuyến mãi: 14,100,000 VND
+- Màu: Đen, Bộ nhớ: 512GB, RAM: 8GB, Chip: Apple A15 Bionic, Giá chưa giảm: 19,500,000 VND, Giảm: 6%, Giá khuyến mãi: 18,330,000 VND
+- Màu: Trắng, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A15 Bionic, Giá chưa giảm: 15,000,000 VND, Giảm: 6%, Giá khuyến mãi: 14,100,000 VND
 
 ------------------------
 
@@ -54,10 +47,8 @@ Sản phẩm: Laptop Lenovo Gaming LOQ 15ARP9
 Thương hiệu: Lenovo
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 0
-Cửa hàng hiện có: 5
 Biến thể:
-- Màu: Xám, Bộ nhớ: 512 GB SSD, RAM: 24GB, Chip: Intel, Giá bán: 23,750,000 VND, Đã bán: 0, Cửa hàng còn: 5
+- Màu: Xám, Bộ nhớ: 512GB SSD, RAM: 24GB, Chip: Intel, Giá chưa giảm: 25,000,000 VND, Giảm: 5%, Giá khuyến mãi: 23,750,000 VND
 
 ------------------------
 
@@ -65,33 +56,27 @@ Sản phẩm: Tai nghe Bluetooth True Wireless Xiaomi Redmi Buds 6 Lite
 Thương hiệu: Realme
 Quốc gia: Trung Quốc
 Danh mục: Thiết bị âm thanh
-Tổng đã bán: 0
-Cửa hàng hiện có: 10
 Biến thể:
-- Màu: Xanh Da trời, Bộ nhớ: , RAM: , Chip: , Giá bán: 800,000 VND, Đã bán: 0, Cửa hàng còn: 10
+- Màu: Xanh Da trời, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 500,000 VND, Giảm: 0%
 
 ------------------------
 
 Sản phẩm: Iphone 16 Plus
-Thương hiệu: Apple-iphone
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Điện Thoại
-Tổng đã bán: 0
-Cửa hàng hiện có: 11
 Biến thể:
-- Màu: Đen, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A18 6 nhân, Giá bán: 25,200,000 VND, Đã bán: 0, Cửa hàng còn: 5
-- Màu: Đen, Bộ nhớ: 512GB, RAM: 6GB, Chip: Apple A18 Pro 6 nhân, Giá bán: 27,000,000 VND, Đã bán: 0, Cửa hàng còn: 6
+- Màu: Đen, Bộ nhớ: 128GB, RAM: 6GB, Chip: Apple A18 6 nhân, Giá chưa giảm: 28,000,000 VND, Giảm: 10%, Giá khuyến mãi: 25,200,000 VND
+- Màu: Đen, Bộ nhớ: 512GB, RAM: 6GB, Chip: Apple A18 Pro 6 nhân, Giá chưa giảm: 30,000,000 VND, Giảm: 10%, Giá khuyến mãi: 27,000,000 VND
 
 ------------------------
 
 Sản phẩm: Iphone 14
-Thương hiệu: Apple-iphone
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Điện Thoại
-Tổng đã bán: 2
-Cửa hàng hiện có: 3
 Biến thể:
-- Màu: Xanh Dương, Bộ nhớ: 512GB, RAM: 6GB, Chip: Apple A15 Bionic, Giá bán: 16,472,000 VND, Đã bán: 2, Cửa hàng còn: 3
+- Màu: Xanh Dương, Bộ nhớ: 512GB, RAM: 6GB, Chip: Apple A15 Bionic, Giá chưa giảm: 20,590,000 VND, Giảm: 0%
 
 ------------------------
 
@@ -99,11 +84,9 @@ Sản phẩm: Samsung Galaxy A36
 Thương hiệu: Sam sung
 Quốc gia: Hàn quốc
 Danh mục: Điện Thoại
-Tổng đã bán: 0
-Cửa hàng hiện có: 9
 Biến thể:
-- Màu: Đen, Bộ nhớ: 128GB, RAM: 8GB, Chip: Snapdragon 6 Gen 3, Giá bán: 7,814,400 VND, Đã bán: 0, Cửa hàng còn: 5
-- Màu: Tím, Bộ nhớ: 128GB, RAM: 8GB, Chip: Snapdragon 6 Gen 3, Giá bán: 7,814,400 VND, Đã bán: 0, Cửa hàng còn: 4
+- Màu: Đen, Bộ nhớ: 128GB, RAM: 8GB, Chip: Snapdragon 6 Gen 3, Giá chưa giảm: 8,140,000 VND, Giảm: 4%, Giá khuyến mãi: 7,814,400 VND
+- Màu: Tím, Bộ nhớ: 128GB, RAM: 8GB, Chip: Snapdragon 6 Gen 3, Giá chưa giảm: 8,140,000 VND, Giảm: 4%, Giá khuyến mãi: 7,814,400 VND
 
 ------------------------
 
@@ -111,10 +94,8 @@ Sản phẩm: Realme 13+
 Thương hiệu: Realme
 Quốc gia: Trung Quốc
 Danh mục: Điện Thoại
-Tổng đã bán: 1
-Cửa hàng hiện có: 4
 Biến thể:
-- Màu: Tím, Bộ nhớ: 128GB, RAM: 8GB, Chip: Snapdragon 6 Gen 3, Giá bán: 9,810,000 VND, Đã bán: 1, Cửa hàng còn: 4
+- Màu: Tím, Bộ nhớ: 128GB, RAM: 8GB, Chip: Snapdragon 6 Gen 3, Giá chưa giảm: 9,810,000 VND, Giảm: 0%
 
 ------------------------
 
@@ -122,11 +103,9 @@ Sản phẩm: Xiaomi 14T Pro
 Thương hiệu: Xiaomi
 Quốc gia: Trung Quốc
 Danh mục: Điện Thoại
-Tổng đã bán: 2
-Cửa hàng hiện có: 8
 Biến thể:
-- Màu: Xám, Bộ nhớ: 256GB, RAM: 12GB, Chip: MediaTek Dimensity 9300+ 8 nhân, Giá bán: 15,855,500 VND, Đã bán: 0, Cửa hàng còn: 6
-- Màu: Xám, Bộ nhớ: 512GB, RAM: 12GB, Chip: MediaTek Dimensity 9300+ 8 nhân, Giá bán: 16,805,500 VND, Đã bán: 2, Cửa hàng còn: 2
+- Màu: Xám, Bộ nhớ: 256GB, RAM: 12GB, Chip: MediaTek Dimensity 9300+ 8 nhân, Giá chưa giảm: 16,690,000 VND, Giảm: 5%, Giá khuyến mãi: 15,855,500 VND
+- Màu: Xám, Bộ nhớ: 512GB, RAM: 12GB, Chip: MediaTek Dimensity 9300+ 8 nhân, Giá chưa giảm: 17,690,000 VND, Giảm: 5%, Giá khuyến mãi: 16,805,500 VND
 
 ------------------------
 
@@ -134,10 +113,8 @@ Sản phẩm: Laptop Asus Vivobook Go 15 E1504FA
 Thương hiệu: Asus
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 3
-Cửa hàng hiện có: 3
 Biến thể:
-- Màu: Bạc, Bộ nhớ: 512 GB SSD NVMe PCIe (Có thể tháo ra, lắp thanh khác tối đa 1 TB), RAM: 16GB, Chip: AMD Ryzen 5 - 7520U, Giá bán: 13,455,000 VND, Đã bán: 3, Cửa hàng còn: 3
+- Màu: Bạc, Bộ nhớ: 512GB SSD, RAM: 16GB, Chip: AMD Ryzen 5 - 7520U, Giá chưa giảm: 14,950,000 VND, Giảm: 10%, Giá khuyến mãi: 13,455,000 VND
 
 ------------------------
 
@@ -145,10 +122,8 @@ Sản phẩm: Laptop Asus TUF Gaming A15
 Thương hiệu: Asus
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 0
-Cửa hàng hiện có: 5
 Biến thể:
-- Màu: Xám, Bộ nhớ: 512 GB SSD NVMe PCIe Gen 4 (Có thể tháo ra, lắp thanh khác tối đa 2 TB), RAM: 16GB, Chip: AMD Ryzen 7 - 7435HS, Giá bán: 26,220,000 VND, Đã bán: 0, Cửa hàng còn: 5
+- Màu: Xám, Bộ nhớ: 512GB SSD, RAM: 16GB, Chip: AMD Ryzen 7 - 7435HS, Giá chưa giảm: 27,600,000 VND, Giảm: 5%, Giá khuyến mãi: 26,220,000 VND
 
 ------------------------
 
@@ -156,10 +131,8 @@ Sản phẩm: Laptop Lenovo ThinkBook 14 G7
 Thương hiệu: Lenovo
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 0
-Cửa hàng hiện có: 5
 Biến thể:
-- Màu: Xám, Bộ nhớ: 1TB SSD pacel, RAM: 32GB, Chip: Intel Core Ultra 7 Meteor Lake - 155U, Giá bán: 27,730,000 VND, Đã bán: 0, Cửa hàng còn: 5
+- Màu: Xám, Bộ nhớ: 1TB SSD, RAM: 32GB, Chip: Intel Core Ultra 7 Meteor Lake - 155U, Giá chưa giảm: 29,500,000 VND, Giảm: 0%
 
 ------------------------
 
@@ -167,22 +140,18 @@ Sản phẩm: Laptop Dell Latitude 3450
 Thương hiệu: Dell
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 0
-Cửa hàng hiện có: 5
 Biến thể:
-- Màu: Xám, Bộ nhớ: 512 GB SSD NVMe PCIe (Có thể tháo ra, lắp thanh khác tối đa 1 TB), RAM: 16GB, Chip: Intel Core i7 Raptor Lake - 1355U, Giá bán: 23,644,000 VND, Đã bán: 0, Cửa hàng còn: 5
+- Màu: Xám, Bộ nhớ: 512GB SSD, RAM: 16GB, Chip: Intel Core i7 Raptor Lake - 1355U, Giá chưa giảm: 25,700,000 VND, Giảm: 8%, Giá khuyến mãi: 23,644,000 VND
 
 ------------------------
 
 Sản phẩm: MacBook Air 13 inch M4
-Thương hiệu: Apple-macbook
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 2
-Cửa hàng hiện có: 3
 Biến thể:
-- Màu: Xanh Đen, Bộ nhớ: 256 GB SSD, RAM: 16GB, Chip: Apple M4 - Hãng không công bố, Giá bán: 23,400,000 VND, Đã bán: 0, Cửa hàng còn: 3
-- Màu: Xanh Đen, Bộ nhớ: 512 GB SSD, RAM: 16GB, Chip: Apple M4 - Hãng không công bố, Giá bán: 25,380,000 VND, Đã bán: 2, Cửa hàng còn: 0
+- Màu: Xanh Đen, Bộ nhớ: 256GB SSD, RAM: 16GB, Chip: Apple M4 - Hãng không công bố, Giá chưa giảm: 26,000,000 VND, Giảm: 10%, Giá khuyến mãi: 23,400,000 VND
+- Màu: Xanh Đen, Bộ nhớ: 512GB SSD, RAM: 16GB, Chip: Apple M4 - Hãng không công bố, Giá chưa giảm: 27,000,000 VND, Giảm: 6%, Giá khuyến mãi: 25,380,000 VND
 
 ------------------------
 
@@ -190,22 +159,18 @@ Sản phẩm: Dell Inspiron 15 3520
 Thương hiệu: Dell
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 7
-Cửa hàng hiện có: 3
 Biến thể:
-- Màu: Bạc, Bộ nhớ: 512 GB SSD NVMe PCIe, RAM: 16GB, Chip: Intel Core i5 Alder Lake - 1235U, Giá bán: 15,510,000 VND, Đã bán: 7, Cửa hàng còn: 3
+- Màu: Bạc, Bộ nhớ: 512GB SSD, RAM: 16GB, Chip: Intel Core i5 Alder Lake - 1235U, Giá chưa giảm: 16,500,000 VND, Giảm: 6%, Giá khuyến mãi: 15,510,000 VND
 
 ------------------------
 
 Sản phẩm: Laptop MacBook Pro 14
-Thương hiệu: Apple-macbook
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 1
-Cửa hàng hiện có: 6
 Biến thể:
-- Màu: Đen, Bộ nhớ: 512GB SSD, RAM: 24GB, Chip: Apple M4 Pro - Hãng không công bố, Giá bán: 45,600,000 VND, Đã bán: 1, Cửa hàng còn: 3
-- Màu: Bạc, Bộ nhớ: 512GB SSD, RAM: 24GB, Chip: Apple M4 - Hãng không công bố, Giá bán: 45,120,000 VND, Đã bán: 0, Cửa hàng còn: 3
+- Màu: Đen, Bộ nhớ: 512GB SSD, RAM: 24GB, Chip: Apple M4 Pro - Hãng không công bố, Giá chưa giảm: 48,000,000 VND, Giảm: 5%, Giá khuyến mãi: 45,600,000 VND
+- Màu: Bạc, Bộ nhớ: 512GB SSD, RAM: 24GB, Chip: Apple M4 - Hãng không công bố, Giá chưa giảm: 48,000,000 VND, Giảm: 6%, Giá khuyến mãi: 45,120,000 VND
 
 ------------------------
 
@@ -213,10 +178,8 @@ Sản phẩm: Chuột Bluetooth Silent Logitech M240
 Thương hiệu: Logitech
 Quốc gia: Trung quốc
 Danh mục: Phụ kiện di động
-Tổng đã bán: 4
-Cửa hàng hiện có: 1
 Biến thể:
-- Màu: Đen, Bộ nhớ: , RAM: , Chip: , Giá bán: 332,500 VND, Đã bán: 4, Cửa hàng còn: 1
+- Màu: Đen, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 350,000 VND, Giảm: 5%, Giá khuyến mãi: 332,500 VND
 
 ------------------------
 
@@ -224,32 +187,26 @@ Sản phẩm: Bàn Phím Bluetooth Logitech MX Keys S
 Thương hiệu: Logitech
 Quốc gia: Trung quốc
 Danh mục: Phụ kiện di động
-Tổng đã bán: 0
-Cửa hàng hiện có: 4
 Biến thể:
-- Màu: Bạc, Bộ nhớ: , RAM: , Chip: , Giá bán: 2,430,000 VND, Đã bán: 0, Cửa hàng còn: 4
+- Màu: Bạc, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 2,700,000 VND, Giảm: 10%, Giá khuyến mãi: 2,430,000 VND
 
 ------------------------
 
-Sản phẩm: Bộ Adapter sạc kèm cáp Type C - Type C PD 45W Samsung EP-T4511
+Sản phẩm: Bộ Adapter sạc kèm cáp Type C
 Thương hiệu: Sam sung
 Quốc gia: Hàn quốc
 Danh mục: Phụ kiện di động
-Tổng đã bán: 3
-Cửa hàng hiện có: 7
 Biến thể:
-- Màu: Đen, Bộ nhớ: , RAM: , Chip: , Giá bán: 1,092,500 VND, Đã bán: 3, Cửa hàng còn: 7
+- Màu: Đen, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 1,150,000 VND, Giảm: 5%, Giá khuyến mãi: 1,092,500 VND
 
 ------------------------
 
-Sản phẩm: Pin sạc dự phòng 10000mAh Type C PD QC 3.0 33W Xiaomi PB1033MI kèm Cáp Type C
+Sản phẩm: Pin sạc dự phòng 10000mAh Type C
 Thương hiệu: Xiaomi
 Quốc gia: Trung Quốc
 Danh mục: Phụ kiện di động
-Tổng đã bán: 0
-Cửa hàng hiện có: 10
 Biến thể:
-- Màu: Xanh, Bộ nhớ: , RAM: , Chip: , Giá bán: 720,000 VND, Đã bán: 0, Cửa hàng còn: 10
+- Màu: Xanh, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 800,000 VND, Giảm: 10%, Giá khuyến mãi: 720,000 VND
 
 ------------------------
 
@@ -257,33 +214,27 @@ Sản phẩm: Tai nghe Bluetooth True Wireless JBL Wave Beam 2
 Thương hiệu: JBL
 Quốc gia: Thụy Sỹ
 Danh mục: Thiết bị âm thanh
-Tổng đã bán: 0
-Cửa hàng hiện có: 7
 Biến thể:
-- Màu: Đen, Bộ nhớ: , RAM: , Chip: , Giá bán: 1,360,000 VND, Đã bán: 0, Cửa hàng còn: 5
-- Màu: Xanh Dương, Bộ nhớ: , RAM: , Chip: , Giá bán: 1,360,000 VND, Đã bán: 0, Cửa hàng còn: 2
+- Màu: Đen, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 1,360,000 VND, Giảm: 0%
+- Màu: Trắng, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 1,360,000 VND, Giảm: 0%
 
 ------------------------
 
 Sản phẩm: AirPods 4 (chống ồn)
-Thương hiệu: Apple Phụ Kiện
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Thiết bị âm thanh
-Tổng đã bán: 2
-Cửa hàng hiện có: 8
 Biến thể:
-- Màu: Trắng, Bộ nhớ: , RAM: , Chip: , Giá bán: 4,370,000 VND, Đã bán: 2, Cửa hàng còn: 8
+- Màu: Trắng, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 4,600,000 VND, Giảm: 5%, Giá khuyến mãi: 4,370,000 VND
 
 ------------------------
 
 Sản phẩm: AirPods 4 MXP63
-Thương hiệu: Apple Phụ Kiện
+Thương hiệu: Apple
 Quốc gia: Mỹ
 Danh mục: Thiết bị âm thanh
-Tổng đã bán: 2
-Cửa hàng hiện có: 3
 Biến thể:
-- Màu: Trắng, Bộ nhớ: , RAM: , Chip: , Giá bán: 2,850,000 VND, Đã bán: 2, Cửa hàng còn: 3
+- Màu: Trắng, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 3,000,000 VND, Giảm: 5%, Giá khuyến mãi: 2,850,000 VND
 
 ------------------------
 
@@ -291,12 +242,10 @@ Sản phẩm: Realme C75
 Thương hiệu: Realme
 Quốc gia: Trung Quốc
 Danh mục: Điện Thoại
-Tổng đã bán: 0
-Cửa hàng hiện có: 12
 Biến thể:
-- Màu: Đen, Bộ nhớ: 128GB, RAM: 8GB, Chip: MediaTek Helio G92 Max 8 nhân, Giá bán: 5,310,500 VND, Đã bán: 0, Cửa hàng còn: 4
-- Màu: Đen, Bộ nhớ: 512GB, RAM: 8GB, Chip: MediaTek Helio G92 Max 8 nhân, Giá bán: 6,260,500 VND, Đã bán: 0, Cửa hàng còn: 4
-- Màu: Đỏ, Bộ nhớ: 128GB, RAM: 8GB, Chip: MediaTek Helio G92 Max 8 nhân, Giá bán: 5,310,500 VND, Đã bán: 0, Cửa hàng còn: 4
+- Màu: Đen, Bộ nhớ: 512GB, RAM: 8GB, Chip: MediaTek Helio G92 Max 8 nhân, Giá chưa giảm: 6,590,000 VND, Giảm: 5%, Giá khuyến mãi: 6,260,500 VND
+- Màu: Đỏ, Bộ nhớ: 128GB, RAM: 8GB, Chip: MediaTek Helio G92 Max 8 nhân, Giá chưa giảm: 5,590,000 VND, Giảm: 5%, Giá khuyến mãi: 5,310,500 VND
+- Màu: Hồng, Bộ nhớ: 512GB, RAM: 8GB, Chip: , Giá chưa giảm: 23,000,000 VND, Giảm: 0%
 
 ------------------------
 
@@ -304,11 +253,9 @@ Sản phẩm: Tai nghe TWS Samsung Galaxy Buds3 Pro R630N
 Thương hiệu: Sam sung
 Quốc gia: Hàn quốc
 Danh mục: Thiết bị âm thanh
-Tổng đã bán: 0
-Cửa hàng hiện có: 7
 Biến thể:
-- Màu: Xám, Bộ nhớ: , RAM: , Chip: , Giá bán: 5,264,000 VND, Đã bán: 0, Cửa hàng còn: 2
-- Màu: Trắng, Bộ nhớ: , RAM: , Chip: , Giá bán: 5,264,000 VND, Đã bán: 0, Cửa hàng còn: 5
+- Màu: Xám, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 5,600,000 VND, Giảm: 6%, Giá khuyến mãi: 5,264,000 VND
+- Màu: Trắng, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 5,600,000 VND, Giảm: 6%, Giá khuyến mãi: 5,264,000 VND
 
 ------------------------
 
@@ -316,19 +263,43 @@ Sản phẩm: Laptop Asus Zenbook 14
 Thương hiệu: Asus
 Quốc gia: Mỹ
 Danh mục: Laptop
-Tổng đã bán: 0
-Cửa hàng hiện có: 8
 Biến thể:
-- Màu: Xanh Dương, Bộ nhớ: 1 TB SSD NVMe PCIe Gen 4, RAM: 32GB, Chip: Intel Core Ultra 7 Meteor Lake - 155H, Giá bán: 30,970,000 VND, Đã bán: 0, Cửa hàng còn: 8
+- Màu: Xanh Dương, Bộ nhớ: 1TB SSD, RAM: 32GB, Chip: Intel Core Ultra 7 Meteor Lake - 155H, Giá chưa giảm: 32,600,000 VND, Giảm: 5%, Giá khuyến mãi: 30,970,000 VND
 
 ------------------------
 
-Voucher của shop hiện có:
-- Mã WELCOME50 : Giảm 50.000 VND cho khách hàng mua hàng lần đầu tiên.
-- Mã SALET8 : Giảm 100.000 VND cho đơn hàng từ 5.000.000 VND trở lên, mỗi khách hàng được sử dụng 2 lần, hạn sử dụng đến 30/8/2025.
-- Mã KM3 : Giảm 3% cho đơn hàng từ 5.000.000 VND trở lên, mỗi khách hàng được sử dụng 2 lần, hạn sử dụng đến 29/10/2025.
-- Mã KM5 : Giảm 5% cho đơn hàng từ 10.000.000 VND trở lên, mỗi khách hàng được sử dụng 2 lần, hạn sử dụng đến 28/10/2025.
---------------------------
+Sản phẩm: iPhone 16 Pro
+Thương hiệu: Apple
+Quốc gia: Mỹ
+Danh mục: Điện Thoại
+Biến thể:
+- Màu: Titan Đen, Bộ nhớ: 128GB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá chưa giảm: 26,000,000 VND, Giảm: 5%, Giá khuyến mãi: 24,700,000 VND
+- Màu: Titan Sa Mạc, Bộ nhớ: 128GB, RAM: 8GB, Chip: Apple A18 Pro 6 nhân, Giá chưa giảm: 26,000,000 VND, Giảm: 5%, Giá khuyến mãi: 24,700,000 VND
+
+------------------------
+
+Sản phẩm: IPhone 17
+Thương hiệu: Apple
+Quốc gia: Mỹ
+Danh mục: Điện Thoại
+Biến thể:
+- Màu: Xanh lam khói, Bộ nhớ: 128GB, RAM: 8GB, Chip: Apple A16 Bionic, Giá chưa giảm: 28,000,000 VND, Giảm: 5%, Giá khuyến mãi: 26,600,000 VND
+- Màu: xám, Bộ nhớ: 128GB, RAM: 8GB, Chip: Apple A16 Bionic, Giá chưa giảm: 28,000,000 VND, Giảm: 0%
+
+------------------------
+
+Sản phẩm: Tai nghe Bluetooth Chụp Tai JBL Tune 520BT
+Thương hiệu: JBL
+Quốc gia: Thụy Sỹ
+Danh mục: Thiết bị âm thanh
+Biến thể:
+- Màu: Đen, Bộ nhớ: , RAM: , Chip: , Giá chưa giảm: 1,200,000 VND, Giảm: 0%
+
+------------------------
+
+
+------------------------
+
 Cửa hàng hỗ trợ 2 phương thức thanh toán: Thanh toán COD ( người dùng thanh toán khi nhận hàng ), Thanh toán bằng VNPAY, khi đặt hàng người dùng phải xác nhận đầy đủ 
 các thông tin: họ tên, số điện thoại, email, địa chỉ giao hàng, ghi chú nếu có, phương thức thanh toán
 
@@ -412,9 +383,8 @@ phụ kiện )
 
 Phần sản phẩm đã xem, chúng tôi lưu giữ 10 sản phẩm người dùng đã xem chi tiết gần nhất 
 
-Chúng tôi hỗ trợ chăm sóc khách hàng qua 2 khung chat, khung chat bên phải: Trợ Lý AI của chúng tôi sẽ trả lời cho bạn 1 số câu hỏi trong giới hạn về sản phẩm,
-1 số chính sách, bảo mật, đăng ký đăng nhập, thông tin tài khoản ... Khung chat bên trái, chúng tôi sẽ chat trực tuyến với người dùng về bất ký một thắc mắc nào 
+Chúng tôi hỗ trợ chăm sóc khách hàng qua 2 khung chat: Trợ Lý AI của chúng tôi sẽ trả lời cho bạn 1 số câu hỏi trong giới hạn về sản phẩm,
+1 số chính sách, bảo mật, đăng ký đăng nhập, thông tin tài khoản ... Khung chat còn lại, chúng tôi sẽ chat trực tuyến với người dùng về bất ký một thắc mắc nào 
 mà bạn gặp phải, nếu chúng tôi không onlie, bạn vui lòng đợi chúng tôi trong giây lát, chúng tôi sẽ phản hồi sớm nhất có thể
-
 
 `;

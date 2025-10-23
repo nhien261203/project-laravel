@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\NewConversationCreated;
 use App\Events\PusherBroadcast;
+use App\Events\UnreadCountUpdated;
 use App\Models\Conversation;
 use App\Models\MessageRealtime;
 use Illuminate\Http\Request;
@@ -53,6 +54,16 @@ class PusherController extends Controller
 
         // Broadcast realtime cho admin và các client khác
         broadcast(new PusherBroadcast($message))->toOthers();
+
+        // Đếm lại số tin nhắn chưa đọc của conversation này (gửi từ user)
+    $unreadCount = MessageRealtime::where('conversation_id', $conversation->id)
+        ->where('sender', 'user')
+        ->whereNull('read_at')
+        ->count();
+
+    // Broadcast số lượng chưa đọc cho admin
+    broadcast(new UnreadCountUpdated($conversation->id, $unreadCount, 'admin'));
+
 
         return response()->json([
             'success' => true,
@@ -147,6 +158,14 @@ class PusherController extends Controller
 
         // Broadcast cho các client khác
         broadcast(new PusherBroadcast($message))->toOthers();
+
+        $userUnreadCount = MessageRealtime::where('conversation_id', $conversation->id)
+            ->whereIn('sender', ['admin', 'staff'])
+            ->whereNull('read_at')
+            ->count();
+
+        // Broadcast cho user
+        broadcast(new UnreadCountUpdated($conversation->id, $userUnreadCount, 'user'));
 
         return response()->json([
             'success' => true,

@@ -62,23 +62,38 @@
                     li.className = "p-4 border-b hover:bg-gray-100 cursor-pointer flex justify-between items-center transition duration-200";
                     li.setAttribute('data-id', conv.id);
 
+                    // --- Phần trái: Tên + email ---
+                    const leftDiv = document.createElement('div');
+                    leftDiv.className = "flex flex-col";
                     const nameSpan = document.createElement('span');
                     nameSpan.innerText = conv.user ? conv.user.name : 'Guest';
                     nameSpan.className = "font-medium text-gray-700";
+                    leftDiv.appendChild(nameSpan);
 
-                    li.appendChild(nameSpan);
-
-                    if(conv.user && conv.user.email){
+                    if (conv.user && conv.user.email) {
                         const emailSpan = document.createElement('span');
                         emailSpan.innerText = conv.user.email;
-                        emailSpan.className = "text-xs text-gray-400 truncate"; // truncate nếu email dài
-                        li.appendChild(emailSpan);
+                        emailSpan.className = "text-xs text-gray-400 truncate";
+                        leftDiv.appendChild(emailSpan);
                     }
+
+                    li.appendChild(leftDiv);
+
+                    // --- Phần phải: badge đỏ ---
+                    const badge = document.createElement('span');
+                    badge.className = "badge bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-2 hidden";
+                    badge.innerText = conv.unread_count > 0 ? conv.unread_count : '';
+                    if (conv.unread_count > 0) badge.classList.remove('hidden');
+                    li.appendChild(badge);
 
                     li.onclick = () => {
                         loadConversation(conv.id, conv.user ? conv.user.name : 'Guest');
+                        // Khi admin click vào, ẩn badge (đã đọc)
+                        badge.classList.add('hidden');
                     };
+
                     list.appendChild(li);
+
                 });
             });
         }
@@ -260,5 +275,29 @@
             console.log('Có một cuộc trò chuyện mới được tạo:', data);
             loadConversations();
         });
+
+        // Lắng nghe badge realtime
+        const unreadChannel = pusher.subscribe('unread-count');
+        unreadChannel.bind('unread.count.updated', function(data) {
+            if (data.recipientType === 'admin') {
+                const li = document.querySelector(`#conversationList li[data-id='${data.conversationId}']`);
+                if (li) {
+                    const badge = li.querySelector('.badge');
+                    badge.innerText = data.unreadCount > 0 ? data.unreadCount : '';
+                    if (data.unreadCount > 0) {
+                        badge.classList.remove('hidden');
+                        // Đưa cuộc trò chuyện có tin mới lên đầu
+                        const list = document.getElementById('conversationList');
+                        list.prepend(li);
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                } else {
+                    // Nếu chưa có conversation trong list → reload
+                    loadConversations();
+                }
+            }
+        });
+
     </script>
     @endpush

@@ -19,7 +19,7 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Loại *</label>
-                <select name="type" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
+                <select name="type" id="voucher_type" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-100">
                     <option value="">-- Chọn --</option>
                     <option value="fixed" @selected(old('type') == 'fixed')>Cố định (VNĐ)</option>
                     <option value="percent" @selected(old('type') == 'percent')>Phần trăm (%)</option>
@@ -52,7 +52,7 @@
                     class="w-full px-4 py-2 border rounded" placeholder="5000000">
             </div>
 
-            <div>
+            <div id="max_discount_field">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Giảm tối đa (đ)</label>
                 <input type="number" name="max_discount" value="{{ old('max_discount') }}" min="0"
                     class="w-full px-4 py-2 border rounded">
@@ -103,3 +103,29 @@
     </form>
 </div>
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const voucherType = document.getElementById('voucher_type');
+        const maxDiscountField = document.getElementById('max_discount_field');
+
+        // Hàm xử lý việc hiển thị/ẩn trường Giảm tối đa
+        function toggleMaxDiscountField() {
+            // Kiểm tra nếu loại voucher là 'percent'
+            if (voucherType.value === 'percent') {
+                maxDiscountField.style.display = 'block'; // Hiện
+            } else {
+                maxDiscountField.style.display = 'none'; // Ẩn
+                // Tùy chọn: Xóa giá trị khi ẩn để tránh lỗi validate backend
+                maxDiscountField.querySelector('input[name="max_discount"]').value = ''; 
+            }
+        }
+
+        // Lắng nghe sự kiện thay đổi của Select Box
+        voucherType.addEventListener('change', toggleMaxDiscountField);
+
+        // Gọi hàm một lần khi tải trang để xử lý trường hợp 'old()' có giá trị
+        toggleMaxDiscountField();
+    });
+</script>
+@endpush

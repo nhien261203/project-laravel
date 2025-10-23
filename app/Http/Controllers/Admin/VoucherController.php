@@ -91,4 +91,15 @@ class VoucherController extends Controller
         $this->voucherRepo->delete($id);
         return redirect()->route('admin.vouchers.index')->with('success', 'Xóa thành công');
     }
+    public function show($id)
+    {
+        $voucher = $this->voucherRepo->find($id);
+
+        if (!$voucher) {
+            return redirect()->route('admin.vouchers.index')
+                ->with('error', 'Không tìm thấy mã giảm giá');
+        }
+
+        return view('admin.vouchers.show', compact('voucher'));
+    }
 }

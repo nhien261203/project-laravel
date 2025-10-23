@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\Product;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,9 @@ class ChatBotController extends Controller
         ]);
 
         // Prompt cho AI
-        $prompt = "Thông tin sản phẩm:\n" . $productData . "\n\nCâu hỏi của khách hàng: " . $userMessage;
+        $prompt = "Thông tin sản phẩm:\n" . json_encode($productData, JSON_UNESCAPED_UNICODE) . 
+        "\n\nCâu hỏi của khách hàng: " . $userMessage;
+
 
         // Gọi API Gemini
         $response = Http::withHeaders([
@@ -66,15 +69,53 @@ class ChatBotController extends Controller
         $sessionId = $request->session()->getId();
 
         $messages = Message::where(function ($q) use ($userId, $sessionId) {
-                if ($userId) {
-                    $q->where('user_id', $userId);
-                } else {
-                    $q->where('session_id', $sessionId);
-                }
-            })
+            if ($userId) {
+                $q->where('user_id', $userId);
+            } else {
+                $q->where('session_id', $sessionId);
+            }
+        })
             ->orderBy('created_at')
             ->get();
 
         return response()->json($messages);
+    }
+    public function getDataForChatbotJson()
+    {
+        $products = Product::with([
+            'brand',
+            'category',
+            'variants' => fn($q) => $q->where('status', 1)
+        ])->where('status', 1)->get();
+
+        $formatted = $products->map(function ($p) {
+            return [
+                'product_name' => $p->name,
+                'brand' => $p->brand->name ?? null,
+                'category' => $p->category->name ?? null,
+                'variants' => $p->variants->map(function ($v) {
+                    $original = $v->original_price ?? 0;
+                    $salePercent = $v->sale_percent ?? 0;
+                    $salePrice = $salePercent > 0
+                        ? $original - ($original * $salePercent / 100)
+                        : $original;
+
+                    return [
+                        'color' => $v->color,
+                        'ram' => $v->ram,
+                        'storage' => $v->storage,
+                        'chip' => $v->chip,
+                        'original_price' => $original,
+                        'sale_percent' => $salePercent,
+                        'final_price' => $salePrice,
+                    ];
+                })
+            ];
+        });
+
+        return response()->json([
+            'message' => 'Dữ liệu cho chatbot',
+            'products' => $formatted
+        ]);
     }
 }

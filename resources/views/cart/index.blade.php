@@ -189,10 +189,32 @@
                                                 Giảm tối đa: Không giới hạn
                                             @endif
                                         @endif
+                                        
                                         @if($voucher->only_for_new_user)
-                                            <span class="text-green-600 font-medium">Khách mới</span>
+                                            <span class="text-green-600 font-medium">Dành cho khách mới</span>
                                         @endif
                                     </p>
+                                    @if(!$voucher->only_for_new_user && $voucher->max_usage_per_user)
+                                        @php
+                                            $usedCount = auth()->check()
+                                                ? auth()->user()->vouchers()
+                                                    ->where('voucher_id', $voucher->id)
+                                                    ->count()
+                                                : 0;
+                                        @endphp
+
+                                        @if($usedCount >= $voucher->max_usage_per_user)
+                                            <p class="text-xs text-red-500">
+                                                Bạn đã dùng hết lượt voucher này ({{ $usedCount }}/{{ $voucher->max_usage_per_user }})
+                                            </p>
+                                        @else
+                                            <p class="text-xs text-gray-500">
+                                                Bạn đã dùng {{ $usedCount }} lần / tối đa {{ $voucher->max_usage_per_user }} lần
+                                            </p>
+                                        @endif
+                                    @endif
+
+
                                     @if($voucher->end_date)
                                         <p class="text-xs text-gray-400">HSD: {{ $voucher->end_date->format('d/m/Y') }}</p>
                                     @endif

@@ -6,7 +6,7 @@
 <form method="POST" action="{{ route('user.update') }}">
     @csrf
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
         <div>
             <label class="block font-medium text-gray-700 mb-1">Họ tên</label>
             <input type="text" name="name" class="w-full border rounded px-4 py-2" value="{{ old('name', $user->name) }}">
